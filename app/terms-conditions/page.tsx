@@ -81,7 +81,7 @@ const TermsAndConditions = () => {
                     Your submission of personal information through the store is governed by our Privacy Policy.
                 </p>
                 <p className="mb-4">
-                    By making a purchase, you confirm that you agree to receive emails and SMS about the status of your order, as well as for informational and promotional purposes, while you can at any time request a refusal to send us a request to unsubscribe to <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>.
+                    By making a purchase, you confirm that you agree to receive emails and SMS about the status of your order, as well as for informational and promotional purposes, while you can at any time request a refusal to send us a request to unsubscribe to <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>.
                 </p>
             </section>
 

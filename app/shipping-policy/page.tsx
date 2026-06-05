@@ -47,10 +47,10 @@ const PactAndShipping = () => {
             <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Age Verification</h2>
                 <p className="mb-4">
-                    To comply with state laws we require age verification before purchasing any products on this site. Age verification is requested through our company&apos;s email <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>, a secure online age verification way.
+                    To comply with state laws we require age verification before purchasing any products on this site. Age verification is requested through our company&apos;s email <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>, a secure online age verification way.
                 </p>
                 <p className="mb-4 font-medium">
-                    Please, make sure that you only receive the verification request only through our official contact Information: <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>
+                    Please, make sure that you only receive the verification request only through our official contact Information: <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>
                 </p>
                 <p className="mb-4">
                     Do not provide your age verification document to anyone else.
@@ -87,7 +87,7 @@ const PactAndShipping = () => {
             <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
                 <p className="mb-4">
-                    If you have any questions or concerns about this shipping policies or PACT Act compliance, please contact us at <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>.
+                    If you have any questions or concerns about this shipping policies or PACT Act compliance, please contact us at <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>.
                 </p>
             </section>
         </div>

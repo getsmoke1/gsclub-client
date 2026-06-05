@@ -13,6 +13,9 @@ import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton"
 import { getSEOData } from "@/lib/seo";
 import { noIndex } from "@/lib/noindex";
 
+const SITE_URL = "https://getsmoke.com";
+const GTM_ID = "GTM-TLGTR33M"; // TODO: replace with GetSmoke GTM container ID when created
+
 const unbounded = Unbounded({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -34,6 +37,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const metadata: Metadata = {
     ...noIndex,
+    metadataBase: new URL(SITE_URL),
+    alternates: {
+      canonical: SITE_URL,
+    },
   };
 
   if (!seoData) return metadata;
@@ -49,7 +56,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage = seoData.ogImage;
 
   if (ogTitle || ogDescription || ogImage) {
-    metadata.openGraph = {};
+    metadata.openGraph = {
+      siteName: "GetSmoke",
+      locale: "en_US",
+      type: "website",
+    };
     if (ogTitle) metadata.openGraph.title = ogTitle;
     if (ogDescription) metadata.openGraph.description = ogDescription;
     if (ogImage) metadata.openGraph.images = [ogImage];
@@ -59,6 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
   if (ogTitle || ogDescription || ogImage) {
     metadata.twitter = {
       card: "summary_large_image",
+      site: "@getsmoke",
     };
     if (ogTitle) metadata.twitter.title = ogTitle;
     if (ogDescription) metadata.twitter.description = ogDescription;
@@ -84,57 +96,11 @@ export default function RootLayout({
               new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-TLGTR33M');
+              })(window,document,'script','dataLayer','${GTM_ID}');
             `,
           }}
         />
         {/* End Google Tag Manager */}
-
-        {/* Yandex.Metrika counter */}
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-              m[i].l=1*new Date();
-              for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-              k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-              (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-            
-              ym(102308489, "init", {
-                   clickmap:true,
-                   trackLinks:true,
-                   accurateTrackBounce:true,
-                   webvisor:true,
-                   ecommerce:"dataLayer"
-              });
-            `,
-          }}
-        />
-        <noscript>
-          <div>
-            <img
-              src="https://mc.yandex.ru/watch/102308489"
-              style={{ position: "absolute", left: "-9999px" }}
-              alt=""
-            />
-          </div>
-        </noscript>
-        {/* /Yandex.Metrika counter */}
-
-        {/* Alli AI Widget */}
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              /* Alli AI widget for www.itips.co */
-              (function (w,d,s,o,f,js,fjs) {w['AlliJSWidget']=o;w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) };js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs);}(window, document, 'script', 'alli', 'https://static.alliai.com/widget/v1.js'));
-              alli('init', 'site_oLVbrkWbu5ty2AvF');
-              alli('optimize', 'all');
-            `,
-          }}
-        />
-        {/* End Alli AI Widget */}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable}`}
@@ -142,7 +108,7 @@ export default function RootLayout({
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-TLGTR33M"
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}

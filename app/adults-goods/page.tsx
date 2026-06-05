@@ -1,12 +1,12 @@
-import AdultPage from "@/components/adult-goods/AdultPage";
-import React from "react";
+import { getSEOData } from "@/lib/seo";
+import { buildSeoMetadata } from "@/lib/canonical";
+import { noIndex } from "@/lib/noindex";
+import { Metadata } from "next";
 
-const page = () => {
-  return (
-    <div>
-      <AdultPage />
-    </div>
-  );
-};
 
-export default page;
+export async function generateMetadata(): Promise<Metadata> {
+  const seoData = await getSEOData("/adults-goods");
+  return { ...noIndex, ...buildSeoMetadata(seoData, "/adults-goods") };
+}
+
+

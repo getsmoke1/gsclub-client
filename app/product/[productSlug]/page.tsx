@@ -4,117 +4,47 @@ import React from "react";
 import type { Metadata } from "next";
 import { getSEOData } from "@/lib/seo";
 import { noIndex } from "@/lib/noindex";
+import { buildSeoMetadata, getCanonicalUrl } from "@/lib/canonical";
 
 type Props = {
   params: Promise<{ productSlug: string }>;
 };
 
-const page = async ({ params }: Props) => {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { productSlug } = await params;
+  const seoData = await getSEOData(`/product/${productSlug}`);
+  const canonicalPath = `/product/${productSlug}`;
 
-  // 🔍 Fetch product redirect link
-  // ⚠️ REDIRECT FEATURE DISABLED - causes too much traffic
-  // Keeping this commented in case we need it later
-  /*
+  // Get product data for fallback meta
   const product = await prisma.product.findUnique({
     where: { slug: productSlug },
-    select: { redirectLink: true },
-  });
+    select: { name: true, detailDescription: true, images: true },
+  }).catch(() => null);
 
-  // ✅ If redirect link exists, show redirect screen within layout
-  if (product?.redirectLink) {
-    return (
-      <div
-        style={{
-          minHeight: 'calc(100vh - 200px)', // leave space for navbar + footer
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          textAlign: 'center',
-          padding: '2rem',
-        }}
-      >
-        <meta httpEquiv="refresh" content={`1;url=${product.redirectLink}`} />
-        <h1 style={{ fontSize: '1.5rem', color: '#333', marginBottom: '1rem' }}>
-          Redirecting to new product page...
-        </h1>
-        <p style={{ color: '#777' }}>
-          You'll be redirected shortly. If not,{' '}
-          
-            href={product.redirectLink}
-            style={{ color: '#0070f3', textDecoration: 'underline' }}
-          >
-            click here
-          </a>
-          .
-        </p>
-      </div>
-    );
+  const meta = buildSeoMetadata(seoData, canonicalPath);
+
+  // Fallback to product data if no SEO entry
+  if (!seoData && product) {
+    meta.title = `${product.name} | GetSmoke`;
+    meta.description = product.detailDescription?.substring(0, 160) || `Buy ${product.name} at GetSmoke. Fast US shipping.`;
+    if (product.images?.[0]) {
+      meta.openGraph = {
+        title: `${product.name} | GetSmoke`,
+        description: meta.description,
+        images: [product.images[0]],
+        siteName: "GetSmoke",
+        type: "website",
+        url: getCanonicalUrl(canonicalPath),
+      };
+    }
   }
-  */
 
-  // 🟢 Render normal ProductPage (keeping all products on same site)
+  return { ...noIndex, ...meta };
+}
+
+const page = async ({ params }: Props) => {
+  const { productSlug } = await params;
   return <ProductPage productSlug={productSlug} />;
 };
 
 export default page;
-
-// Metadata (same as before)
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { productSlug } = await params;
-
-  try {
-    const product = await prisma.product.findUnique({
-      where: { slug: productSlug },
-      select: { name: true },
-    });
-
-    if (!product) {
-      return {
-        title: "Product Not Found",
-        description: "The requested product could not be found.",
-      };
-    }
-
-    const seoData = await getSEOData(`/product/${productSlug}`);
-    const metadata: Metadata = {
-      ...noIndex,
-    };
-
-    if (seoData) {
-      if (seoData.title) metadata.title = seoData.title;
-      if (seoData.description) metadata.description = seoData.description;
-      if (seoData.keywords?.length) metadata.keywords = seoData.keywords;
-
-      if (seoData.ogTitle || seoData.ogDescription || seoData.ogImage) {
-        metadata.openGraph = {};
-        if (seoData.ogTitle) metadata.openGraph.title = seoData.ogTitle;
-        if (seoData.ogDescription)
-          metadata.openGraph.description = seoData.ogDescription;
-        if (seoData.ogImage) metadata.openGraph.images = [seoData.ogImage];
-      }
-
-      if (seoData.ogTitle || seoData.ogDescription || seoData.ogImage) {
-        metadata.twitter = {
-          card: "summary_large_image",
-        };
-        if (seoData.ogTitle) metadata.twitter.title = seoData.ogTitle;
-        if (seoData.ogDescription)
-          metadata.twitter.description = seoData.ogDescription;
-        if (seoData.ogImage) metadata.twitter.images = [seoData.ogImage];
-      }
-    } else {
-      metadata.title = product.name || "Product";
-      metadata.description = "View product details.";
-    }
-
-    return metadata;
-  } catch (error) {
-    console.error("Failed to generate metadata:", error);
-    return {
-      title: "Product Not Found",
-      description: "An error occurred while loading the product.",
-    };
-  }
-}

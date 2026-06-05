@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://www.itips.co/",
+  siteUrl: "https://getsmoke.com",
   // siteUrl: "http://localhost:3000/",
   generateRobotsTxt: true,
   exclude: [
@@ -76,8 +76,8 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      "https://www.itips.co/server-sitemap-products.xml",
-      "https://www.itips.co/server-sitemap-blog.xml",
+      "https://www.getsmoke.com/server-sitemap-products.xml",
+      "https://www.getsmoke.com/server-sitemap-blog.xml",
     ],
   },
 };

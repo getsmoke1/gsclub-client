@@ -76,7 +76,7 @@ const Contact = () => {
             <Image src={"/images/mail.png"} width={50} height={50} alt='email' className='object-contain w-full h-full' />
           </div>
             <div className='flex flex-col'>
-              <Link href="mailto:info@itips.com" className=' hover:underline'> info@itips.com </Link>
+              <Link href="mailto:info@getsmoke.comm" className=' hover:underline'> info@getsmoke.comm </Link>
             </div>
           </div>
 

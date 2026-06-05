@@ -35,7 +35,7 @@ const ReturnsRefunds = () => {
                 <p className="mb-4 font-medium">Due to FDA regulations, some items are ineligible for return or exchange:</p>
                 <ul className="list-disc pl-6 space-y-2 mb-4">
                     <li>Opened or used e-liquids</li>
-                    <li>Products not purchased from www.itips.co</li>
+                    <li>Products not purchased from www.getsmoke.com</li>
                     <li>Opened or used devices/accessories</li>
                 </ul>
                 <p className="mb-4 font-medium">We also do not refund:</p>
@@ -58,7 +58,7 @@ const ReturnsRefunds = () => {
             <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
                 <p className="mb-4">
-                    If you have any questions or concerns about this Returns & Refunds Policy, please contact us at <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>.
+                    If you have any questions or concerns about this Returns & Refunds Policy, please contact us at <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>.
                 </p>
             </section>
         </div>

@@ -165,8 +165,6 @@ const Navbar = () => {
         { title: "Main", href: "/" },
         { title: "Vapes", href: "/vapes" },
         { title: "Hookah", href: "/hookah" },
-        { title: "Supplements", href: "/supplements" },
-        { title: "Adults goods", href: "/adults-goods" },
         { title: "Accessories", href: "/accessories" },
         { title: "Blog", href: "/blog" },
         { title: "Contact us", href: "/contact" },

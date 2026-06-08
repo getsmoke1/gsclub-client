@@ -1,10 +1,14 @@
-import VapePage from '@/components/vapes/VapePage'
-import React from 'react'
+import VapePage from "@/components/vapes/VapePage";
+import { getSEOData } from "@/lib/seo";
+import { buildSeoMetadata } from "@/lib/canonical";
+import { noIndex } from "@/lib/noindex";
+import { Metadata } from "next";
 
-const page = () => {
-    return (
-        <VapePage/>
-    )
+export async function generateMetadata(): Promise<Metadata> {
+  const seoData = await getSEOData("/vapes");
+  return { ...noIndex, ...buildSeoMetadata(seoData, "/vapes") };
 }
 
-export default page
+export default function Page() {
+  return <VapePage />;
+}

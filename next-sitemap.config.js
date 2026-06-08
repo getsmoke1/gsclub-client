@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://www.itips.co/",
+  siteUrl: "https://getsmoke.com",
   // siteUrl: "http://localhost:3000/",
   generateRobotsTxt: true,
   exclude: [
@@ -33,9 +33,7 @@ module.exports = {
       { loc: "/terms-conditions", priority: 0.5, changefreq: "yearly" },
       { loc: "/blog", priority: 0.5, changefreq: "daily" },
       { loc: "/accessories", priority: 0.5, changefreq: "daily" },
-      { loc: "/adult-goods", priority: 0.5, changefreq: "daily" },
       { loc: "/hookah", priority: 0.5, changefreq: "daily" },
-      { loc: "/supplements", priority: 0.5, changefreq: "daily" },
       { loc: "/vapes", priority: 0.5, changefreq: "daily" },
     ];
 
@@ -76,8 +74,8 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      "https://www.itips.co/server-sitemap-products.xml",
-      "https://www.itips.co/server-sitemap-blog.xml",
+      "https://www.getsmoke.com/server-sitemap-products.xml",
+      "https://www.getsmoke.com/server-sitemap-blog.xml",
     ],
   },
 };

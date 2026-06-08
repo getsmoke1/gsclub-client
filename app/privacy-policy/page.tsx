@@ -73,7 +73,7 @@ const PrivacyPolicy = () => {
             <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
                 <p className="mb-4">
-                    If you have any questions or concerns about this Privacy Policy, please contact us at <a href="mailto:info@itips.com" className="text-blue-600 hover:underline">info@itips.com</a>.
+                    If you have any questions or concerns about this Privacy Policy, please contact us at <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>.
                 </p>
             </section>
         </div>

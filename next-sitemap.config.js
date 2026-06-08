@@ -33,9 +33,7 @@ module.exports = {
       { loc: "/terms-conditions", priority: 0.5, changefreq: "yearly" },
       { loc: "/blog", priority: 0.5, changefreq: "daily" },
       { loc: "/accessories", priority: 0.5, changefreq: "daily" },
-      { loc: "/adult-goods", priority: 0.5, changefreq: "daily" },
       { loc: "/hookah", priority: 0.5, changefreq: "daily" },
-      { loc: "/supplements", priority: 0.5, changefreq: "daily" },
       { loc: "/vapes", priority: 0.5, changefreq: "daily" },
     ];
 

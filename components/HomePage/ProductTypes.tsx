@@ -7,16 +7,6 @@ export default function ProductTypes() {
     const productTypes = [
         { title: "Vapes", href: "/vapes", img: "/images/vape.png" },
         { title: "Hookah", href: "/hookah", img: "/images/hookah.png" },
-        {
-            title: "Supplements",
-            href: "/supplements",
-            img: "/images/supplyment.png",
-        },
-        {
-            title: "Adults goods",
-            href: "/adults-goods",
-            img: "/images/adult-good.png",
-        },
         { title: "Accessories", href: "/accessories", img: "" },
     ];
 

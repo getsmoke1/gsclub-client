@@ -9,6 +9,5 @@ export async function generateMetadata(): Promise<Metadata> {
   return { ...noIndex, ...buildSeoMetadata(seoData, "/vapes") };
 }
 
-export default function Page() {
-  return <VapePage />;
-}
+const page = () => <VapePage />;
+export default page;

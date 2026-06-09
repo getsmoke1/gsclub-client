@@ -1,6 +1,5 @@
 "use client"
 import React from 'react'
-import Hero from './Hero'
 import Products from '../HomePage/Products'
 import Filter from '../HomePage/Filter'
 
@@ -11,8 +10,7 @@ interface VapePageProps {
 const VapePage = ({ productType = "VAPES" }: VapePageProps) => {
     return (
         <main>
-            <Hero />
-            <div className='pt-5'>
+            <div className="pt-2">
                 <Filter />
                 <Products productType={productType} />
             </div>

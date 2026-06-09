@@ -192,13 +192,22 @@ const Products = ({ productType }: ProductsProps) => {
                     </div>
                     <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
                       <div>
-                        <div className="flex items-center justify-center text-sm font-bold" style={{ color: "#fe3500" }}>
-                          <span>${product.currentPrice.toFixed(2)}</span>
-                          {product.originalPrice && product.originalPrice > product.currentPrice && (
-                            <span className="ml-2 text-xs text-gray-400 line-through font-normal">
-                              ${product.originalPrice.toFixed(2)}
-                            </span>
+                        <div className="text-center">
+                          {product.originalPrice && product.originalPrice > product.currentPrice ? (
+                            <p className="text-sm font-bold text-black">
+                              <span className="line-through text-gray-400 font-normal mr-1">
+                                ${product.originalPrice.toFixed(2)}
+                              </span>
+                              ${product.currentPrice.toFixed(2)}
+                            </p>
+                          ) : (
+                            <p className="text-sm font-bold text-black">
+                              ${product.currentPrice.toFixed(2)}
+                            </p>
                           )}
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            or subscribe to save up to 10%
+                          </p>
                         </div>
                         <p className="text-xs text-gray-500 text-center mt-1">
                           {product.brand.name}
@@ -207,14 +216,13 @@ const Products = ({ productType }: ProductsProps) => {
                           {product.name}
                         </h3>
                       </div>
-                      <div className="mt-3 flex flex-col gap-2">
+                      <div className="mt-3">
                           <button
-                            className="w-full py-2 rounded-full text-white text-xs font-bold uppercase cursor-pointer"
-                            style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                            className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
+                            style={{ background: "linear-gradient(90deg, #FF6B00 0%, #FF9500 100%)" }}
                           >
-                            Add to Cart
+                            select options
                           </button>
-                          <p className="text-center text-xs text-gray-500">subscribe to save up to 10%</p>
                         </div>
                     </div>
                   </div>

@@ -1,35 +1,48 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const Hero = () => {
-  return (
-    <div className="w-11/12 mx-auto rounded-4xl pt-5 flex flex-col justify-center items-center text-white text-center px-4 h-[50vh] font-unbounded relative overflow-hidden">
-      {/* Next.js optimized background image */}
-      <Image
-        src="/images/home_banner.jpg"
-        alt="Adult toys hero background"
-        fill
-        priority
-        quality={85}
-        placeholder="blur"
-        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-        sizes="100vw"
-        className="object-cover rounded-4xl"
-      />
+    return (
+        <section className="w-full relative overflow-hidden" style={{ minHeight: '400px', maxHeight: '600px' }}>
+            {/* Background banner image */}
+            <Image
+                src="/images/home_banner.jpg"
+                alt="GetSmoke - Best Disposable Vapes Online"
+                fill
+                priority
+                quality={85}
+                sizes="100vw"
+                className="object-cover object-center"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/50 z-10" />
 
-      {/* Content positioned above the image */}
-      <div className="relative z-10 px-8 py-12">
-        <motion.div
-          initial={{ opacity: 1 }}
-          className="absolute inset-0 flex items-center justify-center text-center text-white text-4xl font-extrabold tracking-wide font-unbounded uppercase"
-        >
-          Vapes
-        </motion.div>
-      </div>
-    </div>
-  );
+            {/* Content */}
+            <div className="relative z-20 flex flex-col items-center justify-center h-full text-white text-center px-4 py-20 md:py-28">
+                <h1 className="text-3xl md:text-5xl font-bold uppercase font-unbounded mb-4 leading-tight">
+                    Best Disposable Vapes<br />
+                    <span style={{ color: '#fe3500' }}>Online Store</span>
+                </h1>
+                <p className="text-sm md:text-base mb-8 max-w-xl opacity-90">
+                    Top brands: Geek Bar, Lost Mary, RAZ, VIHO, HQD, FUME and more. Fast shipping across the USA.
+                </p>
+                <div className="flex gap-4 flex-wrap justify-center">
+                    <Link href="/vapes"
+                        className="font-unbounded font-bold px-8 py-3 rounded text-white text-sm uppercase tracking-wide transition-colors"
+                        style={{ backgroundColor: '#fe3500' }}
+                    >
+                        Shop Now
+                    </Link>
+                    <Link href="/brand/geek-bar"
+                        className="font-unbounded font-bold px-8 py-3 rounded text-white text-sm uppercase tracking-wide border border-white hover:bg-white hover:text-black transition-colors"
+                    >
+                        Geek Bar
+                    </Link>
+                </div>
+            </div>
+        </section>
+    );
 };
 
 export default Hero;

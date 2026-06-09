@@ -218,7 +218,7 @@ const Navbar = () => {
                             </div>
                             <nav
                                 ref={hamburgerMenuRef}
-                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-gradient-to-r from-[#3E2FE1] to-[#8C14AC] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[230px] h-[430px]" : "w-0 h-0"
+                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-[#003399] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[230px] h-[430px]" : "w-0 h-0"
                                     } transition-all duration-300 ease-linear overflow-hidden`}
                                 aria-hidden={!show}
                             >
@@ -255,7 +255,7 @@ const Navbar = () => {
                                         setSearchQuery(''); // Add this line to clear on blur
                                         setShowResults(false);
                                     }}
-                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#8C14AC] focus:border-transparent"
+                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
                                     initial={{ width: "10rem" }}
                                     animate={{
                                         width: isSearchFocused ? "10rem" : "10rem",
@@ -274,7 +274,7 @@ const Navbar = () => {
                                         setIsSearchFocused(true);
                                     }}
                                     onBlur={() => setIsSearchFocused(false)}
-                                    className="block md:hidden border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#8C14AC] focus:border-transparent"
+                                    className="block md:hidden border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
                                     initial={{ width: "2rem" }}
                                     animate={{
                                         width: isSearchFocused ? "10rem" : "2rem",
@@ -338,7 +338,7 @@ const Navbar = () => {
                                     >
                                         {isLoading ? (
                                             <div className="flex justify-center items-center p-4">
-                                                <div className="w-5 h-5 border-t-2 border-b-2 border-[#8C14AC] rounded-full animate-spin"></div>
+                                                <div className="w-5 h-5 border-t-2 border-b-2 border-[#fe3500] rounded-full animate-spin"></div>
                                                 <span className="ml-2">Loading...</span>
                                             </div>
                                         ) : searchResults.length > 0 ? (

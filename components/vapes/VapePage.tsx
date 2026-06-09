@@ -4,13 +4,18 @@ import Hero from './Hero'
 import Products from '../HomePage/Products'
 import Filter from '../HomePage/Filter'
 
-const VapePage = () => {
+interface VapePageProps {
+    productType?: string;
+    title?: string;
+}
+
+const VapePage = ({ productType = "VAPES", title }: VapePageProps) => {
     return (
         <main>
             <Hero />
             <div className='pt-5'>
-                <Filter /> 
-                <Products productType="VAPES" />
+                <Filter />
+                <Products productType={productType} />
             </div>
         </main>
     )

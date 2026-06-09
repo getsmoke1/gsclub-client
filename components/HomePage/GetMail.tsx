@@ -21,7 +21,7 @@ const GetMail = () => {
                 Subscribe to our newsletter and be the first to know about new products and deals.
             </p>
             {submitted ? (
-                <p className="text-[#fe3500] font-bold">Thanks! You're subscribed.</p>
+                <p className="text-[#fe3500] font-bold">Thanks! You are subscribed.</p>
             ) : (
                 <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-sm">
                     <input
@@ -35,7 +35,7 @@ const GetMail = () => {
                     <button
                         type="submit"
                         className="font-bold px-5 py-2 rounded text-sm uppercase cursor-pointer"
-                        style={{ backgroundColor: '#fe3500', color: 'white' }}
+                        style={{ backgroundColor: "#fe3500", color: "white" }}
                     >
                         Subscribe
                     </button>

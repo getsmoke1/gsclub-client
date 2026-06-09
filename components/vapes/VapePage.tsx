@@ -6,7 +6,6 @@ import Filter from '../HomePage/Filter'
 
 interface VapePageProps {
     productType?: string;
-    title?: string;
 }
 
 const VapePage = ({ productType = "VAPES" }: VapePageProps) => {

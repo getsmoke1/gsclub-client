@@ -168,7 +168,7 @@ const Signup = () => {
                                 type="checkbox"
                                 id="agreeToTerms"
                                 {...register("agreeToTerms")}
-                                className="w-4 h-4 accent-[#3E2FE1] mr-2"
+                                className="w-4 h-4 accent-[#003399] mr-2"
                             />
                             <label htmlFor="agreeToTerms" className="text-sm text-[#666666]">
                                 I agree to the{" "}

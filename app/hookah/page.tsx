@@ -10,5 +10,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function HookahPage() {
-  return <VapePage productType="HOOKAH" title="Hookah" />;
+  return <VapePage productType="HOOKAH" />;
 }

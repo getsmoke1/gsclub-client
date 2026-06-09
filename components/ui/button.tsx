@@ -63,7 +63,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     `;
 
     const variantStyles = {
-      primary: `bg-gradient-to-r from-[#3E2FE1] to-[#8C14AC] text-white`,
+      primary: `bg-[#fe3500] hover:bg-[#d42c00] text-white`,
       secondary: `bg-black text-white`,
     };
 

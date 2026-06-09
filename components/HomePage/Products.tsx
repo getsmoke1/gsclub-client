@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import { ShoppingBag } from "lucide-react";
-import { Button } from "../ui/button";
-import Link from "next/link";
 import ProductShimmer from "./ProductShimmer";
 import { useFilter } from "@/hooks/useFilter";
 import { Product } from "@/types/product";

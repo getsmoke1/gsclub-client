@@ -8,10 +8,6 @@ const Footer = () => {
 
     return (
         <footer className="bg-white text-black font-unbounded border-t border-gray-100">
-            {/* Warning */}
-            <div className="bg-black text-white text-center text-xs py-2 px-4">
-                WARNING: These products contain nicotine. Nicotine is an addictive chemical. Must be 21+ to purchase.
-            </div>
 
             <div className="w-11/12 mx-auto py-12 flex flex-col items-center gap-6 text-center">
                 {/* Logo */}

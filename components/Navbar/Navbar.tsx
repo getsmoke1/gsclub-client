@@ -162,18 +162,10 @@ const Navbar = () => {
     }, [searchQuery, showResults]);
 
     const navItems = [
-        { title: "Home", href: "/" },
-        { title: "Disposables", href: "/vapes" },
-        { title: "Geek Bar", href: "/brand/geek-bar" },
-        { title: "Lost Mary", href: "/brand/lost-mary" },
-        { title: "RAZ", href: "/brand/raz" },
-        { title: "VIHO", href: "/brand/viho" },
-        { title: "HQD", href: "/brand/hqd" },
-        { title: "FUME", href: "/brand/fume" },
-        { title: "Juicy Bar", href: "/brand/juicy-bar" },
-        { title: "Foger", href: "/brand/foger" },
+        { title: "Shop", href: "/vapes" },
+        { title: "Brands", href: "/vapes" },
+        { title: "Accessories", href: "/accessories" },
         { title: "Hookah", href: "/hookah" },
-        { title: "Vape Juice", href: "/vape-juice" },
         { title: "Blog", href: "/blog" },
         { title: "Contact", href: "/contact" },
     ];
@@ -218,17 +210,17 @@ const Navbar = () => {
                             </div>
                             <nav
                                 ref={hamburgerMenuRef}
-                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-[#003399] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[230px] h-[430px]" : "w-0 h-0"
+                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-gradient-to-b from-[#E8726B] via-[#F5A552] to-[#ffc42e] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[240px] h-[360px]" : "w-0 h-0"
                                     } transition-all duration-300 ease-linear overflow-hidden`}
                                 aria-hidden={!show}
                             >
-                                <ul className="text-white text-[1.1rem] py-16 px-3 space-y-4 flex flex-col">
+                                <ul className="text-black text-[1.1rem] py-16 px-3 space-y-4 flex flex-col items-end">
                                     {navItems.map(({ title, href }) => (
                                         <li key={title}>
                                             <Link
                                                 href={href}
                                                 onClick={() => setshow(!show)}
-                                                className="px-4 cursor-pointer block hover:text-gray-200 focus:text-gray-200 focus:outline-none focus:underline"
+                                                className="px-4 cursor-pointer block hover:text-[#fe3500] focus:text-[#fe3500] focus:outline-none font-bold text-xl"
                                             >
                                                 {title}
                                             </Link>

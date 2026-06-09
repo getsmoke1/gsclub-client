@@ -6,6 +6,7 @@ import Products from "./Products"
 import Subscriptions from "./Subscriptions"
 import BrandCircles from "./BrandCircles"
 import MysteryBox from "./MysteryBox"
+import InstagramFeed from "./InstagramFeed"
 
 const HomePage = () => {
     return (
@@ -18,6 +19,7 @@ const HomePage = () => {
             </div>
             <BrandCircles />
             <MysteryBox />
+            <InstagramFeed />
         </main>
     )
 }

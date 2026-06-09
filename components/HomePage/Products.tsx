@@ -207,12 +207,14 @@ const Products = ({ productType }: ProductsProps) => {
                           {product.name}
                         </h3>
                       </div>
-                      <div className="mt-2 text-center">
-                          <span
-                            className="text-xs px-3 py-1.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50 cursor-pointer inline-block"
+                      <div className="mt-3 flex flex-col gap-2">
+                          <button
+                            className="w-full py-2 rounded-full text-white text-xs font-bold uppercase cursor-pointer"
+                            style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
                           >
-                            View Product
-                          </span>
+                            Add to Cart
+                          </button>
+                          <p className="text-center text-xs text-gray-500">subscribe to save up to 10%</p>
                         </div>
                     </div>
                   </div>

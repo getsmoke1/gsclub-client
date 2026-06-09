@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function VapeJuicePage() {
-  return <VapePage productType="VAPES" title="Vape Juice" />;
+  return <VapePage productType="VAPES" />;
 }

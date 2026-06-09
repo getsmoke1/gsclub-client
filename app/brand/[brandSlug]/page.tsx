@@ -11,25 +11,17 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brandSlug } = await params;
   const brand = await prisma.brand.findFirst({ where: { slug: brandSlug } });
-  if (!brand) return { title: "Brand Not Found" };
+  if (!brand) return { ...noIndex, title: "Brand Not Found" };
   return {
     ...noIndex,
-    title: `${brand.name} Disposable Vapes | GetSmoke`,
-    description: `Shop all ${brand.name} disposable vapes at GetSmoke. Best prices, fast shipping.`,
+    title: `${brand.name} Vapes | GetSmoke`,
+    description: `Shop all ${brand.name} disposable vapes at GetSmoke. Best prices and fast US shipping.`,
   };
 }
 
-const page = async ({ params }: Props) => {
+export default async function BrandSlugPage({ params }: Props) {
   const { brandSlug } = await params;
   const brand = await prisma.brand.findFirst({ where: { slug: brandSlug } });
-  if (!brand) notFound();
-  return (
-    <BrandPage
-      brandId={brand.id}
-      brandName={brand.name}
-      brandSlug={brandSlug}
-    />
-  );
-};
-
-export default page;
+  if (!brand) return notFound();
+  return <BrandPage brandId={brand.id} brandName={brand.name} />;
+}

@@ -9,7 +9,7 @@ interface VapePageProps {
     title?: string;
 }
 
-const VapePage = ({ productType = "VAPES", title }: VapePageProps) => {
+const VapePage = ({ productType = "VAPES" }: VapePageProps) => {
     return (
         <main>
             <Hero />

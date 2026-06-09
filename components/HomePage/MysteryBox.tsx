@@ -6,34 +6,31 @@ import Link from "next/link"
 const MysteryBox = () => {
     return (
         <section
-            className="w-full py-12 px-4 relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #0a0a3a 0%, #1a0030 40%, #3a0010 100%)" }}
+            className="w-11/12 mx-auto my-10 rounded-3xl overflow-hidden relative"
+            style={{ background: "linear-gradient(135deg, #1a0a3a 0%, #3a0a1a 60%, #0a0a1a 100%)" }}
         >
-            <div className="w-11/12 mx-auto flex flex-col md:flex-row items-center gap-8">
+            <div className="flex flex-col md:flex-row items-center gap-0">
                 {/* Left: text */}
-                <div className="flex-1 text-white">
-                    <h2 className="font-unbounded font-black text-5xl md:text-7xl leading-none text-white/20 uppercase tracking-tighter">
-                        MYST<br/>ERY<br/>BOX
+                <div className="flex-1 p-8 md:p-12 text-white">
+                    <p className="text-gray-300 text-sm mb-3">For those who look for new experiences...</p>
+                    <h2 className="font-unbounded font-black text-2xl md:text-3xl leading-tight mb-6">
+                        Order the box with 4 mystery flavours
                     </h2>
-                    <p className="text-base md:text-lg mt-4 text-gray-300">
-                        For those who look for new experiences...
-                    </p>
                     <Link href="/vapes"
-                        className="mt-6 inline-block px-8 py-3 rounded-full font-unbounded font-bold text-white text-sm uppercase"
+                        className="inline-block w-full md:w-auto text-center px-10 py-4 rounded-full font-unbounded font-bold text-white text-sm uppercase"
                         style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
                     >
-                        Order the box
+                        order your mystery box
                     </Link>
                 </div>
-
                 {/* Right: box image */}
-                <div className="flex-1 flex justify-center">
+                <div className="md:self-end">
                     <Image
                         src="https://getsmoke.com/wp-content/uploads/2024/07/Mystery-box-2.png"
-                        alt="GetSmoke Mystery Box - Great box for great person"
-                        width={386}
-                        height={602}
-                        className="max-w-[280px] md:max-w-[340px] w-full h-auto"
+                        alt="GetSmoke Mystery Box"
+                        width={300}
+                        height={460}
+                        className="max-w-[200px] md:max-w-[260px] mx-auto"
                         unoptimized
                     />
                 </div>

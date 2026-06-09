@@ -139,10 +139,10 @@ const Filter = () => {
       className="flex items-center gap-4 w-11/12 mx-auto py-7 md:py-10 font-unbounded"
       ref={filterRef}
     >
-      <section className="flex flex-wrap items-center gap-1 md:gap-4 lg:gap-8 xl:gap-10 bg-black rounded-full px-8 md:px-6 py-2.5 md:py-2 text-white w-full text-sm">
+      <section className="flex flex-wrap items-center gap-1 md:gap-4 lg:gap-8 xl:gap-10 bg-[#ffc42e] rounded-full px-8 md:px-6 py-2.5 md:py-2 text-black w-full text-sm font-bold">
         {/* heading */}
-        <div className="hidden lg:block">
-          <h2 className="font-black ml-3">Filter by</h2>
+        <div className="block">
+          <h2 className="font-black ml-3 block">filter by</h2>
         </div>
 
         {/* Loading state */}
@@ -150,8 +150,8 @@ const Filter = () => {
           [...Array(4)].map((_, i) => (
             <div key={i} className="relative">
               <div className="flex items-center gap-2 px-4 py-1.5 rounded-full">
-                <div className="h-6 w-20 bg-gray-700 rounded-full animate-pulse"></div>
-                <div className="h-5 w-5 bg-gray-700 rounded-full animate-pulse"></div>
+                <div className="h-6 w-20 bg-[#f0b800] rounded-full animate-pulse"></div>
+                <div className="h-5 w-5 bg-[#f0b800] rounded-full animate-pulse"></div>
               </div>
             </div>
           ))
@@ -161,8 +161,8 @@ const Filter = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown("brand")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-gray-800 rounded-full transition-colors ${
-                  brandId ? "bg-gray-700" : ""
+                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                  brandId ? "bg-[#f0b800]" : ""
                 }`}
               >
                 <span>Brand</span>
@@ -174,12 +174,12 @@ const Filter = () => {
                 />
               </button>
               {openDropdown === "brand" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-black border border-gray-700 text-white rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
+                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
                   {filterOptions?.brands.map((brand) => (
                     <div
                       key={brand.id}
-                      className={`px-4 flex items-center justify-between py-2 hover:bg-gray-700 cursor-pointer transition-colors ${
-                        brandId === brand.id ? "bg-gray-700" : ""
+                      className={`px-4 flex items-center justify-between py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
+                        brandId === brand.id ? "bg-[#f0b800]" : ""
                       }`}
                       onClick={() => handleOptionClick("brandId", brand.id)}
                     >
@@ -194,8 +194,8 @@ const Filter = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown("flavor")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-gray-800 rounded-full transition-colors ${
-                  flavorId ? "bg-gray-700" : ""
+                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                  flavorId ? "bg-[#f0b800]" : ""
                 }`}
               >
                 <span>Flavor</span>
@@ -207,13 +207,13 @@ const Filter = () => {
                 />
               </button>
               {openDropdown === "flavor" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-black border border-gray-700 text-white rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
+                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
                   {filterOptions?.flavors.map((flavor) => (
                     <>
                       <div
                         key={flavor.id}
-                        className={`px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors ${
-                          flavorId === flavor.id ? "bg-gray-700" : ""
+                        className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
+                          flavorId === flavor.id ? "bg-[#f0b800]" : ""
                         }`}
                         onClick={() => handleOptionClick("flavorId", flavor.id)}
                       >
@@ -229,8 +229,8 @@ const Filter = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown("puffs")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-gray-800 rounded-full transition-colors ${
-                  puffsId ? "bg-gray-700" : ""
+                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                  puffsId ? "bg-[#f0b800]" : ""
                 }`}
               >
                 <span>Puffs</span>
@@ -242,12 +242,12 @@ const Filter = () => {
                 />
               </button>
               {openDropdown === "puffs" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-black border border-gray-700 text-white rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
+                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
                   {filterOptions?.puffs.map((puff) => (
                     <div
                       key={puff.id}
-                      className={`px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors ${
-                        puffsId === puff.id ? "bg-gray-700" : ""
+                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
+                        puffsId === puff.id ? "bg-[#f0b800]" : ""
                       }`}
                       onClick={() => handleOptionClick("puffsId", puff.id)}
                     >
@@ -262,8 +262,8 @@ const Filter = () => {
             <div className="relative">
               <button
                 onClick={() => toggleDropdown("nicotine")}
-                className={`flex items-center gap-2 px-4 py-1.5 hover:bg-gray-800 rounded-full transition-colors cursor-pointer ${
-                  nicotineId ? "bg-gray-700" : ""
+                className={`flex items-center gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors cursor-pointer ${
+                  nicotineId ? "bg-[#f0b800]" : ""
                 }`}
               >
                 <span>Nicotine</span>
@@ -275,12 +275,12 @@ const Filter = () => {
                 />
               </button>
               {openDropdown === "nicotine" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-black border border-gray-700 text-white rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
+                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
                   {filterOptions?.nicotineLevels.map((level) => (
                     <div
                       key={level.id}
-                      className={`px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors ${
-                        nicotineId === level.id ? "bg-gray-700" : ""
+                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
+                        nicotineId === level.id ? "bg-[#f0b800]" : ""
                       }`}
                       onClick={() => handleOptionClick("nicotineId", level.id)}
                     >
@@ -296,7 +296,7 @@ const Filter = () => {
               <button
                 onClick={() => toggleDropdown("activeFilters")}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-colors cursor-pointer ${
-                  hasActiveFilters ? "bg-gray-700 hover:bg-gray-800" : "opacity-50 cursor-not-allowed"
+                  hasActiveFilters ? "bg-gray-700 hover:bg-[#f0b800]" : "opacity-50 cursor-not-allowed"
                 }`}
                 disabled={!hasActiveFilters}
               >
@@ -309,13 +309,13 @@ const Filter = () => {
                 />
               </button>
               {openDropdown === "activeFilters" && (
-                <div className="absolute z-10 right-0 mt-2 w-48 bg-black border border-gray-700 text-white rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
+                <div className="absolute z-10 right-0 mt-2 w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
                   {activeFilters.length > 0 ? (
                     <>
                       {activeFilters.map((filter) => (
                         <div
                           key={filter.type}
-                          className="flex items-center justify-between px-4 py-2 hover:bg-gray-700 cursor-pointer transition-colors"
+                          className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
                         >
                           <span>{filter.name}</span>
                           <button
@@ -336,7 +336,7 @@ const Filter = () => {
                             clearFilters();
                             setOpenDropdown(null);
                           }}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400 hover:text-red-300 transition-colors"
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-400 hover:text-red-300 transition-colors"
                         >
                           Clear All
                         </button>

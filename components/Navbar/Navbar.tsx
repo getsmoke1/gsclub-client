@@ -162,12 +162,16 @@ const Navbar = () => {
     }, [searchQuery, showResults]);
 
     const navItems = [
-        { title: "Main", href: "/" },
-        { title: "Vapes", href: "/vapes" },
-        { title: "Hookah", href: "/hookah" },
-        { title: "Accessories", href: "/accessories" },
+        { title: "Home", href: "/" },
+        { title: "Shop All", href: "/vapes" },
+        { title: "Geek Bar", href: "/brand/geek-bar" },
+        { title: "Lost Mary", href: "/brand/lost-mary" },
+        { title: "RAZ", href: "/brand/raz" },
+        { title: "VIHO", href: "/brand/viho" },
+        { title: "HQD", href: "/brand/hqd" },
+        { title: "FUME", href: "/brand/fume" },
         { title: "Blog", href: "/blog" },
-        { title: "Contact us", href: "/contact" },
+        { title: "Contact", href: "/contact" },
     ];
 
     const handleProductClick = (productSlug: string) => {

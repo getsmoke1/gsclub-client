@@ -163,13 +163,17 @@ const Navbar = () => {
 
     const navItems = [
         { title: "Home", href: "/" },
-        { title: "Shop All", href: "/vapes" },
+        { title: "Disposables", href: "/vapes" },
         { title: "Geek Bar", href: "/brand/geek-bar" },
         { title: "Lost Mary", href: "/brand/lost-mary" },
         { title: "RAZ", href: "/brand/raz" },
         { title: "VIHO", href: "/brand/viho" },
         { title: "HQD", href: "/brand/hqd" },
         { title: "FUME", href: "/brand/fume" },
+        { title: "Juicy Bar", href: "/brand/juicy-bar" },
+        { title: "Foger", href: "/brand/foger" },
+        { title: "Hookah", href: "/hookah" },
+        { title: "Vape Juice", href: "/vape-juice" },
         { title: "Blog", href: "/blog" },
         { title: "Contact", href: "/contact" },
     ];

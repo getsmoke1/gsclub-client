@@ -15,18 +15,18 @@ const HomeFaq = () => {
         <section className="w-full bg-white py-14">
             <div className="w-11/12 max-w-3xl mx-auto">
                 <h2 className="font-unbounded font-bold text-2xl text-center mb-10">FAQs</h2>
-                <div className="divide-y divide-gray-200">
+                <div>
                     {faqs.map((faq, i) => (
-                        <div key={i} className="py-4">
-                            <button
-                                className="w-full flex justify-between items-center text-left"
+                        <div key={i} className="border-b border-gray-200">
+                            <div
+                                className="flex justify-between items-center py-5 cursor-pointer"
                                 onClick={() => setOpen(open === i ? null : i)}
                             >
-                                <span className="font-unbounded text-sm font-medium">{faq.q}</span>
-                                <span className="text-2xl font-light ml-4 flex-shrink-0">{open === i ? '−' : '+'}</span>
-                            </button>
+                                <span className="font-unbounded text-sm font-medium pr-4">{faq.q}</span>
+                                <span className="text-xl font-light flex-shrink-0 select-none">{open === i ? '−' : '+'}</span>
+                            </div>
                             {open === i && (
-                                <p className="mt-3 text-sm text-gray-600 leading-relaxed">{faq.a}</p>
+                                <p className="pb-5 text-sm text-gray-600 leading-relaxed">{faq.a}</p>
                             )}
                         </div>
                     ))}

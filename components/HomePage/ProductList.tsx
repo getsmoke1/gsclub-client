@@ -1,7 +1,6 @@
 "use client";
 import React, { useRef, useState, useCallback } from "react";
 import { ShoppingBag, } from "lucide-react";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import { useFilter } from "@/hooks/useFilter";
 import { Product } from "@/types/product";

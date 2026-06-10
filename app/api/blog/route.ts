@@ -25,7 +25,7 @@ export async function GET(req: Request) {
                 featuredImage: a.images[0]?.url || null,
             })),
         });
-    } catch (e) {
+    } catch {
         return NextResponse.json({ articles: [] });
     }
 }

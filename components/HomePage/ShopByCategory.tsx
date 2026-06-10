@@ -7,19 +7,19 @@ const categories = [
         label: 'DISPOSABLES',
         href: '/vapes',
         gradient: 'linear-gradient(135deg, #fe3500 0%, #ff6b35 100%)',
-        img: 'https://getsmoke.com/wp-content/uploads/2024/11/Geek-Bar-Pulse-X-25000-scaled.jpg',
+        img: '/categories/disposables.jpg',
     },
     {
         label: 'VAPE JUICE',
         href: '/vape-juice',
         gradient: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-        img: 'https://getsmoke.com/wp-content/uploads/2024/07/vape-juice.jpg',
+        img: '/categories/vape-juice.jpg',
     },
     {
         label: 'HOOKAH',
         href: '/hookah',
         gradient: 'linear-gradient(135deg, #003399 0%, #0066cc 100%)',
-        img: 'https://getsmoke.com/wp-content/uploads/2024/07/hookah.jpg',
+        img: '/categories/hookah.jpg',
     },
 ];
 
@@ -38,7 +38,7 @@ const ShopByCategory = () => {
                                 style={{ background: cat.gradient }}
                             >
                                 <div
-                                    className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-50 transition-opacity"
+                                    className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-75 transition-opacity"
                                     style={{ backgroundImage: `url(${cat.img})` }}
                                 />
                                 <div className="absolute inset-0 flex items-end p-4">

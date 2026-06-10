@@ -172,7 +172,7 @@ const Products = ({ productType }: ProductsProps) => {
                   key={product.id}
                   className="cursor-pointer"
                 >
-                  <div className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow flex flex-col h-full bg-white">
+                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
                     <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
                     <div className="absolute inset-0">
                       {product.images.length > 0 ? (
@@ -192,29 +192,30 @@ const Products = ({ productType }: ProductsProps) => {
                     </div>
                     <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
                       <div>
-                        <div className="flex items-center justify-center text-sm font-bold" style={{ color: "#fe3500" }}>
-                          <span>${product.currentPrice.toFixed(2)}</span>
+                        <div className="text-center text-sm font-bold text-black">
+                          ${product.currentPrice.toFixed(2)}
                           {product.originalPrice && product.originalPrice > product.currentPrice && (
-                            <span className="ml-2 text-xs text-gray-400 line-through font-normal">
-                              ${product.originalPrice.toFixed(2)}
+                            <span className="block text-xs text-gray-500 font-normal">
+                              — or subscribe to save up to 10%
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 text-center mt-1">
+                        <h3 className="font-bold text-xs md:text-sm text-center mt-1">
                           {product.brand.name}
-                        </p>
-                        <h3 className="font-semibold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                        </h3>
+                        <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
                           {product.name}
                         </h3>
+                        <p className="text-center text-xs mt-1">Pack Of 10</p>
                       </div>
-                      <div className="mt-3 flex flex-col gap-2">
+                      <div className="mt-3 flex flex-col gap-2 px-1">
+                          <span className="text-center text-xs underline cursor-pointer">View Product</span>
                           <button
-                            className="w-full py-2 rounded-full text-white text-xs font-bold uppercase cursor-pointer"
+                            className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
                             style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
                           >
-                            Add to Cart
+                            select options
                           </button>
-                          <p className="text-center text-xs text-gray-500">subscribe to save up to 10%</p>
                         </div>
                     </div>
                   </div>

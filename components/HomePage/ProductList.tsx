@@ -204,7 +204,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                 className="flex-shrink-0 w-[160px] md:w-[280px] cursor-pointer"
                                 onClick={() => router.push(`/product/${product.slug}`)}
                             >
-                                <div className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                                <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full">
                                     <div className="aspect-square relative bg-gray-100 h-[160px] md:h-[280px]">
                                         {product.images.length > 0 ? (
                                             <Image
@@ -222,38 +222,28 @@ const ProductList: React.FC<ProductListProps> = ({
                                     </div>
                                     <div className="pt-3 pb-5 px-2 md:px-4 flex flex-col flex-grow justify-between">
                                         <div>
-                                            <div className="flex items-center justify-center text-sm md:text-xl">
-                                                <span className="">
-                                                    ${product.currentPrice.toFixed(2)}
-                                                </span>
-                                                {product.originalPrice && (
-                                                    <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
-                                                        ${product.originalPrice.toFixed(2)}
-                                                    </span>
+                                            <div className="text-center text-sm font-semibold">
+                                                ${product.currentPrice.toFixed(2)}
+                                                {product.originalPrice && product.originalPrice > product.currentPrice && (
+                                                    <span className="text-xs text-gray-500"> — or subscribe to save up to 10%</span>
                                                 )}
                                             </div>
-                                            <h3 className="font-semibold text-sm md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
+                                            <h3 className="font-bold text-sm text-center line-clamp-2 mt-1">
                                                 {product.brand.name}
                                             </h3>
-                                            <h3 className="font-semibold text-sm md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-4 md:leading-7">
+                                            <h3 className="font-bold text-sm text-center line-clamp-2 mt-0.5">
                                                 {product.name}
                                             </h3>
                                         </div>
-                                        <div className="w-full mb-1.5 mt-2 md:px-5 flex flex-col items-center justify-center gap-3 text-xs md:text-base text-center">
-                                            <div>
-                                                <span className="w-full underline">View product</span>
-                                            </div>
-                                            {product?.redirectLink && (
-                                                <Button
-                                                    type="submit"
-                                                    className="leading-4 lg:whitespace-nowrap text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
-                                                    // onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    {/* <Link href={product?.redirectLink || ""}> */}
-                                                        Shop Now
-                                                    {/* </Link> */}
-                                                </Button>
-                                            )}
+                                        <div className="w-full mb-3 mt-2 px-3 flex flex-col items-center gap-2 text-center">
+                                            <span className="text-sm underline cursor-pointer">View Product</span>
+                                            <button
+                                                className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
+                                                style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                select options
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

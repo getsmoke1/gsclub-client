@@ -1,49 +1,90 @@
 "use client"
-import React from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+
+const slides = [
+    {
+        desktop: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-Beri-1-scaled.jpg',
+        mobile: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-Beri-mob-1-scaled.jpg',
+        alt: 'Beri Crush 50K – Welcome to our VapeShop',
+        href: '/brand/beri',
+    },
+    {
+        desktop: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-ebcreate-scaled.jpg',
+        mobile: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-ebcreate-mob-scaled.jpg',
+        alt: 'EBCreate BC Pro – Welcome to our VapeShop',
+        href: '/brand/ebcreate',
+    },
+];
 
 const Hero = () => {
+    const [current, setCurrent] = useState(0);
+
+    useEffect(() => {
+        const t = setInterval(() => {
+            setCurrent(c => (c + 1) % slides.length);
+        }, 5000);
+        return () => clearInterval(t);
+    }, []);
+
     return (
-        <section className="w-full relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1b69 50%, #0a1a4e 100%)', minHeight: '280px' }}>
-            <div className="w-11/12 mx-auto py-10 md:py-16 flex flex-col md:flex-row items-center justify-between gap-8">
-                {/* Left: text */}
-                <div className="flex flex-col gap-4 text-white max-w-lg z-10">
-                    <span className="text-xs font-bold px-3 py-1.5 rounded-lg w-fit" style={{ backgroundColor: '#ffc42e', color: '#000' }}>
-                        No more trips to stores
-                    </span>
-                    <div>
-                        <p className="text-base md:text-lg font-normal text-white/80">Welcome to our</p>
-                        <h1 className="font-unbounded font-extrabold text-4xl md:text-6xl uppercase leading-tight text-white">
-                            VAPESHOP
-                        </h1>
-                    </div>
-                    <p className="text-sm text-gray-300 max-w-sm">
-                        Top brands: Geek Bar, Lost Mary, RAZ, VIHO, HQD, FUME. Fast shipping across the USA.
-                    </p>
-                    <div className="flex gap-3 mt-2 flex-wrap">
-                        <Link href="/vapes" className="font-unbounded font-bold px-6 py-2.5 rounded text-white text-xs uppercase" style={{ backgroundColor: '#fe3500' }}>
-                            Shop Now
-                        </Link>
-                        <Link href="/brand/geek-bar" className="font-unbounded font-bold px-6 py-2.5 rounded text-white text-xs uppercase border border-white/50 hover:bg-white hover:text-black transition-colors">
-                            Geek Bar
-                        </Link>
-                    </div>
-                </div>
-                {/* Right: visual */}
-                <div className="hidden md:flex relative items-center justify-center w-[380px] h-[220px]">
-                    <span className="absolute text-[120px] font-extrabold text-white/10 font-unbounded select-none">35K</span>
-                    <span className="absolute top-4 right-8 text-3xl font-extrabold font-unbounded" style={{ color: '#ffc42e' }}>NEW IN</span>
+        <section className="w-full relative overflow-hidden" style={{ aspectRatio: '16/7' }}>
+            {slides.map((slide, i) => (
+                <Link
+                    key={i}
+                    href={slide.href}
+                    className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                    tabIndex={i === current ? 0 : -1}
+                >
+                    {/* Mobile image */}
                     <Image
-                        src="https://getsmoke.com/wp-content/uploads/2024/07/Mystery-box-2.png"
-                        alt="New vapes"
-                        width={200}
-                        height={200}
-                        className="object-contain z-10 drop-shadow-2xl"
+                        src={slide.mobile}
+                        alt={slide.alt}
+                        fill
+                        className="object-cover object-center md:hidden"
+                        priority={i === 0}
                         unoptimized
                     />
-                </div>
+                    {/* Desktop image */}
+                    <Image
+                        src={slide.desktop}
+                        alt={slide.alt}
+                        fill
+                        className="object-cover object-center hidden md:block"
+                        priority={i === 0}
+                        unoptimized
+                    />
+                </Link>
+            ))}
+
+            {/* Dot indicators */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {slides.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrent(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-white w-5' : 'bg-white/50'}`}
+                        aria-label={`Go to slide ${i + 1}`}
+                    />
+                ))}
             </div>
+
+            {/* Prev / Next arrows */}
+            <button
+                onClick={() => setCurrent(c => (c - 1 + slides.length) % slides.length)}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white"
+                aria-label="Previous slide"
+            >
+                ‹
+            </button>
+            <button
+                onClick={() => setCurrent(c => (c + 1) % slides.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white"
+                aria-label="Next slide"
+            >
+                ›
+            </button>
         </section>
     );
 };

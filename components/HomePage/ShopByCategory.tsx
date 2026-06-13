@@ -37,7 +37,7 @@ const ShopByCategory = () => {
                 <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {categories.map((cat) => (
                         <Link key={cat.label} href={cat.href} className="block group">
-                            <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                            <div className="relative rounded-2xl overflow-hidden" style={{ paddingBottom: '100%' }}>
                                 {/* Background image */}
                                 <Image
                                     src={cat.img}

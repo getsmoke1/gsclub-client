@@ -22,20 +22,20 @@ const BrandCircles = () => {
                 </h2>
 
                 {/* 4 per row — 2 rows of 4 = 8 brands */}
-                <div className="grid grid-cols-4 gap-2 md:gap-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-4 md:gap-4">
                     {featured.map((brand) => (
                         <Link
                             key={brand.slug}
                             href={`/brand/${brand.slug}`}
-                            className="flex items-center justify-center group py-3"
+                            className="flex items-center justify-center group py-4 border-b border-gray-100"
                         >
                             <Image
                                 src={brand.logo}
                                 alt={brand.name}
-                                width={140}
-                                height={70}
-                                className="object-contain w-full max-h-10 md:max-h-14 hover:opacity-70 transition-opacity"
-                                sizes="(max-width: 768px) 22vw, 140px"
+                                width={200}
+                                height={80}
+                                className="object-contain w-full max-h-14 md:max-h-16 hover:opacity-70 transition-opacity"
+                                sizes="(max-width: 768px) 45vw, 200px"
                             />
                         </Link>
                     ))}

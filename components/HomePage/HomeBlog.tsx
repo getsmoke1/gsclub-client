@@ -20,53 +20,62 @@ const HomeBlog = () => {
     }, []);
 
     return (
-        <section className="w-full bg-black py-16">
-            <div className="w-11/12 mx-auto flex flex-col md:flex-row gap-10 items-start">
-                {/* Left */}
-                <div className="md:w-2/5 flex flex-col gap-1">
-                    <span className="font-unbounded font-bold text-base text-white">getsmoke</span>
-                    <h2 className="font-unbounded font-bold text-4xl text-white leading-tight">Blog.</h2>
-                    <p className="font-unbounded font-bold text-4xl text-white leading-tight">
-                        Vape <span className="text-purple-500">news</span>
-                    </p>
-                    <p className="font-unbounded font-bold text-4xl text-white leading-tight italic">and study.</p>
-                    <Link
-                        href="/blog"
-                        className="mt-8 inline-block font-unbounded font-bold text-xs uppercase px-6 py-3 rounded-full border-2 border-white text-white hover:bg-white hover:text-black transition-colors w-fit"
-                    >
-                        View all posts
-                    </Link>
+        <section className="w-full py-10 px-4" style={{ backgroundColor: '#FFD600' }}>
+            <div className="w-11/12 mx-auto">
+                {/* Header */}
+                <div className="mb-6">
+                    <span className="text-sm text-gray-600 font-medium">getsmoke</span>
+                    <h2 className="font-unbounded font-bold text-3xl md:text-4xl text-black leading-tight mt-1">
+                        Blog. Vape{' '}
+                        <span style={{ color: '#fe3500' }}>news</span>
+                        <br />
+                        <span style={{ color: '#fe3500' }}>and study.</span>
+                    </h2>
                 </div>
-                {/* Right: blog cards */}
-                <div className="md:w-3/5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                {/* Blog cards — stack on mobile */}
+                <div className="flex flex-col gap-4">
                     {posts.length > 0 ? posts.map((post) => (
                         <Link key={post.slug} href={`/blog/${post.slug}`} className="block group">
-                            <div className="relative rounded-xl overflow-hidden bg-gray-800" style={{ paddingBottom: '65%' }}>
+                            <div className="relative rounded-2xl overflow-hidden bg-gray-800" style={{ paddingBottom: '70%' }}>
                                 {post.featuredImage ? (
                                     <Image
                                         src={post.featuredImage}
                                         alt={post.title}
                                         fill
-                                        className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                                         unoptimized
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />
                                 )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                                <div className="absolute bottom-0 p-4">
-                                    <h3 className="font-unbounded font-bold text-xs text-white line-clamp-3 leading-relaxed">
-                                        {post.title}
-                                    </h3>
+                                {/* White circle with title overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-40 h-40 md:w-48 md:h-48 rounded-full bg-white flex items-center justify-center p-4 shadow-xl">
+                                        <h3 className="font-unbounded font-bold text-xs md:text-sm text-black text-center leading-tight line-clamp-4">
+                                            {post.title}
+                                        </h3>
+                                    </div>
                                 </div>
                             </div>
                         </Link>
                     )) : (
-                        // Placeholder cards while loading
+                        // Skeleton
                         [0, 1].map(i => (
-                            <div key={i} className="rounded-xl overflow-hidden bg-gray-800 animate-pulse" style={{ paddingBottom: '65%' }} />
+                            <div key={i} className="relative rounded-2xl overflow-hidden bg-gray-300 animate-pulse" style={{ paddingBottom: '70%' }}>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-40 h-40 rounded-full bg-gray-200" />
+                                </div>
+                            </div>
                         ))
                     )}
+                </div>
+
+                {/* Read more */}
+                <div className="text-center mt-6">
+                    <Link href="/blog" className="font-unbounded text-sm underline text-black hover:text-gray-700">
+                        read more
+                    </Link>
                 </div>
             </div>
         </section>

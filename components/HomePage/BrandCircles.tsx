@@ -21,24 +21,22 @@ const BrandCircles = () => {
                     SHOP BY <strong>BRAND</strong>
                 </h2>
 
-                {/* 4 per row on mobile, 4 on desktop */}
-                <div className="grid grid-cols-4 gap-4 md:gap-6">
+                {/* 4 per row — 2 rows of 4 = 8 brands */}
+                <div className="grid grid-cols-4 gap-2 md:gap-4">
                     {featured.map((brand) => (
                         <Link
                             key={brand.slug}
                             href={`/brand/${brand.slug}`}
-                            className="flex items-center justify-center group"
+                            className="flex items-center justify-center group py-3"
                         >
-                            <div className="w-full flex items-center justify-center h-16 md:h-20 opacity-80 hover:opacity-100 transition-opacity duration-200">
-                                <Image
-                                    src={brand.logo}
-                                    alt={brand.name}
-                                    width={120}
-                                    height={60}
-                                    className="object-contain max-h-12 md:max-h-16 w-auto"
-                                    sizes="(max-width: 768px) 25vw, 120px"
-                                />
-                            </div>
+                            <Image
+                                src={brand.logo}
+                                alt={brand.name}
+                                width={140}
+                                height={70}
+                                className="object-contain w-full max-h-10 md:max-h-14 hover:opacity-70 transition-opacity"
+                                sizes="(max-width: 768px) 22vw, 140px"
+                            />
                         </Link>
                     ))}
                 </div>

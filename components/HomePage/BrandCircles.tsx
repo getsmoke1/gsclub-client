@@ -21,22 +21,24 @@ const BrandCircles = () => {
                     SHOP BY <strong>BRAND</strong>
                 </h2>
 
-                {/* 4 per row — 2 rows of 4 = 8 brands */}
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-4 md:gap-4">
+                {/* 2 columns × 4 rows = 8 logos, uniform size */}
+                <div className="grid grid-cols-2 divide-x divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
                     {featured.map((brand) => (
                         <Link
                             key={brand.slug}
                             href={`/brand/${brand.slug}`}
-                            className="flex items-center justify-center group py-4 border-b border-gray-100"
+                            className="flex items-center justify-center p-5 bg-white hover:bg-gray-50 transition-colors"
+                            style={{ height: "100px" }}
                         >
-                            <Image
-                                src={brand.logo}
-                                alt={brand.name}
-                                width={200}
-                                height={80}
-                                className="object-contain w-full max-h-14 md:max-h-16 hover:opacity-70 transition-opacity"
-                                sizes="(max-width: 768px) 45vw, 200px"
-                            />
+                            <div className="relative w-full h-full">
+                                <Image
+                                    src={brand.logo}
+                                    alt={brand.name}
+                                    fill
+                                    className="object-contain p-2"
+                                    sizes="45vw"
+                                />
+                            </div>
                         </Link>
                     ))}
                 </div>

@@ -2,6 +2,7 @@
 import React from "react"
 import Hero from "./Hero"
 import BestSellersSection from "./BestSellersSection"
+import BundleDeals from "./BundleDeals"
 import ShopByCategory from "./ShopByCategory"
 import BrandCircles from "./BrandCircles"
 import InstagramFeed from "./InstagramFeed"
@@ -13,6 +14,7 @@ const HomePage = () => {
         <main>
             <Hero />
             <BestSellersSection />
+            <BundleDeals />
             <ShopByCategory />
             <BrandCircles />
             <InstagramFeed />

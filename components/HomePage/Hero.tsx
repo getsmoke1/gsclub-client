@@ -5,18 +5,45 @@ import Link from 'next/link';
 
 const slides = [
     {
-        desktop: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-Beri-1-scaled.jpg',
-        mobile: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-Beri-mob-1-scaled.jpg',
-        alt: 'Beri Crush 50K – Welcome to our VapeShop',
+        desktop: '/banners/desktop-1.jpeg',
+        mobile: '/banners/mobile-1.jpeg',
+        alt: 'Welcome to our VapeShop',
+        href: '/vapes',
+    },
+    {
+        desktop: '/banners/desktop-2.jpg',
+        mobile: '/banners/mobile-2.jpg',
+        alt: 'Beri Crush 50K',
         href: '/brand/beri',
     },
     {
-        desktop: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-ebcreate-scaled.jpg',
-        mobile: 'https://getsmoke.com/wp-content/uploads/2025/10/Main-banner-ebcreate-mob-scaled.jpg',
-        alt: 'EBCreate BC Pro – Welcome to our VapeShop',
+        desktop: '/banners/desktop-3.jpg',
+        mobile: '/banners/mobile-3.jpg',
+        alt: 'EBCreate BC Pro',
         href: '/brand/ebcreate',
     },
+    {
+        desktop: '/banners/desktop-4.jpeg',
+        mobile: '/banners/mobile-4.jpeg',
+        alt: 'New Arrivals',
+        href: '/vapes',
+    },
+    {
+        desktop: '/banners/desktop-5.jpg',
+        mobile: '/banners/mobile-5.jpg',
+        alt: 'New In – Lost Mary',
+        href: '/brand/lost-mary',
+    },
+    {
+        desktop: '/banners/desktop-6.jpeg',
+        mobile: '/banners/mobile-6.jpeg',
+        alt: 'New Collection',
+        href: '/vapes',
+    },
 ];
+
+// Copy existing banners to new names for slides 2 & 3
+// (Beri and EBCreate were previously downloaded to /categories area, now in /banners)
 
 const Hero = () => {
     const [current, setCurrent] = useState(0);
@@ -28,8 +55,15 @@ const Hero = () => {
         return () => clearInterval(t);
     }, []);
 
+    const prev = () => setCurrent(c => (c - 1 + slides.length) % slides.length);
+    const next = () => setCurrent(c => (c + 1) % slides.length);
+
     return (
-        <section className="w-full relative overflow-hidden" style={{ aspectRatio: '16/7' }}>
+        <section className="w-full relative overflow-hidden">
+            {/* Desktop aspect ratio: 2560x933 ≈ 36.5% | Mobile: 860x1280 portrait */}
+            <div className="hidden md:block" style={{ paddingBottom: '36.4%' }} />
+            <div className="block md:hidden" style={{ paddingBottom: '148.8%' }} />
+
             {slides.map((slide, i) => (
                 <Link
                     key={i}
@@ -42,18 +76,18 @@ const Hero = () => {
                         src={slide.mobile}
                         alt={slide.alt}
                         fill
-                        className="object-cover object-center md:hidden"
+                        className="object-contain object-center md:hidden"
                         priority={i === 0}
-                        unoptimized
+                        sizes="100vw"
                     />
                     {/* Desktop image */}
                     <Image
                         src={slide.desktop}
                         alt={slide.alt}
                         fill
-                        className="object-cover object-center hidden md:block"
+                        className="object-contain object-center hidden md:block"
                         priority={i === 0}
-                        unoptimized
+                        sizes="100vw"
                     />
                 </Link>
             ))}
@@ -64,23 +98,23 @@ const Hero = () => {
                     <button
                         key={i}
                         onClick={() => setCurrent(i)}
-                        className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-white w-5' : 'bg-white/50'}`}
+                        className={`h-2 rounded-full transition-all ${i === current ? 'bg-white w-5' : 'bg-white/50 w-2'}`}
                         aria-label={`Go to slide ${i + 1}`}
                     />
                 ))}
             </div>
 
-            {/* Prev / Next arrows */}
+            {/* Arrows — hidden on mobile, visible on desktop */}
             <button
-                onClick={() => setCurrent(c => (c - 1 + slides.length) % slides.length)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white"
+                onClick={prev}
+                className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white text-2xl"
                 aria-label="Previous slide"
             >
                 ‹
             </button>
             <button
-                onClick={() => setCurrent(c => (c + 1) % slides.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white"
+                onClick={next}
+                className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white text-2xl"
                 aria-label="Next slide"
             >
                 ›

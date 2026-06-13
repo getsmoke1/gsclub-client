@@ -2,31 +2,16 @@
 import React from 'react'
 import Image from 'next/image'
 
-const circles = [
-    {
-        img: '/subscription/circle1.png',
-        text: <>Subscribe to get favourite flavour <em style={{ color: '#fe3500', fontStyle: 'normal' }}>everytime.</em> Change flavor at any time.</>,
-    },
-    {
-        img: '/subscription/circle2.png',
-        text: <>No need to visit the store - we will deliver <em style={{ color: '#fe3500' }}>a free vape box monthly.</em></>,
-    },
-    {
-        img: '/subscription/circle3.png',
-        text: <>Only <em style={{ color: '#fe3500' }}>original</em> vapes from the producer - 100% quality guarantee.</>,
-    },
-]
-
 const VapeSubscription = () => {
     return (
         <section
-            className="w-full overflow-hidden py-10"
+            className="w-full overflow-hidden"
             style={{
                 background: 'linear-gradient(180deg, #1a0533 0%, #2d0a4e 35%, #1a1040 70%, #0d1a3e 100%)',
             }}
         >
-            {/* Header — HTML only, no image */}
-            <div className="w-11/12 mx-auto mb-8">
+            {/* Header — HTML only */}
+            <div className="w-11/12 mx-auto pt-10 pb-2">
                 <h2 className="font-unbounded font-black text-3xl text-white uppercase leading-tight">
                     VAPE{' '}
                     <span style={{ color: '#FFD600' }}>SUBSCRIPTION</span>
@@ -43,26 +28,15 @@ const VapeSubscription = () => {
                 </div>
             </div>
 
-            {/* 3 circles + text pills */}
-            {circles.map((item, i) => (
-                <div key={i} className="w-full flex flex-col items-center mb-6">
-                    {/* Circle image — only the circle, no text */}
-                    <div className="w-full">
-                        <Image
-                            src={item.img}
-                            alt={`Subscription flavour ${i + 1}`}
-                            width={712}
-                            height={350}
-                            className="w-full h-auto"
-                            sizes="100vw"
-                        />
-                    </div>
-                    {/* White text pill — HTML only */}
-                    <div className="bg-white rounded-2xl px-5 py-3 mx-6 shadow-lg max-w-xs -mt-2">
-                        <p className="text-black text-sm leading-snug">{item.text}</p>
-                    </div>
-                </div>
-            ))}
+            {/* Circles + text pills — single image from Figma, no HTML duplication */}
+            <Image
+                src="/subscription/circles_and_pills.webp"
+                alt="Vape subscription benefits"
+                width={712}
+                height={1525}
+                className="w-full h-auto"
+                sizes="100vw"
+            />
         </section>
     )
 }

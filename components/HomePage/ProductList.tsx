@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { ShoppingBag, } from "lucide-react";
 import Link from "next/link";
 import { useFilter } from "@/hooks/useFilter";
@@ -25,8 +25,6 @@ const ProductList: React.FC<ProductListProps> = ({
     const { brandId, flavorId, puffsId, nicotineId } = useFilter();
     const router = useRouter();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const [showLeftArrow, setShowLeftArrow] = useState(false);
-    const [showRightArrow, setShowRightArrow] = useState(true);
     const limit = 30; // Items per page for infinite loading
 
     // Function to fetch products with pagination
@@ -82,20 +80,17 @@ const ProductList: React.FC<ProductListProps> = ({
         }
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    // Scroll functions
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({
-                left: -320, // Scroll by approximately one product width
-                behavior: "smooth",
-            });
+            scrollContainerRef.current.scrollBy({ left: -320, behavior: "smooth" });
         }
     };
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const scrollRight = () => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollBy({
-                left: 320, // Scroll by approximately one product width
+                left: 320,
                 behavior: "smooth",
             });
         }
@@ -169,49 +164,24 @@ const ProductList: React.FC<ProductListProps> = ({
                 </div>
             ) : (
                 <div className="relative">
-                    {/* Left Arrow */}
-                    {showLeftArrow && (
-                        <button
-                            onClick={scrollLeft}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#F4F4F4] border shadow-lg rounded-full p-2 w-10 h-10 hover:shadow-xl transition-shadow"
-                            aria-label="Scroll left"
-                        >
-                            <Image src={"/images/arrow.png"} width={20} height={20} alt="left arrow" className="rotate-180" />
-                        </button>
-                    )}
-
-                    {/* Right Arrow */}
-                    {showRightArrow && (
-                        <button
-                            onClick={scrollRight}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#F4F4F4] border shadow-lg rounded-full p-2 w-10 h-10 hover:shadow-xl transition-shadow"
-                            aria-label="Scroll right"
-                        >
-                            <Image src={"/images/arrow.png"} width={20} height={20} alt="right arrow" className="rotate-0" />
-                        </button>
-                    )}
-
-                    {/* Horizontal Scrolling Container */}
-                    <div
-                        ref={scrollContainerRef}
-                        className="flex gap-2 md:gap-6 overflow-x-auto scrollbar-hide pb-4"
-                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                    >
-                        {products.map((product: Product) => (
+                    {/* 2-column grid on mobile, 4-column on desktop — Figma layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+                        {products.slice(0, 4).map((product: Product) => (
                             <div
                                 key={product.id}
-                                className="flex-shrink-0 w-[160px] md:w-[280px] cursor-pointer"
+                                className="cursor-pointer"
                                 onClick={() => router.push(`/product/${product.slug}`)}
                             >
                                 <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-purple-600 transition-colors flex flex-col h-full">
-                                    <div className="aspect-square relative bg-gray-100 h-[160px] md:h-[280px]">
+                                    <div className="relative bg-gray-100" style={{ paddingBottom: '100%' }}>
                                         {product.images.length > 0 ? (
                                             <Image
                                                 src={product.images[0].url}
                                                 alt={product.name}
-                                                width={280}
-                                                height={280}
-                                                className="object-cover w-full h-full"
+                                                fill
+                                                className="object-cover"
+                                                sizes="(max-width: 768px) 50vw, 25vw"
+                                                unoptimized
                                             />
                                         ) : (
                                             <div className="flex items-center justify-center h-full">
@@ -251,12 +221,6 @@ const ProductList: React.FC<ProductListProps> = ({
                             </div>
                         ))}
 
-                        {/* Loading indicator when fetching more */}
-                        {isFetchingNextPage && (
-                            <div className="flex-shrink-0 w-[160px] md:w-[280px] flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                            </div>
-                        )}
                     </div>
                 </div>
             )}

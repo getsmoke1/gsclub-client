@@ -1,24 +1,22 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const categories = [
     {
         label: 'DISPOSABLES',
         href: '/vapes',
-        gradient: 'linear-gradient(135deg, #fe3500 0%, #ff6b35 100%)',
         img: '/categories/disposables.jpg',
     },
     {
         label: 'VAPE JUICE',
         href: '/vape-juice',
-        gradient: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
         img: '/categories/vape-juice.jpg',
     },
     {
         label: 'HOOKAH',
         href: '/hookah',
-        gradient: 'linear-gradient(135deg, #003399 0%, #0066cc 100%)',
         img: '/categories/hookah.jpg',
     },
 ];
@@ -30,19 +28,28 @@ const ShopByCategory = () => {
                 <h2 className="font-unbounded text-center text-2xl font-normal mb-8">
                     SHOP BY <strong>CATEGORY</strong>
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3 md:gap-4">
                     {categories.map((cat) => (
                         <Link key={cat.label} href={cat.href} className="block group">
-                            <div
-                                className="relative rounded-2xl overflow-hidden h-44 w-full"
-                                style={{ background: cat.gradient }}
-                            >
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-75 transition-opacity"
-                                    style={{ backgroundImage: `url(${cat.img})` }}
+                            <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '3/4' }}>
+                                {/* Background image */}
+                                <Image
+                                    src={cat.img}
+                                    alt={cat.label}
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    sizes="(max-width: 768px) 33vw, 30vw"
                                 />
-                                <div className="absolute inset-0 flex items-end p-4">
-                                    <span className="bg-white text-black font-unbounded font-bold text-xs px-3 py-1.5 rounded-md uppercase">
+                                {/* Dark gradient overlay bottom-to-top */}
+                                <div
+                                    className="absolute inset-0"
+                                    style={{
+                                        background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0) 65%)'
+                                    }}
+                                />
+                                {/* Label at bottom-left */}
+                                <div className="absolute bottom-3 left-3 md:bottom-5 md:left-5">
+                                    <span className="font-unbounded font-bold text-white uppercase text-xs md:text-sm leading-tight">
                                         {cat.label}
                                     </span>
                                 </div>

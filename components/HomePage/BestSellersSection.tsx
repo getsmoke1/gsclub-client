@@ -6,7 +6,7 @@ import ProductList from './ProductList';
 const BestSellersSection = () => {
     const [activeTab, setActiveTab] = useState<'best' | 'newest'>('best');
     return (
-        <section className="w-full bg-white pt-5 pb-5">
+        <section className="w-full bg-white pt-5 pb-2">
             <div className="w-11/12 mx-auto">
                 <div className="flex justify-center gap-4 mb-2">
                     {/* Active: yellow filled pill. Inactive: plain text no border */}

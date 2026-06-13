@@ -11,7 +11,7 @@ const categories = [
 
 const ShopByCategory = () => {
     return (
-        <section className="w-full bg-white pt-4 pb-4">
+        <section className="w-full bg-white pt-2 pb-4">
             <div className="w-11/12 mx-auto">
                 <h2 className="font-unbounded text-center text-xl font-normal mb-3">
                     SHOP BY <strong>CATEGORY</strong>

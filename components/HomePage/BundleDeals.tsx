@@ -20,7 +20,9 @@ const BundleDeals: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showLeft, setShowLeft] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showRight, setShowRight] = useState(true);
   const router = useRouter();
 
@@ -34,6 +36,7 @@ const BundleDeals: React.FC = () => {
       .catch(() => setLoading(false));
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -41,7 +44,9 @@ const BundleDeals: React.FC = () => {
     setShowRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scrollLeft = () => scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const scrollRight = () => scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
 
   // Extract pack number from product name e.g. "pack of 3" → "PACK OF 3"
@@ -62,37 +67,12 @@ const BundleDeals: React.FC = () => {
         </h2>
       </div>
 
-      {/* Scrollable cards */}
-      <div className="relative">
-        {showLeft && (
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border shadow-md rounded-full p-2 w-10 h-10 hover:shadow-lg transition-shadow"
-            aria-label="Scroll left"
-          >
-            <Image src="/images/arrow.png" width={20} height={20} alt="left" className="rotate-180" />
-          </button>
-        )}
-        {showRight && (
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border shadow-md rounded-full p-2 w-10 h-10 hover:shadow-lg transition-shadow"
-            aria-label="Scroll right"
-          >
-            <Image src="/images/arrow.png" width={20} height={20} alt="right" />
-          </button>
-        )}
-
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex gap-3 md:gap-5 overflow-x-auto scrollbar-hide pb-4"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
+      {/* 2-col grid — matches Figma */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {loading
-            ? Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex-shrink-0 w-[160px] md:w-[240px] border-2 border-black rounded-3xl overflow-hidden animate-pulse">
-                  <div className="h-[160px] md:h-[240px] bg-gray-200" />
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="border-2 border-black rounded-3xl overflow-hidden animate-pulse">
+                  <div className="h-[160px] bg-gray-200" />
                   <div className="p-3 space-y-2">
                     <div className="h-4 bg-gray-200 rounded" />
                     <div className="h-4 bg-gray-200 rounded w-2/3" />
@@ -100,15 +80,15 @@ const BundleDeals: React.FC = () => {
                   </div>
                 </div>
               ))
-            : products.map((product) => (
+            : products.slice(0, 4).map((product) => (
                 <div
                   key={product.id}
-                  className="flex-shrink-0 w-[160px] md:w-[240px] cursor-pointer"
+                  className="cursor-pointer"
                   onClick={() => router.push(`/product/${product.slug}`)}
                 >
-                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full">
+                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-purple-600 transition-colors flex flex-col h-full">
                     {/* Image + badge */}
-                    <div className="relative h-[160px] md:h-[240px] bg-gray-100">
+                    <div className="relative bg-gray-100" style={{ paddingBottom: '100%' }}>
                       {product.images.length > 0 ? (
                         <Image
                           src={product.images[0].url}
@@ -133,13 +113,13 @@ const BundleDeals: React.FC = () => {
                       <div>
                         <p className="font-bold text-sm text-center">{product.brand.name}</p>
                         <p className="text-xs text-center text-gray-600 line-clamp-2">{product.name}</p>
-                        <p className="text-center font-bold text-sm mt-1" style={{ color: "#fe3500" }}>
+                        <p className="text-center font-bold text-sm mt-1" style={{ color: "#7c3aed" }}>
                           ${product.currentPrice.toFixed(2)}
                         </p>
                       </div>
                       <button
                         className="w-full py-2 rounded-full text-white text-xs font-bold mt-2"
-                        style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                        style={{ background: "linear-gradient(135deg, #7c3aed 0%, #9b59b6 100%)" }}
                         onClick={(e) => e.stopPropagation()}
                       >
                         view product
@@ -148,7 +128,6 @@ const BundleDeals: React.FC = () => {
                   </div>
                 </div>
               ))}
-        </div>
       </div>
 
       {/* View all */}

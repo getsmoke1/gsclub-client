@@ -8,16 +8,19 @@ const BestSellersSection = () => {
     return (
         <section className="w-full bg-white py-10">
             <div className="w-11/12 mx-auto">
-                <div className="flex justify-center gap-3 mb-8">
+                <div className="flex justify-center gap-4 mb-6">
+                    {/* Active: yellow filled pill. Inactive: plain text no border */}
                     <button
                         onClick={() => setActiveTab('best')}
-                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full border-2 border-black transition-colors ${activeTab === 'best' ? 'bg-black text-white' : 'bg-white text-black'}`}
+                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full transition-colors ${activeTab === 'best' ? 'text-black' : 'bg-transparent text-gray-400'}`}
+                        style={activeTab === 'best' ? { background: '#FFD600' } : {}}
                     >
                         BEST SELLERS
                     </button>
                     <button
                         onClick={() => setActiveTab('newest')}
-                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full border-2 border-black transition-colors ${activeTab === 'newest' ? 'bg-black text-white' : 'bg-white text-black'}`}
+                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full transition-colors ${activeTab === 'newest' ? 'text-black' : 'bg-transparent text-gray-400'}`}
+                        style={activeTab === 'newest' ? { background: '#FFD600' } : {}}
                     >
                         NEWEST IN
                     </button>

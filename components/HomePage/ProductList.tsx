@@ -64,17 +64,11 @@ const ProductList: React.FC<ProductListProps> = ({
     // Flatten all pages into a single array of products
     const products = data?.pages.flatMap((page) => page.products) || [];
 
-    // Handle scroll and check for arrows visibility
+    // Handle scroll — kept for potential future use
     const handleScroll = useCallback(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
-
         const { scrollLeft, scrollWidth, clientWidth } = container;
-
-        setShowLeftArrow(scrollLeft > 0);
-        setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
-
-        // Check if user scrolled near the end and load more
         if (scrollLeft >= scrollWidth - clientWidth - 100 && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }

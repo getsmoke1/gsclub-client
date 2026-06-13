@@ -31,7 +31,7 @@ const brands = [
 
 const BrandCircles = () => {
     return (
-        <section className="w-full bg-white py-10">
+        <section className="w-full bg-white pt-4 pb-6">
             <div className="w-11/12 mx-auto">
                 <h2 className="font-unbounded text-center text-2xl font-normal mb-8">
                     SHOP BY <strong>BRAND</strong>

@@ -14,13 +14,15 @@ interface ProductListProps {
     viewAllLink?: string;
     showViewAll?: boolean;
     productType?: string; // New prop for product type filtering
+    search?: string; // Search query filter
 }
 
 const ProductList: React.FC<ProductListProps> = ({
     title = "JUST IN",
     viewAllLink = "/vapes",
     showViewAll = true,
-    productType // New prop
+    productType,
+    search // New prop
 }) => {
     const { brandId, flavorId, puffsId, nicotineId } = useFilter();
     const router = useRouter();
@@ -35,7 +37,8 @@ const ProductList: React.FC<ProductListProps> = ({
         if (flavorId) params.append("flavorId", flavorId);
         if (puffsId) params.append("puffsId", puffsId);
         if (nicotineId) params.append("nicotineId", nicotineId);
-        if (productType) params.append("productType", productType); // Add productType filter
+        if (productType) params.append("productType", productType);
+        if (search) params.append("search", search);
         params.append("page", pageParam.toString());
         params.append("limit", limit.toString());
 
@@ -53,7 +56,7 @@ const ProductList: React.FC<ProductListProps> = ({
         isLoading,
         error,
     } = useInfiniteQuery({
-        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType],
+        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType, search],
         queryFn: fetchProducts,
         getNextPageParam: (lastPage, pages) => {
             return lastPage.hasNextPage ? pages.length + 1 : undefined;

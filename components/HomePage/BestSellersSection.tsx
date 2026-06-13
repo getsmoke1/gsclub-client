@@ -8,7 +8,7 @@ const BestSellersSection = () => {
     return (
         <section className="w-full bg-white py-10">
             <div className="w-11/12 mx-auto">
-                <div className="flex justify-center gap-4 mb-6">
+                <div className="flex justify-center gap-4 mb-3">
                     {/* Active: yellow filled pill. Inactive: plain text no border */}
                     <button
                         onClick={() => setActiveTab('best')}
@@ -25,7 +25,7 @@ const BestSellersSection = () => {
                         NEWEST IN
                     </button>
                 </div>
-                <ProductList title="" showViewAll={false} productType="VAPES" />
+                <ProductList title="" showViewAll={false} productType="VAPES" search="pack" />
                 <div className="flex justify-center mt-8">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
                         view all

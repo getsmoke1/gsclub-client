@@ -3,73 +3,103 @@ import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 
-const posts = [
-    "https://getsmoke.com/wp-content/uploads/2025/06/WhatsApp-Image-2025-06-19-at-7.15.54-PM-1.jpeg",
-    "https://getsmoke.com/wp-content/uploads/2025/06/WhatsApp-Image-2025-06-15-at-10.43.25-PM.jpeg",
-    "https://getsmoke.com/wp-content/uploads/2025/01/Pack-of-10Geek-BAr-Pulse-300x377.jpg",
-]
-
 const InstagramFeed = () => {
     return (
-        <section
-            className="w-full py-10 px-4 relative overflow-hidden"
-            style={{
-                background: 'linear-gradient(135deg, #6a0dad 0%, #4a00e0 40%, #00bfff 100%)',
-            }}
-        >
-            {/* Heading */}
-            <div className="relative z-10 mb-8 max-w-sm">
-                <h2 className="font-unbounded font-bold text-2xl md:text-3xl text-white leading-tight uppercase">
-                    INHALE THE GOOD VIBES — FOLLOW US ON INSTAGRAM FOR THE LATEST DROPS!
-                </h2>
-                <Link
-                    href="https://www.instagram.com/getsmoke.shop/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-5 font-unbounded font-bold text-sm text-white uppercase px-8 py-3 rounded-full bg-black/60 hover:bg-black transition-colors"
-                >
-                    FOLLOW
-                </Link>
-            </div>
+        <section className="w-full bg-white py-4 px-4">
+            {/* Rounded card with purple-to-cyan gradient */}
+            <div
+                className="relative rounded-3xl overflow-hidden w-full"
+                style={{
+                    background: "linear-gradient(135deg, #7B2FBE 0%, #4A90C4 50%, #5BC8C8 100%)",
+                    minHeight: "380px",
+                }}
+            >
+                {/* Text block - top left */}
+                <div className="px-5 pt-7 pb-0 relative z-10 max-w-[70%]">
+                    <p className="font-unbounded font-bold text-white text-lg leading-snug uppercase">
+                        INHALE THE GOOD VIBES - FOLLOW US ON INSTAGRAM FOR THE LATEST DROPS!
+                    </p>
+                    <Link
+                        href="https://www.instagram.com/getsmoke.shop/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-5 px-7 py-3 rounded-full font-unbounded font-bold text-white text-sm uppercase"
+                        style={{ background: "rgba(60,20,100,0.65)" }}
+                    >
+                        FOLLOW
+                    </Link>
+                </div>
 
-            {/* Instagram post mockups */}
-            <div className="relative z-10 flex gap-3 overflow-hidden justify-center">
-                {posts.map((src, i) => (
+                {/* Two phone mockups - bottom, angled */}
+                <div className="absolute bottom-0 right-0 flex items-end" style={{ width: "65%", height: "280px" }}>
+                    {/* Left phone - slightly tilted left */}
                     <div
-                        key={i}
-                        className="flex-shrink-0 rounded-2xl overflow-hidden shadow-xl border border-white/20"
+                        className="absolute bottom-0"
                         style={{
-                            width: i === 1 ? '42vw' : '36vw',
-                            maxWidth: i === 1 ? '180px' : '155px',
-                            transform: i === 0 ? 'rotate(-3deg)' : i === 2 ? 'rotate(3deg)' : 'none',
+                            left: "5%",
+                            width: "52%",
+                            transform: "rotate(-6deg)",
+                            transformOrigin: "bottom center",
+                            zIndex: 2,
                         }}
                     >
-                        {/* IG post header */}
-                        <div className="bg-white px-2 py-1.5 flex items-center gap-1.5">
-                            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-600" />
-                            <span className="text-xs font-bold text-black">getsmoke.shop</span>
-                        </div>
-                        {/* Image */}
-                        <div className="relative" style={{ paddingBottom: '125%' }}>
-                            <Image
-                                src={src}
-                                alt="GetSmoke Instagram"
-                                fill
-                                className="object-cover"
-                                unoptimized
-                            />
-                        </div>
-                        {/* IG post footer */}
-                        <div className="bg-white px-2 py-1.5">
-                            <div className="flex gap-2 text-gray-400 text-sm mb-1">
-                                <span>♡</span><span>💬</span><span>✈</span>
+                        <div className="rounded-2xl overflow-hidden border-4 border-white shadow-xl">
+                            {/* IG header */}
+                            <div className="bg-white flex items-center gap-1.5 px-2 py-1.5">
+                                <div className="w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0" />
+                                <span className="text-[8px] font-bold text-black leading-none">getsmoke.shop</span>
                             </div>
-                            <p className="text-xs text-gray-600 line-clamp-1">
-                                <strong className="text-black">getsmoke.shop</strong> Latest drops!
-                            </p>
+                            <Image
+                                src="/instagram/post1.jpg"
+                                alt="Instagram post 1"
+                                width={200}
+                                height={200}
+                                className="w-full object-cover"
+                                style={{ aspectRatio: "1/1" }}
+                            />
+                            {/* IG footer */}
+                            <div className="bg-white px-2 py-1.5 flex gap-2">
+                                <span className="text-[9px]">♥</span>
+                                <span className="text-[9px]">💬</span>
+                                <span className="text-[9px]">↗</span>
+                            </div>
                         </div>
                     </div>
-                ))}
+
+                    {/* Right phone - slightly tilted right */}
+                    <div
+                        className="absolute bottom-0"
+                        style={{
+                            right: "2%",
+                            width: "48%",
+                            transform: "rotate(6deg)",
+                            transformOrigin: "bottom center",
+                            zIndex: 1,
+                        }}
+                    >
+                        <div className="rounded-2xl overflow-hidden border-4 border-white shadow-xl">
+                            {/* IG header */}
+                            <div className="bg-white flex items-center gap-1.5 px-2 py-1.5">
+                                <div className="w-5 h-5 rounded-full overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0" />
+                                <span className="text-[8px] font-bold text-black leading-none">getsmoke.shop</span>
+                            </div>
+                            <Image
+                                src="/instagram/post2.jpg"
+                                alt="Instagram post 2"
+                                width={180}
+                                height={180}
+                                className="w-full object-cover"
+                                style={{ aspectRatio: "1/1" }}
+                            />
+                            {/* IG footer */}
+                            <div className="bg-white px-2 py-1.5 flex gap-2">
+                                <span className="text-[9px]">♥</span>
+                                <span className="text-[9px]">💬</span>
+                                <span className="text-[9px]">↗</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     )

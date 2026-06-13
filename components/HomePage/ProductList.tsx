@@ -133,7 +133,7 @@ const ProductList: React.FC<ProductListProps> = ({
     }
 
     return (
-        <section className="bg-white text-black font-unbounded w-11/12 mx-auto py-14">
+        <section className="bg-white text-black font-unbounded w-full">
             {/* Header */}
             <div className="flex gap-2 items-end mb-6">
                 <h2 className="font-bold text-2xl">{title}</h2>

@@ -6,9 +6,9 @@ import ProductList from './ProductList';
 const BestSellersSection = () => {
     const [activeTab, setActiveTab] = useState<'best' | 'newest'>('best');
     return (
-        <section className="w-full bg-white py-10">
+        <section className="w-full bg-white pt-5 pb-5">
             <div className="w-11/12 mx-auto">
-                <div className="flex justify-center gap-4 mb-3">
+                <div className="flex justify-center gap-4 mb-2">
                     {/* Active: yellow filled pill. Inactive: plain text no border */}
                     <button
                         onClick={() => setActiveTab('best')}
@@ -26,7 +26,7 @@ const BestSellersSection = () => {
                     </button>
                 </div>
                 <ProductList title="" showViewAll={false} productType="VAPES" search="pack" />
-                <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-4">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
                         view all
                     </Link>

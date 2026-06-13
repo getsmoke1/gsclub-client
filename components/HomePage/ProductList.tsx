@@ -203,7 +203,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                 className="flex-shrink-0 w-[160px] md:w-[280px] cursor-pointer"
                                 onClick={() => router.push(`/product/${product.slug}`)}
                             >
-                                <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full">
+                                <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-purple-600 transition-colors flex flex-col h-full">
                                     <div className="aspect-square relative bg-gray-100 h-[160px] md:h-[280px]">
                                         {product.images.length > 0 ? (
                                             <Image
@@ -238,10 +238,10 @@ const ProductList: React.FC<ProductListProps> = ({
                                             <span className="text-sm underline cursor-pointer">View Product</span>
                                             <button
                                                 className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
-                                                style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                                                style={{ background: "linear-gradient(135deg, #7c3aed 0%, #9b59b6 100%)" }}
                                                 onClick={(e) => e.stopPropagation()}
                                             >
-                                                select options
+                                                view product
                                             </button>
                                         </div>
                                     </div>

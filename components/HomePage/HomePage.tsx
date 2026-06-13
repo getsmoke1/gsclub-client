@@ -2,6 +2,7 @@
 import React from "react"
 import Hero from "./Hero"
 import BestSellersSection from "./BestSellersSection"
+import VapeSubscription from "./VapeSubscription"
 import BundleDeals from "./BundleDeals"
 import ShopByCategory from "./ShopByCategory"
 import BrandCircles from "./BrandCircles"
@@ -14,6 +15,7 @@ const HomePage = () => {
         <main>
             <Hero />
             <BestSellersSection />
+            <VapeSubscription />
             <BundleDeals />
             <ShopByCategory />
             <BrandCircles />

@@ -27,8 +27,8 @@ const BrandCircles = () => {
                         <Link
                             key={brand.slug}
                             href={`/brand/${brand.slug}`}
-                            className="flex items-center justify-center p-5 bg-white hover:bg-gray-50 transition-colors"
-                            style={{ height: "100px" }}
+                            className="flex items-center justify-center p-4 bg-white hover:bg-gray-50 transition-colors"
+                            style={{ height: "120px" }}
                         >
                             <div className="relative w-full h-full">
                                 <Image

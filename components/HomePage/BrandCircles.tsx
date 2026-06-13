@@ -3,14 +3,14 @@ import Link from "next/link"
 import Image from "next/image"
 
 const featured = [
-    { name: "RAZ",       slug: "raz",       logo: "/brand-logos/raz-clean.png"       },
-    { name: "GEEK BAR",  slug: "geek-bar",  logo: "/brand-logos/geek-bar-clean.png"  },
-    { name: "HQD",       slug: "hqd",       logo: "/brand-logos/hqd-clean.png"       },
-    { name: "FUME",      slug: "fume",      logo: "/brand-logos/fume-clean.png"      },
-    { name: "LOST MARY", slug: "lost-mary", logo: "/brand-logos/lost-mary-clean.png" },
-    { name: "FOGER",     slug: "foger",     logo: "/brand-logos/foger-clean.png"     },
-    { name: "FIFTY BAR", slug: "fifty-bar", logo: "/brand-logos/fifty-bar-clean.png" },
-    { name: "EBCREATE",  slug: "ebcreate",  logo: "/brand-logos/ebcreate-clean.png"  },
+    { name: "RAZ",       slug: "raz",       logo: "/brand-logos/raz-norm.png"       },
+    { name: "GEEK BAR",  slug: "geek-bar",  logo: "/brand-logos/geek-bar-norm.png"  },
+    { name: "HQD",       slug: "hqd",       logo: "/brand-logos/hqd-norm.png"       },
+    { name: "FUME",      slug: "fume",      logo: "/brand-logos/fume-norm.png"      },
+    { name: "LOST MARY", slug: "lost-mary", logo: "/brand-logos/lost-mary-norm.png" },
+    { name: "FOGER",     slug: "foger",     logo: "/brand-logos/foger-norm.png"     },
+    { name: "FIFTY BAR", slug: "fifty-bar", logo: "/brand-logos/fifty-bar-norm.png" },
+    { name: "EBCREATE",  slug: "ebcreate",  logo: "/brand-logos/ebcreate-norm.png"  },
 ]
 
 const BrandCircles = () => {

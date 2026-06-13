@@ -8,7 +8,7 @@ const VapeSubscription = () => {
                 src="/subscription/full_section.webp"
                 alt="Vape Subscription - Make your life easier"
                 width={712}
-                height={1965}
+                height={2018}
                 className="w-full h-auto block"
                 sizes="100vw"
             />

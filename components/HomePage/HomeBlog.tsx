@@ -53,14 +53,14 @@ const HomeBlog = () => {
                                 </div>
                             </div>
                         ))
-                        : posts.map(post => (
+                        : posts.map((post, idx) => (
                             <Link
                                 key={post.slug}
                                 href={`/blog/${post.slug}`}
                                 className="block group"
                             >
-                                {/* Card wrapper — no overflow-hidden so circle can bleed out */}
-                                <div className="relative rounded-2xl bg-gray-800 mb-6" style={{ paddingBottom: '70%' }}>
+                                {/* Card wrapper — circle bleeds out bottom; last card needs less margin */}
+                                <div className="relative rounded-2xl bg-gray-800" style={{ paddingBottom: '70%', marginBottom: idx === posts.length - 1 ? '88px' : '100px' }}>
                                     {/* Clip only the image to rounded corners */}
                                     <div className="absolute inset-0 rounded-2xl overflow-hidden">
                                         {post.featuredImage ? (
@@ -92,7 +92,7 @@ const HomeBlog = () => {
                 </div>
 
                 {/* Read more */}
-                <div className="text-center mt-6">
+                <div className="text-center mt-2">
                     <Link
                         href="/blog"
                         className="font-unbounded text-sm underline text-black hover:text-gray-700"

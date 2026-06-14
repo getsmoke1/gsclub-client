@@ -31,6 +31,21 @@ const page = async () => {
       ? await getWpFeaturedImages(slugsNeedingImages)
       : {};
 
+    // Save WP images to MongoDB so future loads don't hit WP API
+    await Promise.all(
+      Object.entries(wpImages)
+        .filter(([, url]) => url)
+        .map(async ([slug, url]) => {
+          const article = articles.find(a => a.slug === slug);
+          if (!article) return;
+          try {
+            await prisma.image.create({
+              data: { url: url as string, blogArticleId: article.id, position: 0 },
+            });
+          } catch {} // ignore duplicate errors
+        })
+    );
+
     // Merge WP images into articles
     const enriched = articles.map(a => ({
       ...a,

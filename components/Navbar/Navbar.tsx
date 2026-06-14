@@ -163,7 +163,7 @@ const Navbar = () => {
 
     const navItems = [
         { title: "Shop", href: "/vapes" },
-        { title: "Brands", href: "/vapes" },
+        { title: "Brands", href: "/brands" },
         { title: "Accessories", href: "/accessories" },
         { title: "Hookah", href: "/hookah" },
         { title: "Blog", href: "/blog" },

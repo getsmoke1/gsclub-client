@@ -63,14 +63,14 @@ export default function AgeVerification() {
                         <Button
                             onClick={() => handleConfirm(true)}
                             variant='primary'
-                            className="w-full"
+                            className="w-full !bg-green-500 hover:!bg-green-600"
                         >
                             Yes, I&apos;m 21 years +
                         </Button>
                         <Button
                             variant='secondary'
                             onClick={() => handleConfirm(false)}
-                            className="w-full"
+                            className="w-full !bg-red-600 hover:!bg-red-700 !text-white"
                         >
                             No, I&apos;m under 21 years age
                         </Button>

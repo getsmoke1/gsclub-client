@@ -1,97 +1,32 @@
-import React from 'react'
+import PolicyPage from "@/components/PolicyPage/PolicyPage"
+import type { Metadata } from "next"
 
-const PactAndShipping = () => {
-    return (
-        <div className="w-11/12 lg:w-10/12 mx-auto px-4 py-8 font-unbounded">
-            <h1 className="text-3xl font-semibold mb-6">PACT Act & Shipping Policy</h1>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">PACT Act Compliance</h2>
-                <p className="mb-4">
-                    We ship products through regional carriers, with age verification required before checkout. All unverified orders will need an adult signature upon receipt.
-                </p>
-                <p className="mb-4">
-                    The Prevent All Cigarette Trafficking (PACT) Act, also known as the &quot;vape mail ban,&quot; was enacted in December 2020. This law expands the definition of tobacco products to include:
-                </p>
-                <ul className="list-disc pl-6 space-y-2 mb-4">
-                    <li>Nicotine e-liquids</li>
-                    <li>Nicotine-free e-liquids</li>
-                    <li>Electronic cigarette devices</li>
-                    <li>Related components</li>
-                </ul>
-                <p className="mb-4 font-medium">The PACT Act imposes the following requirements on all online retailers:</p>
-                <ul className="list-disc pl-6 space-y-2 mb-4">
-                    <li>Verify the age of customers using a commercially available database</li>
-                    <li>Register with the ATF and the U.S. Attorney General</li>
-                    <li>Register with state and local tax authorities in every jurisdiction where business is conducted</li>
-                    <li>Collect and remit all applicable state and local taxes, and apply any necessary tax stamps to products sold</li>
-                    <li>Submit a monthly report of all transactions to the tax authorities in each state</li>
-                </ul>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Delivery Times & Process</h2>
-                <p className="mb-4">
-                    GETSMOKE is dedicated to providing our customers with reliable and timely shipping services.
-                </p>
-                <p className="mb-4 font-medium">Expected Shipping Times:</p>
-                <ul className="list-disc pl-6 space-y-2 mb-4">
-                    <li>Standard Shipping - 5-6 business days</li>
-                    <li>Fast Shipping - 2-3 business days</li>
-                </ul>
-                <p className="mb-4">
-                    When you order with us, we provide tracking information that is sent to your email address to ensure your package is on the right route. However, if it appears that your shipment has been delayed past our expected shipping times please let us know and we&apos;ll investigate any issues surrounding the delivery of your purchase.
-                </p>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Age Verification</h2>
-                <p className="mb-4">
-                    To comply with state laws we require age verification before purchasing any products on this site. Age verification is requested through our company&apos;s email <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>, a secure online age verification way.
-                </p>
-                <p className="mb-4 font-medium">
-                    Please, make sure that you only receive the verification request only through our official contact Information: <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>
-                </p>
-                <p className="mb-4">
-                    Do not provide your age verification document to anyone else.
-                </p>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Route Shipping Protection</h2>
-                <p className="mb-4">
-                    We&apos;ve partnered with SHIPPO - a package protection and tracking solution - to give our customers the best possible delivery experience.
-                </p>
-                <p className="mb-4">
-                    SHIPPO provides low-cost shipping protection to protect your package in the event that it gets lost, stolen, or damaged while in transit. If you experienced an issue with your order, please file a claim with shippo&apos;s team.
-                </p>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Order Tracking</h2>
-                <p className="mb-4">
-                    Tracking information will be sent directly to your email when your order has been processed by our shipping team.
-                </p>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Canceling Orders</h2>
-                <p className="mb-4">
-                    If you need to cancel an order right after it has been placed, contact us immediately. We will do our best to cancel and refund your order.
-                </p>
-                <p className="mb-4">
-                    However, once an order has been placed, we cannot guarantee that it can be altered, changed, or canceled upon your request.
-                </p>
-            </section>
-
-            <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-                <p className="mb-4">
-                    If you have any questions or concerns about this shipping policies or PACT Act compliance, please contact us at <a href="mailto:info@getsmoke.comm" className="text-blue-600 hover:underline">info@getsmoke.comm</a>.
-                </p>
-            </section>
-        </div>
-    )
+export const metadata: Metadata = {
+  title: "Shipping Policy | GetSmoke",
+  description: "GetSmoke Shipping Policy",
 }
 
-export default PactAndShipping
+const content = `		<div data-elementor-type="wp-page" data-elementor-id="2706" class="elementor elementor-2706" data-elementor-post-type="page">
+				<div class="elementor-element elementor-element-3379fd1 e-flex e-con-boxed e-con e-parent" data-id="3379fd1" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;jet_parallax_layout_list&quot;:[]}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-c6d2373 elementor-hidden-mobile elementor-widget elementor-widget-heading" data-id="c6d2373" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h1 class="elementor-heading-title elementor-size-default">Shipping Policy 
+</h1>				</div>
+				</div>
+					</div>
+				</div>
+		<div class="elementor-element elementor-element-c33f15d e-flex e-con-boxed e-con e-parent" data-id="c33f15d" data-element_type="container" data-settings="{&quot;jet_parallax_layout_list&quot;:[]}">
+					<div class="e-con-inner">
+				<div class="elementor-element elementor-element-fb6c5b5 elementor-widget elementor-widget-heading" data-id="fb6c5b5" data-element_type="widget" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+					<h2 class="elementor-heading-title elementor-size-default"><div class="text-base my-auto mx-auto pb-10 [--thread-content-margin:--spacing(4)] @w-sm/main:[--thread-content-margin:--spacing(6)] @w-lg/main:[--thread-content-margin:--spacing(16)] px-(--thread-content-margin)" style="font-size: medium"><div class="[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn"><div class="flex max-w-full flex-col grow"><div data-message-author-role="assistant" data-message-id="ea62d455-66c8-4794-99cd-770da2fc561f" dir="auto" class="min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal [.text-message+&amp;]:mt-1" data-message-model-slug="gpt-5-2"><div class="flex w-full flex-col gap-1 empty:hidden first:pt-[1px]"><div class="markdown prose dark:prose-invert w-full break-words light markdown-new-styling"><p data-start="0" data-end="34"><strong data-start="0" data-end="34">PACT Act &amp; Shipping Compliance</strong></p><p data-start="36" data-end="254">GetSmoke operates in full compliance with the Prevent All Cigarette Trafficking (PACT) Act and all applicable federal, state, and local regulations governing the sale and shipment of vape and nicotine-related products.</p><p data-start="256" data-end="298">In accordance with the PACT Act, GetSmoke:</p><ul data-start="300" data-end="802"><li data-start="300" data-end="413"><p data-start="302" data-end="413">Verifies the age of all customers using a commercially available age-verification database prior to purchase.</p></li><li data-start="414" data-end="518"><p data-start="416" data-end="518">Registers with the ATF, the U.S. Attorney General, and all required state and local tax authorities.</p></li><li data-start="519" data-end="590"><p data-start="521" data-end="590">Collects and remits all applicable federal, state, and local taxes.</p></li><li data-start="591" data-end="678"><p data-start="593" data-end="678">Submits all required monthly transaction reports to the appropriate state agencies.</p></li><li data-start="679" data-end="802"><p data-start="681" data-end="802">Ships products only through compliant carriers and requires an adult signature upon delivery for all vape-related orders.</p></li></ul><p data-start="804" data-end="991">To ensure compliance with state-level restrictions, GetSmoke maintains automated geographic controls that prevent the sale and shipment of restricted products to prohibited jurisdictions.</p><p data-start="993" data-end="1165"><strong data-start="993" data-end="1165">We do not ship flavored vape products to the State of New Jersey. Orders with a New Jersey shipping address are technically blocked at checkout and cannot be completed.</strong></p><p data-start="1167" data-end="1264">These controls are continuously reviewed and updated to reflect changes in federal and state law.</p><hr data-start="1266" data-end="1269"><p data-start="1271" data-end="1299"><strong data-start="1271" data-end="1299">DELIVERY TIMES &amp; PROCESS</strong></p><p data-start="1301" data-end="1389">GetSmoke is dedicated to providing customers with reliable and timely shipping services.</p><p data-start="1391" data-end="1417">Expected Shipping Times:</p><ul data-start="1418" data-end="1495"><li data-start="1418" data-end="1458"><p data-start="1420" data-end="1458">Standard Shipping: 5–6 business days</p></li><li data-start="1459" data-end="1495"><p data-start="1461" data-end="1495">Fast Shipping: 2–3 business days</p></li></ul><p data-start="1497" data-end="1734">When you place an order, tracking information is sent to your email address so you can monitor your shipment. If your package appears to be delayed beyond the expected delivery window, please contact us and we will investigate the issue.</p><hr data-start="1736" data-end="1739"><p data-start="1741" data-end="1761"><strong data-start="1741" data-end="1761">AGE VERIFICATION</strong></p><p data-start="1763" data-end="1904">To comply with federal and state laws, all customers must successfully complete age verification before purchasing any products on this site.</p><p data-start="1906" data-end="2090">Age verification is performed through a secure, commercially available verification service. Verification requests are sent only from our official email address: <strong data-start="2068" data-end="2089"><a data-start="2070" data-end="2087" class="decorated-link cursor-pointer" rel="noopener">info@getsmoke.com<span aria-hidden="true" class="ms-0.5 inline-block align-middle leading-none"></span></a></strong>.</p><p data-start="2092" data-end="2204">Customers should never provide identification documents or personal verification information to any other party.</p><p data-start="2206" data-end="2259">Orders that cannot be verified will not be processed.</p><hr data-start="2261" data-end="2264"><p data-start="2266" data-end="2295"><strong data-start="2266" data-end="2295">ROUTE SHIPPING PROTECTION</strong></p><p data-start="2297" data-end="2505">We have partnered with SHIPPO to provide optional package protection and enhanced tracking. SHIPPO offers low-cost shipping protection in the event that a package is lost, stolen, or damaged while in transit.</p><p data-start="2507" data-end="2607">If you experience an issue with your order, please file a claim directly with SHIPPO’s support team.</p><hr data-start="2609" data-end="2612"><p data-start="2614" data-end="2632"><strong data-start="2614" data-end="2632">ORDER TRACKING</strong></p><p data-start="2634" data-end="2733">Tracking information is sent to your email once your order has been processed by our shipping team.</p><hr data-start="2735" data-end="2738"><p data-start="2740" data-end="2760"><strong data-start="2740" data-end="2760">CANCELING ORDERS</strong></p><p data-start="2762" data-end="2939">If you need to cancel an order immediately after it has been placed, please contact us as soon as possible. We will make every reasonable effort to cancel and refund your order.</p></div></div></div></div></div></div><span style="font-size: 16px;font-style: inherit;font-weight: inherit">However, once an order has entered processing or shipment, we cannot guarantee that it can be altered, changed, or canceled at your request.</span></h2>				</div>
+				</div>
+					</div>
+				</div>
+				</div>
+		`
+
+export default function Page() {
+  return <PolicyPage title="Shipping Policy" content={content} />
+}

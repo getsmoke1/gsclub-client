@@ -9,22 +9,33 @@ interface BlogProps {
 
 const Blog = ({ articles }: BlogProps) => {
   return (
-    <div className='w-11/12 mx-auto pt-4 pb-14 font-unbounded text-black min-h-[100vh]'>
-      <h1 className='font-semibold text-[2rem] text-center mb-6'>BLOGS</h1>
-      {/* All Blogs */}
-      <div className='font-plusSans gap-6 grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1'>
+    <div className="w-11/12 mx-auto pt-6 pb-14 font-unbounded text-black min-h-[100vh]">
+      <h1 className="font-bold text-2xl text-center mb-8">BLOGS</h1>
+      <div className="flex flex-col gap-8 md:grid md:grid-cols-2 lg:grid-cols-3">
         {articles.map((article, i) => (
-          <Link href={`/blog/${article.slug}`} key={i}>
-            <Image
-              src={article.images[0]?.url}
-              alt={article.title}
-              width={600}
-              height={400}
-              className='object-fill rounded-lg w-[423px] h-[228px]'
-            />
-            <div>
-              <h3 className='font-bold text-[1.2rem] mt-2'>{article.title}</h3>
-              <p className='font-normal'>{article.subtitle}</p>
+          <Link href={`/blog/${article.slug}`} key={i} className="block group">
+            {/* Image */}
+            <div className="relative w-full rounded-xl overflow-hidden bg-gray-200" style={{ paddingBottom: '56%' }}>
+              {article.images?.[0]?.url ? (
+                <Image
+                  src={article.images[0].url}
+                  alt={article.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  unoptimized
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                  <span className="text-gray-500 text-sm">No image</span>
+                </div>
+              )}
+            </div>
+            {/* Text */}
+            <div className="mt-3">
+              <h3 className="font-bold text-base leading-snug line-clamp-2">{article.title}</h3>
+              {article.subtitle && (
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2 font-sans">{article.subtitle}</p>
+              )}
             </div>
           </Link>
         ))}

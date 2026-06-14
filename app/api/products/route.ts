@@ -201,12 +201,7 @@ export async function GET(req: Request) {
       skip,
       take: limit,
       orderBy: [
-        {
-          packCount: "desc",
-        },
-        {
-          createdAt: "desc",
-        },
+        { name: "asc" },
       ],
     });
 

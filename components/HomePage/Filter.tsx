@@ -139,11 +139,10 @@ const Filter = () => {
       className="flex items-center gap-4 w-11/12 mx-auto py-7 md:py-10 font-unbounded"
       ref={filterRef}
     >
-      <section className="flex flex-wrap items-center gap-1 md:gap-4 lg:gap-8 xl:gap-10 bg-[#ffc42e] rounded-full px-8 md:px-6 py-2.5 md:py-2 text-black w-full text-sm font-bold">
+      <section className="flex items-center gap-1 bg-[#ffc42e] rounded-full px-5 py-2.5 text-black w-full text-sm font-bold overflow-x-auto scrollbar-hide" style={{scrollbarWidth:'none'}}>
         {/* heading */}
-        <div className="block">
-          <h2 className="font-black ml-3 block">filter by</h2>
-        </div>
+        <h2 className="font-black whitespace-nowrap mr-1 shrink-0">filter by</h2>
+        <span className="text-black/30 mx-1 shrink-0">|</span>
 
         {/* Loading state */}
         {loading ? (
@@ -158,10 +157,10 @@ const Filter = () => {
         ) : (
           <>
             {/* Brand Filter */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 onClick={() => toggleDropdown("brand")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
                   brandId ? "bg-[#f0b800]" : ""
                 }`}
               >
@@ -190,11 +189,12 @@ const Filter = () => {
               )}
             </div>
 
+            <span className="text-black/30 mx-1 shrink-0">∨</span>
             {/* Flavor Filter */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 onClick={() => toggleDropdown("flavor")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
                   flavorId ? "bg-[#f0b800]" : ""
                 }`}
               >
@@ -225,11 +225,12 @@ const Filter = () => {
               )}
             </div>
 
+            <span className="text-black/30 mx-1 shrink-0">∨</span>
             {/* Puffs Filter */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 onClick={() => toggleDropdown("puffs")}
-                className={`flex items-center cursor-pointer gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors ${
+                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
                   puffsId ? "bg-[#f0b800]" : ""
                 }`}
               >
@@ -258,11 +259,12 @@ const Filter = () => {
               )}
             </div>
 
+            <span className="text-black/30 mx-1 shrink-0">∨</span>
             {/* Nicotine Filter */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 onClick={() => toggleDropdown("nicotine")}
-                className={`flex items-center gap-2 px-4 py-1.5 hover:bg-[#f0b800] rounded-full transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors cursor-pointer whitespace-nowrap ${
                   nicotineId ? "bg-[#f0b800]" : ""
                 }`}
               >

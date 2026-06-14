@@ -63,6 +63,16 @@ const Products = ({ productType }: ProductsProps) => {
     queryFn: fetchProducts,
   });
 
+  // Shuffle products so same brand/model don't cluster together
+  const products = React.useMemo(() => {
+    const arr = [...(data?.products || [])];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor((i * 1664525 + 1013904223) % (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [data]);
+
   // Reset to page 1 only when filters actually change (not when page changes)
   React.useEffect(() => {
     const prevFilters = prevFiltersRef.current;
@@ -138,7 +148,7 @@ const Products = ({ productType }: ProductsProps) => {
     );
   }
 
-  const products = data?.products || [];
+
   const totalPages = data?.totalPages || 1;
 
   return (

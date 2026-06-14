@@ -4,7 +4,7 @@ import Image from "next/image"
 
 const InstagramFeed = () => {
     return (
-        <section className="w-full bg-white py-2 px-4">
+        <section className="w-full bg-white py-2 px-2">
             <Link
                 href="https://www.instagram.com/getsmoke.shop/"
                 target="_blank"

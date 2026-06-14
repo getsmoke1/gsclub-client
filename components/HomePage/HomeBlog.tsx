@@ -14,7 +14,7 @@ const HomeBlog = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/blog-wp')
+        fetch('/api/blog?limit=2&page=1')
             .then(r => r.json())
             .then(data => {
                 setPosts((data.articles || []).slice(0, 2));

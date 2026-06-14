@@ -91,11 +91,11 @@ const Footer = () => {
             {/* Black bottom section — policy links */}
             <div className="bg-black py-8 px-4 flex flex-col items-center gap-4">
                 {[
-                    { label: "Privacy policy",        href: "/privacy-policy" },
-                    { label: "Terms and conditions",  href: "/terms-and-conditions" },
-                    { label: "Return policy",         href: "/return-policy" },
-                    { label: "Contact",               href: "/contact" },
-                    { label: "Shipping Policy",       href: "/shipping-policy" },
+                    { label: "Privacy policy",        href: "https://getsmoke.com/privacy-policy/" },
+                    { label: "Terms and conditions",  href: "https://getsmoke.com/terms-and-conditions/" },
+                    { label: "Return policy",         href: "https://getsmoke.com/return-policy/" },
+                    { label: "Contact",               href: "https://getsmoke.com/contact/" },
+                    { label: "Shipping Policy",       href: "https://getsmoke.com/shipping-policy/" },
                 ].map(({ label, href }) => (
                     <Link
                         key={href}

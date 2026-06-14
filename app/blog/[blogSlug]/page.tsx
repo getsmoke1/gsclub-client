@@ -1,6 +1,7 @@
 import BlogDetails from "@/components/Blog/BlogDetails";
 import { noIndex } from "@/lib/noindex";
 import { prisma } from "@/lib/prisma";
+import { getWpFeaturedImage } from "@/lib/wp-images";
 import { getSEOData } from "@/lib/seo";
 import { Article } from "@/types/article";
 import { Metadata } from "next";
@@ -136,9 +137,18 @@ const page = async ({ params }: Props) => {
       return notFound();
     }
 
+    // Enrich with WP featured image if not in MongoDB
+    let enriched = article as Article;
+    if (!article.images?.length || !article.images[0]?.url) {
+      const wpImage = await getWpFeaturedImage(blogSlug);
+      if (wpImage) {
+        enriched = { ...article, images: [{ url: wpImage, id: "" }] } as Article;
+      }
+    }
+
     return (
       <div>
-        <BlogDetails article={article as Article} />
+        <BlogDetails article={enriched} />
       </div>
     );
   } catch (error) {

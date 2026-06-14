@@ -50,7 +50,7 @@ const ScrollToTopButton = () => {
             {isVisible && (
                 <motion.button
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 p-3 bg-gradient-to-r from-[#3E2FE1] to-[#8C14AC] text-white rounded-xl shadow-lg z-50 flex items-center justify-center hover:shadow-xl hover:cursor-pointer"
+                    className="fixed bottom-8 right-8 p-3 bg-[#fe3500] text-white rounded-xl shadow-lg z-50 flex items-center justify-center hover:shadow-xl hover:cursor-pointer"
                     aria-label="Scroll to top"
                     initial={{ opacity: 0, scale: 0.5, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}

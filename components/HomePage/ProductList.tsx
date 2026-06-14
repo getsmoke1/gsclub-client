@@ -2,7 +2,7 @@
 import React, { useRef, useCallback } from "react";
 import { ShoppingBag, } from "lucide-react";
 import Link from "next/link";
-import { useFilter } from "@/hooks/useFilter";
+// useFilter intentionally NOT used here — homepage always shows unfiltered products
 import { Product } from "@/types/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -24,7 +24,8 @@ const ProductList: React.FC<ProductListProps> = ({
     productType,
     search // New prop
 }) => {
-    const { brandId, flavorId, puffsId, nicotineId } = useFilter();
+    // Homepage: no filters applied regardless of global filter state
+    const brandId = undefined, flavorId = undefined, puffsId = undefined, nicotineId = undefined;
     const router = useRouter();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const limit = 30; // Items per page for infinite loading

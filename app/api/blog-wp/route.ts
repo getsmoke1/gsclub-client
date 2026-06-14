@@ -1,34 +1,23 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600; // cache 1 hour
+export const dynamic = "force-dynamic";
 
 export async function GET() {
     try {
-        // Fetch latest 2 posts from WP with embedded featured media
-        const res = await fetch(
-            "https://getsmoke.com/wp-json/wp/v2/posts?per_page=2&orderby=date&order=desc&_embed=1&_fields=id,slug,title,link,featured_media,_embedded",
-            {
-                headers: { "User-Agent": "GetSmoke-NextJS/1.0" },
-                next: { revalidate: 3600 },
-            }
+        // Step 1: get latest 2 posts (no embed needed)
+        const postsRes = await fetch(
+            "https://getsmoke.com/wp-json/wp/v2/posts?per_page=2&orderby=date&order=desc&_fields=id,slug,title,featured_media",
+            { next: { revalidate: 3600 } }
         );
+        if (!postsRes.ok) throw new Error(`WP posts error: ${postsRes.status}`);
+        const posts = await postsRes.json();
 
-        if (!res.ok) throw new Error(`WP API error: ${res.status}`);
-
-        const posts = await res.json();
-
+        // Step 2: for each post fetch featured image by media ID
         const articles = await Promise.all(
-            posts.map(async (post: Record<string, unknown>) => {
-                // Try embedded first
-                const embedded = post._embedded as Record<string, unknown[]> | undefined;
+            posts.map(async (post: { id: number; slug: string; title: { rendered: string }; featured_media: number }) => {
                 let featuredImage: string | null = null;
 
-                if (embedded?.["wp:featuredmedia"]?.[0]) {
-                    featuredImage = (embedded["wp:featuredmedia"][0] as Record<string, unknown>).source_url as string || null;
-                }
-
-                // Fallback: fetch media directly
-                if (!featuredImage && post.featured_media && (post.featured_media as number) > 0) {
+                if (post.featured_media && post.featured_media > 0) {
                     try {
                         const mediaRes = await fetch(
                             `https://getsmoke.com/wp-json/wp/v2/media/${post.featured_media}?_fields=source_url`,
@@ -41,15 +30,10 @@ export async function GET() {
                     } catch {}
                 }
 
-                const titleObj = post.title as { rendered?: string } | undefined;
-
                 return {
-                    slug: post.slug as string,
-                    title: titleObj?.rendered
-                        ? titleObj.rendered.replace(/<[^>]+>/g, "")
-                        : String(post.slug),
+                    slug: post.slug,
+                    title: post.title.rendered.replace(/<[^>]+>/g, ""),
                     featuredImage,
-                    link: post.link as string,
                 };
             })
         );

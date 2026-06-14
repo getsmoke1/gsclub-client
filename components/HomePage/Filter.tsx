@@ -15,6 +15,71 @@ interface FilterOptions {
   nicotineLevels: FilterOption[];
 }
 
+type FilterKey = "brandId" | "flavorId" | "puffsId" | "nicotineId";
+
+interface FilterButtonProps {
+  label: string;
+  isActive: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
+  options: FilterOption[];
+  selectedId?: string;
+  onSelect: (id: string) => void;
+}
+
+const FilterButton = ({ label, isActive, isOpen, onToggle, options, selectedId, onSelect }: FilterButtonProps) => {
+  const btnRef = useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+
+  useEffect(() => {
+    if (isOpen && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        position: "fixed",
+        top: rect.bottom + 6,
+        left: rect.left,
+        zIndex: 9999,
+      });
+    }
+  }, [isOpen]);
+
+  return (
+    <div className="relative shrink-0" ref={btnRef}>
+      <button
+        onClick={onToggle}
+        className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
+          isActive ? "bg-[#f0b800]" : ""
+        }`}
+      >
+        <span>{isActive ? (options.find(o => o.id === selectedId)?.name || label) : label}</span>
+        <ChevronDown
+          size={16}
+          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          style={dropdownStyle}
+          className="w-48 bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
+        >
+          {options.map((opt) => (
+            <div
+              key={opt.id}
+              className={`px-4 py-2 hover:bg-amber-50 cursor-pointer transition-colors text-sm ${
+                selectedId === opt.id ? "bg-[#ffc42e] font-bold" : ""
+              }`}
+              onClick={() => onSelect(opt.id)}
+            >
+              {opt.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Filter = () => {
   const {
     brandId,
@@ -26,40 +91,11 @@ const Filter = () => {
     removeFilter,
   } = useFilter();
 
-  const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(
-    null
-  );
+  const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const filterRef = useRef<HTMLDivElement>(null);
-
-  const getSelectedFilterName = (
-    type: "brandId" | "flavorId" | "puffsId" | "nicotineId"
-  ) => {
-    const id = { brandId, flavorId, puffsId, nicotineId }[type];
-    if (!id) return null;
-
-    const options = {
-      brandId: filterOptions?.brands,
-      flavorId: filterOptions?.flavors,
-      puffsId: filterOptions?.puffs,
-      nicotineId: filterOptions?.nicotineLevels,
-    }[type];
-
-    return options?.find((option) => option.id === id)?.name;
-  };
-
-  const activeFilters = [
-    { type: "brandId", id: brandId, name: getSelectedFilterName("brandId") },
-    { type: "flavorId", id: flavorId, name: getSelectedFilterName("flavorId") },
-    { type: "puffsId", id: puffsId, name: getSelectedFilterName("puffsId") },
-    {
-      type: "nicotineId",
-      id: nicotineId,
-      name: getSelectedFilterName("nicotineId"),
-    },
-  ].filter((filter) => filter.id);
 
   const fetchFilterOptions = useCallback(async () => {
     try {
@@ -70,299 +106,112 @@ const Filter = () => {
       if (puffsId) params.append("puffsId", puffsId);
       if (nicotineId) params.append("nicotineId", nicotineId);
 
-      const response = await fetch(
-        `/api/products/filter-options?${params.toString()}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch filter options");
-      }
-      const data = await response.json();
-      setFilterOptions(data);
+      const res = await fetch(`/api/products/filter-options?${params.toString()}`);
+      if (!res.ok) throw new Error("Failed to fetch filter options");
+      setFilterOptions(await res.json());
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
-      );
+      setError(err instanceof Error ? err.message : "Error");
     } finally {
       setLoading(false);
     }
-  },[ brandId, flavorId, puffsId, nicotineId]);
+  }, [brandId, flavorId, puffsId, nicotineId]);
+
+  useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
 
   useEffect(() => {
-    fetchFilterOptions();
-  }, [brandId, flavorId,fetchFilterOptions, puffsId, nicotineId]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
-      ) {
+    const handleClick = (e: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
         setOpenDropdown(null);
       }
     };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const toggleDropdown = (dropdownName: string) => {
-    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  const toggle = (name: string) => setOpenDropdown(prev => prev === name ? null : name);
+
+  const handleSelect = (type: FilterKey, id: string) => {
+    const current = { brandId, flavorId, puffsId, nicotineId }[type];
+    if (current === id) {
+      removeFilter(type);
+    } else {
+      setFilters({ [type]: id });
+    }
+    setOpenDropdown(null);
   };
 
-  const handleOptionClick = (
-  type: "brandId" | "flavorId" | "puffsId" | "nicotineId",
-  id: string
-) => {
-  // Get the current value for this filter type
-  const currentValue = { brandId, flavorId, puffsId, nicotineId }[type];
-  
-  // If the clicked option is already selected, remove the filter
-  if (currentValue === id) {
-    removeFilter(type);
-  } else {
-    // Otherwise, set the new filter
-    setFilters({ [type]: id });
-  }
-  
-  // Close the dropdown
-  setOpenDropdown(null);
-};
+  const hasActive = !!(brandId || flavorId || puffsId || nicotineId);
 
-  const hasActiveFilters = activeFilters.length > 0;
-
-  if (error) return <div className="flex gap-2 p-2">Error: {error}</div>;
+  if (error) return <div className="text-red-500 p-2 text-sm">Filter error: {error}</div>;
 
   return (
     <div
-      className="flex items-center gap-4 w-11/12 mx-auto py-7 md:py-10 font-unbounded"
+      className="w-11/12 mx-auto py-6 md:py-8 font-unbounded"
       ref={filterRef}
     >
-      <section className="flex items-center gap-1 bg-[#ffc42e] rounded-full px-5 py-2.5 text-black w-full text-sm font-bold overflow-x-auto scrollbar-hide" style={{scrollbarWidth:'none'}}>
-        {/* heading */}
-        <h2 className="font-black whitespace-nowrap mr-1 shrink-0">filter by</h2>
-        <span className="text-black/30 mx-1 shrink-0">|</span>
+      {/* Yellow pill — overflow-x scroll for mobile, dropdowns escape via fixed positioning */}
+      <div className="flex items-center bg-[#ffc42e] rounded-full px-5 py-2.5 text-black text-sm font-bold overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+        <h2 className="font-black whitespace-nowrap shrink-0 mr-2">filter by</h2>
+        <span className="text-black/30 mx-2 shrink-0">|</span>
 
-        {/* Loading state */}
         {loading ? (
           [...Array(4)].map((_, i) => (
-            <div key={i} className="relative">
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full">
-                <div className="h-6 w-20 bg-[#f0b800] rounded-full animate-pulse"></div>
-                <div className="h-5 w-5 bg-[#f0b800] rounded-full animate-pulse"></div>
-              </div>
-            </div>
+            <div key={i} className="h-7 w-20 bg-[#f0b800] rounded-full animate-pulse mx-2 shrink-0" />
           ))
         ) : (
           <>
-            {/* Brand Filter */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => toggleDropdown("brand")}
-                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
-                  brandId ? "bg-[#f0b800]" : ""
-                }`}
-              >
-                <span>Brand</span>
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-300 ${
-                    openDropdown === "brand" ? "rotate-0" : "-rotate-90"
-                  }`}
-                />
-              </button>
-              {openDropdown === "brand" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
-                  {filterOptions?.brands.map((brand) => (
-                    <div
-                      key={brand.id}
-                      className={`px-4 flex items-center justify-between py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
-                        brandId === brand.id ? "bg-[#f0b800]" : ""
-                      }`}
-                      onClick={() => handleOptionClick("brandId", brand.id)}
-                    >
-                      {brand.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <FilterButton
+              label="Brand"
+              isActive={!!brandId}
+              isOpen={openDropdown === "brand"}
+              onToggle={() => toggle("brand")}
+              options={filterOptions?.brands || []}
+              selectedId={brandId}
+              onSelect={(id) => handleSelect("brandId", id)}
+            />
+            <span className="text-black/30 mx-2 shrink-0">∨</span>
+            <FilterButton
+              label="Puffs"
+              isActive={!!puffsId}
+              isOpen={openDropdown === "puffs"}
+              onToggle={() => toggle("puffs")}
+              options={filterOptions?.puffs || []}
+              selectedId={puffsId}
+              onSelect={(id) => handleSelect("puffsId", id)}
+            />
+            <span className="text-black/30 mx-2 shrink-0">∨</span>
+            <FilterButton
+              label="Flavor"
+              isActive={!!flavorId}
+              isOpen={openDropdown === "flavor"}
+              onToggle={() => toggle("flavor")}
+              options={filterOptions?.flavors || []}
+              selectedId={flavorId}
+              onSelect={(id) => handleSelect("flavorId", id)}
+            />
+            <span className="text-black/30 mx-2 shrink-0">∨</span>
+            <FilterButton
+              label="Nicotine"
+              isActive={!!nicotineId}
+              isOpen={openDropdown === "nicotine"}
+              onToggle={() => toggle("nicotine")}
+              options={filterOptions?.nicotineLevels || []}
+              selectedId={nicotineId}
+              onSelect={(id) => handleSelect("nicotineId", id)}
+            />
 
-            <span className="text-black/30 mx-1 shrink-0">∨</span>
-            {/* Flavor Filter */}
-            <div className="relative shrink-0">
+            {hasActive && (
               <button
-                onClick={() => toggleDropdown("flavor")}
-                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
-                  flavorId ? "bg-[#f0b800]" : ""
-                }`}
+                onClick={() => { clearFilters(); setOpenDropdown(null); }}
+                className="flex items-center gap-1 ml-4 px-3 py-1 text-sm text-black/60 hover:text-black transition-colors shrink-0 whitespace-nowrap"
               >
-                <span>Flavor</span>
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-300 ${
-                    openDropdown === "flavor" ? "rotate-0" : "-rotate-90"
-                  }`}
-                />
+                <X size={14} />
+                Clear all
               </button>
-              {openDropdown === "flavor" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
-                  {filterOptions?.flavors.map((flavor) => (
-                    <>
-                      <div
-                        key={flavor.id}
-                        className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
-                          flavorId === flavor.id ? "bg-[#f0b800]" : ""
-                        }`}
-                        onClick={() => handleOptionClick("flavorId", flavor.id)}
-                      >
-                        {flavor.name}
-                      </div>
-                    </>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <span className="text-black/30 mx-1 shrink-0">∨</span>
-            {/* Puffs Filter */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => toggleDropdown("puffs")}
-                className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
-                  puffsId ? "bg-[#f0b800]" : ""
-                }`}
-              >
-                <span>Puffs</span>
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-300 ${
-                    openDropdown === "puffs" ? "rotate-0" : "-rotate-90"
-                  }`}
-                />
-              </button>
-              {openDropdown === "puffs" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
-                  {filterOptions?.puffs.map((puff) => (
-                    <div
-                      key={puff.id}
-                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
-                        puffsId === puff.id ? "bg-[#f0b800]" : ""
-                      }`}
-                      onClick={() => handleOptionClick("puffsId", puff.id)}
-                    >
-                      {puff.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <span className="text-black/30 mx-1 shrink-0">∨</span>
-            {/* Nicotine Filter */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => toggleDropdown("nicotine")}
-                className={`flex items-center gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors cursor-pointer whitespace-nowrap ${
-                  nicotineId ? "bg-[#f0b800]" : ""
-                }`}
-              >
-                <span>Nicotine</span>
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-300 ${
-                    openDropdown === "nicotine" ? "rotate-0" : "-rotate-90"
-                  }`}
-                />
-              </button>
-              {openDropdown === "nicotine" && (
-                <div className="absolute z-10 mt-2 w-fit md:w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
-                  {filterOptions?.nicotineLevels.map((level) => (
-                    <div
-                      key={level.id}
-                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
-                        nicotineId === level.id ? "bg-[#f0b800]" : ""
-                      }`}
-                      onClick={() => handleOptionClick("nicotineId", level.id)}
-                    >
-                      {level.name}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Active Filters Dropdown */}
-            {/* <div className="relative">
-              <button
-                onClick={() => toggleDropdown("activeFilters")}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-colors cursor-pointer ${
-                  hasActiveFilters ? "bg-gray-700 hover:bg-[#f0b800]" : "opacity-50 cursor-not-allowed"
-                }`}
-                disabled={!hasActiveFilters}
-              >
-                <span>Active Filters ({activeFilters.length})</span>
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-300 ${
-                    openDropdown === "activeFilters" ? "rotate-0" : "-rotate-90"
-                  }`}
-                />
-              </button>
-              {openDropdown === "activeFilters" && (
-                <div className="absolute z-10 right-0 mt-2 w-48 bg-white border border-gray-200 text-black rounded-lg shadow-lg py-1 max-h-[50vh] overflow-y-auto">
-                  {activeFilters.length > 0 ? (
-                    <>
-                      {activeFilters.map((filter) => (
-                        <div
-                          key={filter.type}
-                          className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
-                        >
-                          <span>{filter.name}</span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeFilter(filter.type as any);
-                            }}
-                            className="hover:text-gray-300 p-1"
-                          >
-                            <X size={14} />
-                          </button>
-                        </div>
-                      ))}
-                      <div className="border-t border-gray-700 mt-1 pt-1">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            clearFilters();
-                            setOpenDropdown(null);
-                          }}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-400 hover:text-red-300 transition-colors"
-                        >
-                          Clear All
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="px-4 py-2 text-gray-400">No active filters</div>
-                  )}
-                </div>
-              )}
-            </div> */}
+            )}
           </>
         )}
-
-        {!loading && hasActiveFilters && (
-          <button
-            onClick={clearFilters}
-            className="flex items-center gap-1 px-2 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer ml-auto"
-          >
-            <X size={16} />
-            Clear all
-          </button>
-        )}
-      </section>
+      </div>
     </div>
   );
 };

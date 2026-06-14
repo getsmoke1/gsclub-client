@@ -59,23 +59,26 @@ const HomeBlog = () => {
                                 href={`/blog/${post.slug}`}
                                 className="block group"
                             >
-                                <div className="relative rounded-2xl overflow-hidden bg-gray-800" style={{ paddingBottom: '70%' }}>
-                                    {/* Featured image */}
-                                    {post.featuredImage ? (
-                                        <Image
-                                            src={post.featuredImage}
-                                            alt={post.title}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                            unoptimized
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />
-                                    )}
-                                    {/* Dark overlay for readability */}
-                                    <div className="absolute inset-0 bg-black/20" />
-                                    {/* White circle with title */}
-                                    <div className="absolute inset-0 flex items-center justify-center">
+                                {/* Card wrapper — no overflow-hidden so circle can bleed out */}
+                                <div className="relative rounded-2xl bg-gray-800 mb-6" style={{ paddingBottom: '70%' }}>
+                                    {/* Clip only the image to rounded corners */}
+                                    <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                                        {post.featuredImage ? (
+                                            <Image
+                                                src={post.featuredImage}
+                                                alt={post.title}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                                unoptimized
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />
+                                        )}
+                                        {/* Dark overlay */}
+                                        <div className="absolute inset-0 bg-black/20" />
+                                    </div>
+                                    {/* White circle — centered horizontally, bottom overflows card */}
+                                    <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-60px' }}>
                                         <div className="w-44 h-44 rounded-full bg-white flex items-center justify-center p-5 shadow-xl">
                                             <h3 className="font-unbounded font-bold text-xs text-black text-center leading-snug line-clamp-5">
                                                 {post.title}

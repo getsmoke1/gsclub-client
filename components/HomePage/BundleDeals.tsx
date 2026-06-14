@@ -86,44 +86,54 @@ const BundleDeals: React.FC = () => {
                   className="cursor-pointer"
                   onClick={() => router.push(`/product/${product.slug}`)}
                 >
-                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-purple-600 transition-colors flex flex-col h-full">
-                    {/* Image + badge */}
-                    <div className="relative bg-gray-100" style={{ paddingBottom: '100%' }}>
-                      {product.images.length > 0 ? (
-                        <Image
-                          src={product.images[0].url}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <ShoppingBag className="h-10 w-10 text-gray-300" />
-                        </div>
-                      )}
-                      {/* Pack badge */}
-                      <span className="absolute top-2 left-2 bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">
-                        {getPackLabel(product.name)}
-                      </span>
+                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                    {/* Image */}
+                    <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
+                      <div className="absolute inset-0">
+                        {product.images.length > 0 ? (
+                          <Image
+                            src={product.images[0].url}
+                            alt={product.name}
+                            width={400}
+                            height={400}
+                            className="object-cover w-full h-full"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <ShoppingBag className="h-10 w-10 text-gray-300" />
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* Info */}
-                    <div className="p-3 flex flex-col gap-1 flex-grow justify-between">
+                    <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
                       <div>
-                        <p className="font-bold text-sm text-center">{product.brand.name}</p>
-                        <p className="text-xs text-center text-gray-600 line-clamp-2">{product.name}</p>
-                        <p className="text-center font-bold text-sm mt-1" style={{ color: "#7c3aed" }}>
+                        <div className="text-center text-sm font-bold text-black">
                           ${product.currentPrice.toFixed(2)}
-                        </p>
+                          <span className="block text-xs text-gray-500 font-normal">
+                            — or subscribe to save up to 10%
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-xs md:text-sm text-center mt-1">
+                          {product.brand.name}
+                        </h3>
+                        <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                          {product.name}
+                        </h3>
+                        <p className="text-center text-xs mt-1">{getPackLabel(product.name)}</p>
                       </div>
-                      <button
-                        className="w-full py-2 rounded-full text-white text-xs font-bold mt-2"
-                        style={{ background: "linear-gradient(135deg, #7c3aed 0%, #9b59b6 100%)" }}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        view product
-                      </button>
+                      <div className="mt-3 flex flex-col gap-2 px-1">
+                        <span className="text-center text-xs underline cursor-pointer">View Product</span>
+                        <button
+                          className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
+                          style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          select options
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -162,57 +162,60 @@ const ProductList: React.FC<ProductListProps> = ({
             ) : (
                 <div className="relative">
                     {/* 2-column grid on mobile, 4-column on desktop — Figma layout */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5">
                         {products.slice(0, 4).map((product: Product) => (
                             <div
                                 key={product.id}
                                 className="cursor-pointer"
                                 onClick={() => router.push(`/product/${product.slug}`)}
                             >
-                                <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-purple-600 transition-colors flex flex-col h-full">
-                                    <div className="relative bg-gray-100" style={{ paddingBottom: '100%' }}>
-                                        {product.images.length > 0 ? (
-                                            <Image
-                                                src={product.images[0].url}
-                                                alt={product.name}
-                                                fill
-                                                className="object-cover"
-                                                sizes="(max-width: 768px) 50vw, 25vw"
-                                                unoptimized
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full">
-                                                <ShoppingBag className="h-10 w-10 text-gray-300" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="pt-3 pb-4 px-3 flex flex-col gap-1">
-                                        {/* Brand name — small, centered */}
-                                        <p className="text-xs text-center text-gray-500 font-semibold uppercase tracking-wide">
-                                            {product.brand.name}
-                                        </p>
-                                        {/* Product name — bold */}
-                                        <h3 className="font-bold text-sm text-center line-clamp-2 leading-tight">
-                                            {product.name}
-                                        </h3>
-                                        {/* Stars */}
-                                        <div className="flex justify-center gap-0.5 my-0.5">
-                                            {[1,2,3,4,5].map(i => (
-                                                <span key={i} className="text-yellow-400 text-xs">★</span>
-                                            ))}
+                                <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                                    {/* Image */}
+                                    <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
+                                        <div className="absolute inset-0">
+                                            {product.images.length > 0 ? (
+                                                <Image
+                                                    src={product.images[0].url}
+                                                    alt={product.name}
+                                                    width={400}
+                                                    height={400}
+                                                    className="object-cover w-full h-full"
+                                                    unoptimized
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full">
+                                                    <ShoppingBag className="h-10 w-10 text-gray-300" />
+                                                </div>
+                                            )}
                                         </div>
-                                        {/* Price */}
-                                        <p className="text-center font-bold text-sm">
-                                            ${product.currentPrice.toFixed(2)}
-                                        </p>
-                                        {/* Single purple button */}
-                                        <button
-                                            className="w-full mt-1 py-2.5 rounded-full text-white text-xs font-bold cursor-pointer"
-                                            style={{ background: "linear-gradient(135deg, #7c3aed 0%, #9b59b6 100%)" }}
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            view product
-                                        </button>
+                                    </div>
+                                    {/* Info */}
+                                    <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
+                                        <div>
+                                            <div className="text-center text-sm font-bold text-black">
+                                                ${product.currentPrice.toFixed(2)}
+                                                <span className="block text-xs text-gray-500 font-normal">
+                                                    — or subscribe to save up to 10%
+                                                </span>
+                                            </div>
+                                            <h3 className="font-bold text-xs md:text-sm text-center mt-1">
+                                                {product.brand.name}
+                                            </h3>
+                                            <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                                                {product.name}
+                                            </h3>
+                                            <p className="text-center text-xs mt-1">Pack Of 10</p>
+                                        </div>
+                                        <div className="mt-3 flex flex-col gap-2 px-1">
+                                            <span className="text-center text-xs underline cursor-pointer">View Product</span>
+                                            <button
+                                                className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
+                                                style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                select options
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

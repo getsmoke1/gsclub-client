@@ -67,7 +67,7 @@ const Products = ({ productType }: ProductsProps) => {
   const products = React.useMemo(() => {
     const arr = [...(data?.products || [])];
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor((i * 1664525 + 1013904223) % (i + 1));
+      const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;

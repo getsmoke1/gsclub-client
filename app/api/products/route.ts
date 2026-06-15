@@ -179,8 +179,14 @@ export async function GET(req: Request) {
       }
     }
 
-    // Query products with pagination and filters
-    const products = await prisma.product.findMany({
+    // Get total count for pagination
+    const totalCount = await prisma.product.count({
+      where: filter,
+    });
+
+    // Fetch all products matching filter, then interleave by brand before pagination
+    // This ensures no single brand dominates any page
+    const allProducts = await prisma.product.findMany({
       where: filter,
       include: {
         images: true,
@@ -198,12 +204,27 @@ export async function GET(req: Request) {
           },
         },
       },
-      skip,
-      take: limit,
-      orderBy: [
-        { name: "asc" },
-      ],
+      orderBy: [{ name: "asc" }],
     });
+
+    // Round-robin interleave by brandId so brands are evenly distributed across pages
+    const byBrand: Record<string, typeof allProducts> = {};
+    for (const p of allProducts) {
+      const key = p.brandId || "unknown";
+      if (!byBrand[key]) byBrand[key] = [];
+      byBrand[key].push(p);
+    }
+    const groups = Object.values(byBrand);
+    const interleaved: typeof allProducts = [];
+    const maxLen = Math.max(0, ...groups.map((g) => g.length));
+    for (let i = 0; i < maxLen; i++) {
+      for (const g of groups) {
+        if (g[i]) interleaved.push(g[i]);
+      }
+    }
+
+    // Apply pagination on interleaved result
+    const products = interleaved.slice(skip ?? 0, (skip ?? 0) + limit);
 
     // Transform the productPuffs data to a more usable format if needed
     const transformedProducts = products.map((product) => ({
@@ -213,11 +234,6 @@ export async function GET(req: Request) {
         puffDesc: pp.puffDesc,
       })),
     }));
-
-    // Get total count for pagination
-    const totalCount = await prisma.product.count({
-      where: filter,
-    });
 
     return NextResponse.json({
       products: transformedProducts,

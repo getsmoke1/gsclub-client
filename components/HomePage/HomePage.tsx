@@ -9,12 +9,17 @@ import BrandCircles from "./BrandCircles"
 import InstagramFeed from "./InstagramFeed"
 import HomeFaq from "./HomeFaq"
 import HomeBlog from "./HomeBlog"
+import { Product } from "@/types/product"
 
-const HomePage = () => {
+interface HomePageProps {
+    initialProducts?: Product[];
+}
+
+const HomePage = ({ initialProducts }: HomePageProps) => {
     return (
         <main>
             <Hero />
-            <BestSellersSection />
+            <BestSellersSection initialProducts={initialProducts} />
             <VapeSubscription />
             <BundleDeals />
             <ShopByCategory />

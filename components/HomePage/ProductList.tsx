@@ -13,8 +13,9 @@ interface ProductListProps {
     title?: string;
     viewAllLink?: string;
     showViewAll?: boolean;
-    productType?: string; // New prop for product type filtering
-    search?: string; // Search query filter
+    productType?: string;
+    search?: string;
+    initialProducts?: Product[]; // Server-prefetched products — skips loading skeleton
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -22,7 +23,8 @@ const ProductList: React.FC<ProductListProps> = ({
     viewAllLink = "/vapes",
     showViewAll = true,
     productType,
-    search // New prop
+    search,
+    initialProducts
 }) => {
     // Homepage: no filters applied regardless of global filter state
     const brandId = undefined, flavorId = undefined, puffsId = undefined, nicotineId = undefined;
@@ -63,8 +65,14 @@ const ProductList: React.FC<ProductListProps> = ({
             return lastPage.hasNextPage ? pages.length + 1 : undefined;
         },
         initialPageParam: 1,
-        staleTime: 5 * 60 * 1000,  // Cache for 5 min — instant on back navigation
-        gcTime: 10 * 60 * 1000,    // Keep in memory for 10 min
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+        initialData: initialProducts?.length
+            ? {
+                pages: [{ products: initialProducts, hasNextPage: true, page: 1, pageSize: initialProducts.length, totalCount: initialProducts.length, totalPages: 99 }],
+                pageParams: [1],
+              }
+            : undefined,
     });
 
     // Flatten all pages into a single array of products

@@ -16,9 +16,13 @@ interface Product {
   packCount?: number | null;
 }
 
-const BundleDeals: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+interface BundleDealsProps {
+  initialProducts?: Product[];
+}
+
+const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
+  const [products, setProducts] = useState<Product[]>(initialProducts || []);
+  const [loading, setLoading] = useState(!initialProducts?.length);
   const scrollRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showLeft, setShowLeft] = useState(false);
@@ -27,6 +31,7 @@ const BundleDeals: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+    if (initialProducts?.length) return; // skip fetch if server-prefetched
     fetch("/api/products?search=pack&limit=20&page=1")
       .then((r) => r.json())
       .then((data) => {
@@ -34,6 +39,7 @@ const BundleDeals: React.FC = () => {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

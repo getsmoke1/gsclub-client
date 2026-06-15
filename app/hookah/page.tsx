@@ -1,6 +1,7 @@
-import { noIndex } from "@/lib/noindex";
 import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
+import { noIndex } from "@/lib/noindex";
+import { prefetchProducts } from "@/lib/prefetch-products";
 
 export const metadata: Metadata = {
   ...noIndex,
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description: "Shop hookah, e-hookah and shisha vapes at GetSmoke.",
 };
 
-export default function HookahPage() {
-  return <VapePage productType="HOOKAH" />;
+export default async function HookahPage() {
+  const initialProducts = await prefetchProducts("HOOKAH", 24);
+  return <VapePage productType="HOOKAH" initialProducts={initialProducts} />;
 }

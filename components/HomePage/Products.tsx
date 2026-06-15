@@ -19,9 +19,11 @@ import { useQuery } from "@tanstack/react-query";
 
 type ProductsProps = {
   productType?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialProducts?: any[];
 };
 
-const Products = ({ productType }: ProductsProps) => {
+const Products = ({ productType, initialProducts }: ProductsProps) => {
   const { brandId, flavorId, puffsId, nicotineId, clearFilters } = useFilter();
 
   // Clear filters when productType changes (navigating between sections)
@@ -72,6 +74,9 @@ const Products = ({ productType }: ProductsProps) => {
     queryFn: fetchProducts,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    initialData: initialProducts?.length
+      ? { products: initialProducts, totalCount: initialProducts.length, page: 1, pageSize: initialProducts.length, totalPages: 99 }
+      : undefined,
   });
 
   // Interleave products by brand (round-robin) so no brand dominates a page

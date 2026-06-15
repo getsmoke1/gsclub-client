@@ -13,15 +13,17 @@ import { Product } from "@/types/product"
 
 interface HomePageProps {
     initialProducts?: Product[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bundleProducts?: any[];
 }
 
-const HomePage = ({ initialProducts }: HomePageProps) => {
+const HomePage = ({ initialProducts, bundleProducts }: HomePageProps) => {
     return (
         <main>
             <Hero />
             <BestSellersSection initialProducts={initialProducts} />
             <VapeSubscription />
-            <BundleDeals />
+            <BundleDeals initialProducts={bundleProducts} />
             <ShopByCategory />
             <BrandCircles />
             <InstagramFeed />

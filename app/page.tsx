@@ -31,11 +31,20 @@ export default async function Home() {
     orderBy: { name: "asc" },
   });
 
-  // Transform to match API shape (productPuffs → puffs)
+  // Prefetch bundle deals (pack products)
+  const rawBundles = await prisma.product.findMany({
+    where: { productType: "VAPES", isArchived: false, name: { contains: "pack", mode: "insensitive" } },
+    include: { images: { take: 1 }, brand: true },
+    take: 20,
+    orderBy: { name: "asc" },
+  });
+
   const initialProducts = rawProducts.map((p) => ({
     ...p,
     puffs: p.productPuffs.map((pp) => ({ ...pp.puffs, puffDesc: pp.puffDesc })),
   })) as unknown as Product[];
 
-  return <HomePage initialProducts={initialProducts} />;
+  const bundleProducts = rawBundles.map((p) => ({ ...p, puffs: [] }));
+
+  return <HomePage initialProducts={initialProducts} bundleProducts={bundleProducts} />;
 }

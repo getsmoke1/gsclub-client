@@ -166,6 +166,7 @@ const Navbar = () => {
         { title: "Brands", href: "/brands" },
         { title: "Accessories", href: "/accessories" },
         { title: "Hookah", href: "/hookah" },
+        { title: "Vape Juice", href: "/vape-juice" },
         { title: "Blog", href: "/blog" },
         { title: "Contact", href: "/contact" },
     ];

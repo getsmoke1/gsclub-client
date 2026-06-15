@@ -41,6 +41,7 @@ model Address {
 enum ProductType {
   VAPES
   HOOKAH
+  VAPE_JUICE
   SUPPLEMENTS
   ADULT_GOODS
   ACCESSORIES

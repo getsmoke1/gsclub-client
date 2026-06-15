@@ -4,10 +4,10 @@ import VapePage from "@/components/vapes/VapePage";
 
 export const metadata: Metadata = {
   ...noIndex,
-  title: "Vape Juice & E-Liquids | GetSmoke",
-  description: "Shop vape juice and e-liquids at GetSmoke.",
+  title: "Vape Juice | GetSmoke",
+  description: "Shop premium vape juice and e-liquids at GetSmoke. Ice Monster, Lost Art and more.",
 };
 
 export default function VapeJuicePage() {
-  return <VapePage productType="VAPES" />;
+  return <VapePage productType="VAPE_JUICE" />;
 }

@@ -63,14 +63,34 @@ const Products = ({ productType }: ProductsProps) => {
     queryFn: fetchProducts,
   });
 
-  // Shuffle products so same brand/model don't cluster together
+  // Interleave products by brand (round-robin) so no brand dominates a page
   const products = React.useMemo(() => {
     const arr = [...(data?.products || [])];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+    // Group by brandId
+    const byBrand: Record<string, typeof arr> = {};
+    for (const p of arr) {
+      const key = (p as { brandId?: string }).brandId || 'unknown';
+      if (!byBrand[key]) byBrand[key] = [];
+      byBrand[key].push(p);
     }
-    return arr;
+    // Shuffle within each brand group
+    for (const key of Object.keys(byBrand)) {
+      const g = byBrand[key];
+      for (let i = g.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [g[i], g[j]] = [g[j], g[i]];
+      }
+    }
+    // Round-robin: pick one from each brand in turn
+    const groups = Object.values(byBrand);
+    const result: typeof arr = [];
+    const maxLen = Math.max(0, ...groups.map((g) => g.length));
+    for (let i = 0; i < maxLen; i++) {
+      for (const g of groups) {
+        if (g[i]) result.push(g[i]);
+      }
+    }
+    return result;
   }, [data]);
 
   // Reset to page 1 only when filters actually change (not when page changes)

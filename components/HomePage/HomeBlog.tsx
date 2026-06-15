@@ -69,7 +69,6 @@ const HomeBlog = () => {
                                                 alt={post.title}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                                unoptimized
                                             />
                                         ) : (
                                             <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />

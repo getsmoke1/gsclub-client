@@ -63,6 +63,8 @@ const ProductList: React.FC<ProductListProps> = ({
             return lastPage.hasNextPage ? pages.length + 1 : undefined;
         },
         initialPageParam: 1,
+        staleTime: 5 * 60 * 1000,  // Cache for 5 min — instant on back navigation
+        gcTime: 10 * 60 * 1000,    // Keep in memory for 10 min
     });
 
     // Flatten all pages into a single array of products
@@ -181,7 +183,6 @@ const ProductList: React.FC<ProductListProps> = ({
                                                     width={400}
                                                     height={400}
                                                     className="object-cover w-full h-full"
-                                                    unoptimized
                                                 />
                                             ) : (
                                                 <div className="flex items-center justify-center h-full">

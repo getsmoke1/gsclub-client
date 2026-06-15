@@ -97,7 +97,6 @@ const BundleDeals: React.FC = () => {
                             width={400}
                             height={400}
                             className="object-cover w-full h-full"
-                            unoptimized
                           />
                         ) : (
                           <div className="flex items-center justify-center h-full">

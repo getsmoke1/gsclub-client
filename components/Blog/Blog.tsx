@@ -22,7 +22,6 @@ const Blog = ({ articles }: BlogProps) => {
                   alt={article.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  unoptimized
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">

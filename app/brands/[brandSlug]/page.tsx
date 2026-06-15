@@ -85,7 +85,6 @@ export default async function BrandPage({ params }: Props) {
                       alt={product.name}
                       fill
                       className="object-cover"
-                      unoptimized
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100">

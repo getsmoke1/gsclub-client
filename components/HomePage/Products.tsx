@@ -70,6 +70,8 @@ const Products = ({ productType }: ProductsProps) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["products", productType, brandId, flavorId, puffsId, nicotineId, currentPage],
     queryFn: fetchProducts,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   // Interleave products by brand (round-robin) so no brand dominates a page

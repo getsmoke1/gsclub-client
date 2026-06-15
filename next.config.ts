@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    unoptimized: true,
+    // unoptimized removed — Vercel will optimize, resize and serve WebP
     remotePatterns: [
       {
         protocol: "https",
@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "example.com",
+        hostname: "pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev",
       },
     ],
   },

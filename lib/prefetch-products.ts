@@ -4,6 +4,7 @@ import { ProductType } from "@prisma/client";
 export async function prefetchProducts(productType: string, limit = 24) {
   const type = productType as ProductType;
 
+  // Fetch ALL products for this type so interleaving works across all brands
   const rawProducts = await prisma.product.findMany({
     where: { productType: type, isArchived: false },
     include: {
@@ -14,7 +15,6 @@ export async function prefetchProducts(productType: string, limit = 24) {
       productPuffs: { include: { puffs: true } },
       productFlavors: { include: { flavor: true } },
     },
-    take: limit,
     orderBy: { name: "asc" },
   });
 

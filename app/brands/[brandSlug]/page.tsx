@@ -3,33 +3,30 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-
-const BRAND_LOGOS: Record<string, string> = {
-  "geek-bar":   "/brand-logos/geek-bar-norm.png",
-  "raz":        "/brand-logos/raz-norm.png",
-  "hqd":        "/brand-logos/hqd-norm.png",
-  "lost-mary":  "/brand-logos/lost-mary-norm.png",
-  "fume":       "/brand-logos/fume-norm.png",
-  "foger":      "/brand-logos/foger-norm.png",
-  "fifty-bar":  "/brand-logos/fifty-bar-norm.png",
-  "ebcreate":   "/brand-logos/ebcreate-norm.png",
-  "juicy-bar":  "/brand-logos/juicy-bar.png",
-  "viho":       "/brand-logos/viho.png",
-  "kado-bar":   "/brand-logos/kado-bar.png",
-  "flum-pebble":"/brand-logos/flum.png",
-  "oxbar":      "/brand-logos/oxbar.png",
-  "x-posed":    "/brand-logos/x-posed.png",
-};
+import { BRAND_SEO } from "@/lib/brand-seo-content";
+import { BrandFaq } from "@/components/BrandPage/BrandFaq";
 
 type Props = { params: Promise<{ brandSlug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brandSlug } = await params;
+  const seo = BRAND_SEO[brandSlug];
   const brand = await prisma.brand.findFirst({ where: { slug: brandSlug } });
   if (!brand) return { title: "Brand Not Found" };
+
+  const title = seo?.metaTitle ?? `${brand.name} Vapes | GetSmoke`;
+  const description =
+    seo?.metaDescription ??
+    `Shop all ${brand.name} disposable vapes at GetSmoke. Best prices, fast shipping.`;
+
   return {
-    title: `${brand.name} Vapes | GetSmoke`,
-    description: `Shop all ${brand.name} disposable vapes at GetSmoke. Best prices, fast shipping.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+    },
   };
 }
 
@@ -41,7 +38,6 @@ export default async function BrandPage({ params }: Props) {
     include: {
       products: {
         include: { images: { take: 1 } },
-        
         orderBy: { name: "asc" },
       },
     },
@@ -49,71 +45,254 @@ export default async function BrandPage({ params }: Props) {
 
   if (!brand) return notFound();
 
-  const logo = brand.slug ? BRAND_LOGOS[brand.slug] : undefined;
+  const seo = brand.slug ? BRAND_SEO[brand.slug] : undefined;
+
+  // First product image for hero
+  const heroImageUrl =
+    brand.products[0]?.images[0]?.url ?? null;
+
+  // JSON-LD FAQPage schema
+  const faqSchema = seo?.faqs
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: seo.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      }
+    : null;
+
+  const h1 = seo?.h1 ?? `${brand.name} Vapes`;
+  const advantageTitle =
+    seo?.advantageTitle ?? `Understanding the ${brand.name} Advantage`;
+  const features = seo?.features ?? [
+    {
+      title: "Design & Portability",
+      description: `${brand.name} devices are built for everyday carry with a compact, ergonomic form factor that fits any lifestyle.`,
+    },
+    {
+      title: "Flavor Profiles",
+      description: `${brand.name} offers a diverse range of bold, satisfying flavors crafted for every type of vaper.`,
+    },
+    {
+      title: "Coil Technology",
+      description: `Advanced coil systems deliver consistent vapor and rich flavor from first draw to last.`,
+    },
+    {
+      title: "Power & Longevity",
+      description: `High-capacity rechargeable batteries ensure your ${brand.name} device never runs out of power before the e-liquid is done.`,
+    },
+  ];
 
   return (
-    <main className="w-11/12 mx-auto pt-8 pb-16 font-unbounded">
-      {/* Brand header */}
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/brands" className="text-sm text-gray-500 hover:underline">← Brands</Link>
-      </div>
-      <div className="flex items-center gap-6 mb-8 p-6 border-2 border-black rounded-2xl bg-white w-fit">
-        {logo ? (
-          <Image src={logo} alt={brand.name} width={160} height={80} className="object-contain max-h-[70px] w-auto" />
-        ) : (
-          <h1 className="font-bold text-3xl">{brand.name}</h1>
-        )}
-        {logo && <span className="text-gray-400 text-sm">{brand.products.length} products</span>}
-      </div>
-
-      {/* Products grid */}
-      {brand.products.length === 0 ? (
-        <p className="text-gray-500">No products available for this brand yet.</p>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
-          {brand.products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/product/${product.slug}`}
-              className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col bg-white"
-            >
-              <div className="relative bg-gray-50" style={{ paddingTop: "100%" }}>
-                <div className="absolute inset-0">
-                  {product.images[0]?.url ? (
-                    <Image
-                      src={product.images[0].url}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                      <span className="text-gray-300 text-xs">No image</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
-                <div>
-                  <div className="text-center text-sm font-bold text-black">
-                    ${product.currentPrice.toFixed(2)}
-                    <span className="block text-xs text-gray-500 font-normal">— or subscribe to save up to 10%</span>
-                  </div>
-                  <h3 className="font-bold text-xs md:text-sm text-center mt-1 line-clamp-2 leading-4">{product.name}</h3>
-                </div>
-                <div className="mt-3 px-1">
-                  <button
-                    className="w-full py-2.5 rounded-full text-white text-sm font-bold"
-                    style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
-                  >
-                    select options
-                  </button>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+    <>
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
       )}
-    </main>
+
+      <main className="font-unbounded pb-16">
+        {/* Breadcrumb */}
+        <nav className="w-11/12 mx-auto pt-6 pb-2 text-xs text-gray-500 flex items-center gap-2">
+          <Link href="/" className="hover:underline">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/brands" className="hover:underline">
+            Brands
+          </Link>
+          <span>/</span>
+          <span className="text-gray-800">{brand.name}</span>
+        </nav>
+
+        {/* Black hero section */}
+        <section className="bg-black text-white text-center py-16 px-6 mt-4">
+          <h1 className="font-unbounded font-bold text-3xl md:text-4xl lg:text-5xl mb-8">
+            {h1}
+          </h1>
+          <div className="max-w-3xl mx-auto space-y-4">
+            {(
+              seo?.introParagraphs ?? [
+                `Discover the best ${brand.name} disposable vapes at GetSmoke. Every device is crafted for consistent performance and bold flavor that satisfies from first draw to last.`,
+                `${brand.name} has earned a loyal following by delivering premium vaping experiences at accessible prices. Explore the full lineup and find your perfect all-day vape.`,
+                `At GetSmoke, we carry the complete ${brand.name} collection with competitive pricing and subscription savings of up to 10%. Never run out of your favorite flavor again.`,
+              ]
+            ).map((para, i) => (
+              <p key={i} className="text-gray-200 text-sm md:text-base leading-relaxed">
+                {para}
+              </p>
+            ))}
+          </div>
+        </section>
+
+        {/* Hero product image */}
+        {heroImageUrl && (
+          <div className="flex justify-center my-10 px-4">
+            <div className="relative w-48 h-48 md:w-64 md:h-64">
+              <Image
+                src={heroImageUrl}
+                alt={`${brand.name} vape`}
+                fill
+                className="object-contain"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Product grid */}
+        <section className="w-11/12 mx-auto mt-6">
+          <h2 className="font-unbounded font-bold text-2xl md:text-3xl mb-8 text-center">
+            {brand.name} Vape
+          </h2>
+          {brand.products.length === 0 ? (
+            <p className="text-gray-500 text-center py-8">
+              No products available for this brand yet.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+              {brand.products.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/product/${product.slug}`}
+                  className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col bg-white"
+                >
+                  <div className="relative bg-gray-50" style={{ paddingTop: "100%" }}>
+                    <div className="absolute inset-0">
+                      {product.images[0]?.url ? (
+                        <Image
+                          src={product.images[0].url}
+                          alt={product.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                          <span className="text-gray-300 text-xs">No image</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
+                    <div>
+                      <div className="text-center text-sm font-bold text-black">
+                        ${product.currentPrice.toFixed(2)}
+                        <span className="block text-xs text-gray-500 font-normal">
+                          — or subscribe to save up to 10%
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-xs md:text-sm text-center mt-1 line-clamp-2 leading-4">
+                        {product.name}
+                      </h3>
+                    </div>
+                    <div className="mt-3 px-1">
+                      <div
+                        className="w-full py-2.5 rounded-full text-white text-sm font-bold text-center"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)",
+                        }}
+                      >
+                        select options
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Advantage / Features section */}
+        <section className="w-11/12 mx-auto mt-16">
+          <h2 className="font-unbounded font-bold text-2xl md:text-3xl mb-10 text-center">
+            {advantageTitle}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {features.map((feature, i) => (
+              <div
+                key={i}
+                className="border border-gray-200 rounded-2xl p-6 text-center bg-white shadow-sm"
+              >
+                <h3 className="font-unbounded font-bold text-sm md:text-base mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA section */}
+        <section className="w-11/12 mx-auto mt-16 text-center">
+          <h2 className="font-unbounded font-bold text-2xl md:text-3xl mb-6">
+            {seo?.ctaTitle ?? "Elevate Your Daily Routine"}
+          </h2>
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto mb-8 leading-relaxed">
+            {seo?.ctaText ??
+              `Explore the full ${brand.name} lineup at GetSmoke and find your perfect everyday vape. Competitive pricing, fast shipping, and subscription savings of up to 10%.`}
+          </p>
+          <Link
+            href="/vapes"
+            className="inline-block py-3 px-8 rounded-full text-white font-bold text-sm"
+            style={{
+              background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)",
+            }}
+          >
+            Shop All Vapes
+          </Link>
+        </section>
+
+        {/* Closing section */}
+        <section className="w-11/12 mx-auto mt-16 text-center max-w-3xl mx-auto">
+          <h2 className="font-unbounded font-bold text-2xl md:text-3xl mb-6">
+            {seo?.closingTitle ?? "Where Passion Meets Performance"}
+          </h2>
+          <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+            {seo?.closingText ??
+              `${brand.name} continues to set the standard for quality, flavor, and reliability in the disposable vape market. Discover the full lineup at GetSmoke and experience the difference.`}
+          </p>
+        </section>
+
+        {/* FAQ section */}
+        <div className="mt-16">
+          <BrandFaq
+            title={seo?.faqTitle ?? `${brand.name} Vapes FAQs`}
+            faqs={
+              seo?.faqs ?? [
+                {
+                  question: `What products does ${brand.name} offer?`,
+                  answer: `${brand.name} offers a range of premium disposable vapes available at GetSmoke. Browse our full collection for the latest models and flavors.`,
+                },
+                {
+                  question: `Are ${brand.name} vapes rechargeable?`,
+                  answer: `Many ${brand.name} devices include USB-C recharging. Check individual product listings for specific details.`,
+                },
+                {
+                  question: `What nicotine strength does ${brand.name} use?`,
+                  answer: `Most ${brand.name} devices use 5% (50mg) nicotine salt for a smooth, satisfying draw.`,
+                },
+                {
+                  question: `How many puffs does a ${brand.name} vape deliver?`,
+                  answer: `${brand.name} offers devices across a range of puff counts. See individual product listings for exact specifications.`,
+                },
+                {
+                  question: `Where can I buy authentic ${brand.name} vapes?`,
+                  answer: `GetSmoke is an authorized ${brand.name} retailer. All our products are genuine and ship fast across the USA.`,
+                },
+              ]
+            }
+          />
+        </div>
+      </main>
+    </>
   );
 }

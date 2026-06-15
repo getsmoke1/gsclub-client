@@ -22,7 +22,16 @@ type ProductsProps = {
 };
 
 const Products = ({ productType }: ProductsProps) => {
-  const { brandId, flavorId, puffsId, nicotineId } = useFilter();
+  const { brandId, flavorId, puffsId, nicotineId, clearFilters } = useFilter();
+
+  // Clear filters when productType changes (navigating between sections)
+  const prevProductTypeRef = React.useRef(productType);
+  React.useEffect(() => {
+    if (prevProductTypeRef.current !== productType) {
+      clearFilters();
+      prevProductTypeRef.current = productType;
+    }
+  }, [productType, clearFilters]);
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -59,7 +68,7 @@ const Products = ({ productType }: ProductsProps) => {
 
   // TanStack Query hook
   const { data, isLoading, error } = useQuery({
-    queryKey: ["products", brandId, flavorId, puffsId, nicotineId, currentPage],
+    queryKey: ["products", productType, brandId, flavorId, puffsId, nicotineId, currentPage],
     queryFn: fetchProducts,
   });
 

@@ -10,9 +10,10 @@ interface RelatedProductProps {
     brandId: string;
     flavorId?: string;
     productId: string;
+    productName?: string; // used for keyword-based flavor matching
 }
 
-const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) => {
+const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedProductProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -20,37 +21,41 @@ const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) =
     const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
-            const url = '/api/products/related-products?';
 
-            // Add filter parameters
+            // Build flavor search keywords from flavorId name or product name
+            // Strategy: search by flavor keywords, exclude current brand to show variety
             const params = new URLSearchParams();
-            if (brandId) params.append('brandId', brandId);
-            if (flavorId) params.append('flavorId', flavorId);
-
-            // Fixed limit of 8 products
             params.append('page', '1');
-            params.append('limit', '8');
+            params.append('limit', '12'); // fetch more, we filter out same-brand after
+            params.append('excludeBrandId', brandId); // exclude same brand
 
-            const response = await fetch(url + params.toString());
+            if (flavorId) {
+                params.append('flavorId', flavorId);
+            } else if (productName) {
+                // Fallback: search by product name keywords
+                const keywords = productName.split(' ').slice(0, 3).join(' ');
+                params.append('search', keywords);
+            }
 
+            const response = await fetch('/api/products/related-products?' + params.toString());
             if (!response.ok) throw new Error('Failed to fetch products');
-
             const data = await response.json();
-            setProducts(data.products);
+            setProducts(data.products || []);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setLoading(false);
         }
-    }, [brandId, flavorId]);
+    }, [brandId, flavorId, productName]);
 
     useEffect(() => {
         fetchProducts();
     }, [fetchProducts]);
 
-    const filteredProducts = products.filter(
-        (product: Product) => product.id !== productId
-    );
+    // Exclude current product, limit to 8
+    const filteredProducts = products
+        .filter((product: Product) => product.id !== productId)
+        .slice(0, 8);
 
     if (loading) {
         return (

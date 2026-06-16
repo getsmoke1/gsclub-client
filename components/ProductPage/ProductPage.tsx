@@ -413,36 +413,37 @@ const ProductPage = ({ productSlug }: SingleProductProps) => {
             )}
 
             <section className="">
-                {product.flavorId ? (
-                    <RelatedPRoduct
-                        brandId={product.brandId}
-                        flavorId={product.flavorId}
-                        productId={product.id}
-                    />
-                ) : (
-                    <RelatedPRoduct brandId={product.brandId} productId={product.id} />
-                )}
+                <RelatedPRoduct
+                    brandId={product.brandId}
+                    flavorId={product.flavorId ?? undefined}
+                    productId={product.id}
+                    productName={product.name}
+                />
             </section>
 
             <section className="-mt-4 mb-28">
                 <Faq slug={product.slug} />
             </section>
 
-            <section className="w-full -mt-7 md:-mt-10">
-                <Image
-                    src="/images/rp_banner.png"
-                    width={1000}
-                    height={1000}
-                    alt="banner"
-                    className="w-full h-auto object-cover md:block hidden"
-                />
-                <Image
-                    src="/images/rp_banner2.png"
-                    width={1000}
-                    height={1000}
-                    alt="banner"
-                    className="w-full h-auto object-cover md:hidden block"
-                />
+            {/* Shipping banner — replaces rp_banner images so threshold is editable */}
+            <section
+                className="w-full py-10 px-6"
+                style={{ background: "linear-gradient(135deg, #1a0533 0%, #3d1a6e 30%, #7b2d8b 55%, #c0337d 80%, #e8417a 100%)" }}
+            >
+                <div className="max-w-xl mx-auto text-center font-unbounded">
+                    <p className="text-white font-bold text-lg md:text-xl mb-4">
+                        Free shipping for orders over $89
+                    </p>
+                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 mb-6 text-white text-sm leading-relaxed">
+                        At your choice of frequency you will receive a set of your favourite vapes home
+                    </div>
+                    <p className="text-white font-bold text-lg md:text-xl mb-4">
+                        Instant shipping
+                    </p>
+                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 text-white text-sm leading-relaxed">
+                        Orders will arrive within 1-5 business days. Box ships within 24h.
+                    </div>
+                </div>
             </section>
         </main>
     );

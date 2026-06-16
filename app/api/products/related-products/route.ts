@@ -17,6 +17,7 @@ export async function GET(req: Request) {
 
     // Filter parameters
     const brandId = searchParams.get("brandId");
+    const excludeBrandId = searchParams.get("excludeBrandId"); // exclude this brand from results
     const flavorId = searchParams.get("flavorId");
     const puffsId = searchParams.get("puffsId");
     const nicotineId = searchParams.get("nicotineId");
@@ -40,13 +41,20 @@ export async function GET(req: Request) {
       filter.id = { in: productIds };
     }
 
+    // Exclude specific brand (for flavor-based related products from other brands)
+    if (excludeBrandId) {
+      filter.brandId = { not: excludeBrandId };
+    }
+
     // Add OR condition for brandId and flavorId if both are present
-    if (brandId && flavorId) {
+    if (brandId && flavorId && !excludeBrandId) {
       filter.OR = [{ brandId: brandId }, { flavorId: flavorId }];
-    } else {
-      // Add individual filters if only one is present
+    } else if (!excludeBrandId) {
       if (brandId) filter.brandId = brandId;
       if (flavorId) filter.flavorId = flavorId;
+    } else if (flavorId) {
+      // excludeBrandId mode: filter by flavor only (brand already excluded above)
+      filter.flavorId = flavorId;
     }
 
     // Add other filters (these remain AND conditions with the above)

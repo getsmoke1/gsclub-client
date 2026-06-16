@@ -22,7 +22,7 @@ const HomePage = ({ initialProducts, bundleProducts }: HomePageProps) => {
         <main>
             <Hero />
             <BestSellersSection initialProducts={initialProducts} />
-            <VapeSubscription />
+            <div className="md:hidden"><VapeSubscription /></div>
             <BundleDeals initialProducts={bundleProducts} />
             <ShopByCategory />
             <BrandCircles />

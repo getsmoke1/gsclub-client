@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 
+/* Mobile: 8 featured brands (unchanged) */
 const featured = [
     { name: "RAZ",       slug: "raz",       logo: "/brand-logos/raz-norm.png"       },
     { name: "GEEK BAR",  slug: "geek-bar",  logo: "/brand-logos/geek-bar-norm.png"  },
@@ -13,6 +14,42 @@ const featured = [
     { name: "EBCREATE",  slug: "ebcreate",  logo: "/brand-logos/ebcreate-norm.png"  },
 ]
 
+/* Desktop: all brands (Figma layout - 4 rows × 8 cols = 32 brands) */
+const allBrands = [
+    { name: "RAZ",          slug: "raz",        logo: "/brand-logos/raz-norm.png"        },
+    { name: "ELFTHC",       slug: "elfthc",     logo: null                               },
+    { name: "JUICY BAR",    slug: "juicy-bar",  logo: "/brand-logos/juicy-bar.png"       },
+    { name: "NUUBEZ",       slug: "nuubez",     logo: null                               },
+    { name: "GEEK BAR",     slug: "geek-bar",   logo: "/brand-logos/geek-bar-norm.png"   },
+    { name: "HQD",          slug: "hqd",        logo: "/brand-logos/hqd-norm.png"        },
+    { name: "fume",         slug: "fume",       logo: "/brand-logos/fume-norm.png"       },
+    { name: "torch",        slug: "torch",      logo: null                               },
+    { name: "LostArt",      slug: "lost-art",   logo: null                               },
+    { name: "TYSON",        slug: "tyson",      logo: null                               },
+    { name: "BLAZE",        slug: "blaze",      logo: null                               },
+    { name: "EBDESIGN",     slug: "ebcreate",   logo: "/brand-logos/ebcreate-norm.png"   },
+    { name: "FLUM",         slug: "flum",       logo: "/brand-logos/flum.png"            },
+    { name: "LOST MARY",    slug: "lost-mary",  logo: "/brand-logos/lost-mary-norm.png"  },
+    { name: "FIFTY BAR",    slug: "fifty-bar",  logo: "/brand-logos/fifty-bar-norm.png"  },
+    { name: "Cookies",      slug: "cookies",    logo: null                               },
+    { name: "EBCREATE",     slug: "ebcreate",   logo: "/brand-logos/ebcreate-norm.png"   },
+    { name: "X-POSED",      slug: "x-posed",    logo: "/brand-logos/x-posed.png"         },
+    { name: "RiA",          slug: "ria",        logo: "/brand-logos/ria.png"             },
+    { name: "FASTA",        slug: "fasta",      logo: "/brand-logos/fasta.png"           },
+    { name: "FOGER",        slug: "foger",      logo: "/brand-logos/foger-norm.png"      },
+    { name: "BERi",         slug: "beri",       logo: "/brand-logos/beri.png"            },
+    { name: "OXBAR",        slug: "oxbar",      logo: "/brand-logos/oxbar.png"           },
+    { name: "OLIT",         slug: "olit",       logo: null                               },
+    { name: "KADOBAR",      slug: "kado-bar",   logo: "/brand-logos/kado-bar.png"        },
+    { name: "AL FAKHER",    slug: "al-fakher",  logo: null                               },
+    { name: "FRUIT MONSTER",slug: "fruit-monster", logo: null                            },
+    { name: "VIHO",         slug: "viho",       logo: "/brand-logos/viho.png"            },
+    { name: "adjust",       slug: "adjust",     logo: "/brand-logos/adjust.png"          },
+    { name: "SMOK",         slug: "smok",       logo: "/brand-logos/smok.png"            },
+    { name: "RAMA",         slug: "rama",       logo: null                               },
+    { name: "PillowTalk",   slug: "pillow-talk",logo: "/brand-logos/pillow-talk.png"     },
+]
+
 const BrandCircles = () => {
     return (
         <section className="w-full bg-white pt-4 pb-6">
@@ -21,8 +58,8 @@ const BrandCircles = () => {
                     SHOP BY <strong>BRAND</strong>
                 </h2>
 
-                {/* 2 columns × 4 rows = 8 logos, uniform size */}
-                <div className="grid grid-cols-2 divide-x divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden">
+                {/* Mobile: 2 columns × 4 rows, 8 featured brands with cell borders */}
+                <div className="grid grid-cols-2 divide-x divide-y divide-gray-200 border border-gray-200 rounded-2xl overflow-hidden md:hidden">
                     {featured.map((brand) => (
                         <Link
                             key={brand.slug}
@@ -39,6 +76,34 @@ const BrandCircles = () => {
                                     sizes="45vw"
                                 />
                             </div>
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Desktop: 8 columns × 4 rows, all brands, no cell borders */}
+                <div className="hidden md:grid md:grid-cols-8 gap-y-4 gap-x-2">
+                    {allBrands.map((brand, idx) => (
+                        <Link
+                            key={`${brand.slug}-${idx}`}
+                            href={`/brand/${brand.slug}`}
+                            className="flex items-center justify-center py-3 px-2 bg-white hover:bg-gray-50 rounded-xl transition-colors"
+                            style={{ height: "70px" }}
+                        >
+                            {brand.logo ? (
+                                <div className="relative w-full h-full">
+                                    <Image
+                                        src={brand.logo}
+                                        alt={brand.name}
+                                        fill
+                                        className="object-contain"
+                                        sizes="12vw"
+                                    />
+                                </div>
+                            ) : (
+                                <span className="font-unbounded font-bold text-xs text-black text-center leading-tight">
+                                    {brand.name}
+                                </span>
+                            )}
                         </Link>
                     ))}
                 </div>

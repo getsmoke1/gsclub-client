@@ -173,7 +173,7 @@ const ProductList: React.FC<ProductListProps> = ({
             ) : (
                 <div className="relative">
                     {/* 2-column grid on mobile, 4-column on desktop — Figma layout */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5">
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-5">
                         {products.slice(0, 4).map((product: Product) => (
                             <div
                                 key={product.id}

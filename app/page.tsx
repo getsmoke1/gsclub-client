@@ -31,6 +31,21 @@ export default async function Home() {
     orderBy: { name: "asc" },
   });
 
+  // Prefetch newest 4 products server-side — eliminates skeleton on NEWEST IN tab
+  const rawNewest = await prisma.product.findMany({
+    where: { isArchived: false },
+    include: {
+      images: { take: 1 },
+      brand: true,
+      flavor: true,
+      Nicotine: true,
+      productPuffs: { include: { puffs: true } },
+      productFlavors: { include: { flavor: true } },
+    },
+    take: 4,
+    orderBy: { createdAt: "desc" },
+  });
+
   // Prefetch bundle deals (pack products)
   const rawBundles = await prisma.product.findMany({
     where: { productType: "VAPES", isArchived: false, name: { contains: "pack", mode: "insensitive" } },
@@ -44,7 +59,12 @@ export default async function Home() {
     puffs: p.productPuffs.map((pp) => ({ ...pp.puffs, puffDesc: pp.puffDesc })),
   })) as unknown as Product[];
 
+  const newestProducts = rawNewest.map((p) => ({
+    ...p,
+    puffs: p.productPuffs.map((pp) => ({ ...pp.puffs, puffDesc: pp.puffDesc })),
+  })) as unknown as Product[];
+
   const bundleProducts = rawBundles.map((p) => ({ ...p, puffs: [] }));
 
-  return <HomePage initialProducts={initialProducts} bundleProducts={bundleProducts} />;
+  return <HomePage initialProducts={initialProducts} newestProducts={newestProducts} bundleProducts={bundleProducts} />;
 }

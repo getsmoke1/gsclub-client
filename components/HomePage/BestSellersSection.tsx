@@ -6,9 +6,10 @@ import { Product } from '@/types/product';
 
 interface BestSellersSectionProps {
     initialProducts?: Product[];
+    newestProducts?: Product[];
 }
 
-const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
+const BestSellersSection = ({ initialProducts, newestProducts }: BestSellersSectionProps) => {
     const [activeTab, setActiveTab] = useState<'best' | 'newest'>('best');
     return (
         <section className="w-full bg-white pt-5 pb-2">
@@ -32,10 +33,10 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                 <ProductList
                     title=""
                     showViewAll={false}
-                    productType="VAPES"
+                    productType={activeTab === 'newest' ? undefined : "VAPES"}
                     search={activeTab === 'newest' ? undefined : "pack"}
                     sortBy={activeTab === 'newest' ? 'newest' : undefined}
-                    initialProducts={activeTab === 'best' ? initialProducts : undefined}
+                    initialProducts={activeTab === 'best' ? initialProducts : newestProducts}
                 />
                 <div className="flex justify-center mt-4">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">

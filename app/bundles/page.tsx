@@ -4,7 +4,7 @@ import { noIndex } from "@/lib/noindex";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@/types/product";
 
-export const revalidate = 60;
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   ...noIndex,

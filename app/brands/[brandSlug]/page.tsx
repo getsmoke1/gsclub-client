@@ -1,4 +1,5 @@
-export const revalidate = 60;
+export const revalidate = 3600; // Re-generate at most every hour
+export const dynamicParams = true; // fallback to SSR for unknown slugs
 
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -9,6 +10,14 @@ import { BRAND_SEO } from "@/lib/brand-seo-content";
 import { BrandFaq } from "@/components/BrandPage/BrandFaq";
 
 type Props = { params: Promise<{ brandSlug: string }> };
+
+// Pre-render all brand pages as static HTML at build time
+export async function generateStaticParams() {
+  const brands = await prisma.brand.findMany({ select: { slug: true } });
+  return brands
+    .filter((b) => !!b.slug)
+    .map((b) => ({ brandSlug: b.slug as string }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brandSlug } = await params;

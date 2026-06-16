@@ -429,36 +429,10 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                 <Faq slug={resolvedProduct.slug} />
             </section>
 
-            {/* Shipping banner — original smoke image, price text overlaid in code */}
-            <section className="w-full relative">
-                {/* Desktop */}
-                <div className="relative md:block hidden">
-                    <Image src="/images/rp_banner.png" width={1000} height={1000} alt="Free shipping banner" className="w-full h-auto object-cover" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-8">
-                        <p className="font-bold text-2xl lg:text-3xl mb-4 drop-shadow-lg">Free shipping for orders over $89</p>
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3 mb-5 text-sm max-w-md">
-                            At your choice of frequency you will receive a set of your favourite vapes home
-                        </div>
-                        <p className="font-bold text-2xl lg:text-3xl mb-4 drop-shadow-lg">Instant shipping</p>
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3 text-sm max-w-md">
-                            Orders will arrive within 1-5 business days. Box ships within 24h.
-                        </div>
-                    </div>
-                </div>
-                {/* Mobile */}
-                <div className="relative md:hidden block">
-                    <Image src="/images/rp_banner2.png" width={860} height={664} alt="Free shipping banner" className="w-full h-auto object-cover" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6">
-                        <p className="font-bold text-lg mb-3 drop-shadow-lg">Free shipping for orders over $89</p>
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-4 py-3 mb-4 text-xs leading-relaxed max-w-xs">
-                            At your choice of frequency you will receive a set of your favourite vapes home
-                        </div>
-                        <p className="font-bold text-lg mb-3 drop-shadow-lg">Instant shipping</p>
-                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-xs">
-                            Orders will arrive within 1-5 business days. Box ships within 24h.
-                        </div>
-                    </div>
-                </div>
+            {/* Shipping banner */}
+            <section className="w-full">
+                <Image src="/images/rp_banner.png" width={1440} height={500} alt="Free shipping over $89 — Instant shipping" className="w-full h-auto object-cover hidden md:block" />
+                <Image src="/images/rp_banner2.png" width={860} height={664} alt="Free shipping over $89 — Instant shipping" className="w-full h-auto object-cover block md:hidden" />
             </section>
         </main>
     );

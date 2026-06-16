@@ -189,7 +189,7 @@ const Navbar = () => {
                             <div
                                 ref={hamburgerButtonRef}
                                 onClick={() => setshow(!show)}
-                                className="relative w-10 z-[60]"
+                                className="relative w-10 z-[60] md:hidden"
                                 role="button"
                                 aria-label="Toggle navigation menu"
                                 aria-expanded={show}
@@ -231,6 +231,19 @@ const Navbar = () => {
                             </nav>
 
                             {/* Search Bar with Dropdown */}
+                            {/* Desktop horizontal nav — hidden on mobile */}
+                            <nav className="hidden md:flex items-center gap-6 ml-4">
+                                {navItems.map(({ title, href }) => (
+                                    <Link
+                                        key={title}
+                                        href={href}
+                                        className="text-black font-bold text-sm hover:text-[#fe3500] transition-colors whitespace-nowrap"
+                                    >
+                                        {title}
+                                    </Link>
+                                ))}
+                            </nav>
+
                             <div className="relative text-black search-container flex gap-2 items-center" onClick={handleSearchContainerClick}>
                                 {/* Search input remains the same */}
                                 <motion.input

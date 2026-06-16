@@ -16,7 +16,7 @@ const Footer = () => {
     return (
         <footer className="bg-white font-unbounded">
             {/* White top section */}
-            <div className="w-11/12 mx-auto pt-8 pb-6 flex flex-col items-start gap-4">
+            <div className="w-11/12 mx-auto pt-8 pb-6 flex flex-col md:flex-row md:items-start md:justify-between md:gap-12 gap-4">
                 {/* Logo */}
                 <Link href="/" className="block">
                     <Image
@@ -35,7 +35,7 @@ const Footer = () => {
                 </div>
 
                 {/* Subscribe */}
-                <div className="w-full mt-2">
+                <div className="w-full md:max-w-sm mt-2">
                     <p className="text-sm font-bold text-black mb-3">Subscribe to the latest news</p>
                     {submitted ? (
                         <p className="text-green-600 font-bold text-sm py-4">Subscribed successfully!</p>
@@ -89,7 +89,7 @@ const Footer = () => {
             </div>
 
             {/* Black bottom section — policy links */}
-            <div className="bg-black py-8 px-4 flex flex-col items-center gap-4">
+            <div className="bg-black py-6 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8">
                 {[
                     { label: "Privacy policy",        href: "/privacy-policy" },
                     { label: "Terms and conditions",  href: "/terms-and-conditions" },

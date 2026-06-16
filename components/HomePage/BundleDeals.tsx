@@ -148,7 +148,7 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
       {/* View all */}
       <div className="text-center mt-6">
         <Link
-          href="/vapes?search=pack"
+          href="/bundles"
           className="inline-block bg-black text-white font-unbounded font-bold text-sm px-8 py-3 rounded-full hover:bg-gray-900 transition-colors uppercase"
         >
           View All

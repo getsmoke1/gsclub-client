@@ -19,11 +19,12 @@ import { useQuery } from "@tanstack/react-query";
 
 type ProductsProps = {
   productType?: string;
+  search?: string; // e.g. "pack" to filter bundle products
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialProducts?: any[];
 };
 
-const Products = ({ productType, initialProducts }: ProductsProps) => {
+const Products = ({ productType, search, initialProducts }: ProductsProps) => {
   const { brandId, flavorId, puffsId, nicotineId, clearFilters } = useFilter();
 
   // Clear filters when productType changes (navigating between sections)
@@ -60,6 +61,7 @@ const Products = ({ productType, initialProducts }: ProductsProps) => {
     if (puffsId) params.append("puffsId", puffsId);
     if (nicotineId) params.append("nicotineId", nicotineId);
     if (productType) params.append("productType", productType);
+    if (search) params.append("search", search);
     params.append("page", currentPage.toString());
     params.append("limit", limit.toString());
 
@@ -70,7 +72,7 @@ const Products = ({ productType, initialProducts }: ProductsProps) => {
 
   // TanStack Query hook
   const { data, isLoading, error } = useQuery({
-    queryKey: ["products", productType, brandId, flavorId, puffsId, nicotineId, currentPage],
+    queryKey: ["products", productType, search, brandId, flavorId, puffsId, nicotineId, currentPage],
     queryFn: fetchProducts,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

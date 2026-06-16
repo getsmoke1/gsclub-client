@@ -1,3 +1,5 @@
+export const revalidate = 60;
+
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";

@@ -181,10 +181,11 @@ const Navbar = () => {
             <section className='font-unbounded'>
                 <div ref={blackDivRef} className='bg-black p-3 text-white text-center text-sm md:text-base'>WARNING: These products contain nicotine. Nicotine is an addictive chemical.</div>
                 <aside
-                    className={`bg-white py-4 ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
+                    className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
                     style={{ transition: 'all 0.3s ease' }}
                 >
-                    <div className='w-11/12 mx-auto flex items-center justify-between'>
+                    {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
+                    <div className='w-11/12 mx-auto flex items-center justify-between py-3'>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
@@ -231,19 +232,6 @@ const Navbar = () => {
                             </nav>
 
                             {/* Search Bar with Dropdown */}
-                            {/* Desktop horizontal nav — hidden on mobile */}
-                            <nav className="hidden md:flex items-center gap-6 ml-4">
-                                {navItems.map(({ title, href }) => (
-                                    <Link
-                                        key={title}
-                                        href={href}
-                                        className="text-black font-bold text-sm hover:text-[#fe3500] transition-colors whitespace-nowrap"
-                                    >
-                                        {title}
-                                    </Link>
-                                ))}
-                            </nav>
-
                             <div className="relative text-black search-container flex gap-2 items-center" onClick={handleSearchContainerClick}>
                                 {/* Search input remains the same */}
                                 <motion.input
@@ -394,7 +382,7 @@ const Navbar = () => {
                             </div>
 
                         </div>
-                        <div className="md:mr-28">
+                        <div className="">
                             <Link href={"/"} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}
@@ -437,9 +425,21 @@ const Navbar = () => {
                             </div>
                         </div>
                     </div>
+                    {/* Row 2 (desktop only): Navigation links */}
+                    <nav className="hidden md:flex items-center justify-center gap-8 border-t border-gray-100 py-2.5 bg-white">
+                        {navItems.map(({ title, href }) => (
+                            <Link
+                                key={title}
+                                href={href}
+                                className="text-black font-bold text-sm hover:text-[#fe3500] transition-colors whitespace-nowrap"
+                            >
+                                {title}
+                            </Link>
+                        ))}
+                    </nav>
                 </aside>
                 {/* Add a placeholder div when navbar is sticky to prevent content jump */}
-                {isSticky && <div style={{ height: '76px' }}></div>}
+                {isSticky && <div style={{ height: '100px' }}></div>}
             </section>
         </Suspense>
     )

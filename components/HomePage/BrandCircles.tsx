@@ -63,7 +63,7 @@ const BrandCircles = () => {
                     {featured.map((brand) => (
                         <Link
                             key={brand.slug}
-                            href={`/brand/${brand.slug}`}
+                            href={`/brands/${brand.slug}`}
                             className="flex items-center justify-center p-4 bg-white hover:bg-gray-50 transition-colors"
                             style={{ height: "120px" }}
                         >
@@ -85,7 +85,7 @@ const BrandCircles = () => {
                     {allBrands.map((brand, idx) => (
                         <Link
                             key={`${brand.slug}-${idx}`}
-                            href={`/brand/${brand.slug}`}
+                            href={`/brands/${brand.slug}`}
                             className="flex items-center justify-center py-3 px-2 bg-white hover:bg-gray-50 rounded-xl transition-colors"
                             style={{ height: "70px" }}
                         >

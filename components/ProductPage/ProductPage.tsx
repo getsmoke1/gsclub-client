@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { Product } from "@/types/product";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { format } from "date-fns";
@@ -23,10 +24,11 @@ import Modal from "../ui/modal";
 
 interface SingleProductProps {
     productSlug: string;
+    initialProduct?: Product;
 }
 
-const ProductPage = ({ productSlug }: SingleProductProps) => {
-    const { data: product, isLoading, error } = useProduct(productSlug);
+const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
+    const { data: product, isLoading, error } = useProduct(productSlug, initialProduct);
 
     // Smart default states based on content availability
     const hasDescription = product?.detailDescription;
@@ -206,7 +208,7 @@ const ProductPage = ({ productSlug }: SingleProductProps) => {
                                                 {product.productPuffs.map((pp, index) => (
                                                     <span key={index}>
                                                         {index > 0 && " / "}
-                                                        {pp.puffs.name} {pp.puffDesc}
+                                                        {pp.puffs.name}{pp.puffDesc && pp.puffDesc !== pp.puffs.name ? ` ${pp.puffDesc}` : ''}
                                                     </span>
                                                 ))}
                                             </p>
@@ -425,23 +427,34 @@ const ProductPage = ({ productSlug }: SingleProductProps) => {
                 <Faq slug={product.slug} />
             </section>
 
-            {/* Shipping banner — replaces rp_banner images so threshold is editable */}
-            <section
-                className="w-full py-10 px-6"
-                style={{ background: "linear-gradient(135deg, #1a0533 0%, #3d1a6e 30%, #7b2d8b 55%, #c0337d 80%, #e8417a 100%)" }}
-            >
-                <div className="max-w-xl mx-auto text-center font-unbounded">
-                    <p className="text-white font-bold text-lg md:text-xl mb-4">
-                        Free shipping for orders over $89
-                    </p>
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 mb-6 text-white text-sm leading-relaxed">
-                        At your choice of frequency you will receive a set of your favourite vapes home
+            {/* Shipping banner — original smoke image, price text overlaid in code */}
+            <section className="w-full relative">
+                {/* Desktop */}
+                <div className="relative md:block hidden">
+                    <Image src="/images/rp_banner.png" width={1000} height={1000} alt="Free shipping banner" className="w-full h-auto object-cover" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-8">
+                        <p className="font-bold text-2xl lg:text-3xl mb-4 drop-shadow-lg">Free shipping for orders over $89</p>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3 mb-5 text-sm max-w-md">
+                            At your choice of frequency you will receive a set of your favourite vapes home
+                        </div>
+                        <p className="font-bold text-2xl lg:text-3xl mb-4 drop-shadow-lg">Instant shipping</p>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3 text-sm max-w-md">
+                            Orders will arrive within 1-5 business days. Box ships within 24h.
+                        </div>
                     </div>
-                    <p className="text-white font-bold text-lg md:text-xl mb-4">
-                        Instant shipping
-                    </p>
-                    <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 text-white text-sm leading-relaxed">
-                        Orders will arrive within 1-5 business days. Box ships within 24h.
+                </div>
+                {/* Mobile */}
+                <div className="relative md:hidden block">
+                    <Image src="/images/rp_banner2.png" width={860} height={664} alt="Free shipping banner" className="w-full h-auto object-cover" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-6">
+                        <p className="font-bold text-lg mb-3 drop-shadow-lg">Free shipping for orders over $89</p>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-4 py-3 mb-4 text-xs leading-relaxed max-w-xs">
+                            At your choice of frequency you will receive a set of your favourite vapes home
+                        </div>
+                        <p className="font-bold text-lg mb-3 drop-shadow-lg">Instant shipping</p>
+                        <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-xs">
+                            Orders will arrive within 1-5 business days. Box ships within 24h.
+                        </div>
                     </div>
                 </div>
             </section>

@@ -44,7 +44,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const page = async ({ params }: Props) => {
   const { productSlug } = await params;
-  return <ProductPage productSlug={productSlug} />;
+
+  // Prefetch product server-side to eliminate loading skeleton
+  const raw = await prisma.product.findUnique({
+    where: { slug: productSlug },
+    include: {
+      Review: true,
+      images: { orderBy: { position: "asc" } },
+      brand: true,
+      flavor: true,
+      Nicotine: true,
+      productPuffs: { include: { puffs: true }, orderBy: { createdAt: "asc" } },
+      productFlavors: { include: { flavor: true } },
+      ProductContentSection: true,
+    },
+  }).catch(() => null);
+
+  const initialProduct = raw
+    ? {
+        ...raw,
+        packCount: raw.packCount ?? 1,
+        puffs: raw.productPuffs.map((pp) => ({ ...pp.puffs, description: pp.puffDesc })),
+      }
+    : undefined;
+
+  return <ProductPage productSlug={productSlug} initialProduct={initialProduct as never} />;
 };
 
 export default page;

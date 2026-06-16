@@ -430,9 +430,24 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
             </section>
 
             {/* Shipping banner */}
-            <section className="w-full">
-                <Image src="/images/rp_banner.png" width={1440} height={500} alt="Free shipping over $89 — Instant shipping" className="w-full h-auto object-cover hidden md:block" />
-                <Image src="/images/rp_banner2.png" width={860} height={664} alt="Free shipping over $89 — Instant shipping" className="w-full h-auto object-cover block md:hidden" />
+            <section
+                className="w-full py-10 px-6"
+                style={{ background: "linear-gradient(160deg, #2d1b6e 0%, #6b21a8 35%, #a855f7 60%, #ec4899 85%, #f43f5e 100%)" }}
+            >
+                <div className="max-w-sm mx-auto text-center">
+                    <p className="text-white font-bold text-xl mb-5 leading-snug">
+                        Free shipping for orders over $89
+                    </p>
+                    <div className="bg-white/20 rounded-2xl px-5 py-4 mb-5 text-white text-sm leading-relaxed">
+                        At your choice of frequency you will receive a set of your favourite vapes home
+                    </div>
+                    <p className="text-white font-bold text-xl mb-5">
+                        Instant shipping
+                    </p>
+                    <div className="bg-white/20 rounded-2xl px-5 py-4 text-white text-sm leading-relaxed">
+                        Orders will arrive within 1-5 business days. Box ships within 24h.
+                    </div>
+                </div>
             </section>
         </main>
     );

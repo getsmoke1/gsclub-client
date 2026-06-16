@@ -33,8 +33,9 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                     title=""
                     showViewAll={false}
                     productType="VAPES"
-                    search="pack"
-                    initialProducts={initialProducts}
+                    search={activeTab === 'newest' ? undefined : "pack"}
+                    sortBy={activeTab === 'newest' ? 'newest' : undefined}
+                    initialProducts={activeTab === 'best' ? initialProducts : undefined}
                 />
                 <div className="flex justify-center mt-4">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">

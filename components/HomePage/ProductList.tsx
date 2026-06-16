@@ -15,6 +15,7 @@ interface ProductListProps {
     showViewAll?: boolean;
     productType?: string;
     search?: string;
+    sortBy?: string; // "newest" for newest-first
     initialProducts?: Product[]; // Server-prefetched products — skips loading skeleton
 }
 
@@ -24,6 +25,7 @@ const ProductList: React.FC<ProductListProps> = ({
     showViewAll = true,
     productType,
     search,
+    sortBy,
     initialProducts
 }) => {
     // Homepage: no filters applied regardless of global filter state
@@ -42,6 +44,7 @@ const ProductList: React.FC<ProductListProps> = ({
         if (nicotineId) params.append("nicotineId", nicotineId);
         if (productType) params.append("productType", productType);
         if (search) params.append("search", search);
+        if (sortBy) params.append("sortBy", sortBy);
         params.append("page", pageParam.toString());
         params.append("limit", limit.toString());
 
@@ -59,7 +62,7 @@ const ProductList: React.FC<ProductListProps> = ({
         isLoading,
         error,
     } = useInfiniteQuery({
-        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType, search],
+        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType, search, sortBy],
         queryFn: fetchProducts,
         getNextPageParam: (lastPage, pages) => {
             return lastPage.hasNextPage ? pages.length + 1 : undefined;

@@ -22,6 +22,7 @@ export async function GET(req: Request) {
     const nicotineId = searchParams.get("nicotineId");
     const productType = searchParams.get("productType");
     const search = searchParams.get("search");
+    const sortBy = searchParams.get("sortBy"); // "newest" | undefined
     const archived = searchParams.has("archived")
       ? searchParams.get("archived") === "true"
       : false;
@@ -204,7 +205,7 @@ export async function GET(req: Request) {
           },
         },
       },
-      orderBy: [{ name: "asc" }],
+      orderBy: sortBy === "newest" ? [{ createdAt: "desc" as const }] : [{ name: "asc" as const }],
     });
 
     // Round-robin interleave by brandId so brands are evenly distributed across pages

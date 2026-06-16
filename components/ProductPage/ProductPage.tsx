@@ -28,10 +28,12 @@ interface SingleProductProps {
 }
 
 const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
+    // If server prefetched product — use it directly, skip loading skeleton
     const { data: product, isLoading, error } = useProduct(productSlug, initialProduct);
+    const resolvedProduct = product ?? initialProduct;
 
     // Smart default states based on content availability
-    const hasDescription = product?.detailDescription;
+    const hasDescription = resolvedProduct?.detailDescription;
     const [isDescriptionOpen, setIsDescriptionOpen] = useState(true); // Description should always be open by default when it exists
     const [isDetailsOpen, setIsDetailsOpen] = useState(!hasDescription); // Device details open only when description doesn't exist
 
@@ -52,8 +54,8 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
     // const [selectedFlavors, setSelectedFlavors] = useState<{ [key: number]: string }>({});
     // const [availableFlavors, setAvailableFlavors] = useState<{ id: string, name: string }[]>([]);
 
-    // Loading state
-    if (isLoading) {
+    // Loading state — skip if we already have server-prefetched data
+    if (isLoading && !resolvedProduct) {
         return <Loading />;
     }
 
@@ -70,10 +72,10 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
     }
 
     const hasMultipleFlavors =
-        product?.productFlavors && product.productFlavors.length > 0;
-    const hasSingleFlavor = product?.flavorId && !hasMultipleFlavors;
+        resolvedProduct?.productFlavors && resolvedProduct.productFlavors.length > 0;
+    const hasSingleFlavor = resolvedProduct?.flavorId && !hasMultipleFlavors;
 
-    if (!product) {
+    if (!resolvedProduct) {
         return (
             <div className="flex justify-center items-center min-h-screen">
                 <div className="text-red-500 bg-red-100 p-4 rounded-md">
@@ -98,9 +100,9 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
             <section className="w-11/12 mx-auto py-7 flex flex-col lg:flex-row gap-3 md:gap-10 xl:gap-20 font-unbounded text-black">
                 {/* Product Images */}
                 <div className="w-full lg:w-[35%] ">
-                    {product.images && product.images.length > 0 ? (
+                    {resolvedProduct.images && resolvedProduct.images.length > 0 ? (
                         <Image
-                            src={product.images[0].url}
+                            src={resolvedProduct.images[0].url}
                             width={1000}
                             height={1000}
                             alt="product image"
@@ -118,31 +120,31 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                     <div className="space-y-5">
                         {/* Product Name */}
                         <h1 className="text-3xl font-semibold text-[#0C0B0B] leading-10">
-                            {product.brand.name} <br />
-                            {product.name} <br />
-                            {hasSingleFlavor && product.flavor?.name}
+                            {resolvedProduct.brand.name} <br />
+                            {resolvedProduct.name} <br />
+                            {hasSingleFlavor && resolvedProduct.flavor?.name}
                         </h1>
 
                         {/* Price */}
                         <div className="flex items-center gap-4">
                             <span className="text-2xl font-medium">
-                                ${product.currentPrice.toFixed(2)}
+                                ${resolvedProduct.currentPrice.toFixed(2)}
                             </span>
-                            {product.originalPrice && (
+                            {resolvedProduct.originalPrice && (
                                 <span className="text-lg text-gray-500 line-through">
-                                    ${product.originalPrice.toFixed(2)}
+                                    ${resolvedProduct.originalPrice.toFixed(2)}
                                 </span>
                             )}
-                            {product.packCount > 1 && (
+                            {resolvedProduct.packCount > 1 && (
                                 <span>
                                     (each pack $
-                                    {(product.currentPrice / product.packCount).toFixed(2)})
+                                    {(resolvedProduct.currentPrice / resolvedProduct.packCount).toFixed(2)})
                                 </span>
                             )}
                         </div>
 
                         {/* Product Description */}
-                        {product.detailDescription && (
+                        {resolvedProduct.detailDescription && (
                             <div className="space-y-3">
                                 <button
                                     className="flex items-center gap-2 font-bold text-xl text-[#0C0B0B]"
@@ -168,7 +170,7 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                     <div
                                         className="prose max-w-none"
                                         dangerouslySetInnerHTML={{
-                                            __html: product.detailDescription,
+                                            __html: resolvedProduct.detailDescription,
                                         }}
                                     />
                                 )}
@@ -199,13 +201,13 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             </button>
                             {isDetailsOpen && (
                                 <div className="space-y-1.5">
-                                    {product.Nicotine &&
-                                        renderField("Nicotine Strength", product.Nicotine.name)}
-                                    {product.productPuffs && product.productPuffs.length > 0 && (
+                                    {resolvedProduct.Nicotine &&
+                                        renderField("Nicotine Strength", resolvedProduct.Nicotine.name)}
+                                    {resolvedProduct.productPuffs && resolvedProduct.productPuffs.length > 0 && (
                                         <div className="flex">
                                             <p className="font-medium">Puffs:</p>
                                             <p className="ml-2">
-                                                {product.productPuffs.map((pp, index) => (
+                                                {resolvedProduct.productPuffs.map((pp, index) => (
                                                     <span key={index}>
                                                         {index > 0 && " / "}
                                                         {pp.puffs.name}{pp.puffDesc && pp.puffDesc !== pp.puffs.name ? ` ${pp.puffDesc}` : ''}
@@ -214,20 +216,20 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                             </p>
                                         </div>
                                     )}
-                                    {renderField("E-liquid Content", product.eLiquidContent)}
-                                    {renderField("Battery Capacity", product.batteryCapacity)}
-                                    {renderField("Coil", product.coil)}
-                                    {renderField("Firing Mechanism", product.firingMechanism)}
-                                    {renderField("Type", product.type)}
-                                    {renderField("Resistance", product.resistance)}
-                                    {renderField("Power Range", product.powerRange)}
-                                    {renderField("Charging", product.charging)}
-                                    {product.extra && (
+                                    {renderField("E-liquid Content", resolvedProduct.eLiquidContent)}
+                                    {renderField("Battery Capacity", resolvedProduct.batteryCapacity)}
+                                    {renderField("Coil", resolvedProduct.coil)}
+                                    {renderField("Firing Mechanism", resolvedProduct.firingMechanism)}
+                                    {renderField("Type", resolvedProduct.type)}
+                                    {renderField("Resistance", resolvedProduct.resistance)}
+                                    {renderField("Power Range", resolvedProduct.powerRange)}
+                                    {renderField("Charging", resolvedProduct.charging)}
+                                    {resolvedProduct.extra && (
                                         <div className="flex">
                                             <p className="font-medium">Extra Features:</p>
                                             <div
                                                 className="prose max-w-none ml-2"
-                                                dangerouslySetInnerHTML={{ __html: product.extra }}
+                                                dangerouslySetInnerHTML={{ __html: resolvedProduct.extra }}
                                             />
                                         </div>
                                     )}
@@ -237,19 +239,19 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
 
                         {/* Stock Action Section */}
                         <div className="mt-8 flex flex-col lg:flex-row w-full items-center gap-4">
-                            {/* {product.isArchived ? (
+                            {/* {resolvedProduct.isArchived ? (
                                 <div className="w-full text-center bg-gray-100 border border-gray-300 text-gray-600 py-3 rounded-full font-medium">
                                     Not in Stock
                                 </div>
                             ) : (
                                 <>
-                                    {product?.redirectLink && (
+                                    {resolvedProduct?.redirectLink && (
                                         <Button
                                             type="submit"
                                             variant="primary"
                                             className="px-8 w-full leading-4 whitespace-nowrap"
                                         >
-                                            <Link href={product?.redirectLink || ""}>Shop Now</Link>
+                                            <Link href={resolvedProduct?.redirectLink || ""}>Shop Now</Link>
                                         </Button>
                                     )}
                                 </>
@@ -286,19 +288,19 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                 <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="xl">
                     <div className="p-4">
                         <ReviewForm
-                            productId={product.id}
-                            productSlug={product.slug}
+                            productId={resolvedProduct.id}
+                            productSlug={resolvedProduct.slug}
                             onSuccess={() => setIsOpen(false)}
                         />
                     </div>
                 </Modal>
 
                 <div className="space-y-6">
-                    {product?.Review.length > 0 ? (
+                    {resolvedProduct?.Review.length > 0 ? (
                         <>
                             {(showAllReviews
-                                ? product.Review
-                                : product.Review.slice(0, 3)
+                                ? resolvedProduct.Review
+                                : resolvedProduct.Review.slice(0, 3)
                             ).map((review) => (
                                 <div key={review.id} className="border-b pb-4">
                                     <div className="flex justify-between items-start">
@@ -324,8 +326,8 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                                     deleteReview({
                                                         reviewId: review.id,
                                                         userEmail: review.userEmail,
-                                                        productId: product.id,
-                                                        productSlug: product.slug,
+                                                        productId: resolvedProduct.id,
+                                                        productSlug: resolvedProduct.slug,
                                                     })
                                                 }
                                                 className="text-red-500 hover:text-red-700"
@@ -337,13 +339,13 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                 </div>
                             ))}
 
-                            {product.Review.length > 3 && !showAllReviews && (
+                            {resolvedProduct.Review.length > 3 && !showAllReviews && (
                                 <div className="text-center mt-4">
                                     <Button
                                         variant="secondary"
                                         onClick={() => setShowAllReviews(true)}
                                     >
-                                        See All Reviews ({product.Review.length})
+                                        See All Reviews ({resolvedProduct.Review.length})
                                     </Button>
                                 </div>
                             )}
@@ -359,26 +361,26 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
             </section>
 
             {/*------------------- Product Content Section --------------------- */}
-            {product.ProductContentSection && (
+            {resolvedProduct.ProductContentSection && (
                 <section className="w-11/12 mx-auto mt-10 font-unbounded text-center">
                     <div className="bg-black h-[2.5px] mb-7 md:mb-10 rounded-full"></div>
 
                     <div className="space-y-4">
                         <h2 className="text-xl md:text-2xl font-semibold text-[#0C0B0B]">
-                            {product.ProductContentSection.title}
+                            {resolvedProduct.ProductContentSection.title}
                         </h2>
 
                         <p className="text-gray-700 leading-relaxed">
-                            {product.ProductContentSection.description}
+                            {resolvedProduct.ProductContentSection.description}
                         </p>
 
-                        {product.ProductContentSection.detailDescription && (
+                        {resolvedProduct.ProductContentSection.detailDescription && (
                             <div className="bg-gray-100 rounded-lg p-4 space-y-4">
                                 {isContentSectionExpanded && (
                                     <div
                                         className="prose max-w-none text-gray-700 text-center"
                                         dangerouslySetInnerHTML={{
-                                            __html: product.ProductContentSection.detailDescription,
+                                            __html: resolvedProduct.ProductContentSection.detailDescription,
                                         }}
                                     />
                                 )}
@@ -416,15 +418,15 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
 
             <section className="">
                 <RelatedPRoduct
-                    brandId={product.brandId}
-                    flavorId={product.flavorId ?? undefined}
-                    productId={product.id}
-                    productName={product.name}
+                    brandId={resolvedProduct.brandId}
+                    flavorId={resolvedProduct.flavorId ?? undefined}
+                    productId={resolvedProduct.id}
+                    productName={resolvedProduct.name}
                 />
             </section>
 
             <section className="-mt-4 mb-28">
-                <Faq slug={product.slug} />
+                <Faq slug={resolvedProduct.slug} />
             </section>
 
             {/* Shipping banner — original smoke image, price text overlaid in code */}

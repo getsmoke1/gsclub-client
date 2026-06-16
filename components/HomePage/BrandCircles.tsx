@@ -32,20 +32,20 @@ const allBrands = [
     { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/blogo-26.png"      },
     { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/blogo-27.png"      },
     { name: "Cookies",       slug: "cookies",       logo: "/brand-logos/blogo-28.png"      },
-    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png" },
-    { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed.png"       },
-    { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria.png"           },
-    { name: "FASTA",         slug: "fasta",         logo: "/brand-logos/fasta.png"         },
-    { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-norm.png"    },
-    { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri.png"          },
-    { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar.png"         },
-    { name: "OLIT",          slug: "olit",          logo: "/brand-logos/blogo-18.png"      },
-    { name: "KADOBAR",       slug: "kado-bar",      logo: "/brand-logos/blogo-19.png"      },
-    { name: "AL FAKHER",     slug: "al-fakher",     logo: "/brand-logos/blogo-20.png"      },
-    { name: "FRUIT MONSTER", slug: "fruit-monster", logo: "/brand-logos/blogo-21.png"      },
-    { name: "VIHO",          slug: "viho",          logo: "/brand-logos/blogo-10.png"      },
-    { name: "adjust",        slug: "adjust",        logo: "/brand-logos/blogo-11.png"      },
-    { name: "SMOK",          slug: "smok",          logo: "/brand-logos/blogo-29.png"      },
+    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-clean.png"  },
+    { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png"  },
+    { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria-clean.png"       },
+    { name: "FASTA",         slug: "fasta",         logo: "/brand-logos/fasta-clean.png"     },
+    { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-clean.png"     },
+    { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri-clean.png"      },
+    { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar-clean.png"     },
+    { name: "OLIT",          slug: "olit",          logo: "/brand-logos/blogo-18.png"        },
+    { name: "KADOBAR",       slug: "kado-bar",      logo: "/brand-logos/kado-bar-clean.png"  },
+    { name: "AL FAKHER",     slug: "al-fakher",     logo: "/brand-logos/blogo-20.png"        },
+    { name: "FRUIT MONSTER", slug: "fruit-monster", logo: "/brand-logos/blogo-21.png"        },
+    { name: "VIHO",          slug: "viho",          logo: "/brand-logos/viho-clean.png"      },
+    { name: "adjust",        slug: "adjust",        logo: "/brand-logos/adjust-clean.png"    },
+    { name: "SMOK",          slug: "smok",          logo: "/brand-logos/smok-clean.png"      },
     { name: "RAMA",          slug: "rama",          logo: "/brand-logos/brand-logo-1.png"  },
     { name: "PillowTalk",    slug: "pillow-talk",   logo: "/brand-logos/brand-logo-2.png"  },
 ]
@@ -87,7 +87,7 @@ const BrandCircles = () => {
                             key={`${brand.slug}-${idx}`}
                             href={`/brands/${brand.slug}`}
                             className="flex items-center justify-center py-3 px-2 bg-white hover:bg-gray-50 rounded-xl transition-colors"
-                            style={{ height: "70px" }}
+                            style={{ height: "90px" }}
                         >
                             {brand.logo ? (
                                 <div className="relative w-full h-full">

@@ -1,10 +1,14 @@
 import ProductPage from "@/components/ProductPage/ProductPage";
 import { prisma } from "@/lib/prisma";
+import { getCachedProduct } from "@/lib/cached-queries";
 import React from "react";
 import type { Metadata } from "next";
 import { getSEOData } from "@/lib/seo";
 import { noIndex } from "@/lib/noindex";
 import { buildSeoMetadata, getCanonicalUrl } from "@/lib/canonical";
+
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 type Props = {
   params: Promise<{ productSlug: string }>;
@@ -45,26 +49,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const page = async ({ params }: Props) => {
   const { productSlug } = await params;
 
-  // Prefetch product server-side to eliminate loading skeleton
-  const raw = await prisma.product.findUnique({
-    where: { slug: productSlug },
-    include: {
-      Review: true,
-      images: { orderBy: { position: "asc" } },
-      brand: true,
-      flavor: true,
-      Nicotine: true,
-      productPuffs: { include: { puffs: true }, orderBy: { createdAt: "asc" } },
-      productFlavors: { include: { flavor: true } },
-      ProductContentSection: true,
-    },
-  }).catch(() => null);
+  // Prefetch product via unstable_cache — instant on repeat visits
+  const raw = await getCachedProduct(productSlug).catch(() => null);
 
-  const initialProduct = raw
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const rawAny = raw as any;
+const initialProduct = rawAny
     ? {
-        ...raw,
-        packCount: raw.packCount ?? 1,
-        puffs: raw.productPuffs.map((pp) => ({ ...pp.puffs, description: pp.puffDesc })),
+        ...rawAny,
+        packCount: rawAny.packCount ?? 1,
+        puffs: (rawAny.productPuffs ?? []).map((pp: { puffs: object; puffDesc: string }) => ({ ...pp.puffs, description: pp.puffDesc })),
       }
     : undefined;
 

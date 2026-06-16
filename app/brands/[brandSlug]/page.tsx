@@ -1,7 +1,8 @@
-export const revalidate = 3600; // Re-generate at most every hour
-export const dynamicParams = true; // fallback to SSR for unknown slugs
+export const revalidate = 3600;
+export const dynamicParams = true;
 
 import { prisma } from "@/lib/prisma";
+import { getCachedBrand } from "@/lib/cached-queries";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,15 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BrandPage({ params }: Props) {
   const { brandSlug } = await params;
 
-  const brand = await prisma.brand.findFirst({
-    where: { slug: brandSlug },
-    include: {
-      products: {
-        include: { images: { take: 1 } },
-        orderBy: { name: "asc" },
-      },
-    },
-  });
+  const brand = await getCachedBrand(brandSlug);
 
   if (!brand) return notFound();
 

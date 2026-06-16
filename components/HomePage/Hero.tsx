@@ -14,13 +14,13 @@ const slides = [
         desktop: '/banners/desktop-2.jpg',
         mobile: '/banners/mobile-2.jpg',
         alt: 'Beri Crush 50K',
-        href: '/brand/beri',
+        href: '/brands/beri',
     },
     {
         desktop: '/banners/desktop-3.jpg',
         mobile: '/banners/mobile-3.jpg',
         alt: 'EBCreate BC Pro',
-        href: '/brand/ebcreate',
+        href: '/brands/ebcreate',
     },
     {
         desktop: '/banners/desktop-4.jpeg',
@@ -32,7 +32,7 @@ const slides = [
         desktop: '/banners/desktop-5.jpg',
         mobile: '/banners/mobile-5.jpg',
         alt: 'New In – Lost Mary',
-        href: '/brand/lost-mary',
+        href: '/brands/lost-mary',
     },
     {
         desktop: '/banners/desktop-6.jpeg',

@@ -25,7 +25,7 @@ const BrandGrid = () => {
                 {brands.map((brand) => (
                     <Link
                         key={brand.slug}
-                        href={`/brand/${brand.slug}`}
+                        href={`/brands/${brand.slug}`}
                         className="flex items-center justify-center rounded-lg p-4 text-white font-unbounded font-bold text-sm text-center uppercase hover:opacity-90 transition-opacity"
                         style={{ backgroundColor: brand.color, minHeight: '64px' }}
                     >

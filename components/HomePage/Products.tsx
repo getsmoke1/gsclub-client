@@ -79,6 +79,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     initialData: initialProducts?.length
       ? { products: initialProducts, totalCount: initialProducts.length, page: 1, pageSize: initialProducts.length, totalPages: 99 }
       : undefined,
+    initialDataUpdatedAt: initialProducts?.length ? Date.now() : undefined,
   });
 
   // Interleave products by brand (round-robin) so no brand dominates a page

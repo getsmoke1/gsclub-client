@@ -76,6 +76,7 @@ const ProductList: React.FC<ProductListProps> = ({
                 pageParams: [1],
               }
             : undefined,
+        initialDataUpdatedAt: initialProducts?.length ? Date.now() : undefined,
     });
 
     // Flatten all pages into a single array of products

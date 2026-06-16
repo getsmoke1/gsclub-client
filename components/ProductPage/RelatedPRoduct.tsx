@@ -91,7 +91,7 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
             ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
                     {filteredProducts.map((product) => (
-                        <Link href={`/product/${product.id}`} key={product.id}>
+                        <Link href={`/product/${product.slug}`} key={product.id}>
                             <div className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
                                 <div className="aspect-square relative bg-gray-100 h-[16rem] md:h-[32rem] lg:h-[22rem]">
                                     {product.images.length > 0 ? (

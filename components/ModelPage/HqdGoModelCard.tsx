@@ -8,14 +8,14 @@ export default function HqdGoModelCard() {
   return (
     <Link href="/models/hqd-go" className="block">
       <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#7c3aed] transition-colors flex flex-col h-full bg-white">
-        {/* Image */}
-        <div className="relative bg-gray-50" style={{ paddingTop: "100%" }}>
+        {/* Image — taller aspect ratio so banner isn't cropped */}
+        <div className="relative bg-gray-50" style={{ paddingTop: "75%" }}>
           <div className="absolute inset-0">
             <Image
               src={HQD_GO_IMAGE}
               alt="HQD GO 35000 Puffs Disposable Vape"
               fill
-              className="object-cover"
+              className="object-cover object-center"
             />
           </div>
           {/* Badge */}
@@ -27,23 +27,24 @@ export default function HqdGoModelCard() {
         </div>
 
         {/* Info */}
-        <div className="p-2 md:p-3 flex flex-col gap-1">
-          <span className="text-xs text-gray-500">HQD</span>
-          <p className="font-bold text-lg leading-tight">HQD GO</p>
-          <p className="text-sm text-gray-600">14 Flavors Available</p>
-          <p className="font-bold mt-1">from $34.99</p>
+        <div className="p-2 flex flex-col gap-0.5">
+          <span className="text-[10px] text-gray-500">HQD</span>
+          <p className="font-bold text-sm leading-tight">HQD GO</p>
+          <p className="text-[11px] text-gray-600">14 Flavors Available</p>
+          <p className="font-bold text-sm mt-0.5">$34.99</p>
         </div>
 
         {/* CTA */}
-        <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto">
+        <div className="px-2 pb-2 mt-auto">
           <span
-            className="block w-full text-center py-2.5 rounded-full text-white font-bold text-sm"
+            className="block w-full text-center py-2 rounded-full text-white font-bold text-xs"
             style={{
               background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)",
             }}
           >
             Pick Your Flavor
           </span>
+          <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
         </div>
       </div>
     </Link>

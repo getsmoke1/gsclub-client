@@ -9,6 +9,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { BRAND_SEO } from "@/lib/brand-seo-content";
 import { BrandFaq } from "@/components/BrandPage/BrandFaq";
+import BrandProductCard from "@/components/BrandPage/BrandProductCard";
 
 type Props = { params: Promise<{ brandSlug: string }> };
 
@@ -162,52 +163,7 @@ export default async function BrandPage({ params }: Props) {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
               {brand.products.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/product/${product.slug}`}
-                  className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col bg-white"
-                >
-                  <div className="relative bg-gray-50" style={{ paddingTop: "100%" }}>
-                    <div className="absolute inset-0">
-                      {product.images[0]?.url ? (
-                        <Image
-                          src={product.images[0].url}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                          <span className="text-gray-300 text-xs">No image</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
-                    <div>
-                      <div className="text-center text-sm font-bold text-black">
-                        ${product.currentPrice.toFixed(2)}
-                        <span className="block text-xs text-gray-500 font-normal">
-                          — or subscribe to save up to 10%
-                        </span>
-                      </div>
-                      <h3 className="font-bold text-xs md:text-sm text-center mt-1 line-clamp-2 leading-4">
-                        {product.name}
-                      </h3>
-                    </div>
-                    <div className="mt-3 px-1">
-                      <div
-                        className="w-full py-2.5 rounded-full text-white text-sm font-bold text-center"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)",
-                        }}
-                      >
-                        select options
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                <BrandProductCard key={product.id} product={product} />
               ))}
             </div>
           )}

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import AddToCartButton from "@/components/Cart/AddToCartButton";
 import { ShoppingBag } from "lucide-react";
 
 interface Product {
@@ -131,13 +132,7 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
                       </div>
                       <div className="mt-3 flex flex-col gap-2 px-1">
                         <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                        <button
-                          className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
-                          style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          select options
-                        </button>
+                        <AddToCartButton product={product as never} compact={true} />
                       </div>
                     </div>
                   </div>

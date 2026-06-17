@@ -189,7 +189,7 @@ const ProductList: React.FC<ProductListProps> = ({
                             const m = MODELS.find(x => x.slug === slug);
                             return m ? <GenericModelCard key={slug} model={m} /> : null;
                         })}
-                        {products.slice(featuredModelSlugs ? featuredModelSlugs.length : 0, featuredModelSlugs ? featuredModelSlugs.length + 4 : 4).map((product: Product) => (
+                        {!featuredModelSlugs && products.slice(0, 4).map((product: Product) => (
                             <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
                                 <Link href={`/product/${product.slug}`} className="block">
                                     <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>

@@ -11,6 +11,8 @@ import { BRAND_SEO } from "@/lib/brand-seo-content";
 import { BrandFaq } from "@/components/BrandPage/BrandFaq";
 import BrandProductCard from "@/components/BrandPage/BrandProductCard";
 import HqdGoModelCard from "@/components/ModelPage/HqdGoModelCard";
+import GenericModelCard from "@/components/ModelPage/GenericModelCard";
+import { getModelsByBrand } from "@/lib/models-config";
 
 type Props = { params: Promise<{ brandSlug: string }> };
 
@@ -52,6 +54,7 @@ export default async function BrandPage({ params }: Props) {
   if (!brand) return notFound();
 
   const seo = brand.slug ? BRAND_SEO[brand.slug] : undefined;
+  const brandModels = brand.slug ? getModelsByBrand(brand.slug) : [];
 
   // First product image for hero
   const heroImageUrl =
@@ -164,6 +167,9 @@ export default async function BrandPage({ params }: Props) {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
               {brand.slug === "hqd" && <HqdGoModelCard />}
+              {brandModels.map(model => (
+                <GenericModelCard key={model.slug} model={model} />
+              ))}
               {brand.products.map((product) => (
                 <BrandProductCard key={product.id} product={product} />
               ))}

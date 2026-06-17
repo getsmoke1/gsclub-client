@@ -88,8 +88,19 @@ const Footer = () => {
                 </div>
             </div>
 
+            {/* Health Warning Bar */}
+            <div className="bg-black border-t border-gray-800 py-4 px-4 text-center">
+                <p className="text-gray-400 text-xs leading-relaxed max-w-3xl mx-auto">
+                    <strong className="text-gray-300">WARNING:</strong> This product contains nicotine. Nicotine is an addictive chemical.
+                    For use by adults 21+ only. Keep out of reach of children and pets.
+                    If you are pregnant, nursing, or have a heart condition, do not use this product.
+                    GetSmoke is a reseller of third-party manufactured products and assumes no liability for health consequences arising from product use.
+                    By purchasing, you confirm you are 21 or older and acknowledge all associated health risks.
+                </p>
+            </div>
+
             {/* Black bottom section — policy links */}
-            <div className="bg-black py-6 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8">
+            <div className="bg-black py-5 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8">
                 {[
                     { label: "Privacy policy",        href: "/privacy-policy" },
                     { label: "Terms and conditions",  href: "/terms-and-conditions" },
@@ -105,6 +116,9 @@ const Footer = () => {
                         {label}
                     </Link>
                 ))}
+                <p className="text-gray-600 text-xs w-full text-center mt-1 md:mt-0">
+                    © {new Date().getFullYear()} Cosmoproject LLC. All rights reserved.
+                </p>
             </div>
         </footer>
     )

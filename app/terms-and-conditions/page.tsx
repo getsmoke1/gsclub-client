@@ -14,7 +14,7 @@ const content = `
 
 <hr/>
 
-<h2>1. AGE RESTRICTION — 21+ ONLY</h2>
+<h2>1. AGE RESTRICTION - 21+ ONLY</h2>
 <p>ALL products sold on this website contain nicotine, are tobacco-derived, or are intended for use with such products. <strong>You must be 21 years of age or older to purchase from GetSmoke.</strong> By placing an order, you represent and warrant under penalty of perjury that you are at least 21 years old. We use third-party age verification services to confirm eligibility. Any order where age cannot be verified will be cancelled. Attempting to purchase as a minor or on behalf of a minor is a violation of federal law and these Terms.</p>
 
 <hr/>
@@ -24,7 +24,7 @@ const content = `
 <p>Vaping and use of electronic nicotine delivery systems (ENDS) involves serious health risks, including but not limited to:</p>
 <ul>
   <li>Nicotine addiction</li>
-  <li>Lung injury (including EVALI — E-cigarette or Vaping product use-Associated Lung Injury)</li>
+  <li>Lung injury (including EVALI - E-cigarette or Vaping product use-Associated Lung Injury)</li>
   <li>Cardiovascular disease</li>
   <li>Adverse effects on fetal development during pregnancy</li>
   <li>Unknown long-term health consequences</li>
@@ -34,7 +34,7 @@ const content = `
 
 <hr/>
 
-<h2>3. RESELLER DISCLAIMER — NO MANUFACTURER LIABILITY</h2>
+<h2>3. RESELLER DISCLAIMER - NO MANUFACTURER LIABILITY</h2>
 <p>GetSmoke is a <strong>retail reseller only</strong>. We purchase all products exclusively from <strong>authorized U.S.-based distributors</strong> and do not manufacture, import, formulate, or directly source any product from any foreign manufacturer, including China. We have no control over, and make no representations regarding, the design, manufacturing processes, materials, ingredients, quality control, or safety testing of any product we sell.</p>
 <p>All product liability, warranty claims, personal injury claims, or claims arising from product defects, contamination, mislabeling, or failure to warn must be directed to the <strong>product manufacturer</strong>. GetSmoke expressly disclaims all liability for any claims arising from the nature, composition, or condition of the products themselves.</p>
 <p>GetSmoke's liability in connection with any product sold is strictly limited to its role as a reseller and shall not exceed the purchase price paid for that specific product.</p>

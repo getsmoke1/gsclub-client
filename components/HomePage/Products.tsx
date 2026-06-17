@@ -256,6 +256,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                   <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2">
                     <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
                     <AddToCartButton product={product as never} compact={true} />
+                    <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
                   </div>
                 </div>
               ))}

@@ -24,7 +24,7 @@ const content = `
 <p>Return requests must be initiated within <strong>30 days of the purchase date</strong> by contacting us at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a> with your order number.</p>
 <p>Returns are accepted <strong>only</strong> for the following reasons:</p>
 <ul>
-  <li>Device is <strong>dead on arrival (DOA)</strong> — non-functional upon first use, unopened seal intact</li>
+  <li>Device is <strong>dead on arrival (DOA)</strong> - non-functional upon first use, unopened seal intact</li>
   <li>Device arrived with a <strong>documented manufacturer defect</strong> (e.g., auto-firing, no draw, leaking sealed unit)</li>
   <li>You received the <strong>wrong item</strong> due to a fulfillment error on our part</li>
 </ul>
@@ -54,7 +54,7 @@ const content = `
   <li>Refunds are issued to the <strong>original payment method only</strong></li>
   <li>Shipping costs are non-refundable in all cases</li>
   <li>Return shipping costs are the customer's responsibility; we do not provide prepaid return labels</li>
-  <li>We recommend insuring your return shipment — GetSmoke is not responsible for items lost or damaged in return transit</li>
+  <li>We recommend insuring your return shipment - GetSmoke is not responsible for items lost or damaged in return transit</li>
 </ul>
 <p>Alternative: We may offer a <strong>full store credit</strong> with no restocking fee, at our sole discretion.</p>
 

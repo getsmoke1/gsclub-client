@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | GetSmoke",
-  description: "GetSmoke Privacy Policy — how we collect, use, and protect your personal information.",
+  description: "GetSmoke Privacy Policy - how we collect, use, and protect your personal information.",
 }
 
 const content = `
@@ -19,7 +19,7 @@ const content = `
 <ul>
   <li><strong>Identity information:</strong> full name, date of birth (for age verification)</li>
   <li><strong>Contact information:</strong> email address, phone number, shipping and billing address</li>
-  <li><strong>Payment information:</strong> credit/debit card details (processed and stored by our payment processor — we do not store full card numbers)</li>
+  <li><strong>Payment information:</strong> credit/debit card details (processed and stored by our payment processor - we do not store full card numbers)</li>
   <li><strong>Age verification data:</strong> information shared with our third-party age verification provider to confirm you are 21 or older, as required by federal law</li>
   <li><strong>Transaction data:</strong> order history, products purchased, prices paid</li>
   <li><strong>Technical data:</strong> IP address, browser type, device information, pages visited, referring URLs, cookies</li>
@@ -48,7 +48,7 @@ const content = `
   <li><strong>Age verification providers:</strong> to confirm you are 21 or older, as legally required</li>
   <li><strong>Payment processors:</strong> to complete transactions securely (e.g., Stripe, PayPal)</li>
   <li><strong>Shipping carriers and fulfillment partners:</strong> to deliver your order</li>
-  <li><strong>Government and law enforcement authorities:</strong> as required by the PACT Act, state tax law, court order, or other legal obligation — including submission of customer transaction data to state tobacco tax authorities</li>
+  <li><strong>Government and law enforcement authorities:</strong> as required by the PACT Act, state tax law, court order, or other legal obligation - including submission of customer transaction data to state tobacco tax authorities</li>
   <li><strong>Service providers:</strong> analytics, email, and marketing platforms operating under confidentiality agreements</li>
 </ul>
 <p><strong>By making a purchase, you acknowledge that your name, address, and purchase information may be shared with state and federal regulatory authorities as required by law.</strong></p>
@@ -79,7 +79,7 @@ const content = `
   <li><strong>Correction:</strong> request correction of inaccurate data</li>
   <li><strong>Opt-out of marketing:</strong> unsubscribe from marketing emails via the link in any email, or contact us at <a href="mailto:marketing@getsmoke.com">marketing@getsmoke.com</a></li>
 </ul>
-<p><strong>California residents (CCPA):</strong> You have the right to know what personal information we collect, to request deletion, and to opt out of the sale of personal information (we do not sell your data). To exercise these rights, contact <a href="mailto:privacy@getsmoke.com">privacy@getsmoke.com</a>.</p>
+<p><strong>California residents (CCPA):</strong> You have the right to know what personal information we collect, to request deletion, and to opt out of the sale of personal information (we do not sell your data). To exercise these rights, contact <a href="mailto:info@getsmoke.com">info@getsmoke.com</a>.</p>
 
 <hr/>
 
@@ -99,7 +99,7 @@ const content = `
 <hr/>
 
 <h2>10. CONTACT</h2>
-<p>Privacy questions or requests: <a href="mailto:privacy@getsmoke.com">privacy@getsmoke.com</a><br/>
+<p>Privacy questions or requests: <a href="mailto:info@getsmoke.com">info@getsmoke.com</a><br/>
 General inquiries: <a href="mailto:info@getsmoke.com">info@getsmoke.com</a></p>
 `
 

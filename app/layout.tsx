@@ -10,6 +10,7 @@ import Footer from "@/components/Footer/Footer";
 import { Suspense } from "react";
 import AgeVerification from "@/components/AgeVerification/AgeVerification";
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
+import CookieBanner from "@/components/CookieBanner/CookieBanner";
 import { getSEOData } from "@/lib/seo";
 import { noIndex } from "@/lib/noindex";
 
@@ -128,6 +129,7 @@ export default function RootLayout({
           </div>
           <ScrollToTopButton />
           <Footer />
+          <CookieBanner />
         </Providers>
       </body>
     </html>

@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Shipping Policy | GetSmoke",
-  description: "GetSmoke Shipping Policy — delivery times, PACT Act compliance, age verification, and order tracking.",
+  description: "GetSmoke Shipping Policy - delivery times, PACT Act compliance, age verification, and order tracking.",
 }
 
 const content = `

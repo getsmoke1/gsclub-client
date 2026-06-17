@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
+import AddToCartButton from '@/components/Cart/AddToCartButton';
 
 interface RelatedProductProps {
     brandId: string;
@@ -91,8 +92,8 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
             ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
                     {filteredProducts.map((product) => (
-                        <Link href={`/product/${product.slug}`} key={product.id}>
-                            <div className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                        <div key={product.id} className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                            <Link href={`/product/${product.slug}`} className="block">
                                 <div className="aspect-square relative bg-gray-100 h-[16rem] md:h-[32rem] lg:h-[22rem]">
                                     {product.images.length > 0 ? (
                                         <Image
@@ -108,39 +109,33 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
                                         </div>
                                     )}
                                 </div>
-                                <div className="pt-3 pb-5 md:pb-5 px-2 md:px-4 flex flex-col flex-grow justify-between">
-                                    <div>
-                                        <div className="flex items-center justify-center text-sm md:text-xl">
-                                            <span className="">${product.currentPrice.toFixed(2)}</span>
-                                            <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
-                                                ${product.originalPrice.toFixed(2)}
-                                            </span>
-                                        </div>
-                                        <h3 className="font-semibold text-base md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
-                                            {product.brand.name}
-                                        </h3>
-                                        <h3 className="font-semibold text-base md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-5 md:leading-7">
-                                            {product.name}
-                                        </h3>
+                                <div className="pt-3 px-2 md:px-4">
+                                    <div className="flex items-center justify-center text-sm md:text-xl">
+                                        <span>${product.currentPrice.toFixed(2)}</span>
+                                        <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
+                                            ${product.originalPrice.toFixed(2)}
+                                        </span>
                                     </div>
-
-                                    <div className='w-full mb-1.5 mt-2 md:px-5 flex flex-col items-center justify-center gap-3 text-xs md:text-base text-center'>
-                                        <div>
-                                            <span className="w-full underline">
-                                                View product
-                                            </span>
-                                        </div>
-                                        {product?.redirectLink && (
-                                            <Button type="submit" className='leading-4 lg:whitespace-nowrap'>
-                                                <Link href={product?.redirectLink || ""}>
-                                                    Shop Now
-                                                </Link>
-                                            </Button>
-                                        )}
-                                    </div>
+                                    <h3 className="font-semibold text-base md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
+                                        {product.brand.name}
+                                    </h3>
+                                    <h3 className="font-semibold text-base md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-5 md:leading-7">
+                                        {product.name}
+                                    </h3>
                                 </div>
+                            </Link>
+                            <div className="mt-auto px-2 md:px-4 pb-4 pt-2 flex flex-col gap-2">
+                                <Link href={`/product/${product.slug}`} className="text-center text-xs underline">
+                                    View product
+                                </Link>
+                                <AddToCartButton product={product as never} compact={true} />
+                                {product?.redirectLink && (
+                                    <Button type="submit" className="leading-4 lg:whitespace-nowrap">
+                                        <Link href={product?.redirectLink || ""}>Shop Now</Link>
+                                    </Button>
+                                )}
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             )}

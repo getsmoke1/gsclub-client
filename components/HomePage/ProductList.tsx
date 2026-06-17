@@ -2,6 +2,7 @@
 import React, { useRef, useCallback } from "react";
 import { ShoppingBag, } from "lucide-react";
 import Link from "next/link";
+import AddToCartButton from "@/components/Cart/AddToCartButton";
 // useFilter intentionally NOT used here — homepage always shows unfiltered products
 import { Product } from "@/types/product";
 import Image from "next/image";
@@ -222,13 +223,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                         </div>
                                         <div className="mt-3 flex flex-col gap-2 px-1">
                                             <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                                            <button
-                                                className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
-                                                style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
-                                                onClick={(e) => e.stopPropagation()}
-                                            >
-                                                select options
-                                            </button>
+                                            <AddToCartButton product={product as never} />
                                         </div>
                                     </div>
                                 </div>

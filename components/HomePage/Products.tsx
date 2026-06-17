@@ -16,6 +16,7 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
+import AddToCartButton from "@/components/Cart/AddToCartButton";
 
 type ProductsProps = {
   productType?: string;
@@ -259,12 +260,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                       </div>
                       <div className="mt-3 flex flex-col gap-2 px-1">
                           <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                          <button
-                            className="w-full py-2.5 rounded-full text-white text-sm font-bold cursor-pointer"
-                            style={{ background: "linear-gradient(90deg, #fe3500 0%, #ffc42e 100%)" }}
-                          >
-                            select options
-                          </button>
+                          <AddToCartButton product={product as never} />
                         </div>
                     </div>
                   </div>

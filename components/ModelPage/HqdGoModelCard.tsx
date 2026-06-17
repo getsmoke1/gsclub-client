@@ -1,15 +1,16 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
 
 const HQD_GO_IMAGE = "/hqd-go-hero.jpg";
 
 export default function HqdGoModelCard() {
   return (
-    <Link href="/models/hqd-go" className="block">
-      <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#7c3aed] transition-colors flex flex-col h-full bg-white">
-        {/* Image — taller aspect ratio so banner isn't cropped */}
-        <div className="relative bg-gray-50" style={{ paddingTop: "75%" }}>
+    <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+      <Link href="/models/hqd-go" className="block">
+        {/* Image — same 100% square ratio as regular product cards */}
+        <div className="relative bg-gray-50" style={{ paddingTop: "100%" }}>
           <div className="absolute inset-0">
             <Image
               src={HQD_GO_IMAGE}
@@ -18,7 +19,6 @@ export default function HqdGoModelCard() {
               className="object-cover object-center"
             />
           </div>
-          {/* Badge */}
           <div className="absolute top-2 left-2">
             <span className="bg-yellow-400 text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
               35,000 PUFFS
@@ -26,27 +26,33 @@ export default function HqdGoModelCard() {
           </div>
         </div>
 
-        {/* Info */}
-        <div className="p-2 flex flex-col gap-0.5">
-          <span className="text-[10px] text-gray-500">HQD</span>
-          <p className="font-bold text-sm leading-tight">HQD GO</p>
-          <p className="text-[11px] text-gray-600">14 Flavors Available</p>
-          <p className="font-bold text-sm mt-0.5">$34.99</p>
+        {/* Text — same layout as BrandProductCard */}
+        <div className="p-2 md:p-3">
+          <div className="text-center text-sm font-bold text-black">
+            $34.99
+            <span className="block text-xs text-gray-500 font-normal">
+              14 Flavors Available
+            </span>
+          </div>
+          <h3 className="font-bold text-xs md:text-sm text-center mt-1 leading-4">
+            HQD GO
+          </h3>
         </div>
+      </Link>
 
-        {/* CTA */}
-        <div className="px-2 pb-2 mt-auto">
-          <span
-            className="block w-full text-center py-2 rounded-full text-white font-bold text-xs"
-            style={{
-              background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)",
-            }}
+      {/* Button — exact same style as compact AddToCartButton */}
+      <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto">
+        <Link href="/models/hqd-go" className="block">
+          <button
+            className="w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 transition-opacity"
+            style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
           >
+            <ShoppingCart size={14} />
             Pick Your Flavor
-          </span>
-          <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
-        </div>
+          </button>
+        </Link>
+        <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
       </div>
-    </Link>
+    </div>
   );
 }

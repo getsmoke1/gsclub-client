@@ -219,7 +219,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
               {/* Featured model listing cards - shown on page 1, no filters, no search */}
-              {currentPage === 1 && !brandId && !flavorId && !puffsId && !nicotineId && (
+              {currentPage === 1 && !brandId && !flavorId && !puffsId && !nicotineId && productType === "VAPES" && (
                 <>
                   {["raz-dc25000", "lost-mary-turbo", "geek-bar-pulse", "hqd-cuvie-glaze"].map(slug => {
                     const m = MODELS.find(x => x.slug === slug);

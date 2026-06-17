@@ -8,9 +8,9 @@ import React from "react";
 import type { Metadata } from "next";
 import { noIndex } from "@/lib/noindex";
 
-// Static shell — no dynamic data needed at render time
-export const dynamic = "force-static";
-export const revalidate = false;
+// Dynamic params allowed, but page renders instantly as shell (no DB call)
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 type Props = {
   params: Promise<{ productSlug: string }>;

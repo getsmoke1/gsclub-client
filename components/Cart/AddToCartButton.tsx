@@ -8,9 +8,10 @@ import { Product } from "@/types/product";
 interface AddToCartButtonProps {
   product: Product;
   className?: string;
+  compact?: boolean; // compact=true → button only, no qty selector
 }
 
-const AddToCartButton = ({ product, className = "" }: AddToCartButtonProps) => {
+const AddToCartButton = ({ product, className = "", compact = false }: AddToCartButtonProps) => {
   const [qty, setQty] = useState(1);
   const { data: session } = useSession();
   const { addItem, loading } = useCart();
@@ -40,26 +41,40 @@ const AddToCartButton = ({ product, className = "" }: AddToCartButtonProps) => {
     setQty((q) => Math.min(99, q + 1));
   };
 
+  if (compact) {
+    return (
+      <button
+        onClick={handleAdd}
+        disabled={loading}
+        className={`w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity ${className}`}
+        style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
+      >
+        <ShoppingCart size={14} />
+        add to cart
+      </button>
+    );
+  }
+
   return (
     <div className={`flex items-center gap-2 w-full ${className}`} onClick={(e) => e.preventDefault()}>
       {/* Quantity selector */}
       <div className="flex items-center border-2 border-black rounded-full overflow-hidden shrink-0">
         <button
           onClick={dec}
-          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors text-lg font-bold"
+          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors"
           aria-label="Decrease quantity"
         >
-          <Minus size={14} />
+          <Minus size={13} />
         </button>
-        <span className="w-8 text-center text-sm font-bold select-none">
+        <span className="w-7 text-center text-sm font-bold select-none">
           {qty}
         </span>
         <button
           onClick={inc}
-          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors text-lg font-bold"
+          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors"
           aria-label="Increase quantity"
         >
-          <Plus size={14} />
+          <Plus size={13} />
         </button>
       </div>
 

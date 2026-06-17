@@ -37,6 +37,7 @@ const BestSellersSection = ({ initialProducts, newestProducts }: BestSellersSect
                     search={activeTab === 'newest' ? undefined : "pack"}
                     sortBy={activeTab === 'newest' ? 'newest' : undefined}
                     initialProducts={activeTab === 'best' ? initialProducts : newestProducts}
+                    compactCart={true}
                 />
                 <div className="flex justify-center mt-4">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">

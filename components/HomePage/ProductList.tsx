@@ -16,8 +16,9 @@ interface ProductListProps {
     showViewAll?: boolean;
     productType?: string;
     search?: string;
-    sortBy?: string; // "newest" for newest-first
-    initialProducts?: Product[]; // Server-prefetched products — skips loading skeleton
+    sortBy?: string;
+    initialProducts?: Product[];
+    compactCart?: boolean; // true = button only (homepage), false = qty+button (listings)
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -27,7 +28,8 @@ const ProductList: React.FC<ProductListProps> = ({
     productType,
     search,
     sortBy,
-    initialProducts
+    initialProducts,
+    compactCart = false
 }) => {
     // Homepage: no filters applied regardless of global filter state
     const brandId = undefined, flavorId = undefined, puffsId = undefined, nicotineId = undefined;
@@ -223,7 +225,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                         </div>
                                         <div className="mt-3 flex flex-col gap-2 px-1">
                                             <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                                            <AddToCartButton product={product as never} />
+                                            <AddToCartButton product={product as never} compact={compactCart} />
                                         </div>
                                     </div>
                                 </div>

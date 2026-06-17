@@ -172,6 +172,10 @@ export async function GET(req: Request) {
       page,
       pageSize: limit,
       totalPages: limit ? Math.ceil(totalCount / limit) : 1,
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+      },
     });
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);

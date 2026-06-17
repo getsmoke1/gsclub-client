@@ -59,7 +59,12 @@ export async function GET(req: NextRequest, { params }: Props) {
       })),
     };
 
-    return NextResponse.json(transformedProduct);
+    return NextResponse.json(transformedProduct, {
+      headers: {
+        // Cache at Vercel edge CDN: 1h fresh, 24h stale-while-revalidate
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
   } catch (error) {
     console.error("Failed to fetch product:", error);
     return new NextResponse(null, { status: 500 });

@@ -75,7 +75,7 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
       </div>
 
       {/* 2-col grid — matches Figma */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {loading
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="border-2 border-black rounded-3xl overflow-hidden animate-pulse">

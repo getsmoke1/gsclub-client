@@ -33,7 +33,7 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                     </button>
                 </div>
                 {activeTab === 'newest' ? (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5">
                         {MODELS.map(model => (
                             <GenericModelCard key={model.slug} model={model} />
                         ))}

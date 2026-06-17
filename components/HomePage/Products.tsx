@@ -5,6 +5,7 @@ import ProductShimmer from "./ProductShimmer";
 import { useFilter } from "@/hooks/useFilter";
 import { Product } from "@/types/product";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Pagination,
@@ -215,54 +216,46 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
               {products.map((product: Product) => (
-                <div
-                  onClick={() => {
-                    router.push(`/product/${product.slug}`);
-                  }}
-                  key={product.id}
-                  className="cursor-pointer"
-                >
-                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                  <Link href={`/product/${product.slug}`} className="block">
                     <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
-                    <div className="absolute inset-0">
-                      {product.images.length > 0 ? (
-                        <Image
-                          src={product.images[0].url}
-                          alt={product.name}
-                          width={400}
-                          height={400}
-                          className="object-cover w-full h-full"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <ShoppingBag className="h-10 w-10 text-gray-300" />
-                        </div>
-                      )}
-                    </div>
-                    </div>
-                    <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
-                      <div>
-                        <div className="text-center text-sm font-bold text-black">
-                          ${product.currentPrice.toFixed(2)}
-                          {product.originalPrice && product.originalPrice > product.currentPrice && (
-                            <span className="block text-xs text-gray-500 font-normal">
-                              — or subscribe to save up to 10%
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-bold text-xs md:text-sm text-center mt-1">
-                          {product.brand.name}
-                        </h3>
-                        <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
-                          {product.name}
-                        </h3>
-                        <p className="text-center text-xs mt-1">Pack Of 10</p>
+                      <div className="absolute inset-0">
+                        {product.images.length > 0 ? (
+                          <Image
+                            src={product.images[0].url}
+                            alt={product.name}
+                            width={400}
+                            height={400}
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center h-full">
+                            <ShoppingBag className="h-10 w-10 text-gray-300" />
+                          </div>
+                        )}
                       </div>
-                      <div className="mt-3 flex flex-col gap-2 px-1">
-                          <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                          <AddToCartButton product={product as never} />
-                        </div>
                     </div>
+                    <div className="p-2 md:p-3">
+                      <div className="text-center text-sm font-bold text-black">
+                        ${product.currentPrice.toFixed(2)}
+                        {product.originalPrice && product.originalPrice > product.currentPrice && (
+                          <span className="block text-xs text-gray-500 font-normal">
+                            — or subscribe to save up to 10%
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-xs md:text-sm text-center mt-1">
+                        {product.brand.name}
+                      </h3>
+                      <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                        {product.name}
+                      </h3>
+                      <p className="text-center text-xs mt-1">Pack Of 10</p>
+                    </div>
+                  </Link>
+                  <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2">
+                    <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
+                    <AddToCartButton product={product as never} />
                   </div>
                 </div>
               ))}

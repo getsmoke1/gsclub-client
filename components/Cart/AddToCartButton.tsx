@@ -56,7 +56,7 @@ const AddToCartButton = ({ product, className = "", compact = false }: AddToCart
   }
 
   return (
-    <div className={`flex items-center gap-2 w-full ${className}`} onClick={(e) => e.preventDefault()}>
+    <div className={`flex items-center gap-2 w-full ${className}`} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
       {/* Quantity selector */}
       <div className="flex items-center border-2 border-black rounded-full overflow-hidden shrink-0">
         <button

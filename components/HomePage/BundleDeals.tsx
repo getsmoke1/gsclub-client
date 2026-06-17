@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import AddToCartButton from "@/components/Cart/AddToCartButton";
 import { ShoppingBag } from "lucide-react";
 
@@ -29,7 +29,7 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
   const [showLeft, setShowLeft] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showRight, setShowRight] = useState(true);
-  const router = useRouter();
+
 
   useEffect(() => {
     if (initialProducts?.length) return; // skip fetch if server-prefetched
@@ -88,13 +88,8 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
                 </div>
               ))
             : products.slice(0, 4).map((product) => (
-                <div
-                  key={product.id}
-                  className="cursor-pointer"
-                  onClick={() => router.push(`/product/${product.slug}`)}
-                >
-                  <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
-                    {/* Image */}
+                <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                  <Link href={`/product/${product.slug}`} className="block">
                     <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
                       <div className="absolute inset-0">
                         {product.images.length > 0 ? (
@@ -112,29 +107,25 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
                         )}
                       </div>
                     </div>
-
-                    {/* Info */}
-                    <div className="p-2 md:p-3 flex flex-col flex-grow justify-between">
-                      <div>
-                        <div className="text-center text-sm font-bold text-black">
-                          ${product.currentPrice.toFixed(2)}
-                          <span className="block text-xs text-gray-500 font-normal">
-                            — or subscribe to save up to 10%
-                          </span>
-                        </div>
-                        <h3 className="font-bold text-xs md:text-sm text-center mt-1">
-                          {product.brand.name}
-                        </h3>
-                        <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
-                          {product.name}
-                        </h3>
-                        <p className="text-center text-xs mt-1">{getPackLabel(product.name)}</p>
+                    <div className="p-2 md:p-3">
+                      <div className="text-center text-sm font-bold text-black">
+                        ${product.currentPrice.toFixed(2)}
+                        <span className="block text-xs text-gray-500 font-normal">
+                          — or subscribe to save up to 10%
+                        </span>
                       </div>
-                      <div className="mt-3 flex flex-col gap-2 px-1">
-                        <span className="text-center text-xs underline cursor-pointer">View Product</span>
-                        <AddToCartButton product={product as never} compact={true} />
-                      </div>
+                      <h3 className="font-bold text-xs md:text-sm text-center mt-1">
+                        {product.brand.name}
+                      </h3>
+                      <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                        {product.name}
+                      </h3>
+                      <p className="text-center text-xs mt-1">{getPackLabel(product.name)}</p>
                     </div>
+                  </Link>
+                  <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2">
+                    <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
+                    <AddToCartButton product={product as never} compact={true} />
                   </div>
                 </div>
               ))}

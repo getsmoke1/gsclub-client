@@ -22,80 +22,48 @@ interface FilterButtonProps {
   isActive: boolean;
   isOpen: boolean;
   onToggle: () => void;
-  options: FilterOption[];
-  selectedId?: string;
-  onSelect: (id: string) => void;
+  selectedName?: string;
+  btnRef: React.RefObject<HTMLButtonElement | null>;
 }
 
-const FilterButton = ({ label, isActive, isOpen, onToggle, options, selectedId, onSelect }: FilterButtonProps) => {
-  const btnRef = useRef<HTMLDivElement>(null);
-  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
-
-  useEffect(() => {
-    if (isOpen && btnRef.current) {
-      const rect = btnRef.current.getBoundingClientRect();
-      setDropdownStyle({
-        position: "fixed",
-        top: rect.bottom + 6,
-        left: rect.left,
-        zIndex: 9999,
-      });
-    }
-  }, [isOpen]);
-
-  return (
-    <div className="relative shrink-0" ref={btnRef}>
-      <button
-        onClick={onToggle}
-        className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
-          isActive ? "bg-[#f0b800]" : ""
-        }`}
-      >
-        <span>{isActive ? (options.find(o => o.id === selectedId)?.name || label) : label}</span>
-        <ChevronDown
-          size={16}
-          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {isOpen && (
-        <div
-          style={dropdownStyle}
-          className="w-48 bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
-        >
-          {options.map((opt) => (
-            <div
-              key={opt.id}
-              className={`px-4 py-2 hover:bg-amber-50 cursor-pointer transition-colors text-sm ${
-                selectedId === opt.id ? "bg-[#ffc42e] font-bold" : ""
-              }`}
-              onClick={() => onSelect(opt.id)}
-            >
-              {opt.name}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+// Trigger button only — dropdown is rendered outside the overflow container
+const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef }: FilterButtonProps) => (
+  <button
+    ref={btnRef}
+    onClick={onToggle}
+    className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
+      isActive ? "bg-[#f0b800]" : ""
+    }`}
+  >
+    <span>{isActive && selectedName ? selectedName : label}</span>
+    <ChevronDown
+      size={16}
+      className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+    />
+  </button>
+);
 
 const Filter = () => {
-  const {
-    brandId,
-    flavorId,
-    puffsId,
-    nicotineId,
-    setFilters,
-    clearFilters,
-    removeFilter,
-  } = useFilter();
+  const { brandId, flavorId, puffsId, nicotineId, setFilters, clearFilters, removeFilter } = useFilter();
 
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+
   const filterRef = useRef<HTMLDivElement>(null);
+  const brandBtnRef = useRef<HTMLButtonElement>(null);
+  const puffsBtnRef = useRef<HTMLButtonElement>(null);
+  const flavorBtnRef = useRef<HTMLButtonElement>(null);
+  const nicotineBtnRef = useRef<HTMLButtonElement>(null);
+
+  const btnRefs: Record<string, React.RefObject<HTMLButtonElement | null>> = {
+    brand: brandBtnRef,
+    puffs: puffsBtnRef,
+    flavor: flavorBtnRef,
+    nicotine: nicotineBtnRef,
+  };
 
   const fetchFilterOptions = useCallback(async () => {
     try {
@@ -105,7 +73,6 @@ const Filter = () => {
       if (flavorId) params.append("flavorId", flavorId);
       if (puffsId) params.append("puffsId", puffsId);
       if (nicotineId) params.append("nicotineId", nicotineId);
-
       const res = await fetch(`/api/products/filter-options?${params.toString()}`);
       if (!res.ok) throw new Error("Failed to fetch filter options");
       setFilterOptions(await res.json());
@@ -118,6 +85,7 @@ const Filter = () => {
 
   useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
 
+  // Close on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
@@ -128,29 +96,64 @@ const Filter = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const toggle = (name: string) => setOpenDropdown(prev => prev === name ? null : name);
+  const toggle = (name: string) => {
+    if (openDropdown === name) {
+      setOpenDropdown(null);
+      return;
+    }
+    const btn = btnRefs[name]?.current;
+    const container = filterRef.current;
+    if (btn && container) {
+      const btnRect = btn.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      setDropdownPos({
+        top: btnRect.bottom - containerRect.top + 6,
+        left: Math.max(0, btnRect.left - containerRect.left),
+        width: Math.max(btnRect.width, 180),
+      });
+    }
+    setOpenDropdown(name);
+  };
 
   const handleSelect = (type: FilterKey, id: string) => {
     const current = { brandId, flavorId, puffsId, nicotineId }[type];
-    if (current === id) {
-      removeFilter(type);
-    } else {
-      setFilters({ [type]: id });
-    }
+    if (current === id) removeFilter(type);
+    else setFilters({ [type]: id });
     setOpenDropdown(null);
   };
 
+  const getOptions = (key: string): FilterOption[] => {
+    if (!filterOptions) return [];
+    const map: Record<string, FilterOption[]> = {
+      brand: filterOptions.brands,
+      puffs: filterOptions.puffs,
+      flavor: filterOptions.flavors,
+      nicotine: filterOptions.nicotineLevels,
+    };
+    return map[key] || [];
+  };
+
+  const getSelectedId = (key: string) =>
+    ({ brand: brandId, puffs: puffsId, flavor: flavorId, nicotine: nicotineId })[key];
+
   const hasActive = !!(brandId || flavorId || puffsId || nicotineId);
+
+  const FILTERS = [
+    { key: "brand", label: "Brand", filterKey: "brandId" as FilterKey },
+    { key: "puffs", label: "Puffs", filterKey: "puffsId" as FilterKey },
+    { key: "flavor", label: "Flavor", filterKey: "flavorId" as FilterKey },
+    { key: "nicotine", label: "Nicotine", filterKey: "nicotineId" as FilterKey },
+  ];
 
   if (error) return <div className="text-red-500 p-2 text-sm">Filter error: {error}</div>;
 
   return (
-    <div
-      className="w-11/12 mx-auto py-6 md:py-8 font-unbounded"
-      ref={filterRef}
-    >
-      {/* Yellow pill — overflow-x scroll for mobile, dropdowns escape via fixed positioning */}
-      <div className="flex items-center bg-[#ffc42e] rounded-full px-5 py-2.5 text-black text-sm font-bold overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+    <div className="relative w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef}>
+      {/* Yellow pill — overflow-x scroll, no clipping of children */}
+      <div
+        className="flex items-center bg-[#ffc42e] rounded-full px-5 py-2.5 text-black text-sm font-bold overflow-x-auto"
+        style={{ scrollbarWidth: "none", overflowY: "visible" }}
+      >
         <h2 className="font-black whitespace-nowrap shrink-0 mr-2">filter by</h2>
         <span className="text-black/30 mx-2 shrink-0">|</span>
 
@@ -160,45 +163,19 @@ const Filter = () => {
           ))
         ) : (
           <>
-            <FilterButton
-              label="Brand"
-              isActive={!!brandId}
-              isOpen={openDropdown === "brand"}
-              onToggle={() => toggle("brand")}
-              options={filterOptions?.brands || []}
-              selectedId={brandId}
-              onSelect={(id) => handleSelect("brandId", id)}
-            />
-            <span className="text-black/30 mx-2 shrink-0">∨</span>
-            <FilterButton
-              label="Puffs"
-              isActive={!!puffsId}
-              isOpen={openDropdown === "puffs"}
-              onToggle={() => toggle("puffs")}
-              options={filterOptions?.puffs || []}
-              selectedId={puffsId}
-              onSelect={(id) => handleSelect("puffsId", id)}
-            />
-            <span className="text-black/30 mx-2 shrink-0">∨</span>
-            <FilterButton
-              label="Flavor"
-              isActive={!!flavorId}
-              isOpen={openDropdown === "flavor"}
-              onToggle={() => toggle("flavor")}
-              options={filterOptions?.flavors || []}
-              selectedId={flavorId}
-              onSelect={(id) => handleSelect("flavorId", id)}
-            />
-            <span className="text-black/30 mx-2 shrink-0">∨</span>
-            <FilterButton
-              label="Nicotine"
-              isActive={!!nicotineId}
-              isOpen={openDropdown === "nicotine"}
-              onToggle={() => toggle("nicotine")}
-              options={filterOptions?.nicotineLevels || []}
-              selectedId={nicotineId}
-              onSelect={(id) => handleSelect("nicotineId", id)}
-            />
+            {FILTERS.map((f, i) => (
+              <React.Fragment key={f.key}>
+                {i > 0 && <span className="text-black/30 mx-2 shrink-0">&#8964;</span>}
+                <FilterTrigger
+                  label={f.label}
+                  isActive={!!getSelectedId(f.key)}
+                  isOpen={openDropdown === f.key}
+                  onToggle={() => toggle(f.key)}
+                  selectedName={getOptions(f.key).find(o => o.id === getSelectedId(f.key))?.name}
+                  btnRef={btnRefs[f.key]}
+                />
+              </React.Fragment>
+            ))}
 
             {hasActive && (
               <button
@@ -212,6 +189,34 @@ const Filter = () => {
           </>
         )}
       </div>
+
+      {/* Dropdown rendered OUTSIDE the overflow container, positioned absolutely relative to filterRef */}
+      {openDropdown && (
+        <div
+          className="absolute bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
+          style={{
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            minWidth: 180,
+            zIndex: 9999,
+          }}
+        >
+          {getOptions(openDropdown).map((opt) => (
+            <div
+              key={opt.id}
+              className={`px-4 py-2.5 hover:bg-amber-50 cursor-pointer transition-colors text-sm ${
+                getSelectedId(openDropdown) === opt.id ? "bg-[#ffc42e] font-bold" : ""
+              }`}
+              onClick={() => handleSelect(
+                FILTERS.find(f => f.key === openDropdown)!.filterKey,
+                opt.id
+              )}
+            >
+              {opt.name}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

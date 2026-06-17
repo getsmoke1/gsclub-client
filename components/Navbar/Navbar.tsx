@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from "framer-motion";
 import useCart from '@/hooks/useCart';
 import { Product } from '@/types/product';
+import { useFilter } from '@/hooks/useFilter';
 
 // Define type for debounce function
 type DebouncedFunction<T extends unknown[]> = (...args: T) => void;
@@ -22,6 +23,7 @@ const Navbar = () => {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const { items } = useCart();
+    const { clearFilters } = useFilter();
     // Add state for sticky navbar
     const [isSticky, setIsSticky] = useState(false);
     const blackDivRef = useRef<HTMLDivElement>(null);
@@ -309,7 +311,7 @@ const Navbar = () => {
                                         >
                                             <Link
                                                 href="/"
-                                                onClick={(e) => e.stopPropagation()}
+                                                onClick={(e) => { e.stopPropagation(); clearFilters(); }}
                                                 aria-label="Go to GetSmoke homepage"
                                             >
                                                 <Image
@@ -383,7 +385,7 @@ const Navbar = () => {
 
                         </div>
                         <div className="">
-                            <Link href={"/"} aria-label="Go to GetSmoke homepage">
+                            <Link href={"/"} onClick={() => clearFilters()} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}
                                     width={180}

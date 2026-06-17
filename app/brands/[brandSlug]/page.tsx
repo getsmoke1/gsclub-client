@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { BRAND_SEO } from "@/lib/brand-seo-content";
 import { BrandFaq } from "@/components/BrandPage/BrandFaq";
 import BrandProductCard from "@/components/BrandPage/BrandProductCard";
+import HqdGoModelCard from "@/components/ModelPage/HqdGoModelCard";
 
 type Props = { params: Promise<{ brandSlug: string }> };
 
@@ -162,6 +163,7 @@ export default async function BrandPage({ params }: Props) {
             </p>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+              {brand.slug === "hqd" && <HqdGoModelCard />}
               {brand.products.map((product) => (
                 <BrandProductCard key={product.id} product={product} />
               ))}

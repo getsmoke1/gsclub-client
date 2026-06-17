@@ -3,29 +3,85 @@ import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Shipping Policy | GetSmoke",
-  description: "GetSmoke Shipping Policy",
+  description: "GetSmoke Shipping Policy — delivery times, PACT Act compliance, age verification, and order tracking.",
 }
 
-const content = `		<div data-elementor-type="wp-page" data-elementor-id="2706" class="elementor elementor-2706" data-elementor-post-type="page">
-				<div class="elementor-element elementor-element-3379fd1 e-flex e-con-boxed e-con e-parent" data-id="3379fd1" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;jet_parallax_layout_list&quot;:[]}">
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-c6d2373 elementor-hidden-mobile elementor-widget elementor-widget-heading" data-id="c6d2373" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">Shipping Policy 
-</h1>				</div>
-				</div>
-					</div>
-				</div>
-		<div class="elementor-element elementor-element-c33f15d e-flex e-con-boxed e-con e-parent" data-id="c33f15d" data-element_type="container" data-settings="{&quot;jet_parallax_layout_list&quot;:[]}">
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-fb6c5b5 elementor-widget elementor-widget-heading" data-id="fb6c5b5" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"><div class="text-base my-auto mx-auto pb-10 [--thread-content-margin:--spacing(4)] @w-sm/main:[--thread-content-margin:--spacing(6)] @w-lg/main:[--thread-content-margin:--spacing(16)] px-(--thread-content-margin)" style="font-size: medium"><div class="[--thread-content-max-width:40rem] @w-lg/main:[--thread-content-max-width:48rem] mx-auto max-w-(--thread-content-max-width) flex-1 group/turn-messages focus-visible:outline-hidden relative flex w-full min-w-0 flex-col agent-turn"><div class="flex max-w-full flex-col grow"><div data-message-author-role="assistant" data-message-id="ea62d455-66c8-4794-99cd-770da2fc561f" dir="auto" class="min-h-8 text-message relative flex w-full flex-col items-end gap-2 text-start break-words whitespace-normal [.text-message+&amp;]:mt-1" data-message-model-slug="gpt-5-2"><div class="flex w-full flex-col gap-1 empty:hidden first:pt-[1px]"><div class="markdown prose dark:prose-invert w-full break-words light markdown-new-styling"><p data-start="0" data-end="34"><strong data-start="0" data-end="34">PACT Act &amp; Shipping Compliance</strong></p><p data-start="36" data-end="254">GetSmoke operates in full compliance with the Prevent All Cigarette Trafficking (PACT) Act and all applicable federal, state, and local regulations governing the sale and shipment of vape and nicotine-related products.</p><p data-start="256" data-end="298">In accordance with the PACT Act, GetSmoke:</p><ul data-start="300" data-end="802"><li data-start="300" data-end="413"><p data-start="302" data-end="413">Verifies the age of all customers using a commercially available age-verification database prior to purchase.</p></li><li data-start="414" data-end="518"><p data-start="416" data-end="518">Registers with the ATF, the U.S. Attorney General, and all required state and local tax authorities.</p></li><li data-start="519" data-end="590"><p data-start="521" data-end="590">Collects and remits all applicable federal, state, and local taxes.</p></li><li data-start="591" data-end="678"><p data-start="593" data-end="678">Submits all required monthly transaction reports to the appropriate state agencies.</p></li><li data-start="679" data-end="802"><p data-start="681" data-end="802">Ships products only through compliant carriers and requires an adult signature upon delivery for all vape-related orders.</p></li></ul><p data-start="804" data-end="991">To ensure compliance with state-level restrictions, GetSmoke maintains automated geographic controls that prevent the sale and shipment of restricted products to prohibited jurisdictions.</p><p data-start="993" data-end="1165"><strong data-start="993" data-end="1165">We do not ship flavored vape products to the State of New Jersey. Orders with a New Jersey shipping address are technically blocked at checkout and cannot be completed.</strong></p><p data-start="1167" data-end="1264">These controls are continuously reviewed and updated to reflect changes in federal and state law.</p><hr data-start="1266" data-end="1269"><p data-start="1271" data-end="1299"><strong data-start="1271" data-end="1299">DELIVERY TIMES &amp; PROCESS</strong></p><p data-start="1301" data-end="1389">GetSmoke is dedicated to providing customers with reliable and timely shipping services.</p><p data-start="1391" data-end="1417">Expected Shipping Times:</p><ul data-start="1418" data-end="1495"><li data-start="1418" data-end="1458"><p data-start="1420" data-end="1458">Standard Shipping: 5–6 business days</p></li><li data-start="1459" data-end="1495"><p data-start="1461" data-end="1495">Fast Shipping: 2–3 business days</p></li></ul><p data-start="1497" data-end="1734">When you place an order, tracking information is sent to your email address so you can monitor your shipment. If your package appears to be delayed beyond the expected delivery window, please contact us and we will investigate the issue.</p><hr data-start="1736" data-end="1739"><p data-start="1741" data-end="1761"><strong data-start="1741" data-end="1761">AGE VERIFICATION</strong></p><p data-start="1763" data-end="1904">To comply with federal and state laws, all customers must successfully complete age verification before purchasing any products on this site.</p><p data-start="1906" data-end="2090">Age verification is performed through a secure, commercially available verification service. Verification requests are sent only from our official email address: <strong data-start="2068" data-end="2089"><a data-start="2070" data-end="2087" class="decorated-link cursor-pointer" rel="noopener">info@getsmoke.com<span aria-hidden="true" class="ms-0.5 inline-block align-middle leading-none"></span></a></strong>.</p><p data-start="2092" data-end="2204">Customers should never provide identification documents or personal verification information to any other party.</p><p data-start="2206" data-end="2259">Orders that cannot be verified will not be processed.</p><hr data-start="2261" data-end="2264"><p data-start="2266" data-end="2295"><strong data-start="2266" data-end="2295">ROUTE SHIPPING PROTECTION</strong></p><p data-start="2297" data-end="2505">We have partnered with SHIPPO to provide optional package protection and enhanced tracking. SHIPPO offers low-cost shipping protection in the event that a package is lost, stolen, or damaged while in transit.</p><p data-start="2507" data-end="2607">If you experience an issue with your order, please file a claim directly with SHIPPO’s support team.</p><hr data-start="2609" data-end="2612"><p data-start="2614" data-end="2632"><strong data-start="2614" data-end="2632">ORDER TRACKING</strong></p><p data-start="2634" data-end="2733">Tracking information is sent to your email once your order has been processed by our shipping team.</p><hr data-start="2735" data-end="2738"><p data-start="2740" data-end="2760"><strong data-start="2740" data-end="2760">CANCELING ORDERS</strong></p><p data-start="2762" data-end="2939">If you need to cancel an order immediately after it has been placed, please contact us as soon as possible. We will make every reasonable effort to cancel and refund your order.</p></div></div></div></div></div></div><span style="font-size: 16px;font-style: inherit;font-weight: inherit">However, once an order has entered processing or shipment, we cannot guarantee that it can be altered, changed, or canceled at your request.</span></h2>				</div>
-				</div>
-					</div>
-				</div>
-				</div>
-		`
+const content = `
+<h2>Shipping Policy</h2>
+<p><em>Last updated: June 2025</em></p>
+
+<hr/>
+
+<h2>1. PACT ACT AND REGULATORY COMPLIANCE</h2>
+<p>GetSmoke operates in full compliance with the <strong>Prevent All Cigarette Trafficking (PACT) Act</strong> and all applicable federal, state, and local regulations governing the sale and shipment of vape and nicotine-related products. In accordance with the PACT Act, GetSmoke:</p>
+<ul>
+  <li>Verifies the age of all customers using a commercially available age-verification database prior to completing any purchase</li>
+  <li>Is registered with the ATF, the U.S. Attorney General, and all required state and local tax authorities</li>
+  <li>Collects and remits all applicable federal, state, and local excise taxes</li>
+  <li>Submits required monthly transaction reports to the appropriate state agencies</li>
+  <li>Ships products only through PACT Act-compliant carriers and requires an <strong>adult signature upon delivery</strong> for all vape-related orders</li>
+</ul>
+<p>GetSmoke maintains automated geographic controls that prevent the sale and shipment of restricted products to prohibited jurisdictions. These controls are reviewed and updated regularly to reflect changes in law.</p>
+<p><strong>We do not ship to states or localities where online vape sales are prohibited.</strong> Orders placed from restricted jurisdictions will be cancelled and refunded minus applicable processing fees.</p>
+
+<hr/>
+
+<h2>2. AGE VERIFICATION</h2>
+<p>All customers must successfully complete age verification before any order is processed. You must be <strong>21 years of age or older</strong> to purchase from GetSmoke.</p>
+<p>Age verification is performed through a secure, commercially available verification service. Verification requests are sent only from our official email address: <a href="mailto:info@getsmoke.com">info@getsmoke.com</a>. <strong>Do not provide personal identification documents to any other email address or party.</strong></p>
+<p>Orders that cannot be verified will not be processed and will be refunded, minus a 15% processing fee.</p>
+
+<hr/>
+
+<h2>3. DELIVERY TIMES</h2>
+<p>All orders are processed within 1-2 business days. Expected delivery times after shipment:</p>
+<ul>
+  <li><strong>Standard Shipping:</strong> 5-6 business days</li>
+  <li><strong>Expedited Shipping:</strong> 2-3 business days</li>
+</ul>
+<p>Delivery times are estimates only and not guaranteed. Delays may occur due to carrier issues, weather events, holidays, or address verification requirements. GetSmoke is not responsible for delivery delays caused by third-party carriers or circumstances outside our control.</p>
+
+<hr/>
+
+<h2>4. ADULT SIGNATURE REQUIREMENT</h2>
+<p>Due to federal PACT Act requirements, <strong>all deliveries require an adult signature</strong> (age 21+). The carrier will not leave the package unattended. If no adult is available to sign at the time of delivery:</p>
+<ul>
+  <li>The carrier will make additional delivery attempts</li>
+  <li>After failed delivery attempts, the package may be held at a carrier facility for pickup</li>
+  <li>If the package is returned to us, re-shipping fees apply and GetSmoke is not responsible for any product condition changes during extended transit</li>
+</ul>
+
+<hr/>
+
+<h2>5. ORDER TRACKING</h2>
+<p>Tracking information will be emailed to you once your order has been processed and handed to the carrier. If you have not received tracking information within 3 business days of your order, contact us at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a>.</p>
+
+<hr/>
+
+<h2>6. SHIPPING PROTECTION</h2>
+<p>GetSmoke has partnered with SHIPPO to provide optional package protection. If you add shipping protection at checkout and your package is lost, stolen, or damaged in transit, file a claim directly with SHIPPO's support team. GetSmoke is not liable for packages lost or damaged during shipping when shipping protection was declined.</p>
+
+<hr/>
+
+<h2>7. CANCELING ORDERS</h2>
+<p>If you need to cancel an order after placement, contact us immediately at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a>. We will make every effort to cancel before shipment. Once an order has entered processing or shipment, it cannot be cancelled or intercepted. A 15% cancellation fee applies to all refund requests on unshipped orders.</p>
+
+<hr/>
+
+<h2>8. DISCLAIMER OF SHIPPING LIABILITY</h2>
+<p>GetSmoke is not responsible for:</p>
+<ul>
+  <li>Delays caused by carriers, weather, or force majeure events</li>
+  <li>Packages lost or damaged after delivery confirmation</li>
+  <li>Packages returned due to failed age verification at delivery</li>
+  <li>Incorrect addresses provided by the customer</li>
+</ul>
+
+<hr/>
+
+<h2>9. CONTACT</h2>
+<p>Shipping questions: <a href="mailto:info@getsmoke.com">info@getsmoke.com</a></p>
+`
 
 export default function Page() {
   return <PolicyPage title="Shipping Policy" content={content} />

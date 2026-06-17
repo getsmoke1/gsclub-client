@@ -7,113 +7,78 @@ export const metadata: Metadata = {
 }
 
 const content = `
-<p class="wp-block-paragraph">If you encounter any issues with your purchase from <a href="https://getsmoke.com/">www.GetSmoke.com</a>, feel free to contact us via email or website contact form. Our team will assist you through the process. All returns must be initiated within 30 days of the purchase date.</p>
+<h2>Refund and Returns Policy</h2>
+<p><em>Last updated: June 2025</em></p>
 
+<p>Please read this policy carefully. By purchasing from GetSmoke, you acknowledge and agree to the terms below.</p>
 
+<hr/>
 
-<p class="wp-block-paragraph"><strong>Refunds</strong></p>
+<h2>1. IMPORTANT DISCLAIMERS</h2>
+<p>GetSmoke is a <strong>reseller of products manufactured by third parties</strong>. We purchase all inventory from authorized U.S.-based distributors and have no control over product manufacturing, formulation, or quality control. GetSmoke <strong>does not manufacture, import directly, or modify</strong> any product we sell.</p>
+<p>We are not responsible for product defects, failures, or issues that arise from the manufacturer's design or production process. All product liability, health effects, and warranty obligations related to product quality rest with the original manufacturer. By purchasing, you acknowledge this and agree not to hold GetSmoke liable for any manufacturer-side defect beyond the remedy described in this policy.</p>
 
+<hr/>
 
-
-<p class="wp-block-paragraph">Once we receive and check your returned devices, we will process a refund to the original payment method, deducting a 15% restocking and processing fee. Please note, we do not provide pre-paid return labels, nor do we refund shipping costs. To ensure safe delivery, we recommend adding insurance to your return shipment.</p>
-
-
-
-<p class="wp-block-paragraph">For orders that have not been shipped but are requested to be canceled and refunded, we retain a 15% cancellation fee. Alternatively, we can issue a store credit for the full amount, in which case no cancellation fee will be applied.</p>
-
-
-
-<p class="wp-block-paragraph"><strong>Exchanges</strong></p>
-
-
-
-<p class="wp-block-paragraph">Exchanges are available within 30 days of the original purchase date.</p>
-
-
-
-<p class="wp-block-paragraph"><strong>Restrictions on Refunds/Exchanges</strong></p>
-
-
-
-<p class="wp-block-paragraph">Due to FDA regulations, some items are ineligible for return or exchange:</p>
-
-
-
-<ul class="wp-block-list">
-<li>Opened or used e-liquids</li>
-
-
-
-<li>Products not purchased from <a href="https://getsmoke.com/">www.GetSmoke.com</a></li>
-
-
-
-<li>Opened or used devices/accessories</li>
+<h2>2. ELIGIBILITY FOR RETURNS</h2>
+<p>Return requests must be initiated within <strong>30 days of the purchase date</strong> by contacting us at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a> with your order number.</p>
+<p>Returns are accepted <strong>only</strong> for the following reasons:</p>
+<ul>
+  <li>Device is <strong>dead on arrival (DOA)</strong> — non-functional upon first use, unopened seal intact</li>
+  <li>Device arrived with a <strong>documented manufacturer defect</strong> (e.g., auto-firing, no draw, leaking sealed unit)</li>
+  <li>You received the <strong>wrong item</strong> due to a fulfillment error on our part</li>
 </ul>
+<p>To process a return for a defective item, you must provide a photo or short video clearly demonstrating the defect. GetSmoke reserves the right to deny any return claim that cannot be substantiated with evidence.</p>
 
+<hr/>
 
-
-<p class="wp-block-paragraph">We also do not refund:</p>
-
-
-
-<ul class="wp-block-list">
-<li>Shipping costs</li>
-
-
-
-<li>Sample packs or bundle deals that are partially returned or opened</li>
+<h2>3. NON-RETURNABLE ITEMS</h2>
+<p>The following items are <strong>strictly non-returnable and non-refundable</strong> under any circumstances, including pursuant to applicable FDA and PACT Act regulations:</p>
+<ul>
+  <li>Opened or used devices of any kind</li>
+  <li>Opened or used e-liquids or vape juice</li>
+  <li>Products that have been used and then reported as defective (used products cannot be tested for original defects)</li>
+  <li>Bundle packs or multi-packs where any unit has been opened or used</li>
+  <li>Products returned without prior written authorization from GetSmoke</li>
+  <li>Products not purchased from www.getsmoke.com</li>
+  <li>Change-of-mind returns (you no longer want the product, do not like the flavor, etc.)</li>
 </ul>
+<p><strong>We do not accept returns based on subjective dissatisfaction with flavor, vapor production, throat hit, or nicotine effect.</strong> All sales of opened or used nicotine products are final.</p>
 
+<hr/>
 
-
-<p class="wp-block-paragraph"><strong>Shipping Fees</strong></p>
-
-
-
-<p class="wp-block-paragraph">Customers are responsible for covering the cost of shipping items back to us.<br>When returned items are received, a customer service representative will contact you to finalize the exchange. You may need to pay the price difference if exchanging for an item of higher value.<br>Standard shipping fees apply to orders under $79.99.</p>
-
-
-
-<p class="wp-block-paragraph">We’re here to ensure a smooth and hassle-free experience!</p>
-
-
-
-<ul class="wp-block-list">
-<li></li>
+<h2>4. REFUND PROCESS</h2>
+<p>Approved returns (confirmed defective, wrong item) will be processed as follows:</p>
+<ul>
+  <li>A <strong>15% restocking and processing fee</strong> is deducted from all refunds</li>
+  <li>Refunds are issued to the <strong>original payment method only</strong></li>
+  <li>Shipping costs are non-refundable in all cases</li>
+  <li>Return shipping costs are the customer's responsibility; we do not provide prepaid return labels</li>
+  <li>We recommend insuring your return shipment — GetSmoke is not responsible for items lost or damaged in return transit</li>
 </ul>
+<p>Alternative: We may offer a <strong>full store credit</strong> with no restocking fee, at our sole discretion.</p>
 
+<hr/>
 
-
-<ul class="wp-block-list">
-<li></li>
+<h2>5. ORDER CANCELLATIONS</h2>
+<p>If you wish to cancel an order that has not yet been shipped:</p>
+<ul>
+  <li>Contact us immediately at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a></li>
+  <li>A <strong>15% cancellation fee</strong> applies to cash refunds</li>
+  <li>A full store credit (no fee) may be issued as an alternative</li>
 </ul>
+<p>Once an order has entered the shipping process, it <strong>cannot be cancelled or intercepted</strong>. You must wait for delivery and then initiate a return per this policy.</p>
 
+<hr/>
 
+<h2>6. HEALTH-RELATED CLAIMS</h2>
+<p>GetSmoke will <strong>not accept returns, issue refunds, or provide compensation</strong> based on any claimed adverse health effects, allergic reactions, nicotine sensitivity, respiratory issues, or any other health-related complaints arising from product use. By purchasing, you have acknowledged our Health Warning in the Terms and Conditions and voluntarily assumed all health risks associated with vaping and nicotine consumption.</p>
+<p>Any health-related claims must be directed to the product manufacturer.</p>
 
-<ul class="wp-block-list">
-<li></li>
-</ul>
+<hr/>
 
-
-
-<ul class="wp-block-list">
-<li></li>
-</ul>
-
-
-
-<ul class="wp-block-list">
-<li></li>
-</ul>
-
-
-
-<p class="wp-block-paragraph">Contact us at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a> for questions related to refunds and returns.</p>
-
-
-
-<p class="wp-block-paragraph"></p>
+<h2>7. CONTACT</h2>
+<p>Questions about returns or refunds: <a href="mailto:info@getsmoke.com">info@getsmoke.com</a></p>
 `
 
 export default function Page() {

@@ -2,195 +2,109 @@ import PolicyPage from "@/components/PolicyPage/PolicyPage"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Terms and conditions | GetSmoke",
-  description: "GetSmoke Terms and Conditions",
+  title: "Terms and Conditions | GetSmoke",
+  description: "GetSmoke Terms and Conditions - Legal terms governing use of our website and purchase of products.",
 }
 
-const content = `		<div data-elementor-type="wp-page" data-elementor-id="752" class="elementor elementor-752" data-elementor-post-type="page">
-				<div class="elementor-element elementor-element-449e864 e-flex e-con-boxed e-con e-parent" data-id="449e864" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;gradient&quot;,&quot;jet_parallax_layout_list&quot;:[]}">
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-bf47bb4 elementor-hidden-mobile elementor-widget elementor-widget-heading" data-id="bf47bb4" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h1 class="elementor-heading-title elementor-size-default">Terms and Conditions
-</h1>				</div>
-				</div>
-					</div>
-				</div>
-		<div class="elementor-element elementor-element-267d333 e-flex e-con-boxed e-con e-parent" data-id="267d333" data-element_type="container" data-settings="{&quot;jet_parallax_layout_list&quot;:[]}">
-					<div class="e-con-inner">
-				<div class="elementor-element elementor-element-9a148d7 elementor-widget elementor-widget-heading" data-id="9a148d7" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">Website Terms and Conditions
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-6f595ab elementor-widget elementor-widget-heading" data-id="6f595ab" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">This website is owned and operated by cosmoproject LLC. By using this website, you agree to be bound by the following terms and conditions ("Terms of Service"). Please read these Terms of Service carefully before accessing or using our website.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-f7f88f4 elementor-widget elementor-widget-heading" data-id="f7f88f4" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">ONLINE STORE TERMS
+const content = `
+<h2>Terms and Conditions</h2>
+<p><em>Last updated: June 2025</em></p>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-1d6cabb elementor-widget elementor-widget-heading" data-id="1d6cabb" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">By using our website, you represent that you are of legal age in your jurisdiction and have given us your consent to allow any of your minor dependents to use this site. You may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction. You must not transmit any worms or viruses or any code of a destructive nature.<br><br>By purchasing, you confirm that you agree with the terms and conditions of our website and understand that Nicotine contain products regulate the FD&amp;C Act compliance therefore we must follow the law and confirm the legal age before we processed the order. You also agree that in case you aren't able to verify your age and request the refund, your refund will proceed regarding our refund policy including cancellation fee. 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-2c28a3f elementor-widget elementor-widget-heading" data-id="2c28a3f" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">GENERAL CONDITIONS
+<p>This website is owned and operated by <strong>Cosmoproject LLC</strong> ("GetSmoke," "we," "us," or "our"). By accessing or using this website or purchasing any product from us, you agree to be fully bound by these Terms and Conditions. <strong>If you do not agree to all terms, do not use this website or place any order.</strong></p>
 
+<hr/>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-96a559c elementor-widget elementor-widget-heading" data-id="96a559c" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">We reserve the right to refuse Service to anyone for any reason at any time. You agree not to reproduce, duplicate, copy, sell, resell or exploit any portion of the Service without our express written permission.</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-7a21594 elementor-widget elementor-widget-heading" data-id="7a21594" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"> ACCURACY, COMPLETENESS, AND TIMELINESS OF INFORMATION
+<h2>1. AGE RESTRICTION — 21+ ONLY</h2>
+<p>ALL products sold on this website contain nicotine, are tobacco-derived, or are intended for use with such products. <strong>You must be 21 years of age or older to purchase from GetSmoke.</strong> By placing an order, you represent and warrant under penalty of perjury that you are at least 21 years old. We use third-party age verification services to confirm eligibility. Any order where age cannot be verified will be cancelled. Attempting to purchase as a minor or on behalf of a minor is a violation of federal law and these Terms.</p>
 
+<hr/>
 
+<h2>2. HEALTH WARNING AND ASSUMPTION OF RISK</h2>
+<p><strong>WARNING: This product contains nicotine. Nicotine is an addictive chemical.</strong></p>
+<p>Vaping and use of electronic nicotine delivery systems (ENDS) involves serious health risks, including but not limited to:</p>
+<ul>
+  <li>Nicotine addiction</li>
+  <li>Lung injury (including EVALI — E-cigarette or Vaping product use-Associated Lung Injury)</li>
+  <li>Cardiovascular disease</li>
+  <li>Adverse effects on fetal development during pregnancy</li>
+  <li>Unknown long-term health consequences</li>
+</ul>
+<p>These products are <strong>not approved by the FDA</strong> as smoking cessation devices and are not intended to diagnose, treat, cure, or prevent any disease or condition. By purchasing from GetSmoke, you <strong>knowingly and voluntarily assume all risks</strong> associated with the purchase and use of these products. You acknowledge that you have consulted or had the opportunity to consult with a licensed healthcare professional before using any nicotine or vaping product.</p>
+<p>GetSmoke bears no responsibility whatsoever for any health consequences, injuries, illnesses, or adverse effects arising from the use or misuse of any product sold on this site.</p>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-f46d755 elementor-widget elementor-widget-heading" data-id="f46d755" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">We are not responsible if information made available on this site is not accurate, complete, or current. The material on this site is provided for general information only and should not be relied upon or used as the sole basis for making decisions without consulting primary, more accurate, more complete, or more timely sources of information. Any reliance on the material on this site is at your own risk.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-45244fe elementor-widget elementor-widget-heading" data-id="45244fe" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"> MODIFICATIONS TO THE SERVICE AND PRICES
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-bef27c7 elementor-widget elementor-widget-heading" data-id="bef27c7" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">Prices for our products are subject to change without notice. We reserve the right to modify or discontinue the Service without notice at any time.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-01db519 elementor-widget elementor-widget-heading" data-id="01db519" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"> PRODUCTS OR SERVICES
+<hr/>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-cbc1b93 elementor-widget elementor-widget-heading" data-id="cbc1b93" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">Certain products or services may be available exclusively online through the website. We reserve the right to limit the sales of our products or services to any person, geographic region or jurisdiction. We may exercise this right on a case-by-case basis. All descriptions of products or product pricing are subject to change at any time without notice. Any offer for any product or Service made on this site is void where prohibited.
+<h2>3. RESELLER DISCLAIMER — NO MANUFACTURER LIABILITY</h2>
+<p>GetSmoke is a <strong>retail reseller only</strong>. We purchase all products exclusively from <strong>authorized U.S.-based distributors</strong> and do not manufacture, import, formulate, or directly source any product from any foreign manufacturer, including China. We have no control over, and make no representations regarding, the design, manufacturing processes, materials, ingredients, quality control, or safety testing of any product we sell.</p>
+<p>All product liability, warranty claims, personal injury claims, or claims arising from product defects, contamination, mislabeling, or failure to warn must be directed to the <strong>product manufacturer</strong>. GetSmoke expressly disclaims all liability for any claims arising from the nature, composition, or condition of the products themselves.</p>
+<p>GetSmoke's liability in connection with any product sold is strictly limited to its role as a reseller and shall not exceed the purchase price paid for that specific product.</p>
 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-7fa22c1 elementor-widget elementor-widget-heading" data-id="7fa22c1" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">ACCURACY OF BILLING AND ACCOUNT INFORMATION
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-0f498dd elementor-widget elementor-widget-heading" data-id="0f498dd" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">We reserve the right to refuse any order you place with us. You agree to provide current, complete and accurate purchase and account information for all purchases made at our store.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-9dffc6a elementor-widget elementor-widget-heading" data-id="9dffc6a" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"> OPTIONAL TOOLS
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-5b0d1f2 elementor-widget elementor-widget-heading" data-id="5b0d1f2" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">
-We may provide you with access to third-party tools over which we have no control nor input. Any use by you of optional tools offered through the site is entirely at your own risk
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-e11076f elementor-widget elementor-widget-heading" data-id="e11076f" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">THIRD-PARTY LINKS
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-4ac3bd9 elementor-widget elementor-widget-heading" data-id="4ac3bd9" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">Third-party links on this site may direct you to third-party websites that are not affiliated with us. We are not responsible for examining or evaluating the content or accuracy and we do not warrant and will not have any liability or responsibility for any third-party materials or websites.
+<hr/>
 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-3dca4c5 elementor-widget elementor-widget-heading" data-id="3dca4c5" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">USER COMMENTS, FEEDBACK, AND OTHER SUBMISSIONS
+<h2>4. PACT ACT COMPLIANCE</h2>
+<p>GetSmoke operates in full compliance with the <strong>Prevent All Cigarette Trafficking (PACT) Act</strong> and all applicable federal, state, and local regulations. We:</p>
+<ul>
+  <li>Verify customer age using a commercially available age-verification database prior to completing any sale</li>
+  <li>Register with the ATF, the U.S. Attorney General, and all required state and local tax authorities</li>
+  <li>Collect and remit all applicable federal, state, and local excise taxes</li>
+  <li>Submit required monthly transaction reports to state agencies</li>
+  <li>Require adult signature upon delivery for all shipments</li>
+  <li>Maintain automated geographic controls to block sales to prohibited jurisdictions</li>
+</ul>
+<p>We <strong>do not ship</strong> to states where online vape sales are prohibited. Orders placed from restricted jurisdictions will be cancelled and refunded minus any applicable processing fees.</p>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-f731fff elementor-widget elementor-widget-heading" data-id="f731fff" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">
-If you send specific submissions or creative ideas, suggestions, proposals, plans or other materials, you agree that we may edit, copy, publish, distribute, translate and otherwise use in any medium any comments that you forward to us.
+<hr/>
 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-8c4f394 elementor-widget elementor-widget-heading" data-id="8c4f394" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">PERSONAL INFORMATION
+<h2>5. DISCLAIMER OF WARRANTIES</h2>
+<p>ALL PRODUCTS AND SERVICES ARE PROVIDED <strong>"AS IS" AND "AS AVAILABLE"</strong> WITHOUT ANY WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR ANY WARRANTY ARISING FROM COURSE OF DEALING OR USAGE OF TRADE. WE DO NOT WARRANT THAT ANY PRODUCT WILL MEET YOUR REQUIREMENTS OR EXPECTATIONS.</p>
+<p>We make no representations regarding the accuracy, completeness, or reliability of any product description, specification, or pricing information. Product images are for illustrative purposes only. Actual products may differ from images shown.</p>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-24d2c8b elementor-widget elementor-widget-heading" data-id="24d2c8b" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">Your submission of personal information through the store is governed by our Privacy Policy.<br><br>By making a purchase, you confirm that you agree to receive emails and SMS about the status of your order, as well as for informational and promotional purposes, while you can at any time request a refusal to send us a request to unsubscribe to marketing@getsmoke.com 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-7631255 elementor-widget elementor-widget-heading" data-id="7631255" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">ERRORS, INACCURACIES, AND OMISSIONS
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-6d25925 elementor-widget elementor-widget-heading" data-id="6d25925" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">Occasionally there may be information on our site or in the Service that contains typographical errors, inaccuracies or omissions. We reserve the right to correct any errors, inaccuracies, or omissions, and to change or update information or cancel orders if any information in the Service or on any related website is inaccurate at any time without prior notice.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-672bd4f elementor-widget elementor-widget-heading" data-id="672bd4f" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">PROHIBITED USES
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-22e04ce elementor-widget elementor-widget-heading" data-id="22e04ce" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">You are prohibited from using the site or its content for any unlawful purpose or to infringe upon or violate our intellectual property rights or the intellectual property rights of others.
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-65ed4a6 elementor-widget elementor-widget-heading" data-id="65ed4a6" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default">DISCLAIMER OF WARRANTIES; LIMITATION OF LIABILITY
+<hr/>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-50ea0ea elementor-widget elementor-widget-heading" data-id="50ea0ea" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">We do not guarantee, represent, or warrant that your use of our Service will be uninterrupted or error-free. You expressly agree that your use of, or inability to use, the Service is at your sole risk. In no case shall [company name] be liable for any direct, indirect, incidental, punitive, special, or consequential damages arising from your use of any of the Service or any products procured using the Service.
+<h2>6. LIMITATION OF LIABILITY</h2>
+<p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, COSMOPROJECT LLC, ITS OFFICERS, DIRECTORS, EMPLOYEES, AGENTS, AFFILIATES, AND SUPPLIERS SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES OF ANY KIND, INCLUDING BUT NOT LIMITED TO:</p>
+<ul>
+  <li>Personal injury, death, or health conditions arising from product use</li>
+  <li>Loss of profits, revenue, data, or business opportunities</li>
+  <li>Property damage</li>
+  <li>Any claims by third parties</li>
+</ul>
+<p>IN NO EVENT SHALL OUR AGGREGATE LIABILITY TO YOU FOR ANY CLAIM ARISING OUT OF OR RELATING TO THESE TERMS OR YOUR USE OF OUR WEBSITE OR PRODUCTS EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID FOR THE SPECIFIC PRODUCT GIVING RISE TO THE CLAIM, OR (B) ONE HUNDRED DOLLARS ($100.00).</p>
+<p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability, so some of the above limitations may not apply to you.</p>
 
-</p>				</div>
-				</div>
-				<div class="elementor-element elementor-element-1e0ea28 elementor-widget elementor-widget-heading" data-id="1e0ea28" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<h2 class="elementor-heading-title elementor-size-default"> INDEMNIFICATION
+<hr/>
 
-</h2>				</div>
-				</div>
-				<div class="elementor-element elementor-element-0b97f72 elementor-widget elementor-widget-heading" data-id="0b97f72" data-element_type="widget" data-widget_type="heading.default">
-				<div class="elementor-widget-container">
-					<p class="elementor-heading-title elementor-size-default">You agree to indemnify, defend and hold harmless cosmoproject LLC and our affiliates, partners, officers, directors, agents, contractors, licensors, service providers, subcontractors, suppliers and employees from any claim or demand, including reasonable attorneys’ fees, made by any third-party due to or arising out of your breach of these Terms of Service.
+<h2>7. INDEMNIFICATION</h2>
+<p>You agree to indemnify, defend, and hold harmless Cosmoproject LLC and its officers, directors, employees, agents, affiliates, and suppliers from and against any claims, demands, actions, losses, damages, penalties, fines, costs, and expenses (including reasonable attorneys' fees) arising out of or related to: (a) your use of this website or any product purchased from us; (b) your violation of these Terms; (c) your violation of any law or the rights of any third party; or (d) any misrepresentation you make, including false age representation.</p>
 
-By using this website, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use&nbsp;any&nbsp;Services.
-</p>				</div>
-				</div>
-					</div>
-				</div>
-				</div>
-		`
+<hr/>
+
+<h2>8. BINDING ARBITRATION AND CLASS ACTION WAIVER</h2>
+<p>ANY DISPUTE, CLAIM, OR CONTROVERSY ARISING OUT OF OR RELATING TO THESE TERMS OR YOUR USE OF THIS WEBSITE OR PRODUCTS SOLD HEREIN SHALL BE RESOLVED BY BINDING INDIVIDUAL ARBITRATION, NOT IN COURT. <strong>YOU WAIVE ANY RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.</strong></p>
+<p>Arbitration shall be conducted by a single arbitrator under the rules of the American Arbitration Association (AAA), in the State of Florida. The arbitrator's decision shall be final and binding and may be entered as a judgment in any court of competent jurisdiction.</p>
+<p>You may opt out of this arbitration agreement within 30 days of first accepting these Terms by sending written notice to <a href="mailto:legal@getsmoke.com">legal@getsmoke.com</a>.</p>
+
+<hr/>
+
+<h2>9. GOVERNING LAW AND JURISDICTION</h2>
+<p>These Terms shall be governed by and construed in accordance with the laws of the <strong>State of Florida</strong>, without regard to its conflict of law provisions. Any dispute not subject to arbitration shall be resolved exclusively in the state or federal courts located in Florida, and you consent to personal jurisdiction in such courts.</p>
+
+<hr/>
+
+<h2>10. PROHIBITED USES</h2>
+<p>You may not use this website to: (a) purchase products if you are under 21; (b) resell products without our written authorization; (c) circumvent age verification or geographic restrictions; (d) transmit malicious code; (e) violate any applicable law or regulation.</p>
+
+<hr/>
+
+<h2>11. GENERAL CONDITIONS</h2>
+<p>We reserve the right to refuse service to anyone for any reason at any time. Prices are subject to change without notice. We may modify or discontinue any product or service without liability. If any provision of these Terms is held invalid or unenforceable, the remaining provisions shall continue in full force. These Terms constitute the entire agreement between you and GetSmoke regarding your use of this website.</p>
+
+<hr/>
+
+<h2>12. CONTACT</h2>
+<p>Questions about these Terms? Contact us at <a href="mailto:info@getsmoke.com">info@getsmoke.com</a></p>
+`
 
 export default function Page() {
-  return <PolicyPage title="Terms and conditions" content={content} />
+  return <PolicyPage title="Terms and Conditions" content={content} />
 }

@@ -6,6 +6,8 @@ import AddToCartButton from "@/components/Cart/AddToCartButton";
 // useFilter intentionally NOT used here — homepage always shows unfiltered products
 import { Product } from "@/types/product";
 import Image from "next/image";
+import GenericModelCard from "@/components/ModelPage/GenericModelCard";
+import { MODELS } from "@/lib/models-config";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import HorizontalProductShimmer from "./HorizontalProductShimmer";
@@ -19,6 +21,7 @@ interface ProductListProps {
     sortBy?: string;
     initialProducts?: Product[];
     compactCart?: boolean; // true = button only (homepage), false = qty+button (listings)
+    featuredModelSlugs?: string[]; // model listing cards to show at top of grid
 }
 
 const ProductList: React.FC<ProductListProps> = ({
@@ -29,7 +32,8 @@ const ProductList: React.FC<ProductListProps> = ({
     search,
     sortBy,
     initialProducts,
-    compactCart = false
+    compactCart = false,
+    featuredModelSlugs
 }) => {
     // Homepage: no filters applied regardless of global filter state
     const brandId = undefined, flavorId = undefined, puffsId = undefined, nicotineId = undefined;
@@ -181,6 +185,10 @@ const ProductList: React.FC<ProductListProps> = ({
                 <div className="relative">
                     {/* 2-column grid on mobile, 4-column on desktop — Figma layout */}
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-5">
+                        {featuredModelSlugs && featuredModelSlugs.map(slug => {
+                            const m = MODELS.find(x => x.slug === slug);
+                            return m ? <GenericModelCard key={slug} model={m} /> : null;
+                        })}
                         {products.slice(0, 4).map((product: Product) => (
                             <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
                                 <Link href={`/product/${product.slug}`} className="block">

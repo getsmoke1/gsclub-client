@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 import { ModelConfig } from "@/lib/models-config";
 
 interface Props {
@@ -15,7 +14,7 @@ export default function GenericModelCard({ model }: Props) {
     <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
       <Link href={`/models/${model.slug}`} className="block">
         {/* Image */}
-        <div className="relative bg-black" style={{ paddingTop: "100%" }}>
+        <div className="relative bg-white" style={{ paddingTop: "100%" }}>
           <div className="absolute inset-0">
             <Image
               src={model.heroImage}
@@ -51,7 +50,6 @@ export default function GenericModelCard({ model }: Props) {
             className="w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 transition-opacity whitespace-nowrap"
             style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
           >
-            <ShoppingCart size={13} />
             Pick Your Flavor
           </button>
         </Link>

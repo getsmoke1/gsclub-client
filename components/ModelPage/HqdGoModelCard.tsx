@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 
 const HQD_GO_IMAGE = "/hqd-go-hero.jpg";
 
@@ -10,7 +9,7 @@ export default function HqdGoModelCard() {
     <div className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
       <Link href="/models/hqd-go" className="block">
         {/* Image — object-contain so "35K PUFFS" at bottom is never cropped */}
-        <div className="relative bg-black" style={{ paddingTop: "100%" }}>
+        <div className="relative bg-white" style={{ paddingTop: "100%" }}>
           <div className="absolute inset-0">
             <Image
               src={HQD_GO_IMAGE}
@@ -42,7 +41,6 @@ export default function HqdGoModelCard() {
             className="w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 transition-opacity whitespace-nowrap"
             style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
           >
-            <ShoppingCart size={13} />
             Pick Your Flavor
           </button>
         </Link>

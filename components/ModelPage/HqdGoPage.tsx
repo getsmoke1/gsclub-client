@@ -138,7 +138,7 @@ const PACK_CONFIG: Record<
 };
 
 export default function HqdGoPage() {
-  const [selectedFlavor, setSelectedFlavor] = useState(FLAVORS[0]);
+  const [selectedFlavor, setSelectedFlavor] = useState<(typeof FLAVORS)[0] | null>(null);
   const [packOption, setPackOption] = useState<PackOption>("single");
   const [qty, setQty] = useState(1);
   const [selectedFlavorIds, setSelectedFlavorIds] = useState<string[]>(
@@ -158,7 +158,6 @@ export default function HqdGoPage() {
 
   const handleFlavorSelect = (flavor: (typeof FLAVORS)[0]) => {
     setSelectedFlavor(flavor);
-    // Pre-fill first dropdown with selected flavor
     setSelectedFlavorIds((prev) => {
       const updated = [...prev];
       updated[0] = flavor.id;
@@ -166,12 +165,16 @@ export default function HqdGoPage() {
     });
   };
 
+  const heroSrc = selectedFlavor
+    ? IMAGE_BASE + selectedFlavor.img
+    : "/hqd-go-hero.jpg";
+
   const handlePackChange = (option: PackOption) => {
     setPackOption(option);
     // Reset flavor IDs keeping first pre-filled
     setSelectedFlavorIds((prev) => {
       const updated = Array(10).fill("");
-      updated[0] = prev[0] || selectedFlavor.id;
+      updated[0] = prev[0] || selectedFlavor?.id || "";
       return updated;
     });
   };
@@ -186,6 +189,7 @@ export default function HqdGoPage() {
 
   const handleAddToCart = async () => {
     if (packOption === "single") {
+      if (!selectedFlavor) return;
       await addItem(email, { id: selectedFlavor.id, quantity: qty });
     } else {
       for (const flavorId of selectedFlavorIds.slice(0, pack.count)) {
@@ -218,8 +222,8 @@ export default function HqdGoPage() {
           {/* Hero image */}
           <div className="relative w-full rounded-3xl overflow-hidden bg-gray-50" style={{ paddingTop: "100%" }}>
             <Image
-              src={IMAGE_BASE + selectedFlavor.img}
-              alt={`HQD GO - ${selectedFlavor.name}`}
+              src={heroSrc}
+              alt={selectedFlavor ? `HQD GO - ${selectedFlavor.name}` : "HQD GO 35,000 Puffs Disposable Vape"}
               fill
               className="object-cover"
               priority
@@ -229,7 +233,7 @@ export default function HqdGoPage() {
           {/* Flavor chips horizontal scroll */}
           <div className="flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
             {FLAVORS.map((flavor) => {
-              const isSelected = flavor.id === selectedFlavor.id;
+              const isSelected = selectedFlavor?.id === flavor.id;
               return (
                 <button
                   key={flavor.id}

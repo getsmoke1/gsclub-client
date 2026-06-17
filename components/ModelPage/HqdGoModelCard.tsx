@@ -2,8 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const HQD_GO_IMAGE =
-  "https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev/wp-content/uploads/2025/11/HQD-Go-Purple-Drank.jpg";
+const HQD_GO_IMAGE = "/hqd-go-hero.jpg";
 
 export default function HqdGoModelCard() {
   return (

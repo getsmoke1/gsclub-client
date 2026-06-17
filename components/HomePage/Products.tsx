@@ -255,7 +255,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                   </Link>
                   <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2">
                     <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
-                    <AddToCartButton product={product as never} />
+                    <AddToCartButton product={product as never} compact={true} />
                   </div>
                 </div>
               ))}

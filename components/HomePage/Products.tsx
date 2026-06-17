@@ -3,6 +3,8 @@ import React from "react";
 import { ShoppingBag } from "lucide-react";
 import ProductShimmer from "./ProductShimmer";
 import { useFilter } from "@/hooks/useFilter";
+import GenericModelCard from "@/components/ModelPage/GenericModelCard";
+import { MODELS } from "@/lib/models-config";
 import { Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
@@ -216,6 +218,15 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
             <ProductShimmer />
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
+              {/* Featured model listing cards - shown on page 1, no filters, no search */}
+              {currentPage === 1 && !brandId && !flavorId && !puffsId && !nicotineId && !search && (
+                <>
+                  {["raz-dc25000", "lost-mary-turbo", "geek-bar-pulse", "hqd-cuvie-glaze"].map(slug => {
+                    const m = MODELS.find(x => x.slug === slug);
+                    return m ? <GenericModelCard key={slug} model={m} /> : null;
+                  })}
+                </>
+              )}
               {products.map((product: Product) => (
                 <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
                   <Link href={`/product/${product.slug}`} className="block">

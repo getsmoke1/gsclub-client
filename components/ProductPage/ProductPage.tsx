@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import RelatedPRoduct from "./RelatedPRoduct";
 import { useProduct } from "./useProduct";
 import Loading from "./loading";
+import AddToCartButton from "@/components/Cart/AddToCartButton";
 import Faq from "./Faq";
 import { useDeleteReview } from "./useReview";
 import { Edit, X } from "lucide-react";
@@ -141,6 +142,11 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                     {(resolvedProduct.currentPrice / resolvedProduct.packCount).toFixed(2)})
                                 </span>
                             )}
+                        </div>
+
+                        {/* Add to Cart */}
+                        <div className="py-2">
+                            <AddToCartButton product={resolvedProduct as never} />
                         </div>
 
                         {/* Product Description */}

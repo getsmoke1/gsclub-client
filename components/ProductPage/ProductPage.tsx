@@ -266,7 +266,13 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             {/* Return to Shop Button */}
                             <Button
                                 variant="secondary"
-                                onClick={() => router.push("/")}
+                                onClick={() => {
+                                    if (window.history.length > 1) {
+                                        router.back();
+                                    } else {
+                                        router.push("/vapes");
+                                    }
+                                }}
                                 className="flex items-center gap-2 w-full"
                             >
                                 Return to shop

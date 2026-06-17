@@ -78,10 +78,11 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     queryFn: fetchProducts,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    initialData: initialProducts?.length
+    // Only use initialData when no filters are active (otherwise stale server data overrides filter results)
+    initialData: (initialProducts?.length && !brandId && !flavorId && !puffsId && !nicotineId)
       ? { products: initialProducts, totalCount: initialProducts.length, page: 1, pageSize: initialProducts.length, totalPages: 99 }
       : undefined,
-    initialDataUpdatedAt: initialProducts?.length ? Date.now() : undefined,
+    initialDataUpdatedAt: (initialProducts?.length && !brandId && !flavorId && !puffsId && !nicotineId) ? Date.now() : undefined,
   });
 
   // Interleave products by brand (round-robin) so no brand dominates a page

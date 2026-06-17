@@ -16,7 +16,7 @@ const VapePage = ({ productType = "VAPES", search, initialProducts, faqSlug = "/
     return (
         <main>
             <div className="pt-2">
-                <Filter />
+                <Filter productType={productType} />
                 <Products productType={productType} search={search} initialProducts={initialProducts} />
             </div>
             <ListingFaq pageSlug={faqSlug} />

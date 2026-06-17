@@ -15,11 +15,13 @@ export async function GET(request: Request) {
     const flavorId = searchParams.get("flavorId");
     const puffsId = searchParams.get("puffsId");
     const nicotineId = searchParams.get("nicotineId");
+    const productType = searchParams.get("productType");
 
     // Base product filter based on current selections
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const productFilter: any = { isArchived: false };
 
+    if (productType) productFilter.productType = productType;
     if (brandId) productFilter.brandId = brandId;
     if (flavorId) {
       productFilter.OR = [

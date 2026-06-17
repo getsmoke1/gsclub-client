@@ -43,7 +43,7 @@ const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef
   </button>
 );
 
-const Filter = () => {
+const Filter = ({ productType }: { productType?: string }) => {
   const { brandId, flavorId, puffsId, nicotineId, setFilters, clearFilters, removeFilter } = useFilter();
 
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
@@ -70,11 +70,13 @@ const Filter = () => {
       setLoading(true);
       // Brands: always fetch without brandId so user can switch brands freely
       const brandParams = new URLSearchParams();
+      if (productType) brandParams.append("productType", productType);
       if (flavorId) brandParams.append("flavorId", flavorId);
       if (puffsId) brandParams.append("puffsId", puffsId);
       if (nicotineId) brandParams.append("nicotineId", nicotineId);
       // Other options: fetch with current brandId to narrow down choices
       const otherParams = new URLSearchParams();
+      if (productType) otherParams.append("productType", productType);
       if (brandId) otherParams.append("brandId", brandId);
       if (flavorId) otherParams.append("flavorId", flavorId);
       if (puffsId) otherParams.append("puffsId", puffsId);
@@ -92,7 +94,7 @@ const Filter = () => {
     } finally {
       setLoading(false);
     }
-  }, [brandId, flavorId, puffsId, nicotineId]);
+  }, [brandId, flavorId, puffsId, nicotineId, productType]);
 
   useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
 

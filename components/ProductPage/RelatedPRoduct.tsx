@@ -129,6 +129,7 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
                                     View product
                                 </Link>
                                 <AddToCartButton product={product as never} compact={true} />
+                                <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
                                 {product?.redirectLink && (
                                     <Button type="submit" className="leading-4 lg:whitespace-nowrap">
                                         <Link href={product?.redirectLink || ""}>Shop Now</Link>

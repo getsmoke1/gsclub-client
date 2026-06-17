@@ -26,7 +26,7 @@ export default function HqdGoModelCard() {
           <div className="text-center text-sm font-bold text-black">
             $34.99
             <span className="block text-xs text-gray-500 font-normal">
-              14 Flavors Available
+              — or subscribe to save up to 10%
             </span>
           </div>
           <h3 className="font-bold text-xs md:text-sm text-center mt-1 leading-4">
@@ -39,7 +39,7 @@ export default function HqdGoModelCard() {
       <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto">
         <Link href="/models/hqd-go" className="block">
           <button
-            className="w-full py-2.5 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-opacity whitespace-nowrap"
+            className="w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 transition-opacity whitespace-nowrap"
             style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
           >
             <ShoppingCart size={13} />

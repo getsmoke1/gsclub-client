@@ -396,6 +396,102 @@ export default function HqdGoPage() {
           </div>
         </div>
       </div>
+
+      {/* SEO Description */}
+      <section className="mt-12 border-t border-gray-100 pt-8">
+        <h2 className="text-lg md:text-xl font-bold font-unbounded mb-4">
+          About HQD GO 35,000 Puffs Disposable Vape
+        </h2>
+        <div className="text-sm text-gray-700 space-y-3 leading-relaxed">
+          <p>
+            The <strong>HQD GO 35,000 puffs disposable vape</strong> is one of the most advanced and long-lasting disposable devices on the market. Designed for vapers who want powerful performance without the hassle of refilling or recharging frequently, the HQD GO delivers up to 35,000 puffs per device with consistent vapor quality from the first puff to the last.
+          </p>
+          <p>
+            Powered by a high-capacity rechargeable battery and a large e-liquid reservoir, the <strong>HQD GO disposable</strong> features a smooth draw-activated mechanism - no buttons required. Each device is pre-filled with <strong>50mg (5%) nicotine salt</strong> e-liquid for a satisfying throat hit and rapid nicotine delivery, making it ideal for smokers switching to vaping or experienced vapers who prefer strong nicotine.
+          </p>
+          <p>
+            Available in 14 carefully crafted flavors - from refreshing <strong>Black Ice</strong> and tropical <strong>Mango Tropico</strong> to smooth <strong>Virginia Tobacco</strong> and sweet <strong>Berry&apos;d Alive</strong> - the HQD GO offers something for every taste. Each flavor is developed to deliver a rich, consistent taste profile throughout the life of the device.
+          </p>
+          <p>
+            GetSmoke ships the <strong>HQD GO vape</strong> across the entire United States with adult signature required delivery. Orders over $79 qualify for free shipping. All products are sourced from authorized US distributors and comply with applicable regulations for the sale of nicotine products to adults 21 and older.
+          </p>
+        </div>
+      </section>
+
+      {/* Specs table */}
+      <section className="mt-8">
+        <h2 className="text-base font-bold font-unbounded mb-3">HQD GO Specifications</h2>
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          {[
+            ["Puff Count", "Up to 35,000 puffs"],
+            ["Nicotine Strength", "50mg (5%) Nicotine Salt"],
+            ["Battery", "Rechargeable (USB-C)"],
+            ["E-Liquid Capacity", "Pre-filled, large reservoir"],
+            ["Operation", "Draw-activated (no button)"],
+            ["Available Flavors", "14 flavors"],
+            ["Brand", "HQD Tech"],
+            ["Age Requirement", "21+ only"],
+          ].map(([label, value]) => (
+            <div key={label} className="flex flex-col bg-gray-50 rounded-xl p-3">
+              <span className="text-xs text-gray-500">{label}</span>
+              <span className="font-bold text-black">{value}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mt-10">
+        <h2 className="text-lg md:text-xl font-bold font-unbounded mb-6">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-4">
+          {[
+            {
+              q: "How many puffs does the HQD GO have?",
+              a: "The HQD GO delivers up to 35,000 puffs per device. This is one of the highest puff counts available in a disposable vape, making it an excellent value for long-term use.",
+            },
+            {
+              q: "What nicotine strength is in the HQD GO?",
+              a: "The HQD GO uses 50mg (5%) nicotine salt. Nicotine salts provide a smoother throat hit at higher concentrations compared to freebase nicotine, making the HQD GO suitable for users who need a stronger nicotine experience.",
+            },
+            {
+              q: "How many flavors does the HQD GO come in?",
+              a: "The HQD GO is available in 14 flavors: Berry'd Alive, Black Ice, Breezy Nana, Dubai Chocolate, Fresh AF, Kiwi Splash, Lush Ice, Mango Tropico, Menthol God, Miami Breeze, Purple Drank, Razz Quake, Strawmelon, and Virginia Tobacco.",
+            },
+            {
+              q: "Can I buy the HQD GO in a pack?",
+              a: "Yes. GetSmoke offers the HQD GO in Single ($34.99), Pack of 3 ($33.24/each), Pack of 5 ($32.19/each), and Pack of 10 ($30.79/each). Each device in a pack can be a different flavor, so you can mix and match to find your favorites.",
+            },
+            {
+              q: "Does the HQD GO have a rechargeable battery?",
+              a: "Yes, the HQD GO features a rechargeable battery via USB-C. This ensures that you use all the e-liquid in the device before it runs out of power - extending the lifespan and value of each unit.",
+            },
+            {
+              q: "What is the shipping policy for HQD GO?",
+              a: "GetSmoke ships HQD GO devices across the United States. Free shipping is available on orders over $79. In compliance with the PACT Act and state regulations, adult signature is required upon delivery. We do not ship to states or localities where the sale of nicotine products is prohibited.",
+            },
+            {
+              q: "Is the HQD GO a good vape for beginners?",
+              a: "The HQD GO is ideal for vapers who are comfortable with high-nicotine products. If you are new to vaping or transitioning from cigarettes, the 50mg nicotine salt strength delivers a satisfying experience similar to cigarettes. The draw-activated design (no buttons) makes it easy to use right out of the box.",
+            },
+            {
+              q: "Where can I buy HQD GO disposable vapes online?",
+              a: "You can buy the HQD GO disposable vape directly at GetSmoke. We offer all 14 flavors in stock with fast delivery across the USA. Orders are shipped from our US warehouse with adult signature required.",
+            },
+          ].map(({ q, a }) => (
+            <details key={q} className="border border-gray-200 rounded-2xl overflow-hidden group">
+              <summary className="cursor-pointer px-5 py-4 font-bold text-sm flex justify-between items-center list-none">
+                {q}
+                <span className="text-gray-400 group-open:rotate-180 transition-transform text-lg leading-none ml-2 shrink-0">&#8964;</span>
+              </summary>
+              <div className="px-5 pb-4 text-sm text-gray-700 leading-relaxed border-t border-gray-100 pt-3">
+                {a}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

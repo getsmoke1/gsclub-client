@@ -71,7 +71,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     queryKey: ["products", productType, search, brandId, flavorId, puffsId, nicotineId],
     queryFn: fetchProducts,
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.hasNextPage ? pages.length + 1 : undefined;
+      return pages.length < lastPage.totalPages ? pages.length + 1 : undefined;
     },
     initialPageParam: 1,
     staleTime: 5 * 60 * 1000,
@@ -79,7 +79,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     // Only use initialData when no filters are active (otherwise stale server data overrides filter results)
     initialData: (initialProducts?.length && !brandId && !flavorId && !puffsId && !nicotineId)
       ? {
-          pages: [{ products: initialProducts, hasNextPage: true, page: 1, pageSize: initialProducts.length, totalCount: initialProducts.length, totalPages: 99 }],
+          pages: [{ products: initialProducts, hasNextPage: true, page: 1, pageSize: 24, totalCount: 999, totalPages: 999 }],
           pageParams: [1],
         }
       : undefined,

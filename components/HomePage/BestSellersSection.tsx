@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import ProductList from './ProductList';
 import { Product } from '@/types/product';
+import GenericModelCard from '@/components/ModelPage/GenericModelCard';
+import { MODELS } from '@/lib/models-config';
 
 interface BestSellersSectionProps {
     initialProducts?: Product[];
     newestProducts?: Product[];
 }
 
-const BestSellersSection = ({ initialProducts, newestProducts }: BestSellersSectionProps) => {
+const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
     const [activeTab, setActiveTab] = useState<'best' | 'newest'>('best');
     return (
         <section className="w-full bg-white pt-5 pb-2">
@@ -30,15 +32,22 @@ const BestSellersSection = ({ initialProducts, newestProducts }: BestSellersSect
                         NEWEST IN
                     </button>
                 </div>
-                <ProductList
-                    title=""
-                    showViewAll={false}
-                    productType={activeTab === 'newest' ? undefined : "VAPES"}
-                    search={activeTab === 'newest' ? undefined : "pack"}
-                    sortBy={activeTab === 'newest' ? 'newest' : undefined}
-                    initialProducts={activeTab === 'best' ? initialProducts : newestProducts}
-                    compactCart={true}
-                />
+                {activeTab === 'newest' ? (
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
+                        {MODELS.map(model => (
+                            <GenericModelCard key={model.slug} model={model} />
+                        ))}
+                    </div>
+                ) : (
+                    <ProductList
+                        title=""
+                        showViewAll={false}
+                        productType="VAPES"
+                        search="pack"
+                        initialProducts={initialProducts}
+                        compactCart={true}
+                    />
+                )}
                 <div className="flex justify-center mt-4">
                     <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
                         view all

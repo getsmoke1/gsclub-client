@@ -15,7 +15,7 @@ export default function HqdGoModelCard() {
               src={HQD_GO_IMAGE}
               alt="HQD GO 35000 Puffs Disposable Vape"
               fill
-              className="object-contain"
+              className="object-cover object-center"
             />
           </div>
         </div>

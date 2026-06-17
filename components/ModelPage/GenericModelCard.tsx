@@ -20,7 +20,7 @@ export default function GenericModelCard({ model }: Props) {
               src={model.heroImage}
               alt={`${model.name} Disposable Vape`}
               fill
-              className="object-contain"
+              className="object-cover object-center"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/placeholder-vape.jpg";
               }}

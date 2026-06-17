@@ -68,14 +68,25 @@ const Filter = () => {
   const fetchFilterOptions = useCallback(async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (brandId) params.append("brandId", brandId);
-      if (flavorId) params.append("flavorId", flavorId);
-      if (puffsId) params.append("puffsId", puffsId);
-      if (nicotineId) params.append("nicotineId", nicotineId);
-      const res = await fetch(`/api/products/filter-options?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to fetch filter options");
-      setFilterOptions(await res.json());
+      // Brands: always fetch without brandId so user can switch brands freely
+      const brandParams = new URLSearchParams();
+      if (flavorId) brandParams.append("flavorId", flavorId);
+      if (puffsId) brandParams.append("puffsId", puffsId);
+      if (nicotineId) brandParams.append("nicotineId", nicotineId);
+      // Other options: fetch with current brandId to narrow down choices
+      const otherParams = new URLSearchParams();
+      if (brandId) otherParams.append("brandId", brandId);
+      if (flavorId) otherParams.append("flavorId", flavorId);
+      if (puffsId) otherParams.append("puffsId", puffsId);
+      if (nicotineId) otherParams.append("nicotineId", nicotineId);
+      const [brandRes, otherRes] = await Promise.all([
+        fetch(`/api/products/filter-options?${brandParams.toString()}`),
+        fetch(`/api/products/filter-options?${otherParams.toString()}`),
+      ]);
+      if (!brandRes.ok || !otherRes.ok) throw new Error("Failed to fetch filter options");
+      const brandData = await brandRes.json();
+      const otherData = await otherRes.json();
+      setFilterOptions({ ...otherData, brands: brandData.brands });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
     } finally {

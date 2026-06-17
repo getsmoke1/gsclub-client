@@ -189,8 +189,10 @@ export default function HqdGoPage() {
 
   const handleAddToCart = async () => {
     if (packOption === "single") {
-      if (!selectedFlavor) return;
-      await addItem(email, { id: selectedFlavor.id, quantity: qty });
+      // Use dropdown selection (slot 0); fallback to flavor scroll selection
+      const id = selectedFlavorIds[0] || selectedFlavor?.id;
+      if (!id) return;
+      await addItem(email, { id, quantity: qty });
     } else {
       for (const flavorId of selectedFlavorIds.slice(0, pack.count)) {
         if (flavorId) await addItem(email, { id: flavorId, quantity: 1 });
@@ -316,8 +318,8 @@ export default function HqdGoPage() {
                       <span className="text-sm font-bold">{cfg.display}</span>
                     </button>
 
-                    {/* Flavor dropdowns - shown inline when selected */}
-                    {isSelected && key !== "single" && (
+                    {/* Flavor dropdowns - shown inline when selected (including single) */}
+                    {isSelected && (
                       <div
                         className={`mt-2 px-2 flex flex-col gap-2 ${
                           key === "pack10" ? "md:grid md:grid-cols-2 md:gap-x-3" : ""

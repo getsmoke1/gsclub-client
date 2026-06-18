@@ -38,6 +38,7 @@ const BRAND_LOGOS: Record<string, string> = {
   "cookies":    "/brand-logos/blogo-28.png",
   "coconara":   "/brand-logos/coconara-norm.png",
   "al-fakher":  "/brand-logos/blogo-20.png",
+  "ovns":       "/brand-logos/ovns-norm.png",
 };
 
 export default async function BrandsPage() {

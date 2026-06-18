@@ -164,13 +164,13 @@ const Navbar = () => {
     }, [searchQuery, showResults]);
 
     const navItems = [
-        { title: "Shop", href: "/vapes" },
+        { title: "Disposables", href: "/vapes" },
         { title: "Brands", href: "/brands" },
-        { title: "Accessories", href: "/accessories" },
-        { title: "Hookah", href: "/hookah" },
         { title: "Vape Juice", href: "/vape-juice" },
+        { title: "Hookah", href: "/hookah" },
+        { title: "About Us", href: "/about-us" },
+        { title: "FAQ", href: "/faq" },
         { title: "Blog", href: "/blog" },
-        { title: "Contact", href: "/contact" },
     ];
 
     const handleProductClick = (productSlug: string) => {

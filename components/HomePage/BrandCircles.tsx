@@ -17,19 +17,19 @@ const featured = [
 /* Desktop: all brands (Figma layout - 4 rows × 8 cols = 32 brands) */
 /* large: true = use bigger image padding so small logos fill more of the cell */
 const allBrands = [
-    { name: "RAZ",           slug: "raz",           logo: "/brand-logos/brand-logo-3.png"    },
-    { name: "JUICY BAR",     slug: "juicy-bar",     logo: "/brand-logos/brand-logo-6.png"    },
-    { name: "GEEK BAR",      slug: "geek-bar",      logo: "/brand-logos/brand-logo-7.png"    },
-    { name: "HQD",           slug: "hqd",           logo: "/brand-logos/blogo-30.png"        },
-    { name: "fume",          slug: "fume",          logo: "/brand-logos/brand-logo-4.png"    },
-    { name: "LostArt",       slug: "lost-art",      logo: "/brand-logos/blogo-31.png"        },
+    { name: "RAZ",           slug: "raz",           logo: "/brand-logos/raz-norm.png"        },
+    { name: "JUICY BAR",     slug: "juicy-bar",     logo: "/brand-logos/juicy-bar-clean.png" },
+    { name: "GEEK BAR",      slug: "geek-bar",      logo: "/brand-logos/geek-bar-norm.png"   },
+    { name: "HQD",           slug: "hqd",           logo: "/brand-logos/hqd-norm.png"        },
+    { name: "fume",          slug: "fume",          logo: "/brand-logos/fume-norm.png"       },
+    { name: "LostArt",       slug: "lost-art",      logo: "/brand-logos/brand-logo-8.png"   },
     { name: "TYSON",         slug: "tyson",         logo: "/brand-logos/blogo-22.png"        },
 
     { name: "FLUM",          slug: "flum",          logo: "/brand-logos/blogo-25.png"        },
-    { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/blogo-26.png"        },
-    { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/blogo-27.png",       large: true },
+    { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/lost-mary-norm.png"  },
+    { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/fifty-bar-norm.png", large: true },
     { name: "Cookies",       slug: "cookies",       logo: "/brand-logos/blogo-28.png"        },
-    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png"  },
+    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png"   },
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
     { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria-clean.png"       },
     { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-clean.png",    large: true },
@@ -41,7 +41,7 @@ const allBrands = [
     { name: "VIHO",          slug: "viho",          logo: "/brand-logos/viho-clean.png",     large: true },
     { name: "adjust",        slug: "adjust",        logo: "/brand-logos/adjust-clean.png",   large: true },
     { name: "SMOK",          slug: "smok",          logo: "/brand-logos/smok-clean.png",     large: true },
-    { name: "RAMA",          slug: "rama",          logo: "/brand-logos/brand-logo-1.png"    },
+    { name: "RAMA",          slug: "rama",          logo: "/brand-logos/blogo-30.png"        },
 ]
 
 const BrandCircles = () => {

@@ -41,6 +41,7 @@ const allBrands = [
     { name: "VIHO",          slug: "viho",          logo: "/brand-logos/viho-clean.png",     large: true },
     { name: "adjust",        slug: "adjust",        logo: "/brand-logos/adjust-clean.png",   large: true },
     { name: "RAMA",          slug: "rama",          logo: "/brand-logos/blogo-30.png"        },
+    { name: "FUMYTECH",      slug: "fumytech",      logo: "/brand-logos/fumytech-norm.png",  large: true },
 ]
 
 const BrandCircles = () => {

@@ -213,12 +213,10 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                                         <div className="flex">
                                             <p className="font-medium">Puffs:</p>
                                             <p className="ml-2">
-                                                {resolvedProduct.productPuffs.map((pp, index) => (
-                                                    <span key={index}>
-                                                        {index > 0 && " / "}
-                                                        {pp.puffs.name}{pp.puffDesc && pp.puffDesc !== pp.puffs.name ? ` ${pp.puffDesc}` : ''}
-                                                    </span>
-                                                ))}
+                                                {resolvedProduct.productPuffs.length > 1
+                                                    ? `Up to ${Math.max(...resolvedProduct.productPuffs.map(pp => parseInt(pp.puffs.name) || 0)).toLocaleString()}`
+                                                    : resolvedProduct.productPuffs[0].puffs.name
+                                                }
                                             </p>
                                         </div>
                                     )}

@@ -18,7 +18,7 @@ const featured = [
 /* large: true = use bigger image padding so small logos fill more of the cell */
 const allBrands = [
     { name: "RAZ",           slug: "raz",           logo: "/brand-logos/raz-norm.png"        },
-    { name: "JUICY BAR",     slug: "juicy-bar",     logo: "/brand-logos/juicy-bar-clean.png" },
+    { name: "JUICY BAR",     slug: "juicy-bar",     logo: "/brand-logos/juicy-bar-clean.png", large: true },
     { name: "GEEK BAR",      slug: "geek-bar",      logo: "/brand-logos/geek-bar-norm.png"   },
     { name: "HQD",           slug: "hqd",           logo: "/brand-logos/hqd-norm.png"        },
     { name: "fume",          slug: "fume",          logo: "/brand-logos/fume-norm.png"       },
@@ -32,7 +32,7 @@ const allBrands = [
     { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png"   },
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
     { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria-clean.png"       },
-    { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-clean.png",    large: true },
+    { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-norm.png",     large: true },
     { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri-clean.png",     large: true },
     { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar-clean.png",    large: true },
     { name: "OLIT",          slug: "olit",          logo: "/brand-logos/blogo-18.png"        },
@@ -40,7 +40,6 @@ const allBrands = [
     { name: "AL FAKHER",     slug: "al-fakher",     logo: "/brand-logos/blogo-20.png"        },
     { name: "VIHO",          slug: "viho",          logo: "/brand-logos/viho-clean.png",     large: true },
     { name: "adjust",        slug: "adjust",        logo: "/brand-logos/adjust-clean.png",   large: true },
-    { name: "SMOK",          slug: "smok",          logo: "/brand-logos/smok-clean.png",     large: true },
     { name: "RAMA",          slug: "rama",          logo: "/brand-logos/blogo-30.png"        },
 ]
 

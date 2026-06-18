@@ -29,7 +29,7 @@ const allBrands = [
     { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/blogo-26.png"        },
     { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/blogo-27.png",       large: true },
     { name: "Cookies",       slug: "cookies",       logo: "/brand-logos/blogo-28.png"        },
-    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-clean.png"  },
+    { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png"  },
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
     { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria-clean.png"       },
     { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-clean.png",    large: true },

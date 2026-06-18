@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import HomePage from "@/components/HomePage/HomePage";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";

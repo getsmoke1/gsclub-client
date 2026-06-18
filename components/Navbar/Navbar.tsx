@@ -428,7 +428,8 @@ const Navbar = () => {
                         </div>
                     </div>
                     {/* Row 2 (desktop only): Navigation links */}
-                    <nav className="hidden md:flex items-center justify-center gap-8 border-t border-gray-100 py-2.5 bg-white">
+                    <nav className="hidden md:flex border-t border-gray-100 py-2.5 bg-white">
+                        <div className="w-11/12 mx-auto flex items-center justify-between">
                         {navItems.map(({ title, href }) => (
                             <Link
                                 key={title}
@@ -438,6 +439,7 @@ const Navbar = () => {
                                 {title}
                             </Link>
                         ))}
+                        </div>
                     </nav>
                 </aside>
                 {/* Add a placeholder div when navbar is sticky to prevent content jump */}

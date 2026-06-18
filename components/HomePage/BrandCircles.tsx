@@ -84,14 +84,18 @@ const BrandCircles = () => {
                             style={{ height: "90px" }}
                         >
                             {brand.logo ? (
-                                <Image
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
                                     src={brand.logo}
                                     alt={brand.name}
-                                    width={120}
-                                    height={70}
-                                    className={(brand as {large?: boolean}).large
-                                        ? "object-contain w-full max-h-[70px]"
-                                        : "object-contain w-full max-h-[50px]"}
+                                    style={{
+                                        maxWidth: "100%",
+                                        maxHeight: (brand as {large?: boolean}).large ? "70px" : "50px",
+                                        width: "auto",
+                                        height: "auto",
+                                        objectFit: "contain",
+                                        display: "block",
+                                    }}
                                 />
                             ) : (
                                 <span className="font-unbounded font-bold text-xs text-black text-center leading-tight">

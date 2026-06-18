@@ -80,8 +80,8 @@ const BrandCircles = () => {
                         <Link
                             key={`${brand.slug}-${idx}`}
                             href={`/brands/${brand.slug}`}
-                            className="flex items-center justify-center py-2 px-2 bg-white hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
-                            style={{ height: "90px" }}
+                            className="flex items-center justify-center bg-white hover:bg-gray-50 rounded-xl transition-colors cursor-pointer overflow-hidden"
+                            style={{ height: "90px", width: "100%", minWidth: 0 }}
                         >
                             {brand.logo ? (
                                 // eslint-disable-next-line @next/next/no-img-element
@@ -89,16 +89,15 @@ const BrandCircles = () => {
                                     src={brand.logo}
                                     alt={brand.name}
                                     style={{
-                                        maxWidth: "100%",
-                                        maxHeight: (brand as {large?: boolean}).large ? "70px" : "50px",
-                                        width: "auto",
-                                        height: "auto",
+                                        width: "100%",
+                                        height: "100%",
                                         objectFit: "contain",
+                                        padding: (brand as {large?: boolean}).large ? "4px" : "14px",
                                         display: "block",
                                     }}
                                 />
                             ) : (
-                                <span className="font-unbounded font-bold text-xs text-black text-center leading-tight">
+                                <span className="font-unbounded font-bold text-xs text-black text-center leading-tight px-1">
                                     {brand.name}
                                 </span>
                             )}

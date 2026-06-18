@@ -84,15 +84,15 @@ const BrandCircles = () => {
                             style={{ height: "90px" }}
                         >
                             {brand.logo ? (
-                                <div className="relative w-full h-full">
-                                    <Image
-                                        src={brand.logo}
-                                        alt={brand.name}
-                                        fill
-                                        className={(brand as {large?: boolean}).large ? "object-contain p-0" : "object-contain p-3"}
-                                        sizes="12vw"
-                                    />
-                                </div>
+                                <Image
+                                    src={brand.logo}
+                                    alt={brand.name}
+                                    width={120}
+                                    height={70}
+                                    className={(brand as {large?: boolean}).large
+                                        ? "object-contain w-full max-h-[70px]"
+                                        : "object-contain w-full max-h-[50px]"}
+                                />
                             ) : (
                                 <span className="font-unbounded font-bold text-xs text-black text-center leading-tight">
                                     {brand.name}

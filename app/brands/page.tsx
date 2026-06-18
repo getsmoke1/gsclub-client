@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 // Map brand slugs to local logo files
 const BRAND_LOGOS: Record<string, string> = {
+  // Named clean/norm versions (no orange arc)
   "geek-bar":   "/brand-logos/geek-bar-norm.png",
   "raz":        "/brand-logos/raz-norm.png",
   "hqd":        "/brand-logos/hqd-norm.png",
@@ -20,14 +21,23 @@ const BRAND_LOGOS: Record<string, string> = {
   "foger":      "/brand-logos/foger-norm.png",
   "fifty-bar":  "/brand-logos/fifty-bar-norm.png",
   "ebcreate":   "/brand-logos/ebcreate-norm.png",
-  "juicy-bar":  "/brand-logos/juicy-bar.png",
-  "viho":       "/brand-logos/viho.png",
-  "kado-bar":   "/brand-logos/kado-bar.png",
-  "flum-pebble":"/brand-logos/flum.png",
-  "oxbar":      "/brand-logos/oxbar.png",
-  "x-posed":    "/brand-logos/x-posed.png",
-  "adjust":     "/brand-logos/adjust.png",
-  "beri":       "/brand-logos/beri.png",
+  "juicy-bar":  "/brand-logos/juicy-bar-clean.png",
+  "viho":       "/brand-logos/viho-clean.png",
+  "kado-bar":   "/brand-logos/kado-bar-clean.png",
+  "flum-pebble":"/brand-logos/blogo-25.png",
+  "oxbar":      "/brand-logos/oxbar-clean.png",
+  "x-posed":    "/brand-logos/x-posed-clean.png",
+  "adjust":     "/brand-logos/adjust-clean.png",
+  "beri":       "/brand-logos/beri-clean.png",
+  // Previously text-only — now have logos
+  "tyson-2-0":  "/brand-logos/blogo-22.png",
+  "olit":       "/brand-logos/blogo-18.png",
+  "rama":       "/brand-logos/blogo-30.png",
+  "lost-art":   "/brand-logos/brand-logo-8.png",
+  "fumytech":   "/brand-logos/fumytech-norm.png",
+  "cookies":    "/brand-logos/blogo-28.png",
+  "coconara":   "/brand-logos/coconara-norm.png",
+  "al-fakher":  "/brand-logos/blogo-20.png",
 };
 
 export default async function BrandsPage() {

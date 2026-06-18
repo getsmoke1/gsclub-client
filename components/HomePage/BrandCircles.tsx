@@ -33,7 +33,7 @@ const allBrands = [
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
 
     { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-norm.png",     large: true },
-    { name: "COCONARA",      slug: "coconara",      logo: "/brand-logos/coconara-norm.png"   },
+    { name: "COCONARA",      slug: "coconara",      logo: "/brand-logos/coconara-norm.png",  small: true },
     { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri-clean.png",     large: true },
     { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar-clean.png",    large: true },
     { name: "OLIT",          slug: "olit",          logo: "/brand-logos/blogo-18.png"        },
@@ -93,7 +93,7 @@ const BrandCircles = () => {
                                         width: "100%",
                                         height: "100%",
                                         objectFit: "contain",
-                                        padding: (brand as {large?: boolean}).large ? "4px" : "14px",
+                                        padding: (brand as {large?: boolean; small?: boolean}).large ? "4px" : (brand as {small?: boolean}).small ? "28px" : "14px",
                                         display: "block",
                                     }}
                                 />

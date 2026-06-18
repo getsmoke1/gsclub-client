@@ -5,7 +5,7 @@ import BestSellersSection from "./BestSellersSection"
 import VapeSubscription from "./VapeSubscription"
 import BundleDeals from "./BundleDeals"
 import ShopByCategory from "./ShopByCategory"
-import BrandCircles from "./BrandCircles"
+
 import InstagramFeed from "./InstagramFeed"
 import HomeFaq from "./HomeFaq"
 import HomeBlog from "./HomeBlog"
@@ -26,7 +26,6 @@ const HomePage = ({ initialProducts, newestProducts, bundleProducts }: HomePageP
             <div className="md:hidden"><VapeSubscription /></div>
             <BundleDeals initialProducts={bundleProducts} />
             <ShopByCategory />
-            <BrandCircles />
             <InstagramFeed />
             <HomeFaq />
             <HomeBlog />

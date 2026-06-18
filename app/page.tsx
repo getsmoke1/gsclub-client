@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 import HomePage from "@/components/HomePage/HomePage";
+import BrandCircles from "@/components/HomePage/BrandCircles";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";
 import { noIndex } from "@/lib/noindex";
@@ -67,5 +68,10 @@ export default async function Home() {
 
   const bundleProducts = rawBundles.map((p) => ({ ...p, puffs: [] }));
 
-  return <HomePage initialProducts={initialProducts} newestProducts={newestProducts} bundleProducts={bundleProducts} />;
+  return (
+    <>
+      <HomePage initialProducts={initialProducts} newestProducts={newestProducts} bundleProducts={bundleProducts} />
+      <BrandCircles />
+    </>
+  );
 }

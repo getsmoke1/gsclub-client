@@ -10,6 +10,12 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+// Brands whose logos should render larger in the grid
+const LARGE_LOGO_SLUGS = new Set([
+  "adjust", "beri", "fifty-bar", "fumytech", "juicy-bar",
+  "kado-bar", "lost-art", "lost-mary", "oxbar", "viho", "x-posed",
+]);
+
 // Map brand slugs to local logo files
 const BRAND_LOGOS: Record<string, string> = {
   // Named clean/norm versions (no orange arc)
@@ -70,9 +76,9 @@ export default async function BrandsPage() {
                 <Image
                   src={logo}
                   alt={brand.name}
-                  width={120}
-                  height={60}
-                  className="object-contain max-h-[60px] w-auto"
+                  width={brand.slug && LARGE_LOGO_SLUGS.has(brand.slug) ? 220 : 120}
+                  height={brand.slug && LARGE_LOGO_SLUGS.has(brand.slug) ? 110 : 60}
+                  className={`object-contain w-auto ${brand.slug && LARGE_LOGO_SLUGS.has(brand.slug) ? "max-h-[110px]" : "max-h-[60px]"}`}
                 />
               ) : (
                 <span className="font-bold text-base text-center">{brand.name}</span>

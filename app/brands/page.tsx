@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 // Brands whose logos should render larger in the grid
 const LARGE_LOGO_SLUGS = new Set([
   "adjust", "beri", "fifty-bar", "fumytech", "juicy-bar",
-  "kado-bar", "lost-art", "lost-mary", "oxbar", "viho", "x-posed",
+  "kado-bar", "lost-art", "lost-mary", "oxbar", "viho", "x-posed", "ovns",
 ]);
 
 // Map brand slugs to local logo files

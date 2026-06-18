@@ -23,15 +23,15 @@ const allBrands = [
     { name: "HQD",           slug: "hqd",           logo: "/brand-logos/hqd-norm.png"        },
     { name: "fume",          slug: "fume",          logo: "/brand-logos/fume-norm.png"       },
     { name: "LostArt",       slug: "lost-art",      logo: "/brand-logos/brand-logo-8.png"   },
-    { name: "TYSON",         slug: "tyson",         logo: "/brand-logos/blogo-22.png"        },
+    { name: "TYSON",         slug: "tyson-2-0",     logo: "/brand-logos/blogo-22.png"        },
 
-    { name: "FLUM",          slug: "flum",          logo: "/brand-logos/blogo-25.png"        },
+    { name: "FLUM",          slug: "flum-pebble",   logo: "/brand-logos/blogo-25.png"        },
     { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/lost-mary-norm.png"  },
     { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/fifty-bar-norm.png", large: true },
     { name: "Cookies",       slug: "cookies",       logo: "/brand-logos/blogo-28.png"        },
     { name: "EBCREATE",      slug: "ebcreate",      logo: "/brand-logos/ebcreate-norm.png"   },
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
-    { name: "RiA",           slug: "ria",           logo: "/brand-logos/ria-clean.png"       },
+
     { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-norm.png",     large: true },
     { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri-clean.png",     large: true },
     { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar-clean.png",    large: true },

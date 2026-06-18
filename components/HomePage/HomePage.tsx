@@ -14,11 +14,12 @@ import { Product } from "@/types/product"
 interface HomePageProps {
     initialProducts?: Product[];
     newestProducts?: Product[];
+    brandCircles?: React.ReactNode;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bundleProducts?: any[];
 }
 
-const HomePage = ({ initialProducts, newestProducts, bundleProducts }: HomePageProps) => {
+const HomePage = ({ initialProducts, newestProducts, bundleProducts, brandCircles }: HomePageProps) => {
     return (
         <main>
             <Hero />
@@ -26,6 +27,7 @@ const HomePage = ({ initialProducts, newestProducts, bundleProducts }: HomePageP
             <div className="md:hidden"><VapeSubscription /></div>
             <BundleDeals initialProducts={bundleProducts} />
             <ShopByCategory />
+            {brandCircles}
             <InstagramFeed />
             <HomeFaq />
             <HomeBlog />

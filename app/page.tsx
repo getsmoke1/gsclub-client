@@ -69,9 +69,11 @@ export default async function Home() {
   const bundleProducts = rawBundles.map((p) => ({ ...p, puffs: [] }));
 
   return (
-    <>
-      <HomePage initialProducts={initialProducts} newestProducts={newestProducts} bundleProducts={bundleProducts} />
-      <BrandCircles />
-    </>
+    <HomePage
+      initialProducts={initialProducts}
+      newestProducts={newestProducts}
+      bundleProducts={bundleProducts}
+      brandCircles={<BrandCircles />}
+    />
   );
 }

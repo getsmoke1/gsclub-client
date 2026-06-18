@@ -24,7 +24,7 @@ const allBrands = [
     { name: "fume",          slug: "fume",          logo: "/brand-logos/brand-logo-4.png"    },
     { name: "LostArt",       slug: "lost-art",      logo: "/brand-logos/blogo-31.png"        },
     { name: "TYSON",         slug: "tyson",         logo: "/brand-logos/blogo-22.png"        },
-    { name: "BLAZE",         slug: "blaze",         logo: "/brand-logos/blogo-23.png"        },
+
     { name: "FLUM",          slug: "flum",          logo: "/brand-logos/blogo-25.png"        },
     { name: "LOST MARY",     slug: "lost-mary",     logo: "/brand-logos/blogo-26.png"        },
     { name: "FIFTY BAR",     slug: "fifty-bar",     logo: "/brand-logos/blogo-27.png",       large: true },

@@ -33,7 +33,7 @@ const allBrands = [
     { name: "X-POSED",       slug: "x-posed",       logo: "/brand-logos/x-posed-clean.png",  large: true },
 
     { name: "FOGER",         slug: "foger",         logo: "/brand-logos/foger-norm.png",     large: true },
-    { name: "COCONARA",      slug: "coconara",      logo: "/brand-logos/coconara-norm.png",  large: true },
+    { name: "COCONARA",      slug: "coconara",      logo: "/brand-logos/coconara-norm.png"   },
     { name: "BERi",          slug: "beri",          logo: "/brand-logos/beri-clean.png",     large: true },
     { name: "OXBAR",         slug: "oxbar",         logo: "/brand-logos/oxbar-clean.png",    large: true },
     { name: "OLIT",          slug: "olit",          logo: "/brand-logos/blogo-18.png"        },

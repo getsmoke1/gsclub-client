@@ -119,7 +119,7 @@ export default function RootLayout({
 
         <Providers>
           <Navbar />
-          <Toaster position="top-right" reverseOrder={false} />
+          <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 1500 }} />
           <InitializeCart />
           <div className="bg-white text-black">
             <Suspense>

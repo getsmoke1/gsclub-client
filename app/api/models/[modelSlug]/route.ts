@@ -12,8 +12,15 @@ export async function GET(
   const model = getModelBySlug(modelSlug);
   if (!model) return NextResponse.json({ error: "Model not found" }, { status: 404 });
 
+  const excludeFilters = (model.excludeQueries || []).map((q) => ({
+    name: { contains: q, mode: "insensitive" as const },
+  }));
+
   const products = await prisma.product.findMany({
-    where: { name: { contains: model.dbSearchQuery, mode: "insensitive" } },
+    where: {
+      name: { contains: model.dbSearchQuery, mode: "insensitive" },
+      ...(excludeFilters.length > 0 ? { NOT: excludeFilters } : {}),
+    },
     include: { images: { take: 1 }, flavor: true },
     orderBy: { name: "asc" },
     take: 50,

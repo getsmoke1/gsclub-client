@@ -62,40 +62,39 @@ const BrandCircles = () => {
                             className="flex items-center justify-center p-4 bg-white hover:bg-gray-50 transition-colors"
                             style={{ height: "120px" }}
                         >
-                            <div className="relative w-full h-full">
-                                <Image
-                                    src={brand.logo}
-                                    alt={brand.name}
-                                    fill
-                                    className="object-contain p-2"
-                                    sizes="45vw"
-                                />
-                            </div>
+                            <Image
+                                src={brand.logo}
+                                alt={brand.name}
+                                width={140}
+                                height={72}
+                                className="object-contain"
+                                style={{ maxWidth: "140px", maxHeight: "72px", width: "auto", height: "auto" }}
+                            />
                         </Link>
                     ))}
                 </div>
 
                 {/* Desktop: 8 columns, curated brands, clickable */}
                 <div className="hidden md:grid md:grid-cols-8 gap-y-4 gap-x-2">
-                    {allBrands.map((brand, idx) => (
+                    {allBrands.map((brand, idx) => {
+                        const b = brand as { name: string; slug: string; logo: string; large?: boolean; small?: boolean };
+                        const imgH = b.large ? 70 : b.small ? 32 : 55;
+                        const imgW = b.large ? 110 : b.small ? 80 : 95;
+                        return (
                         <Link
                             key={`${brand.slug}-${idx}`}
                             href={`/brands/${brand.slug}`}
-                            className="flex items-center justify-center bg-white hover:bg-gray-50 rounded-xl transition-colors cursor-pointer overflow-hidden"
-                            style={{ height: "90px", width: "100%", minWidth: 0 }}
+                            className="flex items-center justify-center bg-white hover:bg-gray-50 rounded-xl transition-colors cursor-pointer"
+                            style={{ height: "90px" }}
                         >
                             {brand.logo ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
+                                <Image
                                     src={brand.logo}
                                     alt={brand.name}
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "contain",
-                                        padding: (brand as {large?: boolean; small?: boolean}).large ? "4px" : (brand as {small?: boolean}).small ? "28px" : "14px",
-                                        display: "block",
-                                    }}
+                                    width={imgW}
+                                    height={imgH}
+                                    className="object-contain"
+                                    style={{ maxWidth: `${imgW}px`, maxHeight: `${imgH}px`, width: "auto", height: "auto" }}
                                 />
                             ) : (
                                 <span className="font-unbounded font-bold text-xs text-black text-center leading-tight px-1">
@@ -103,7 +102,8 @@ const BrandCircles = () => {
                                 </span>
                             )}
                         </Link>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="text-center mt-6">

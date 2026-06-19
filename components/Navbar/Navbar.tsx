@@ -187,7 +187,7 @@ const Navbar = () => {
                     style={{ transition: 'all 0.3s ease' }}
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
-                    <div className='w-11/12 mx-auto flex items-center justify-between py-3'>
+                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:relative'>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
@@ -384,14 +384,13 @@ const Navbar = () => {
                             </div>
 
                         </div>
-                        <div className="">
+                        <div className="hidden md:block md:absolute md:left-1/2 md:-translate-x-1/2">
                             <Link href={"/"} onClick={() => clearFilters()} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}
                                     width={180}
                                     height={180}
                                     alt='GetSmoke logo - Go to homepage'
-                                    className='hidden md:block'
                                 />
                             </Link>
                         </div>

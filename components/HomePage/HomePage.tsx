@@ -25,6 +25,15 @@ const HomePage = ({ initialProducts, newestProducts, bundleProducts, brandCircle
             <Hero />
             <BestSellersSection initialProducts={initialProducts} newestProducts={newestProducts} />
             <div className="md:hidden"><VapeSubscription /></div>
+            {/* Desktop-only promo banner between View All and Bundle Deals */}
+            <div className="hidden md:block w-11/12 mx-auto my-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src="/banners/vape-more-banner.jpg"
+                    alt="Vape More, Stress Less - Packs of 3, 5 or 10"
+                    style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }}
+                />
+            </div>
             <BundleDeals initialProducts={bundleProducts} />
             <ShopByCategory />
             {brandCircles}

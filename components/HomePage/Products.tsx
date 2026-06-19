@@ -200,13 +200,12 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
       ) : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
-            {/* Featured model listing cards - shown only when no filters active and productType === "VAPES" */}
+            {/* Featured model listing cards - all 54 models, shown only when no filters active and productType === "VAPES" */}
             {showFeaturedModels && (
               <>
-                {["raz-dc25000", "lost-mary-turbo", "geek-bar-pulse", "hqd-cuvie-glaze"].map((slug) => {
-                  const m = MODELS.find((x) => x.slug === slug);
-                  return m ? <GenericModelCard key={slug} model={m} /> : null;
-                })}
+                {MODELS.map((model) => (
+                  <GenericModelCard key={model.slug} model={model} />
+                ))}
               </>
             )}
 

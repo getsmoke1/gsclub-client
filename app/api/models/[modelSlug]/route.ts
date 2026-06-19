@@ -19,6 +19,7 @@ export async function GET(
   const products = await prisma.product.findMany({
     where: {
       name: { contains: model.dbSearchQuery, mode: "insensitive" },
+      isArchived: false,
       ...(excludeFilters.length > 0 ? { NOT: excludeFilters } : {}),
     },
     include: { images: { take: 1 }, flavor: true },

@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // unoptimized removed — Vercel will optimize, resize and serve WebP
+    unoptimized: true, // bypass Vercel image optimizer (Hobby plan quota); R2 images already optimized
     remotePatterns: [
       {
         protocol: "https",

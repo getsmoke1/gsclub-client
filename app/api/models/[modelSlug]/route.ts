@@ -26,10 +26,18 @@ export async function GET(
     take: 50,
   });
 
+  // Deduplicate by name (keep first occurrence)
+  const seen = new Set<string>();
+  const uniqueProducts = products.filter(p => {
+    if (seen.has(p.name)) return false;
+    seen.add(p.name);
+    return true;
+  });
+
   return NextResponse.json(
-    { products, model },
+    { products: uniqueProducts, model },
     {
-      headers: { "Cache-Control": "s-maxage=3600, stale-while-revalidate=86400" },
+      headers: { "Cache-Control": "public, max-age=0, must-revalidate" },
     }
   );
 }

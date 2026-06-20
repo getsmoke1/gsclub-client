@@ -229,13 +229,18 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   };
 
   const handleAddToCart = async () => {
+    const isSubscribe = purchaseMode === "subscribe" && subscriptionDiscountPct > 0;
+    const subscriptionMeta = isSubscribe
+      ? { isSubscription: true, subscriptionFrequency: "1_week", price: activePack.price }
+      : {};
+
     if (packOption === "single") {
       const id = selectedProductIds[0] || selectedProduct?.id;
       if (!id) return;
-      await addItem(email, { id, quantity: qty });
+      await addItem(email, { id, quantity: qty, ...subscriptionMeta });
     } else {
       for (const productId of selectedProductIds.slice(0, pack.count)) {
-        if (productId) await addItem(email, { id: productId, quantity: 1 });
+        if (productId) await addItem(email, { id: productId, quantity: 1, ...subscriptionMeta });
       }
     }
   };

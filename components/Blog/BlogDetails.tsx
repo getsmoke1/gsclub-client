@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
@@ -12,6 +12,20 @@ interface BlogDetailsProps {
 
 const BlogDetails = ({ article }: BlogDetailsProps) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Hide broken images in article content
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    const imgs = el.querySelectorAll('img');
+    imgs.forEach(img => {
+      if (!img.complete || img.naturalWidth === 0) {
+        img.style.display = 'none';
+      }
+      img.addEventListener('error', () => { img.style.display = 'none'; });
+    });
+  }, [article.description]);
   const formattedDate = format(new Date(article.createdAt), 'dd/MM/yyyy');
 
   // Dynamic styles for the blog content
@@ -70,6 +84,7 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
       {/* Blog Content */}
       <article className="mt-7">
         <div
+          ref={contentRef}
           dangerouslySetInnerHTML={{ __html: article.description }}
           className={contentStyles}
         />

@@ -74,14 +74,16 @@ const HomeBlog = () => {
                 {/* ── Desktop layout: horizontal — text left, 2 cards right ── */}
                 <div className="hidden md:flex items-start gap-8 rounded-3xl overflow-visible">
                     {/* Left: logo + heading */}
-                    <div className="flex-shrink-0 w-64 pt-4">
-                        <Link href="/"><Image src="/images/logo.png" alt="GetSmoke" width={120} height={32} className="h-7 w-auto object-contain mb-3" /></Link>
-                        <h2 className="font-unbounded font-bold text-4xl text-black leading-tight">
-                            Blog.<br />
-                            <span>Vape </span>
-                            <span style={{ color: '#fe3500' }}>news<br />and study.</span>
-                        </h2>
-                        <Link href="/blog" className="inline-block mt-4 font-unbounded text-sm underline text-black hover:text-gray-700">read more</Link>
+                    <div className="flex-shrink-0 w-64 flex flex-col justify-between" style={{ minHeight: '220px' }}>
+                        <Link href="/"><Image src="/images/logo.png" alt="GetSmoke" width={120} height={32} className="h-7 w-auto object-contain" /></Link>
+                        <div>
+                          <h2 className="font-unbounded font-bold text-4xl text-black leading-tight">
+                              Blog.<br />
+                              <span>Vape </span>
+                              <span style={{ color: '#fe3500' }}>news<br />and study.</span>
+                          </h2>
+                          <Link href="/blog" className="inline-block mt-4 font-unbounded text-sm underline text-black hover:text-gray-700">read more</Link>
+                        </div>
                     </div>
 
                     {/* Right: 2 blog cards side by side */}

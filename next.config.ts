@@ -1,6 +1,35 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/product-tag/:brand*',
+        destination: '/brands/:brand',
+        permanent: true,
+      },
+      {
+        source: '/product-category/vapes:path*',
+        destination: '/vapes',
+        permanent: true,
+      },
+      {
+        source: '/product-category/hookah:path*',
+        destination: '/hookah',
+        permanent: true,
+      },
+      {
+        source: '/shop:path*',
+        destination: '/vapes',
+        permanent: true,
+      },
+      {
+        source: '/category/:brand*',
+        destination: '/brands/:brand',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     unoptimized: true, // bypass Vercel image optimizer (Hobby plan quota); R2 images already optimized
     remotePatterns: [

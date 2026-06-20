@@ -74,9 +74,9 @@ const HomeBlog = () => {
                 {/* ── Desktop layout: horizontal — text left, 2 cards right ── */}
                 <div className="hidden md:flex items-start gap-8 rounded-3xl overflow-visible">
                     {/* Left: logo + heading */}
-                    <div className="flex-shrink-0 w-64 flex flex-col justify-between" style={{ minHeight: '220px' }}>
+                    <div className="flex-shrink-0 w-64 flex flex-col" style={{ minHeight: '220px' }}>
                         <Link href="/"><Image src="/images/logo.png" alt="GetSmoke" width={120} height={32} className="h-7 w-auto object-contain" /></Link>
-                        <div>
+                        <div className="mt-14">
                           <h2 className="font-unbounded font-bold text-4xl text-black leading-tight">
                               Blog.<br />
                               <span>Vape </span>

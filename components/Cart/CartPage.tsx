@@ -98,7 +98,7 @@ const CartPage = () => {
         if (item.price !== undefined) return item.price;
         const product = getProductDetails(item.id);
         if (!product) return 0;
-        return getItemPrice(item);
+        return product.currentPrice / (product.packCount || 1);
     };
 
     const calculateTotal = () => {

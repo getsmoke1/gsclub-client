@@ -50,8 +50,32 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
+  const authorName = article.author || "GetSmoke Editorial Team";
+  const imageUrl = article.images[0]?.url || '';
+
+  // Article structured data for SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.subtitle?.replace(/\[&hellip;\]/g, '…').replace(/<[^>]+>/g, ''),
+    "image": imageUrl,
+    "datePublished": new Date(article.createdAt).toISOString(),
+    "dateModified": new Date(article.updatedAt).toISOString(),
+    "author": { "@type": "Person", "name": authorName },
+    "publisher": {
+      "@type": "Organization",
+      "name": "GetSmoke",
+      "url": "https://getsmoke.com"
+    }
+  };
+
   return (
     <main className="w-11/12 mx-auto pt-6 pb-14 font-unbounded text-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <header className="flex flex-col md:flex-row gap-7">
         <Image
           src={article.images[0]?.url || '/placeholder.jpg'}
@@ -73,10 +97,16 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
             <h1 className="font-semibold text-[1.2rem]">{article.title}</h1>
             <p className="font-normal">{article.subtitle?.replace(/\[&hellip;\]/g, '…').replace(/&hellip;/g, '…').replace(/&amp;/g, '&').replace(/<[^>]+>/g, '')}</p>
           </div>
-          <div>
-            <time dateTime={new Date(article.createdAt).toISOString()} className="text-gray-600 font-sem">
+          <div className="space-y-1">
+            <time dateTime={new Date(article.createdAt).toISOString()} className="text-gray-600 font-sem block">
               Published: {formattedDate}
             </time>
+            <p className="text-gray-500 text-sm flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span>By {authorName}</span>
+            </p>
           </div>
         </div>
       </header>

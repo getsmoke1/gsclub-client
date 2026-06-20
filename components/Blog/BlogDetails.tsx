@@ -25,6 +25,8 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
     [&_li]:mb-2
     [&_strong]:font-bold
     [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800
+    [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-lg [&_img]:my-4
+    [&_img]:block
   `;
 
   // Sort FAQ items by order
@@ -55,7 +57,7 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
           </aside>
           <div className="space-y-2">
             <h1 className="font-semibold text-[1.2rem]">{article.title}</h1>
-            <p className="font-normal">{article.subtitle}</p>
+            <p className="font-normal">{article.subtitle?.replace(/\[&hellip;\]/g, '…').replace(/&hellip;/g, '…').replace(/&amp;/g, '&').replace(/<[^>]+>/g, '')}</p>
           </div>
           <div>
             <time dateTime={new Date(article.createdAt).toISOString()} className="text-gray-600 font-sem">

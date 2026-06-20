@@ -3,6 +3,20 @@ import React from 'react';
 import Link from 'next/link';
 import { Article } from '@/types/article';
 
+function cleanExcerpt(text: string | undefined | null): string {
+  if (!text) return '';
+  return text
+    .replace(/\[&hellip;\]/g, '…')
+    .replace(/&hellip;/g, '…')
+    .replace(/&amp;/g, '&')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/<[^>]+>/g, '') // strip any HTML tags
+    .trim();
+}
+
 interface BlogProps {
   articles: Article[];
 }
@@ -33,7 +47,7 @@ const Blog = ({ articles }: BlogProps) => {
             <div className="mt-3">
               <h3 className="font-bold text-base leading-snug line-clamp-2">{article.title}</h3>
               {article.subtitle && (
-                <p className="text-sm text-gray-600 mt-1 line-clamp-2 font-sans">{article.subtitle}</p>
+                <p className="text-sm text-gray-600 mt-1 line-clamp-2 font-sans">{cleanExcerpt(article.subtitle)}</p>
               )}
             </div>
           </Link>

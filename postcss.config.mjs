@@ -3,7 +3,7 @@ const config = {
     "@tailwindcss/postcss",
     "@csstools/postcss-cascade-layers",
     "postcss-media-minmax",
-    ["@csstools/postcss-oklab-function", { preserve: true }],
+    ["@csstools/postcss-oklab-function", { preserve: false }],
   ],
 };
 

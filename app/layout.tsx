@@ -104,7 +104,7 @@ export default function RootLayout({
         {/* End Google Tag Manager */}
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable} bg-black`}
       >
         {/* Google Tag Manager (noscript) */}
         <noscript>

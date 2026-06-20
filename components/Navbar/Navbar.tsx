@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react
 import { CiSearch } from "react-icons/ci";
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from "framer-motion";
+
 import useCart from '@/hooks/useCart';
 import { Product } from '@/types/product';
 import { useFilter } from '@/hooks/useFilter';
@@ -235,8 +235,8 @@ const Navbar = () => {
 
                             {/* Search Bar with Dropdown */}
                             <div className="relative text-black search-container flex gap-2 items-center" onClick={handleSearchContainerClick}>
-                                {/* Search input remains the same */}
-                                <motion.input
+                                {/* Desktop search input */}
+                                <input
                                     type="text"
                                     placeholder="Search products..."
                                     value={searchQuery}
@@ -248,18 +248,15 @@ const Navbar = () => {
                                     }}
                                     onBlur={() => {
                                         setIsSearchFocused(false);
-                                        setSearchQuery(''); // Add this line to clear on blur
+                                        setSearchQuery('');
                                         setShowResults(false);
                                     }}
-                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
-                                    initial={{ width: "10rem" }}
-                                    animate={{
-                                        width: isSearchFocused ? "10rem" : "10rem",
-                                        transition: { duration: 0.3, ease: "easeInOut" }
-                                    }}
+                                    className="hidden md:block border-black border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
+                                    style={{ width: '10rem' }}
                                     aria-label="Search products"
                                 />
-                                <motion.input
+                                {/* Mobile search input */}
+                                <input
                                     type="text"
                                     placeholder="Search products..."
                                     value={searchQuery}
@@ -270,11 +267,11 @@ const Navbar = () => {
                                         setIsSearchFocused(true);
                                     }}
                                     onBlur={() => setIsSearchFocused(false)}
-                                    className="block md:hidden border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
-                                    initial={{ width: "2rem" }}
-                                    animate={{
-                                        width: isSearchFocused ? "10rem" : "2rem",
-                                        transition: { duration: 0.3, ease: "easeInOut" }
+                                    className="block md:hidden border-black border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
+                                    style={{
+                                        width: isSearchFocused ? '10rem' : '2rem',
+                                        transition: 'width 0.3s ease',
+                                        overflow: 'hidden',
                                     }}
                                     aria-label="Search products"
                                 />
@@ -301,30 +298,28 @@ const Navbar = () => {
                                     <CiSearch size={20} />
                                 </div>
 
-                                {/* Animated logo - wrapped in Link so it will redirect */}
-                                <AnimatePresence>
-                                    {!isSearchFocused && (
-                                        <motion.div
-                                            initial={{ opacity: 1 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                                            className="md:hidden"
-                                        >
-                                            <Link
-                                                href="/"
-                                                onClick={(e) => { e.stopPropagation(); clearFilters(); }}
-                                                aria-label="Go to GetSmoke homepage"
-                                            >
-                                                <Image
-                                                    src={"/images/logo.png"}
-                                                    width={150}
-                                                    height={150}
-                                                    alt='GetSmoke logo - Go to homepage'
-                                                />
-                                            </Link>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                {/* Logo - fades out when search focused on mobile */}
+                                <div
+                                    className="md:hidden"
+                                    style={{
+                                        opacity: isSearchFocused ? 0 : 1,
+                                        transition: 'opacity 0.2s ease',
+                                        pointerEvents: isSearchFocused ? 'none' : 'auto',
+                                    }}
+                                >
+                                    <Link
+                                        href="/"
+                                        onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+                                        aria-label="Go to GetSmoke homepage"
+                                    >
+                                        <Image
+                                            src={"/images/logo.png"}
+                                            width={150}
+                                            height={150}
+                                            alt='GetSmoke logo - Go to homepage'
+                                        />
+                                    </Link>
+                                </div>
 
                                 {/* Search Results Dropdown */}
                                 {showResults && (

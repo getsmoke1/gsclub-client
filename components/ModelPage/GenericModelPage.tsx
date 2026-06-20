@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import useCart from "@/hooks/useCart";
 import { ModelConfig } from "@/lib/models-config";
+import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
+import { FrequencyValue } from "@/lib/nmi";
 
 type PackOption = "single" | "pack3" | "pack5" | "pack10";
 
@@ -111,6 +113,9 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   const [packOption, setPackOption] = useState<PackOption>("single");
   const [qty, setQty] = useState(1);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>(Array(10).fill(""));
+  const [purchaseMode, setPurchaseMode] = useState<"one-time" | "subscribe">("one-time");
+  const [, setSubscriptionFrequency] = useState<FrequencyValue>("1_week");
+  const [subscriptionPrice, setSubscriptionPrice] = useState<number | null>(null);
 
   const { addItem, loading: cartLoading } = useCart();
   const { data: session } = useSession();
@@ -164,10 +169,30 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   const packConfig = buildPackConfig(model.price, model.packPrices);
   const pack = packConfig[packOption];
 
-  const totalPrice =
+  const baseTotalPrice =
     packOption === "single"
       ? pack.price * qty
       : pack.price * pack.count;
+
+  const totalPrice = purchaseMode === "subscribe" && subscriptionPrice !== null
+    ? packOption === "single"
+      ? subscriptionPrice * qty
+      : subscriptionPrice * pack.count
+    : baseTotalPrice;
+
+  const handleSubscriptionChange = (
+    mode: "one-time" | "subscribe",
+    frequency?: FrequencyValue,
+    price?: number
+  ) => {
+    setPurchaseMode(mode);
+    if (mode === "subscribe" && frequency && price !== undefined) {
+      setSubscriptionFrequency(frequency);
+      setSubscriptionPrice(price);
+    } else {
+      setSubscriptionPrice(null);
+    }
+  };
 
   const heroSrc = selectedProduct?.images?.[0]?.url ?? model.heroImage;
 
@@ -303,6 +328,12 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
             {/* Price */}
             <p className="text-xl font-bold mt-2">${totalPrice.toFixed(2)}</p>
           </div>
+
+          {/* Subscription selector */}
+          <SubscriptionSelector
+            basePrice={pack.price}
+            onModeChange={handleSubscriptionChange}
+          />
 
           {/* Pack options */}
           <div className="mt-6">

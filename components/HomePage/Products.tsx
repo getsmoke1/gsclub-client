@@ -161,6 +161,10 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
   if (isLoading) {
     return (
       <div className="w-11/12 mx-auto">
+        {/* DEBUG: remove before launch */}
+        <div style={{ background: '#ff0', color: '#000', padding: '8px', fontSize: '12px', marginBottom: '8px', borderRadius: '4px' }}>
+          DEBUG: isLoading=true | initialProducts={initialProducts?.length ?? 'null'} | brandId={brandId ?? 'none'} | fetchStatus=fetching
+        </div>
         <ProductShimmer />
       </div>
     );

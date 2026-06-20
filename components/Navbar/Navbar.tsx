@@ -251,7 +251,7 @@ const Navbar = () => {
                                         setSearchQuery(''); // Add this line to clear on blur
                                         setShowResults(false);
                                     }}
-                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
+                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
                                     initial={{ width: "10rem" }}
                                     animate={{
                                         width: isSearchFocused ? "10rem" : "10rem",
@@ -281,7 +281,8 @@ const Navbar = () => {
 
                                 {/* Search icon with click handler */}
                                 <div
-                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+                                    className="absolute left-2 cursor-pointer z-10"
+                                    style={{ top: '50%', transform: 'translateY(-50%)' }}
                                     onClick={() => {
                                         setIsSearchFocused(true);
                                         searchInputRef.current?.focus();
@@ -427,7 +428,7 @@ const Navbar = () => {
                         </div>
                     </div>
                     {/* Row 2 (desktop only): Navigation links */}
-                    <nav className="hidden md:flex border-t border-gray-100 py-2.5 bg-white">
+                    <nav className="hidden md:flex border-t border-gray-100 py-2.5 pb-3 bg-white">
                         <div className="w-11/12 mx-auto flex items-center justify-between">
                         {navItems.map(({ title, href }) => (
                             <Link

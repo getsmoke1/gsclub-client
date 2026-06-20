@@ -13,6 +13,7 @@ import RelatedPRoduct from "./RelatedPRoduct";
 import { useProduct } from "./useProduct";
 import Loading from "./loading";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
+import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
 import Faq from "./Faq";
 import { useDeleteReview } from "./useReview";
 import { Edit, X } from "lucide-react";
@@ -144,8 +145,14 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             )}
                         </div>
 
+                        {/* Subscription selector */}
+                        <SubscriptionSelector
+                          basePrice={resolvedProduct.currentPrice}
+                          onModeChange={() => {}}
+                        />
+
                         {/* Add to Cart */}
-                        <div className="py-2">
+                        <div className="py-2 mt-3">
                             <AddToCartButton product={resolvedProduct as never} />
                         </div>
 

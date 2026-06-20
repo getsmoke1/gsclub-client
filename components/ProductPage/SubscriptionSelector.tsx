@@ -5,7 +5,7 @@ import { SUBSCRIPTION_FREQUENCIES, calcSubscriptionPrice, FrequencyValue } from 
 
 interface Props {
   basePrice: number;
-  onModeChange: (mode: "one-time" | "subscribe", frequency?: FrequencyValue, price?: number) => void;
+  onModeChange: (mode: "one-time" | "subscribe", frequency?: FrequencyValue, price?: number, discountPct?: number) => void;
 }
 
 export default function SubscriptionSelector({ basePrice, onModeChange }: Props) {
@@ -18,14 +18,14 @@ export default function SubscriptionSelector({ basePrice, onModeChange }: Props)
       onModeChange("one-time");
     } else {
       const freq = SUBSCRIPTION_FREQUENCIES.find(f => f.value === frequency)!;
-      onModeChange("subscribe", frequency, calcSubscriptionPrice(basePrice, freq.discountPct));
+      onModeChange("subscribe", frequency, calcSubscriptionPrice(basePrice, freq.discountPct), freq.discountPct);
     }
   }
 
   function handleFrequencyChange(val: FrequencyValue) {
     setFrequency(val);
     const freq = SUBSCRIPTION_FREQUENCIES.find(f => f.value === val)!;
-    onModeChange("subscribe", val, calcSubscriptionPrice(basePrice, freq.discountPct));
+    onModeChange("subscribe", val, calcSubscriptionPrice(basePrice, freq.discountPct), freq.discountPct);
   }
 
   return (

@@ -192,17 +192,12 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
 
   const handleSubscriptionChange = (
     mode: "one-time" | "subscribe",
-    frequency?: FrequencyValue,
-    price?: number
+    _frequency?: FrequencyValue,
+    _price?: number,
+    discountPct?: number
   ) => {
     setPurchaseMode(mode);
-    if (mode === "subscribe" && price !== undefined && packConfig.single.price > 0) {
-      // Infer discount % from price vs base
-      const discPct = Math.round((1 - price / packConfig.single.price) * 100);
-      setSubscriptionDiscountPct(discPct);
-    } else {
-      setSubscriptionDiscountPct(0);
-    }
+    setSubscriptionDiscountPct(mode === "subscribe" && discountPct ? discountPct : 0);
   };
 
   const heroSrc = selectedProduct?.images?.[0]?.url ?? model.heroImage;

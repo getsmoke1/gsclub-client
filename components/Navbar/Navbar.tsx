@@ -183,11 +183,10 @@ const Navbar = () => {
             <section className='font-unbounded'>
                 <div ref={blackDivRef} className='bg-black p-3 text-white text-center text-sm md:text-base'>WARNING: These products contain nicotine. Nicotine is an addictive chemical.</div>
                 <aside
-                    className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
-                    style={{ transition: 'all 0.3s ease' }}
+                    className="bg-white sticky top-0 z-40 shadow-sm"
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
-                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:relative'>
+                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative'>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
@@ -380,7 +379,7 @@ const Navbar = () => {
                             </div>
 
                         </div>
-                        <div className="hidden md:block md:absolute md:left-1/2 md:-translate-x-1/2">
+                        <div className="hidden md:block md:absolute" style={{ left: '50%', transform: 'translateX(-50%)' }}>
                             <Link href={"/"} onClick={() => clearFilters()} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}

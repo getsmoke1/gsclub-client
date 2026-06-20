@@ -5,6 +5,7 @@ import { Unbounded } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import InitializeCart from "@/components/Cart/InitializeCart";
 import { Providers } from "@/providers/provider";
+import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Suspense } from "react";
@@ -118,18 +119,20 @@ export default function RootLayout({
         {/* End Google Tag Manager (noscript) */}
 
         <Providers>
-          <Navbar />
-          <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 1500 }} />
-          <InitializeCart />
-          <div className="bg-white text-black">
-            <Suspense>
-              <AgeVerification />
-              {children}
-            </Suspense>
-          </div>
-          <ScrollToTopButton />
-          <Footer />
-          {/* <CookieBanner /> */}
+          <ErrorBoundary>
+            <Navbar />
+            <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 1500 }} />
+            <InitializeCart />
+            <div className="bg-white text-black">
+              <Suspense>
+                <AgeVerification />
+                {children}
+              </Suspense>
+            </div>
+            <ScrollToTopButton />
+            <Footer />
+            {/* <CookieBanner /> */}
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

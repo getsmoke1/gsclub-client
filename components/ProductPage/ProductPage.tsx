@@ -14,6 +14,7 @@ import { useProduct } from "./useProduct";
 import Loading from "./loading";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
 import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
+import { FrequencyValue } from "@/lib/nmi";
 import Faq from "./Faq";
 import { useDeleteReview } from "./useReview";
 import { Edit, X } from "lucide-react";
@@ -46,6 +47,8 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
 
     // State for ProductContentSection
     const [isContentSectionExpanded, setIsContentSectionExpanded] = useState(false);
+    const [subscriptionDiscountPct, setSubscriptionDiscountPct] = useState(0);
+    const [subscriptionFrequency, setSubscriptionFrequency] = useState<FrequencyValue>("1_week");
 
     // const { data: session } = useSession();
     // const email = session?.user.email || "";
@@ -148,12 +151,23 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                         {/* Subscription selector */}
                         <SubscriptionSelector
                           basePrice={resolvedProduct.currentPrice}
-                          onModeChange={() => {}}
+                          onModeChange={(mode, freq, _price, discPct) => {
+                            if (mode === "subscribe" && discPct) {
+                              setSubscriptionDiscountPct(discPct);
+                              if (freq) setSubscriptionFrequency(freq);
+                            } else {
+                              setSubscriptionDiscountPct(0);
+                            }
+                          }}
                         />
 
                         {/* Add to Cart */}
                         <div className="py-2 mt-3">
-                            <AddToCartButton product={resolvedProduct as never} />
+                            <AddToCartButton
+                              product={resolvedProduct as never}
+                              subscriptionDiscountPct={subscriptionDiscountPct}
+                              subscriptionFrequency={subscriptionFrequency}
+                            />
                         </div>
 
                         {/* Product Description */}

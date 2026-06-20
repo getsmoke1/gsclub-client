@@ -8,10 +8,12 @@ import { Product } from "@/types/product";
 interface AddToCartButtonProps {
   product: Product;
   className?: string;
-  compact?: boolean; // compact=true → button only, no qty selector
+  compact?: boolean;
+  subscriptionDiscountPct?: number;
+  subscriptionFrequency?: string;
 }
 
-const AddToCartButton = ({ product, className = "", compact = false }: AddToCartButtonProps) => {
+const AddToCartButton = ({ product, className = "", compact = false, subscriptionDiscountPct = 0, subscriptionFrequency }: AddToCartButtonProps) => {
   const [qty, setQty] = useState(1);
   const { data: session } = useSession();
   const { addItem, loading } = useCart();
@@ -21,10 +23,19 @@ const AddToCartButton = ({ product, className = "", compact = false }: AddToCart
   const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    const basePrice = product.currentPrice / (product.packCount || 1);
+    const discountedPrice = subscriptionDiscountPct > 0
+      ? +(basePrice * (1 - subscriptionDiscountPct / 100)).toFixed(2)
+      : undefined;
     await addItem(email, {
       id: product.id,
       quantity: qty,
       attributeId: undefined,
+      ...(discountedPrice !== undefined ? {
+        price: discountedPrice,
+        isSubscription: true,
+        subscriptionFrequency: subscriptionFrequency || "1_week",
+      } : {}),
     });
     setQty(1);
   };

@@ -107,6 +107,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable} bg-black`}
       >
+        {/* DEBUG: Global error catcher - remove before launch */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.__errorLog = [];
+          window.onerror = function(msg, src, line, col, err) {
+            window.__errorLog.push(msg + ' @ ' + src + ':' + line);
+            var d = document.getElementById('__global_error_display');
+            if (!d) { d = document.createElement('div'); d.id = '__global_error_display'; d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ff0;color:#000;padding:8px;font-size:11px;z-index:99999;word-break:break-all;max-height:120px;overflow:auto;'; document.body.appendChild(d); }
+            d.innerHTML = '<b>JS ERROR:</b> ' + window.__errorLog.join('<br>');
+          };
+          window.onunhandledrejection = function(e) {
+            window.onerror('UnhandledPromise: ' + (e.reason && (e.reason.message || String(e.reason))), 'promise', 0, 0, e.reason);
+          };
+        ` }} />
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

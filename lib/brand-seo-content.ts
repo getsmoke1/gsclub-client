@@ -87,10 +87,10 @@ export const BRAND_SEO: Record<string, BrandSeoContent> = {
     h1: "Geek Bar Vapes",
     metaTitle: "Geek Bar Vapes | Premium Disposables | GetSmoke",
     metaDescription:
-      "Shop Geek Bar disposable vapes at GetSmoke. From the classic S600 to the Geek Bar Pulse with 15,000 puffs — bold flavors, rechargeable options, and fast shipping.",
+      "Shop Geek Bar disposable vapes at GetSmoke. From the Meloso Mini 1,500 puffs to the Geek Bar Pulse X with 25,000 puffs - bold flavors, rechargeable options, and fast shipping.",
     introParagraphs: [
       "Geek Bar has redefined what a disposable vape can be. Built with FDA-certified food-grade materials, Geek Bar devices deliver bold, consistent flavor from the first puff to the last without leaks or fading taste.",
-      "From the compact Geek Bar S600 to the high-capacity Geek Bar Pulse with up to 15,000 puffs, there is a Geek Bar for every lifestyle. Rechargeable models mean you never run out of battery before the e-liquid is finished.",
+      "From the compact Geek Bar Meloso Mini 1,500 puffs to the high-capacity Geek Bar Pulse X with up to 25,000 puffs, there is a Geek Bar for every lifestyle. Rechargeable models mean you never run out of battery before the e-liquid is finished.",
       "GetSmoke carries the full Geek Bar catalog, including fan-favorite flavors like Grapefruit Refresher and Crazy Melon. Subscribe and save up to 10% while enjoying seamless doorstep delivery.",
     ],
     advantageTitle: "Understanding the Geek Bar Advantage",
@@ -127,7 +127,7 @@ export const BRAND_SEO: Record<string, BrandSeoContent> = {
       {
         question: "How long does a Geek Bar last?",
         answer:
-          "It depends on the model. A standard Geek Bar S600 offers around 600 puffs, the Geek Bar Meloso delivers 6,000, and the Geek Bar Pulse can last up to 15,000 puffs. Choose based on how frequently you vape.",
+          "It depends on the model. The Geek Bar Meloso Mini offers 1,500 puffs, the Geek Bar Meloso delivers 30,000, the Geek Bar Pulse lasts up to 15,000 puffs, and the Geek Bar Pulse X goes up to 25,000 puffs. Choose based on how frequently you vape.",
       },
       {
         question: "Are Geek Bar vapes safe?",

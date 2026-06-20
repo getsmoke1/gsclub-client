@@ -70,7 +70,7 @@ export default async function BrandsPage() {
             <Link
               key={brand.id}
               href={`/brands/${brand.slug}`}
-              className="group border-2 border-black rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:border-[#fe3500] hover:shadow-md transition-all bg-white min-h-[140px]"
+              className="group border-2 border-black rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:border-[#fe3500] hover:shadow-md transition-all bg-white aspect-square md:aspect-auto md:min-h-[140px]"
             >
               {logo ? (
                 <Image

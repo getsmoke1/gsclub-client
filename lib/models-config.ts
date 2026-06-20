@@ -10,6 +10,7 @@ export interface ModelConfig {
   dbSearchQuery: string;
   excludeQueries?: string[]; // product names containing these strings will be excluded
   price: number;
+  packPrices?: { pack3?: number; pack5?: number; pack10?: number };
 }
 
 export const MODELS: ModelConfig[] = [
@@ -33,8 +34,8 @@ export const MODELS: ModelConfig[] = [
   { slug: "fume-recharge-zero", name: "Fume Recharge Zero 5,000 Puffs", shortName: "Fume Recharge Zero", brand: "FUME", brandSlug: "fume", puffs: "5,000", nicotine: "0% Nicotine Free", heroImage: "/model-banners/fume-recharge-zero-hero.jpg", dbSearchQuery: "Recharge Zero", price: 14.99 },
   { slug: "geek-bar-meloso", name: "Geek Bar Meloso 30,000 Puffs", shortName: "Geek Bar Meloso", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "30,000", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-meloso-hero.jpg", dbSearchQuery: "Meloso", price: 19.99 },
   { slug: "geek-bar-meloso-mini", name: "Geek Bar Meloso Mini 1,500 Puffs", shortName: "Geek Bar Meloso Mini", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "1,500", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-meloso-mini-hero.jpg", dbSearchQuery: "Meloso Mini", price: 12.99 },
-  { slug: "geek-bar-pulse-x", name: "Geek Bar Pulse X 25,000 Puffs", shortName: "Geek Bar Pulse X", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "25,000", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-pulse-x-hero.jpg", dbSearchQuery: "Pulse X", price: 23.99 },
-  { slug: "geek-bar-pulse", name: "Geek Bar Pulse 15,000 Puffs", shortName: "Geek Bar Pulse", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "15,000", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-pulse-hero.jpg", dbSearchQuery: "Geek Bar Pulse", excludeQueries: ["Pulse X", "pack of 10", "Pack of 10"], price: 19.99 },
+  { slug: "geek-bar-pulse-x", name: "Geek Bar Pulse X 25,000 Puffs", shortName: "Geek Bar Pulse X", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "25,000", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-pulse-x-hero.jpg", dbSearchQuery: "Pulse X", price: 33.99, packPrices: { pack3: 26.99, pack5: 25.00, pack10: 24.00 } },
+  { slug: "geek-bar-pulse", name: "Geek Bar Pulse 15,000 Puffs", shortName: "Geek Bar Pulse", brand: "Geek Bar", brandSlug: "geek-bar", puffs: "15,000", nicotine: "50mg (5%)", heroImage: "/model-banners/geek-bar-pulse-hero.jpg", dbSearchQuery: "Geek Bar Pulse", excludeQueries: ["Pulse X", "pack of 10", "Pack of 10"], price: 26.99, packPrices: { pack3: 22.99, pack5: 20.99, pack10: 19.99 } },
   { slug: "hqd-cuvie-bar", name: "HQD Cuvie Bar 7,000 Puffs", shortName: "HQD Cuvie Bar", brand: "HQD", brandSlug: "hqd", puffs: "7,000", nicotine: "50mg (5%)", heroImage: "/model-banners/hqd-cuvie-bar-hero.jpg", dbSearchQuery: "Cuvie Bar", price: 15.90 },
   { slug: "hqd-cuvie-glaze", name: "HQD Cuvie Glaze 15,000 Puffs", shortName: "HQD Cuvie Glaze", brand: "HQD", brandSlug: "hqd", puffs: "15,000", nicotine: "50mg (5%)", heroImage: "/model-banners/hqd-cuvie-glaze-hero.jpg", dbSearchQuery: "Cuvie Glaze", price: 17.80 },
   { slug: "hqd-cuvie-mars", name: "HQD Cuvie Mars 8,000 Puffs", shortName: "HQD Cuvie Mars", brand: "HQD", brandSlug: "hqd", puffs: "8,000", nicotine: "50mg (5%)", heroImage: "/model-banners/hqd-cuvie-mars-hero.jpg", dbSearchQuery: "Cuvie Mars", price: 12.99 },

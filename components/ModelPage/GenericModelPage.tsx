@@ -21,27 +21,18 @@ interface ApiResponse {
   model: ModelConfig;
 }
 
-function buildPackConfig(price: number) {
+function buildPackConfig(
+  price: number,
+  packPrices?: { pack3?: number; pack5?: number; pack10?: number }
+) {
+  const p3 = packPrices?.pack3 ?? +(price * 0.95).toFixed(2);
+  const p5 = packPrices?.pack5 ?? +(price * 0.92).toFixed(2);
+  const p10 = packPrices?.pack10 ?? +(price * 0.88).toFixed(2);
   return {
     single: { label: "Single", price, count: 1, display: `$${price.toFixed(2)}` },
-    pack3: {
-      label: "Pack of 3",
-      price: +(price * 0.95).toFixed(2),
-      count: 3,
-      display: `$${(price * 0.95).toFixed(2)}/each`,
-    },
-    pack5: {
-      label: "Pack of 5",
-      price: +(price * 0.92).toFixed(2),
-      count: 5,
-      display: `$${(price * 0.92).toFixed(2)}/each`,
-    },
-    pack10: {
-      label: "Pack of 10",
-      price: +(price * 0.88).toFixed(2),
-      count: 10,
-      display: `$${(price * 0.88).toFixed(2)}/each`,
-    },
+    pack3: { label: "Pack of 3", price: p3, count: 3, display: `$${p3.toFixed(2)}/each` },
+    pack5: { label: "Pack of 5", price: p5, count: 5, display: `$${p5.toFixed(2)}/each` },
+    pack10: { label: "Pack of 10", price: p10, count: 10, display: `$${p10.toFixed(2)}/each` },
   };
 }
 
@@ -170,7 +161,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
     );
   }
 
-  const packConfig = buildPackConfig(model.price);
+  const packConfig = buildPackConfig(model.price, model.packPrices);
   const pack = packConfig[packOption];
 
   const totalPrice =

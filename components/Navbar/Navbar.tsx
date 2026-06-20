@@ -183,7 +183,7 @@ const Navbar = () => {
             <section className='font-unbounded'>
                 <div ref={blackDivRef} className='bg-black p-3 text-white text-center text-sm md:text-base'>WARNING: These products contain nicotine. Nicotine is an addictive chemical.</div>
                 <aside
-                    className="bg-white sticky top-0 z-40 shadow-sm"
+                    className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
                     <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative'>

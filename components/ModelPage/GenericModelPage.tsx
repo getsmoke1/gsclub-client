@@ -114,8 +114,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   const [qty, setQty] = useState(1);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>(Array(10).fill(""));
   const [purchaseMode, setPurchaseMode] = useState<"one-time" | "subscribe">("one-time");
-  const [, setSubscriptionFrequency] = useState<FrequencyValue>("1_week");
-  const [subscriptionPrice, setSubscriptionPrice] = useState<number | null>(null);
+  const [subscriptionDiscountPct, setSubscriptionDiscountPct] = useState<number>(0);
 
   const { addItem, loading: cartLoading } = useCart();
   const { data: session } = useSession();
@@ -169,16 +168,27 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   const packConfig = buildPackConfig(model.price, model.packPrices);
   const pack = packConfig[packOption];
 
-  const baseTotalPrice =
-    packOption === "single"
-      ? pack.price * qty
-      : pack.price * pack.count;
+  // Apply subscription discount to all pack prices
+  const discountMultiplier = purchaseMode === "subscribe" ? (1 - subscriptionDiscountPct / 100) : 1;
+  const discountedPackConfig = Object.fromEntries(
+    Object.entries(packConfig).map(([key, cfg]) => [
+      key,
+      {
+        ...cfg,
+        price: +(cfg.price * discountMultiplier).toFixed(2),
+        display: key === "single"
+          ? `$${(cfg.price * discountMultiplier).toFixed(2)}`
+          : `$${(cfg.price * discountMultiplier).toFixed(2)}/each`,
+      },
+    ])
+  ) as typeof packConfig;
 
-  const totalPrice = purchaseMode === "subscribe" && subscriptionPrice !== null
-    ? packOption === "single"
-      ? subscriptionPrice * qty
-      : subscriptionPrice * pack.count
-    : baseTotalPrice;
+  const activePack = discountedPackConfig[packOption];
+
+  const totalPrice =
+    packOption === "single"
+      ? activePack.price * qty
+      : activePack.price * pack.count;
 
   const handleSubscriptionChange = (
     mode: "one-time" | "subscribe",
@@ -186,11 +196,12 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
     price?: number
   ) => {
     setPurchaseMode(mode);
-    if (mode === "subscribe" && frequency && price !== undefined) {
-      setSubscriptionFrequency(frequency);
-      setSubscriptionPrice(price);
+    if (mode === "subscribe" && price !== undefined && packConfig.single.price > 0) {
+      // Infer discount % from price vs base
+      const discPct = Math.round((1 - price / packConfig.single.price) * 100);
+      setSubscriptionDiscountPct(discPct);
     } else {
-      setSubscriptionPrice(null);
+      setSubscriptionDiscountPct(0);
     }
   };
 
@@ -340,8 +351,10 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
             <p className="font-bold text-xs uppercase tracking-wider mb-3">Choose Your Option</p>
             <div className="flex flex-col gap-2">
               {packKeys.map(key => {
-                const cfg = packConfig[key];
+                const cfg = discountedPackConfig[key];
+                const baseCfg = packConfig[key];
                 const isSelected = packOption === key;
+                const hasDiscount = purchaseMode === "subscribe" && subscriptionDiscountPct > 0;
                 return (
                   <div key={key}>
                     <button
@@ -358,7 +371,12 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                         />
                         <span className="text-sm font-medium">{cfg.label}</span>
                       </div>
-                      <span className="text-sm font-bold">{cfg.display}</span>
+                      <div className="flex items-center gap-2">
+                        {hasDiscount && (
+                          <span className="text-xs text-gray-400 line-through">{baseCfg.display}</span>
+                        )}
+                        <span className={`text-sm font-bold ${hasDiscount ? "text-green-600" : ""}`}>{cfg.display}</span>
+                      </div>
                     </button>
 
                     {/* Flavor dropdowns */}
@@ -393,7 +411,14 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
 
           {/* Purchase */}
           <div className="mt-6">
-            <p className="font-bold text-lg">Total: ${totalPrice.toFixed(2)}</p>
+            <p className="font-bold text-lg">
+              Total: <span className={purchaseMode === "subscribe" && subscriptionDiscountPct > 0 ? "text-green-600" : ""}>${totalPrice.toFixed(2)}</span>
+              {purchaseMode === "subscribe" && subscriptionDiscountPct > 0 && (
+                <span className="text-xs text-gray-400 line-through ml-2">
+                  ${(packOption === "single" ? packConfig.single.price * qty : packConfig[packOption].price * pack.count).toFixed(2)}
+                </span>
+              )}
+            </p>
             <div className="flex items-center gap-3 mt-4">
               {packOption === "single" && (
                 <div className="flex items-center border-2 border-gray-200 rounded-full overflow-hidden">

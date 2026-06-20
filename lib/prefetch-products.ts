@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { ProductType } from "@prisma/client";
+import type { ProductType } from "@prisma/client";
 
 export async function prefetchProducts(productType: string, limit = 24) {
   const type = productType as ProductType;

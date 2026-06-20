@@ -1,4 +1,4 @@
-import { Review } from "@prisma/client";
+import type { Review } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 

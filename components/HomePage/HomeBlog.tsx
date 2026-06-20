@@ -72,9 +72,9 @@ const HomeBlog = () => {
                 </div>
 
                 {/* ── Desktop layout: horizontal — text left, 2 cards right ── */}
-                <div className="hidden md:flex items-center gap-8 rounded-3xl overflow-visible">
+                <div className="hidden md:flex items-start gap-8 rounded-3xl overflow-visible">
                     {/* Left: logo + heading */}
-                    <div className="flex-shrink-0 w-64">
+                    <div className="flex-shrink-0 w-64 pt-4">
                         <Link href="/"><Image src="/images/logo.png" alt="GetSmoke" width={120} height={32} className="h-7 w-auto object-contain mb-3" /></Link>
                         <h2 className="font-unbounded font-bold text-4xl text-black leading-tight">
                             Blog.<br />

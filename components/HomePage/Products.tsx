@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useCallback, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import ProductShimmer from "./ProductShimmer";
 import { useFilter } from "@/hooks/useFilter";
@@ -79,7 +79,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     // Only use initialData when no filters are active (otherwise stale server data overrides filter results)
     initialData: (initialProducts?.length && !brandId && !flavorId && !puffsId && !nicotineId)
       ? {
-          pages: [{ products: initialProducts, hasNextPage: true, page: 1, pageSize: 24, totalCount: 999, totalPages: 999 }],
+          pages: [{ products: initialProducts, hasNextPage: initialProducts.length >= 24, page: 1, pageSize: 24, totalCount: initialProducts.length, totalPages: Math.ceil(initialProducts.length / 24) + 1 }],
           pageParams: [1],
         }
       : undefined,
@@ -133,12 +133,13 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     prevFiltersRef.current = currentFilters;
   }, [brandId, flavorId, puffsId, nicotineId]);
 
-  // IntersectionObserver - trigger fetchNextPage when sentinel is visible
-  const handleFetchNext = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  // IntersectionObserver - stable ref pattern to avoid infinite observer recreation
+  const hasNextPageRef = useRef(hasNextPage);
+  const isFetchingRef = useRef(isFetchingNextPage);
+  const fetchNextPageRef = useRef(fetchNextPage);
+  hasNextPageRef.current = hasNextPage;
+  isFetchingRef.current = isFetchingNextPage;
+  fetchNextPageRef.current = fetchNextPage;
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -146,8 +147,8 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          handleFetchNext();
+        if (entries[0].isIntersecting && hasNextPageRef.current && !isFetchingRef.current) {
+          fetchNextPageRef.current();
         }
       },
       { rootMargin: "200px" }
@@ -155,7 +156,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [handleFetchNext]);
+  }, []); // empty deps - observer created once, reads current values via refs
 
   if (isLoading) {
     return (

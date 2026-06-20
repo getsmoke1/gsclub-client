@@ -32,6 +32,11 @@ export default function GenericModelCard({ model }: Props) {
         <div className="p-2 md:p-3">
           <div className="text-center text-sm font-bold text-black">
             ${model.price.toFixed(2)}
+            {model.packPrices?.pack10 && (
+              <span className="block text-[11px] text-[#fe3500] font-semibold">
+                from ${model.packPrices.pack10.toFixed(2)}/each in pack
+              </span>
+            )}
             <span className="block text-xs text-gray-500 font-normal">
               - or subscribe to save up to 10%
             </span>

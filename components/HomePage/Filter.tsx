@@ -31,7 +31,7 @@ const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef
   <button
     ref={btnRef}
     onClick={onToggle}
-    className={`flex items-center cursor-pointer gap-1 px-3 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
+    className={`flex items-center cursor-pointer gap-1 px-4 py-1 hover:bg-[#f0b800] rounded-full transition-colors whitespace-nowrap ${
       isActive ? "bg-[#f0b800]" : ""
     }`}
   >
@@ -171,11 +171,13 @@ const Filter = ({ productType }: { productType?: string }) => {
         <span className="text-black/30 mx-2 shrink-0">|</span>
 
         {loading ? (
-          [...Array(4)].map((_, i) => (
-            <div key={i} className="h-7 w-20 bg-[#f0b800] rounded-full animate-pulse mx-2 shrink-0" />
-          ))
+          <div className="flex flex-1 justify-around">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-7 w-20 bg-[#f0b800] rounded-full animate-pulse mx-2 shrink-0" />
+            ))}
+          </div>
         ) : (
-          <>
+          <div className="flex flex-1 items-center justify-around">
             {FILTERS.map((f, i) => (
               <React.Fragment key={f.key}>
                 {i > 0 && <span className="text-black/30 mx-2 shrink-0">&#8964;</span>}
@@ -194,12 +196,13 @@ const Filter = ({ productType }: { productType?: string }) => {
               <button
                 onClick={() => { clearFilters(); setOpenDropdown(null); }}
                 className="flex items-center gap-1 ml-4 px-3 py-1 text-sm text-black/60 hover:text-black transition-colors shrink-0 whitespace-nowrap"
+                style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
               >
                 <X size={14} />
                 Clear all
               </button>
             )}
-          </>
+          </div>
         )}
       </div>
 

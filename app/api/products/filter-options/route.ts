@@ -63,7 +63,14 @@ async function fetchFilterOptions(
     }),
   ]);
 
-  return { brands, flavors, puffs, nicotineLevels };
+  // Sort puffs numerically (extract first number from name e.g. "1,200 Puffs" → 1200)
+  const sortedPuffs = [...puffs].sort((a, b) => {
+    const numA = parseInt(a.name.replace(/[^0-9]/g, ''), 10) || 0;
+    const numB = parseInt(b.name.replace(/[^0-9]/g, ''), 10) || 0;
+    return numA - numB;
+  });
+
+  return { brands, flavors, puffs: sortedPuffs, nicotineLevels };
 }
 
 export async function GET(request: Request) {

@@ -225,7 +225,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                         <p className="text-center text-xs mt-1">Pack Of 10</p>
                                     </div>
                                 </Link>
-                                <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2">
+                                <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2" style={{ paddingLeft: '12px', paddingRight: '12px', paddingBottom: '12px' }}>
                                     <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
                                     <AddToCartButton product={product as never} compact={compactCart} />
                                     <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>

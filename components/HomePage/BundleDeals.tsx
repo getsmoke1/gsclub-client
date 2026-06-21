@@ -136,7 +136,8 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
       <div className="text-center mt-6">
         <Link
           href="/bundles"
-          className="inline-block bg-black text-white font-unbounded font-bold text-sm px-8 py-3 rounded-full hover:bg-gray-900 transition-colors uppercase"
+          className="inline-block bg-black text-white font-unbounded font-bold text-sm rounded-full hover:bg-gray-900 transition-colors uppercase"
+          style={{ display: 'inline-block', paddingTop: '12px', paddingBottom: '12px', paddingLeft: '32px', paddingRight: '32px' }}
         >
           View All
         </Link>

@@ -46,7 +46,7 @@ export default function GenericModelCard({ model }: Props) {
       </Link>
 
       {/* Button */}
-      <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto">
+      <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto" style={{ paddingLeft: '12px', paddingRight: '12px', paddingBottom: '12px' }}>
         <Link href={`/models/${model.slug}`} className="block">
           <button
             className="w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 transition-opacity whitespace-nowrap"

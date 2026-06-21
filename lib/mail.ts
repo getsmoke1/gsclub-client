@@ -10,7 +10,7 @@ export async function sendEmail(to: string, subject: string, html: string) {
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"GetSmoke" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,

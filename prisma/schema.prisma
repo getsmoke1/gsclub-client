@@ -280,6 +280,12 @@ type BlogFaq {
   order    Int    @default(0)
 }
 
+model NewsletterSubscriber {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
 model Enquiry {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String

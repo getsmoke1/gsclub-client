@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { CartItem } from "@/types/cart";
 import { NextRequest, NextResponse } from "next/server";
+import { sendEmail } from "@/lib/mail";
+import { orderConfirmationTemplate } from "@/emails/orderConfirmationTemplate";
 
 export async function POST(req: NextRequest) {
   try {
@@ -214,6 +216,47 @@ export async function POST(req: NextRequest) {
         where: { id: order.id },
         data: { isPaid: true },
       });
+
+      // Send order confirmation email to customer
+      try {
+        const emailItems = orderItemsData.map((item: { name: string; quantity: number; price: number }) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        }));
+        const subtotal = emailItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
+        const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
+        await sendEmail(
+          email,
+          `Order Confirmed - GetSmoke #${order.id.slice(-8).toUpperCase()}`,
+          orderConfirmationTemplate(
+            shippingName,
+            order.id.slice(-8).toUpperCase(),
+            emailItems,
+            subtotal,
+            parseFloat(shippingAmount) || 0,
+            finalTotal,
+            shippingAddr
+          )
+        );
+        // Notify store
+        await sendEmail(
+          "info@getsmoke.com",
+          `New Order #${order.id.slice(-8).toUpperCase()} - $${finalTotal.toFixed(2)}`,
+          orderConfirmationTemplate(
+            shippingName,
+            order.id.slice(-8).toUpperCase(),
+            emailItems,
+            subtotal,
+            parseFloat(shippingAmount) || 0,
+            finalTotal,
+            shippingAddr
+          )
+        );
+      } catch (emailErr) {
+        console.error("Order confirmation email failed:", emailErr);
+        // Don't fail the order if email fails
+      }
 
       return NextResponse.json(
         {

@@ -19,15 +19,19 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                 <div className="flex justify-center gap-4 mb-2">
                     <button
                         onClick={() => setActiveTab('best')}
-                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full transition-colors border-0 outline-none appearance-none cursor-pointer ${activeTab === 'best' ? 'text-black' : 'bg-transparent text-gray-400'}`}
-                        style={activeTab === 'best' ? { background: '#FFD600' } : {}}
+                        className={`font-unbounded font-bold text-xs uppercase rounded-full transition-colors border-0 outline-none cursor-pointer ${activeTab === 'best' ? 'text-black' : 'bg-transparent text-gray-400'}`}
+                        style={activeTab === 'best'
+                            ? { background: '#FFD600', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '24px', paddingRight: '24px' }
+                            : { paddingTop: '10px', paddingBottom: '10px', paddingLeft: '24px', paddingRight: '24px' }}
                     >
                         BEST SELLERS
                     </button>
                     <button
                         onClick={() => setActiveTab('newest')}
-                        className={`font-unbounded font-bold text-xs uppercase px-6 py-2.5 rounded-full transition-colors border-0 outline-none appearance-none cursor-pointer ${activeTab === 'newest' ? 'text-black' : 'bg-transparent text-gray-400'}`}
-                        style={activeTab === 'newest' ? { background: '#FFD600' } : {}}
+                        className={`font-unbounded font-bold text-xs uppercase rounded-full transition-colors border-0 outline-none cursor-pointer ${activeTab === 'newest' ? 'text-black' : 'bg-transparent text-gray-400'}`}
+                        style={activeTab === 'newest'
+                            ? { background: '#FFD600', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '24px', paddingRight: '24px' }
+                            : { paddingTop: '10px', paddingBottom: '10px', paddingLeft: '24px', paddingRight: '24px' }}
                     >
                         NEWEST IN
                     </button>

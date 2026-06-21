@@ -89,6 +89,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Safari default button/input reset */
+  button {
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input, select, textarea {
+    -webkit-appearance: none;
+    appearance: none;
+  }
 }
 
 /* GetSmoke brand utility classes */

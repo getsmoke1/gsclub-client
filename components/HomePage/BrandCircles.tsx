@@ -110,6 +110,7 @@ const BrandCircles = () => {
                     <Link
                         href="/brands"
                         className="inline-block border-2 border-black text-black font-unbounded font-bold text-xs px-8 py-3 rounded-full hover:bg-black hover:text-white transition-colors uppercase"
+                        style={{ display: 'inline-block', paddingTop: '14px', paddingBottom: '14px', paddingLeft: '32px', paddingRight: '32px' }}
                     >
                         View All Brands
                     </Link>

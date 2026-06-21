@@ -1,14 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 const slides = [
-    { desktop: '/banners/desktop-1.jpeg', mobile: '/banners/mobile-1.jpeg', alt: 'Welcome to our VapeShop', href: '/vapes' },
-    { desktop: '/banners/desktop-2.jpg',  mobile: '/banners/mobile-2.jpg',  alt: 'Beri Crush 50K',         href: '/brands/beri' },
-    { desktop: '/banners/desktop-3.jpg',  mobile: '/banners/mobile-3.jpg',  alt: 'EBCreate BC Pro',         href: '/brands/ebcreate' },
-    { desktop: '/banners/desktop-4.jpeg', mobile: '/banners/mobile-4.jpeg', alt: 'New Arrivals',             href: '/vapes' },
-    { desktop: '/banners/desktop-5.jpg',  mobile: '/banners/mobile-5.jpg',  alt: 'New In - Lost Mary',       href: '/brands/lost-mary' },
-    { desktop: '/banners/desktop-6.jpeg', mobile: '/banners/mobile-6.jpeg', alt: 'New Collection',           href: '/vapes' },
+    { desktop: '/banners/desktop-1.jpeg', mobile: '/banners/mobile-1.jpeg', alt: 'Welcome to our VapeShop' },
+    { desktop: '/banners/desktop-2.jpg',  mobile: '/banners/mobile-2.jpg',  alt: 'Beri Crush 50K' },
+    { desktop: '/banners/desktop-3.jpg',  mobile: '/banners/mobile-3.jpg',  alt: 'EBCreate BC Pro' },
+    { desktop: '/banners/desktop-4.jpeg', mobile: '/banners/mobile-4.jpeg', alt: 'New Arrivals' },
+    { desktop: '/banners/desktop-5.jpg',  mobile: '/banners/mobile-5.jpg',  alt: 'New In - Lost Mary' },
+    { desktop: '/banners/desktop-6.jpeg', mobile: '/banners/mobile-6.jpeg', alt: 'New Collection' },
 ];
 
 const Hero = () => {
@@ -24,16 +23,14 @@ const Hero = () => {
 
     return (
         <section className="w-full relative overflow-hidden">
-            {/* Height spacers - now safe with working min-width media queries */}
+            {/* Height spacers */}
             <div className="hidden md:block" style={{ paddingBottom: '36.4%' }} />
             <div className="block md:hidden" style={{ paddingBottom: '148.8%' }} />
 
             {slides.map((slide, i) => (
-                <Link
+                <div
                     key={i}
-                    href={slide.href}
                     className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                    tabIndex={i === current ? 0 : -1}
                 >
                     {/* Mobile */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -53,16 +50,17 @@ const Hero = () => {
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                         loading={i === 0 ? 'eager' : 'lazy'}
                     />
-                </Link>
+                </div>
             ))}
 
             {/* Dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20" style={{ left: '50%', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }}>
                 {slides.map((_, i) => (
                     <button
                         key={i}
                         onClick={() => setCurrent(i)}
                         className={`h-2 rounded-full transition-all ${i === current ? 'bg-white w-5' : 'bg-white/50 w-2'}`}
+                        style={{ height: '8px', borderRadius: '9999px', background: i === current ? 'white' : 'rgba(255,255,255,0.5)', width: i === current ? '20px' : '8px' }}
                         aria-label={`Go to slide ${i + 1}`}
                     />
                 ))}

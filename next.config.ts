@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Transpile packages that use ES2022 private class fields (#field syntax)
+  // Required for Safari < 14.1 compatibility
+  transpilePackages: [
+    "@tanstack/react-query",
+    "@tanstack/query-core",
+    "@tanstack/react-query-devtools",
+  ],
   async redirects() {
     return [
       {

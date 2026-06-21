@@ -187,6 +187,33 @@ const Navbar = () => {
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
                     <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative' style={{ position: 'relative', paddingTop: '20px', paddingBottom: '20px' }}>
+                        {/* Mobile logo - absolutely centered */}
+                        <div
+                            className="md:hidden"
+                            style={{
+                                position: 'absolute',
+                                left: '50%',
+                                WebkitTransform: 'translateX(-50%)',
+                                transform: 'translateX(-50%)',
+                                opacity: isSearchFocused ? 0 : 1,
+                                transition: 'opacity 0.2s ease',
+                                pointerEvents: isSearchFocused ? 'none' : 'auto',
+                                zIndex: 10,
+                            }}
+                        >
+                            <Link
+                                href="/"
+                                onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+                                aria-label="Go to GetSmoke homepage"
+                            >
+                                <Image
+                                    src={"/images/logo.png"}
+                                    width={150}
+                                    height={150}
+                                    alt='GetSmoke logo - Go to homepage'
+                                />
+                            </Link>
+                        </div>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
@@ -213,8 +240,9 @@ const Navbar = () => {
                             </div>
                             <nav
                                 ref={hamburgerMenuRef}
-                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-gradient-to-b from-[#E8726B] via-[#F5A552] to-[#ffc42e] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[240px] h-[360px]" : "w-0 h-0"
+                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[240px] h-[360px]" : "w-0 h-0"
                                     } transition-all duration-300 ease-linear overflow-hidden`}
+                                style={{ background: 'linear-gradient(to bottom, #E8726B, #F5A552, #ffc42e)' }}
                                 aria-hidden={!show}
                             >
                                 <ul className="text-black text-[1.1rem] py-16 px-3 space-y-4 flex flex-col items-end">
@@ -297,28 +325,7 @@ const Navbar = () => {
                                     <CiSearch size={20} />
                                 </div>
 
-                                {/* Logo - fades out when search focused on mobile */}
-                                <div
-                                    className="md:hidden"
-                                    style={{
-                                        opacity: isSearchFocused ? 0 : 1,
-                                        transition: 'opacity 0.2s ease',
-                                        pointerEvents: isSearchFocused ? 'none' : 'auto',
-                                    }}
-                                >
-                                    <Link
-                                        href="/"
-                                        onClick={(e) => { e.stopPropagation(); clearFilters(); }}
-                                        aria-label="Go to GetSmoke homepage"
-                                    >
-                                        <Image
-                                            src={"/images/logo.png"}
-                                            width={150}
-                                            height={150}
-                                            alt='GetSmoke logo - Go to homepage'
-                                        />
-                                    </Link>
-                                </div>
+{/* mobile logo moved to Row 1 absolute center */}
 
                                 {/* Search Results Dropdown */}
                                 {showResults && (

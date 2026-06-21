@@ -39,7 +39,7 @@ const BrandProductCard = ({ product }: BrandProductCardProps) => {
           </h3>
         </div>
       </Link>
-      <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto">
+      <div className="px-2 md:px-3 pb-2 md:pb-3 mt-auto" style={{ paddingLeft: '12px', paddingRight: '12px', paddingBottom: '12px' }}>
         <AddToCartButton product={product as never} compact={true} />
         <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
       </div>

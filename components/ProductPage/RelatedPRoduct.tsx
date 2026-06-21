@@ -124,7 +124,7 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
                                     </h3>
                                 </div>
                             </Link>
-                            <div className="mt-auto px-2 md:px-4 pb-4 pt-2 flex flex-col gap-2">
+                            <div className="mt-auto px-2 md:px-4 pb-4 pt-2 flex flex-col gap-2" style={{ paddingLeft: '16px', paddingRight: '16px', paddingBottom: '16px' }}>
                                 <Link href={`/product/${product.slug}`} className="text-center text-xs underline">
                                     View product
                                 </Link>

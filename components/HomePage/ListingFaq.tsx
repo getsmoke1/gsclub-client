@@ -2,47 +2,37 @@
 import { useFAQBySlug } from "@/hooks/useFAQs";
 import React, { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
 
 const FaqItem = ({ faq }: { faq: { question: string; answer: string } }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <motion.div
-        initial={false}
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100"
       >
         <h3 className="font-medium text-base text-gray-800 pr-4">{faq.question}</h3>
-        <motion.span
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="text-gray-500 shrink-0"
+        <span
+          className="text-gray-500 shrink-0 transition-transform duration-200"
+          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}
         >
           <FiChevronDown size={20} />
-        </motion.span>
-      </motion.div>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="p-5 pt-3 text-gray-600 text-sm leading-relaxed">
-              {faq.answer}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </span>
+      </div>
+      <div
+        className="overflow-hidden transition-all duration-200"
+        style={{ maxHeight: isOpen ? '500px' : '0px', opacity: isOpen ? 1 : 0 }}
+      >
+        <div className="p-5 pt-3 text-gray-600 text-sm leading-relaxed">
+          {faq.answer}
+        </div>
+      </div>
     </div>
   );
 };
 
 interface ListingFaqProps {
-  pageSlug: string; // e.g. "/vapes" or "/bundles"
+  pageSlug: string;
 }
 
 const ListingFaq = ({ pageSlug }: ListingFaqProps) => {

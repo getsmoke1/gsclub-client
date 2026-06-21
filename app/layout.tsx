@@ -103,6 +103,35 @@ export default function RootLayout({
           }}
         />
         {/* End Google Tag Manager */}
+        {/* Polyfills for Safari < 15.4 - must load before any other JS */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          if (!Array.prototype.at) {
+            Array.prototype.at = function(i) {
+              i = Math.trunc(i) || 0;
+              if (i < 0) i += this.length;
+              if (i < 0 || i >= this.length) return undefined;
+              return this[i];
+            };
+          }
+          if (!Object.hasOwn) {
+            Object.hasOwn = function(o, k) {
+              return Object.prototype.hasOwnProperty.call(o, k);
+            };
+          }
+          if (!String.prototype.at) {
+            String.prototype.at = function(i) {
+              i = Math.trunc(i) || 0;
+              if (i < 0) i += this.length;
+              if (i < 0 || i >= this.length) return undefined;
+              return this[i];
+            };
+          }
+          if (typeof structuredClone === 'undefined') {
+            window.structuredClone = function(obj) {
+              return JSON.parse(JSON.stringify(obj));
+            };
+          }
+        ` }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable} bg-black`}

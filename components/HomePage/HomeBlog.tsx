@@ -52,7 +52,7 @@ const HomeBlog = () => {
     );
 
     return (
-        <section className="w-full py-8 px-4" style={{ backgroundColor: '#FFD600' }}>
+        <section className="w-full py-8 px-4" style={{ backgroundColor: '#FFD600', paddingTop: '56px', paddingBottom: '56px' }}>
             <div className="w-11/12 mx-auto">
 
                 {/* ── Mobile layout (unchanged) ── */}
@@ -101,7 +101,7 @@ const HomeBlog = () => {
                                             )}
                                             <div className="absolute inset-0 bg-black/20" />
                                         </div>
-                                        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-55px' }}>
+                                        <div className="absolute left-1/2 -translate-x-1/2" style={{ bottom: '-55px', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }}>
                                             <div className="w-36 h-36 rounded-full bg-white flex items-center justify-center p-4 shadow-xl">
                                                 <h3 className="font-unbounded font-bold text-xs text-black text-center leading-snug line-clamp-5">{post.title}</h3>
                                             </div>

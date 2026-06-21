@@ -57,8 +57,8 @@ const AddToCartButton = ({ product, className = "", compact = false, subscriptio
       <button
         onClick={handleAdd}
         disabled={loading}
-        className={`w-full py-2.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity ${className}`}
-        style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
+        className={`w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity ${className}`}
+        style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)", paddingTop: '10px', paddingBottom: '10px' }}
       >
         <ShoppingCart size={14} />
         add to cart

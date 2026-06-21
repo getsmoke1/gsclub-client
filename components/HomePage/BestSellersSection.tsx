@@ -54,7 +54,7 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                     />
                 )}
                 <div className="flex justify-center mt-4">
-                    <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase px-10 py-2.5 rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
+                    <Link href="/vapes" className="font-unbounded font-bold text-xs uppercase rounded-full bg-black text-white hover:bg-gray-800 transition-colors" style={{ display: 'inline-block', paddingTop: '10px', paddingBottom: '10px', paddingLeft: '40px', paddingRight: '40px' }}>
                         view all
                     </Link>
                 </div>

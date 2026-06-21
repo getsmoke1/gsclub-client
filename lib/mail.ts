@@ -1,25 +1,25 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail(to: string, subject: string, html: string) {
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: `"GetSmoke" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html,
-  };
-
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully:", info);
-  } catch (error) {
-    console.error("Error sending email:", error);
+    const { data, error } = await resend.emails.send({
+      from: "GetSmoke <onboarding@resend.dev>",
+      to,
+      subject,
+      html,
+      replyTo: "info@getsmoke.com",
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("sendEmail failed:", err);
+    throw err;
   }
 }

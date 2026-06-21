@@ -186,7 +186,7 @@ const Navbar = () => {
                     className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
-                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative'>
+                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative' style={{ position: 'relative' }}>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
@@ -379,7 +379,7 @@ const Navbar = () => {
                             </div>
 
                         </div>
-                        <div className="hidden md:block md:absolute" style={{ left: '50%', transform: 'translateX(-50%)' }}>
+                        <div className="hidden md:block md:absolute" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', WebkitTransform: 'translateX(-50%)' }}>
                             <Link href={"/"} onClick={() => clearFilters()} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}
@@ -422,7 +422,7 @@ const Navbar = () => {
                         </div>
                     </div>
                     {/* Row 2 (desktop only): Navigation links */}
-                    <nav className="hidden md:flex border-t border-gray-100 py-2.5 pb-3 bg-white">
+                    <nav className="hidden md:flex border-t border-gray-200 py-2.5 pb-3 bg-white" style={{ borderTop: '1px solid #e5e7eb', paddingTop: '10px', paddingBottom: '12px' }}>
                         <div className="w-11/12 mx-auto flex items-center justify-between">
                         {navItems.map(({ title, href }) => (
                             <Link

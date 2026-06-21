@@ -12,7 +12,7 @@ const faqs = [
 const HomeFaq = () => {
     const [open, setOpen] = useState<number | null>(null);
     return (
-        <section className="w-full bg-white py-14">
+        <section className="w-full bg-white py-14" style={{ paddingTop: '56px', paddingBottom: '56px' }}>
             <div className="w-11/12 max-w-3xl mx-auto">
                 <h2 className="font-unbounded font-bold text-2xl text-center mb-10">FAQs</h2>
                 <div>

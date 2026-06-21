@@ -16,7 +16,7 @@ const Footer = () => {
     return (
         <footer className="bg-white font-unbounded">
             {/* White top section */}
-            <div className="w-11/12 mx-auto pt-8 pb-6 flex flex-col md:flex-row md:items-start md:justify-between md:gap-12 gap-4">
+            <div className="w-11/12 mx-auto pt-8 pb-6 flex flex-col md:flex-row md:items-start md:justify-between md:gap-12 gap-4" style={{ paddingTop: '32px', paddingBottom: '24px' }}>
                 {/* Logo */}
                 <Link href="/" className="block">
                     <Image
@@ -89,7 +89,7 @@ const Footer = () => {
             </div>
 
             {/* Black bottom section — policy links */}
-            <div className="bg-black py-5 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8">
+            <div className="bg-black py-5 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8" style={{ paddingTop: '20px', paddingBottom: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
                 {[
                     { label: "Privacy policy",        href: "/privacy-policy" },
                     { label: "Terms and conditions",  href: "/terms-and-conditions" },

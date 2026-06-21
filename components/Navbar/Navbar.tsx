@@ -418,7 +418,23 @@ const Navbar = () => {
                                     />
                                     {items.length > 0 && (
                                         <span
-                                            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full"
+                                            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full"
+                                            style={{
+                                                position: 'absolute',
+                                                top: '-8px',
+                                                right: '-8px',
+                                                backgroundColor: '#ef4444',
+                                                color: '#fff',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                width: '20px',
+                                                height: '20px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                lineHeight: 1,
+                                            }}
                                             aria-label={`${items.length} items in cart`}
                                         >
                                             {items.length}

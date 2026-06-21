@@ -165,7 +165,7 @@ const Filter = ({ productType }: { productType?: string }) => {
       {/* Yellow pill — overflow-x scroll, no clipping of children */}
       <div
         className="flex items-center bg-[#ffc42e] rounded-full px-8 py-2.5 text-black text-sm font-bold overflow-x-auto"
-        style={{ scrollbarWidth: "none", overflowY: "visible" }}
+        style={{ scrollbarWidth: "none", overflowY: "visible", paddingLeft: '32px', paddingRight: '32px' }}
       >
         <h2 className="font-black whitespace-nowrap shrink-0 mr-2">filter by</h2>
         <span className="text-black/30 mx-2 shrink-0">|</span>

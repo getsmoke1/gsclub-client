@@ -31,12 +31,12 @@ export default function SubscriptionSelector({ basePrice, onModeChange }: Props)
   return (
     <div className="mt-4 border border-gray-200 rounded-2xl overflow-hidden">
       {/* Description */}
-      <div className="bg-gray-50 px-4 py-2.5 text-xs text-gray-600 leading-snug">
+      <div className="bg-gray-50 px-4 py-2.5 text-xs text-gray-600 leading-snug" style={{ padding: '12px 16px', backgroundColor: '#f9fafb', fontSize: '13px', lineHeight: '1.5' }}>
         <strong>How subscription works:</strong> Vapes will be automatically delivered at your door on your own schedule. You can cancel anytime after the second shipment.
       </div>
 
       {/* Toggle */}
-      <div className="flex divide-x divide-gray-200">
+      <div className="flex divide-x divide-gray-200" style={{ display: 'flex', borderTop: '1px solid #e5e7eb' }}>
         <button
           onClick={() => handleModeChange("one-time")}
           className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
@@ -44,6 +44,18 @@ export default function SubscriptionSelector({ basePrice, onModeChange }: Props)
               ? "bg-black text-white"
               : "bg-white text-gray-700 hover:bg-gray-50"
           }`}
+          style={{
+            flex: 1,
+            paddingTop: '14px',
+            paddingBottom: '14px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            fontSize: '14px',
+            fontWeight: 500,
+            background: mode === "one-time" ? '#000' : '#fff',
+            color: mode === "one-time" ? '#fff' : '#374151',
+            borderRight: '1px solid #e5e7eb',
+          }}
         >
           Purchase one time
         </button>
@@ -54,9 +66,20 @@ export default function SubscriptionSelector({ basePrice, onModeChange }: Props)
               ? "bg-black text-white"
               : "bg-white text-gray-700 hover:bg-gray-50"
           }`}
+          style={{
+            flex: 1,
+            paddingTop: '14px',
+            paddingBottom: '14px',
+            paddingLeft: '16px',
+            paddingRight: '16px',
+            fontSize: '14px',
+            fontWeight: 500,
+            background: mode === "subscribe" ? '#000' : '#fff',
+            color: mode === "subscribe" ? '#fff' : '#374151',
+          }}
         >
           Subscribe &amp; save up to{" "}
-          <span className={mode === "subscribe" ? "text-green-400" : "text-[#fe3500]"}>10%</span>
+          <span style={{ color: mode === "subscribe" ? '#4ade80' : '#fe3500' }}>10%</span>
         </button>
       </div>
 

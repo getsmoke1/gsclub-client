@@ -164,7 +164,7 @@ const Filter = ({ productType }: { productType?: string }) => {
     <div className="relative w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef}>
       {/* Yellow pill — overflow-x scroll, no clipping of children */}
       <div
-        className="flex items-center bg-[#ffc42e] rounded-full px-5 py-2.5 text-black text-sm font-bold overflow-x-auto"
+        className="flex items-center bg-[#ffc42e] rounded-full px-8 py-2.5 text-black text-sm font-bold overflow-x-auto"
         style={{ scrollbarWidth: "none", overflowY: "visible" }}
       >
         <h2 className="font-black whitespace-nowrap shrink-0 mr-2">filter by</h2>
@@ -180,7 +180,7 @@ const Filter = ({ productType }: { productType?: string }) => {
           <div className="flex flex-1 items-center justify-around">
             {FILTERS.map((f, i) => (
               <React.Fragment key={f.key}>
-                {i > 0 && <span className="text-black/30 mx-2 shrink-0">&#8964;</span>}
+                {i > 0 && <span className="text-black/30 mx-1 shrink-0 select-none" style={{ pointerEvents: 'none' }}>|</span>}
                 <FilterTrigger
                   label={f.label}
                   isActive={!!getSelectedId(f.key)}

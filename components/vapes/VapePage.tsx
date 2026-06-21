@@ -20,6 +20,7 @@ const VapePage = ({ productType = "VAPES", search, initialProducts, faqSlug = "/
                 <div style={{ marginTop: '16px' }}>
                     <Products productType={productType} search={search} initialProducts={initialProducts} />
                 </div>
+            </div>
             <ListingFaq pageSlug={faqSlug} />
         </main>
     )

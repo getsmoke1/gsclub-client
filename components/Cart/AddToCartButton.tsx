@@ -52,16 +52,27 @@ const AddToCartButton = ({ product, className = "", compact = false, subscriptio
     setQty((q) => Math.min(99, q + 1));
   };
 
+  const isOutOfStock = product.stockStatus === "OUTOFSTOCK";
+  const isPreOrder = product.stockStatus === "PREORDER";
+
   if (compact) {
+    if (isOutOfStock) {
+      return (
+        <button disabled className={`w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed ${className}`}
+          style={{ background: "#9ca3af", paddingTop: '10px', paddingBottom: '10px' }}>
+          Out of Stock
+        </button>
+      );
+    }
     return (
       <button
         onClick={handleAdd}
         disabled={loading}
         className={`w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity ${className}`}
-        style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)", paddingTop: '10px', paddingBottom: '10px' }}
+        style={{ background: isPreOrder ? "linear-gradient(90deg, #7c3aed 0%, #a855f7 100%)" : "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)", paddingTop: '10px', paddingBottom: '10px' }}
       >
         <ShoppingCart size={14} />
-        add to cart
+        {isPreOrder ? "pre-order" : "add to cart"}
       </button>
     );
   }

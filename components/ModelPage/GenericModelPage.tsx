@@ -16,6 +16,7 @@ interface ApiProduct {
   name: string;
   images: { url: string }[];
   flavor: { name: string } | null;
+  stockStatus?: "INSTOCK" | "OUTOFSTOCK" | "PREORDER";
 }
 
 interface ApiResponse {
@@ -287,13 +288,17 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
               {products.map(product => {
                 const isSelected = selectedProduct?.id === product.id;
                 const imgUrl = product.images?.[0]?.url;
+                const oos = product.stockStatus === "OUTOFSTOCK";
+                const preorder = product.stockStatus === "PREORDER";
                 return (
                   <button
                     key={product.id}
-                    onClick={() => handleProductSelect(product)}
+                    onClick={() => !oos && handleProductSelect(product)}
+                    disabled={oos}
                     className={`flex-shrink-0 flex flex-col items-center gap-1 p-1 rounded-xl border-2 transition-colors ${
                       isSelected ? "border-black" : "border-transparent"
-                    }`}
+                    } ${oos ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
+                    title={oos ? "Out of Stock" : preorder ? "Pre-Order" : ""}
                   >
                     <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
                       {imgUrl ? (
@@ -301,13 +306,23 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                           src={imgUrl}
                           alt={getFlavorName(product)}
                           fill
-                          className="object-cover"
+                          className={`object-cover ${oos ? "grayscale" : ""}`}
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200" />
                       )}
+                      {oos && (
+                        <div className="absolute inset-0 flex items-end justify-center pb-0.5 bg-black/10">
+                          <span className="text-[7px] font-bold text-red-500 bg-white/90 px-0.5 rounded">OOS</span>
+                        </div>
+                      )}
+                      {preorder && (
+                        <div className="absolute inset-0 flex items-end justify-center pb-0.5">
+                          <span className="text-[7px] font-bold text-purple-600 bg-white/90 px-0.5 rounded">PRE</span>
+                        </div>
+                      )}
                     </div>
-                    <span className="text-[9px] text-center leading-tight max-w-[44px] text-gray-700">
+                    <span className={`text-[9px] text-center leading-tight max-w-[44px] ${oos ? "text-gray-400" : "text-gray-700 font-semibold"}`}>
                       {getFlavorName(product)}
                     </span>
                   </button>
@@ -394,11 +409,28 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                             className="rounded-full border border-gray-300 w-full py-2 px-4 text-sm bg-white appearance-none"
                           >
                             <option value="">Choose flavor</option>
-                            {products.map(p => (
-                              <option key={p.id} value={p.id}>
-                                {getFlavorName(p)}
-                              </option>
-                            ))}
+                            {products.map(p => {
+                              const oos = p.stockStatus === "OUTOFSTOCK";
+                              const preorder = p.stockStatus === "PREORDER";
+                              const label = oos
+                                ? `${getFlavorName(p)} — Out of Stock`
+                                : preorder
+                                  ? `${getFlavorName(p)} — Pre-Order`
+                                  : getFlavorName(p);
+                              return (
+                                <option
+                                  key={p.id}
+                                  value={p.id}
+                                  disabled={oos}
+                                  style={{
+                                    color: oos ? "#aaa" : "#000",
+                                    fontWeight: oos ? 400 : 600,
+                                  }}
+                                >
+                                  {label}
+                                </option>
+                              );
+                            })}
                           </select>
                         ))}
                       </div>

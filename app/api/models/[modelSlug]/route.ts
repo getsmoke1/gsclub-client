@@ -22,7 +22,7 @@ export async function GET(
       isArchived: false,
       ...(excludeFilters.length > 0 ? { NOT: excludeFilters } : {}),
     },
-    include: { images: { take: 1 }, flavor: true },
+    select: { id: true, name: true, stockStatus: true, images: { take: 1, select: { url: true } }, flavor: { select: { name: true } } },
     orderBy: { name: "asc" },
     take: 50,
   });

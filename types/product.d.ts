@@ -95,6 +95,7 @@ export interface Product {
   extra: string | null;
   // Relations
   isArchived: boolean;
+  stockStatus: "INSTOCK" | "OUTOFSTOCK" | "PREORDER";
   brandId: string;
   brand: Brand;
   flavorId: string | null; // Make flavorId optional since it might use productFlavors instead

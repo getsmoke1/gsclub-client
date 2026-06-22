@@ -130,6 +130,18 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             {hasSingleFlavor && resolvedProduct.flavor?.name}
                         </h1>
 
+                        {/* Stock Status Badge */}
+                        {resolvedProduct.stockStatus === "OUTOFSTOCK" && (
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fee2e2', color: '#dc2626', padding: '5px 14px', borderRadius: '9999px', fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>
+                            <span>●</span> Out of Stock
+                          </div>
+                        )}
+                        {resolvedProduct.stockStatus === "PREORDER" && (
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ede9fe', color: '#7c3aed', padding: '5px 14px', borderRadius: '9999px', fontWeight: 700, fontSize: '13px', marginBottom: '4px' }}>
+                            <span>⏳</span> Pre-Order - Ships when available
+                          </div>
+                        )}
+
                         {/* Price */}
                         <div className="flex items-center gap-4">
                             <span className="text-2xl font-medium">

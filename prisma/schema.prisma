@@ -50,6 +50,12 @@ enum ProductType {
   ACCESSORIES
 }
 
+enum StockStatus {
+  INSTOCK
+  OUTOFSTOCK
+  PREORDER
+}
+
 model Product {
   // Required fields 
   id   String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -87,9 +93,10 @@ model Product {
   productPuffs ProductPuffs[]
 
   // System fields
-  isArchived Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  isArchived  Boolean     @default(false)
+  stockStatus StockStatus @default(INSTOCK)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   //new feild 
   redirectLink          String?

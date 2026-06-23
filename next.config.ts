@@ -8,6 +8,15 @@ const nextConfig: NextConfig = {
     "@tanstack/query-core",
     "@tanstack/react-query-devtools",
   ],
+  async rewrites() {
+    return [
+      // Proxy WordPress media to old Vultr server (images stored on WP)
+      {
+        source: '/wp-content/:path*',
+        destination: 'http://104.238.136.192/wp-content/:path*',
+      },
+    ];
+  },
   async redirects() {
     return [
       {

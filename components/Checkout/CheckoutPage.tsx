@@ -226,91 +226,9 @@ const CheckoutPage = () => {
       }
       return;
     }
-
-    setLoading(true);
-
-    try {
-      // Step 1: Create Recipient Address
-      const recipientAddressResponse = await axios.post(
-        "https://api.goshippo.com/addresses",
-        {
-          name: selectedCard.name,
-          street1: selectedCard.streetAddress,
-          city: selectedCard.city,
-          state: selectedCard.state,
-          zip: selectedCard.zipCode,
-          country: "US",
-          phone: formData.phone,
-          email: email,
-        },
-        {
-          headers: {
-            Authorization: `ShippoToken ${process.env.NEXT_PUBLIC_SHIPPO_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Shippo Address Created:", recipientAddressResponse.data);
-      const recipientAddressId = recipientAddressResponse.data.object_id;
-
-      // Step 2: Create Shipment
-      const shipmentResponse = await axios.post(
-        "https://api.goshippo.com/shipments",
-        {
-          address_from: process.env.NEXT_PUBLIC_SENDER_ADDRESS_ID,
-          address_to: recipientAddressId,
-          parcels: [
-            {
-              length: "10",
-              width: "8",
-              height: "4",
-              distance_unit: "in",
-              weight: "2",
-              mass_unit: "lb",
-            },
-          ],
-          async: false,
-        },
-        {
-          headers: {
-            Authorization: `ShippoToken ${process.env.NEXT_PUBLIC_SHIPPO_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Shippo Shipment Created:", shipmentResponse.data);
-
-      // Step 3: Retrieve Shipping Rates
-      const rates = shipmentResponse.data.rates;
-      setShippingRates(rates);
-      console.log("Shipping Rates:", rates);
-
-      // Step 4: Store formData in state
-      setFormData(formData);
-
-    } catch (error) {
-      console.error("Error in Shippo API:", error);
-
-      if (axios.isAxiosError(error)) {
-        const errorResponse = error.response?.data;
-
-        if (errorResponse && errorResponse.__all__) {
-          toast.error(`Failed to process shipping: ${errorResponse.__all__[0]}`);
-        } else if (errorResponse && errorResponse.detail) {
-          toast.error(`Failed to process shipping: ${errorResponse.detail}`);
-        } else {
-          toast.error("Failed to process shipping. Please try again.");
-        }
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setLoading(false);
-      setTemp(true);
-      setUseFlatRate(true); // auto-select flat rate
-    }
+    setFormData(formData);
+    setUseFlatRate(true);
+    setTemp(true);
   };
 
   const handlePay = async () => {
@@ -601,37 +519,6 @@ const CheckoutPage = () => {
                               <span className="text-gray-500">(Protects against loss or damage)</span>
                             </span>
                           </label>
-                        </div>
-                      </div>
-                    )}
-                    {shippingRates && (
-                      <div className="bg-white p-6 md:p-0 rounded-md">
-                        <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
-                          Or choose carrier:
-                        </h3>
-                        <div className="space-y-2 h-[12rem] overflow-x-auto scrollbar-thin">
-                          {shippingRates.map((rate) => (
-                            <label
-                              key={rate.object_id}
-                              className="flex items-center space-x-3 cursor-pointer"
-                            >
-                              <input
-                                type="radio"
-                                name="shippingOption"
-                                value={rate.object_id}
-                                checked={
-                                  selectedShippingRate?.object_id === rate.object_id
-                                }
-                                onChange={() => setSelectedShippingRate(rate)}
-                                className="form-radio"
-                              />
-                              <span>
-                                <strong>{rate.provider}</strong> -{" "}
-                                {rate.servicelevel.name}({rate.duration_terms}):{" "}
-                                {rate.amount} {rate.currency}
-                              </span>
-                            </label>
-                          ))}
                         </div>
                       </div>
                     )}

@@ -318,6 +318,13 @@ const CheckoutPage = () => {
       // Use authenticated user email or guest email from form
       const emailToSend = status === "authenticated" ? session?.user?.email : formData?.email || "";
 
+      if (!emailToSend) {
+        setPaymentError("Please enter your email address before paying.");
+        toast.error("Please enter your email address.");
+        setPaymentProcessing(false);
+        return;
+      }
+
       // Make API request to your backend
       const response = await fetch("/api/checkout", {
         method: "POST",

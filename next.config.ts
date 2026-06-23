@@ -49,16 +49,7 @@ const nextConfig: NextConfig = {
         destination: '/login',
         permanent: true,
       },
-      {
-        source: '/about-us:path*',
-        destination: '/about-us',
-        permanent: false,
-      },
-      {
-        source: '/contact-us:path*',
-        destination: '/contact-us',
-        permanent: false,
-      },
+
       {
         source: '/hqd-cuvie-plus-vs-bar-vs-glaze-2026',
         destination: '/blog/hqd-cuvie-plus-vs-bar-vs-glaze-2026',

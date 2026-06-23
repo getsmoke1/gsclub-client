@@ -106,6 +106,7 @@ const CheckoutPage = () => {
   const [billingDifferent, setBillingDifferent] = useState(false);
   const [billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
   const [nameOnCard, setNameOnCard] = useState("");
+  const [paymentEmail, setPaymentEmail] = useState("");
   const [useInsurance, setUseInsurance] = useState(true);
 
   // Add state for NMI script loading
@@ -316,10 +317,10 @@ const CheckoutPage = () => {
       const hasSubscription = items.some(i => i.isSubscription);
       const subscriptionFrequency = items.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
-      // Use authenticated user email or guest email - read directly from form input
+      // Use authenticated user email or guest email from payment form
       const emailToSend = status === "authenticated"
         ? session?.user?.email
-        : (getValues("email") || formData?.email || "");
+        : (paymentEmail || getValues("email") || formData?.email || "");
 
       if (!emailToSend) {
         setPaymentError("Please enter your email address before paying.");
@@ -635,6 +636,19 @@ const CheckoutPage = () => {
                   {/* NMI Payment Form */}
                   <div className="w-full">
                     <form className="space-y-4">
+                      {status === "unauthenticated" && (
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Email</label>
+                          <input
+                            type="email"
+                            value={paymentEmail || getValues("email") || ""}
+                            onChange={e => setPaymentEmail(e.target.value)}
+                            placeholder="your@email.com"
+                            className="w-full border border-gray-300 rounded-md p-3 text-sm"
+                            required
+                          />
+                        </div>
+                      )}
                       <div>
                         <label className="block text-sm font-medium mb-1">Name on Card</label>
                         <input

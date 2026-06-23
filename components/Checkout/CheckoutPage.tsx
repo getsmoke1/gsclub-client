@@ -102,7 +102,7 @@ const CheckoutPage = () => {
   const FLAT_RATE = 7.69;
   const FREE_THRESHOLD = 89;
   const INSURANCE_FEE = 3.00;
-  const [useFlatRate, setUseFlatRate] = useState(false);
+  const [useFlatRate, setUseFlatRate] = useState(true);
   const [useInsurance, setUseInsurance] = useState(true);
 
   // Add state for NMI script loading
@@ -514,14 +514,29 @@ const CheckoutPage = () => {
                                 : <strong style={{color:"#fe3500"}}>${FLAT_RATE.toFixed(2)}</strong>}
                             </span>
                           </div>
-                          <div className="p-3 border rounded-lg bg-blue-50">
-                            <label className="flex items-start space-x-3 cursor-pointer">
-                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)} style={{width:18,height:18,minWidth:18,accentColor:"#fe3500",cursor:"pointer",marginTop:2}} />
-                              <span className="text-sm">
-                                <strong>Shipping Insurance</strong>{" - $3.00 "}
-                                <span className="text-gray-500">(Protects against loss or damage)</span>
-                              </span>
-                            </label>
+                          <div style={{padding:"12px",border:"1px solid #dbeafe",borderRadius:8,background:"#eff6ff"}}>
+                            <p style={{fontSize:13,fontWeight:600,marginBottom:8}}>Shipping Insurance - $3.00</p>
+                            <p style={{fontSize:12,color:"#6b7280",marginBottom:10}}>Protects your order against loss or damage</p>
+                            <div style={{display:"flex",gap:8}}>
+                              <button type="button"
+                                onClick={() => setUseInsurance(true)}
+                                style={{flex:1,padding:"8px 12px",borderRadius:6,border:"2px solid",
+                                  borderColor:useInsurance?"#fe3500":"#d1d5db",
+                                  background:useInsurance?"#fe3500":"white",
+                                  color:useInsurance?"white":"#374151",
+                                  fontWeight:600,fontSize:13,cursor:"pointer"}}>
+                                Yes - Add $3.00
+                              </button>
+                              <button type="button"
+                                onClick={() => setUseInsurance(false)}
+                                style={{flex:1,padding:"8px 12px",borderRadius:6,border:"2px solid",
+                                  borderColor:!useInsurance?"#374151":"#d1d5db",
+                                  background:!useInsurance?"#374151":"white",
+                                  color:!useInsurance?"white":"#374151",
+                                  fontWeight:600,fontSize:13,cursor:"pointer"}}>
+                                No Thanks
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>

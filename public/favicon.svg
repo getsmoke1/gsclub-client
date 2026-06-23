@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="roundedClip">
+      <rect width="512" height="512" rx="110" ry="110"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Red rounded square background -->
+  <rect width="512" height="512" rx="110" ry="110" fill="#FE3500"/>
+  
+  <!-- "get" text -->
+  <text x="58" y="240"
+    font-family="'Arial Rounded MT Bold', 'Nunito', 'Varela Round', Arial, sans-serif"
+    font-weight="900"
+    font-size="168"
+    fill="white"
+    letter-spacing="-2">get</text>
+  
+  <!-- "sm" text -->
+  <text x="58" y="420"
+    font-family="'Arial Rounded MT Bold', 'Nunito', 'Varela Round', Arial, sans-serif"
+    font-weight="900"
+    font-size="168"
+    fill="white"
+    letter-spacing="-2">sm</text>
+  
+  <!-- pill "o" - white oval outline, red inside -->
+  <!-- Position: after "sm" at approximately x=280, centered vertically on "smoke" baseline -->
+  <ellipse cx="326" cy="372" rx="48" ry="32" 
+    fill="none" stroke="white" stroke-width="14"/>
+  
+  <!-- "ke" text -->
+  <text x="370" y="420"
+    font-family="'Arial Rounded MT Bold', 'Nunito', 'Varela Round', Arial, sans-serif"
+    font-weight="900"
+    font-size="168"
+    fill="white"
+    letter-spacing="-2">ke</text>
+</svg>

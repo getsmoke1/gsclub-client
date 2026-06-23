@@ -520,29 +520,18 @@ const CheckoutPage = () => {
                                 : <strong style={{color:"#fe3500"}}>${FLAT_RATE.toFixed(2)}</strong>}
                             </span>
                           </div>
-                          <div style={{padding:"12px",border:"1px solid #dbeafe",borderRadius:8,background:"#eff6ff"}}>
-                            <p style={{fontSize:13,fontWeight:600,marginBottom:8}}>Shipping Insurance - $3.00</p>
-                            <p style={{fontSize:12,color:"#6b7280",marginBottom:10}}>Protects your order against loss or damage</p>
-                            <div style={{display:"flex",gap:8}}>
-                              <button type="button"
-                                onClick={() => setUseInsurance(true)}
-                                style={{flex:1,padding:"8px 12px",borderRadius:6,border:"2px solid",
-                                  borderColor:useInsurance?"#fe3500":"#d1d5db",
-                                  background:useInsurance?"#fe3500":"white",
-                                  color:useInsurance?"white":"#374151",
-                                  fontWeight:600,fontSize:13,cursor:"pointer"}}>
-                                Yes - Add $3.00
-                              </button>
-                              <button type="button"
-                                onClick={() => setUseInsurance(false)}
-                                style={{flex:1,padding:"8px 12px",borderRadius:6,border:"2px solid",
-                                  borderColor:!useInsurance?"#374151":"#d1d5db",
-                                  background:!useInsurance?"#374151":"white",
-                                  color:!useInsurance?"white":"#374151",
-                                  fontWeight:600,fontSize:13,cursor:"pointer"}}>
+                          <div style={{padding:"10px 12px",border:"1px solid #e5e7eb",borderRadius:8,background:"#f9fafb",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                            <label style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}}>
+                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)}
+                                style={{width:18,height:18,accentColor:"#fe3500",cursor:"pointer",flexShrink:0}} />
+                              <span style={{fontSize:13,fontWeight:600}}>Shipping Insurance - $3.00</span>
+                            </label>
+                            {useInsurance && (
+                              <button type="button" onClick={() => setUseInsurance(false)}
+                                style={{fontSize:12,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:"2px 6px",textDecoration:"underline"}}>
                                 No Thanks
                               </button>
-                            </div>
+                            )}
                           </div>
                         </div>
                       </div>

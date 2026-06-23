@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       shippingRateId,
       carrier,
       shippingAmount,
-      _insuranceAmount,
+      _insuranceAmount,  // prefixed to avoid ESLint warning
       nameOnCard,
       billingStreetAddress,
       billingCity,
@@ -49,12 +49,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Email is required" }, { status: 400 });
     }
 
     if (!items || !items.length) {
       console.error("No items provided");
-      return NextResponse.json({ error: "No items provided" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "No items provided in cart" }, { status: 400 });
     }
 
     // Step 1: Check if the user exists -- guest ordering
@@ -155,7 +155,8 @@ export async function POST(req: NextRequest) {
 
     // Add shipping cost to calculate final total
     const shippingCost = shippingAmount ? parseFloat(shippingAmount) : 0;
-    const finalTotal = subtotal + shippingCost;
+    const insuranceCost = _insuranceAmount ? parseFloat(_insuranceAmount) : 0;
+    const finalTotal = subtotal + shippingCost + insuranceCost;
 
     // Step 4: Create order in the database with isPaid = false
     const orderData = {

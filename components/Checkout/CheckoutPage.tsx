@@ -9,7 +9,6 @@ import { IoIosArrowBack } from "react-icons/io";
 import Script from "next/script";
 import Image from "next/image";
 import ShippingAddress from "./../myAccount/ShippingAddress";
-import axios from "axios";
 import ShippingAddressModal from "./ShippingAddressModal";
 import { FaSpinner } from "react-icons/fa";
 import { Button } from "../ui/button";
@@ -87,18 +86,13 @@ interface FormData {
 const CheckoutPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const email = session?.user?.email || "";
   const { items } = useCart();
-  const [loading, setLoading] = useState(false);
+  const loading = false;
   // const [loading2, setLoading2] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [temp, setTemp] = useState(false);
   const [temp2, setTemp2] = useState(false);
-  const [selectedShippingRate, setSelectedShippingRate] =
-    useState<ShippingRate | null>(null);
-  const [shippingRates, setShippingRates] = useState<ShippingRate[] | null>(
-    null
-  );
+
   // Flat rate & insurance
   const FLAT_RATE = 7.69;
   const FREE_SHIPPING_THRESHOLD = 89;
@@ -240,10 +234,7 @@ const CheckoutPage = () => {
       }
       return;
     }
-    if (!selectedShippingRate) {
-      toast.error("Please select a shipping carrier choice");
-      return;
-    }
+
     if (!formData) {
       toast.error("Form data is missing. Please try again.");
       return;
@@ -291,7 +282,7 @@ const CheckoutPage = () => {
   // Calculate shipping amount
   const isFreeShippingEligible = totalAmount >= FREE_SHIPPING_THRESHOLD;
   const shippingAmount = useFlatRate ? (isFreeShippingEligible ? 0 : FLAT_RATE)
-    : (selectedShippingRate?.amount ? parseFloat(selectedShippingRate.amount) : 0);
+    : 0;
   const insuranceAmount = useInsurance ? INSURANCE_FEE : 0;
   const finalTotal = totalAmount + shippingAmount + insuranceAmount;
 
@@ -334,8 +325,6 @@ const CheckoutPage = () => {
           shippingState: selectedCard?.state,
           shippingCity: selectedCard?.city,
           shippingZipCode: selectedCard?.zipCode,
-          shippingRateId: selectedShippingRate?.object_id,
-          carrier: selectedShippingRate?.provider,
           shippingAmount: shippingAmount.toFixed(2),
         }),
       });
@@ -465,7 +454,7 @@ const CheckoutPage = () => {
                             <span className="font-semibold">
                               {useFlatRate
                                 ? (isFreeShippingEligible ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                                : (selectedShippingRate?.amount ? `$${ parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
+                                : "—"}
                             </span>
                           </p>
                         </div>
@@ -726,7 +715,7 @@ const CheckoutPage = () => {
                   <span className="font-medium">
                     {useFlatRate
                       ? (isFreeShippingEligible ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                      : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
+                      : "—"}
                   </span>
                 </p>
               </div>

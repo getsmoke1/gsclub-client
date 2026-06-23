@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       shippingRateId,
       carrier,
       shippingAmount,
-      insuranceAmount,
+      _insuranceAmount,
       nameOnCard,
       billingStreetAddress,
       billingCity,

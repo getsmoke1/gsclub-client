@@ -86,16 +86,21 @@ interface FormData {
 const CheckoutPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const _email = session?.user?.email || "";
   const { items } = useCart();
-  const loading = false;
+  const [loading, _setLoading] = useState(false);
   // const [loading2, setLoading2] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [temp, setTemp] = useState(false);
   const [temp2, setTemp2] = useState(false);
-
-  // Flat rate & insurance
+  const [selectedShippingRate, _setSelectedShippingRate] =
+    useState<ShippingRate | null>(null);
+  const [_shippingRates, _setShippingRates] = useState<ShippingRate[] | null>(
+    null
+  );
+  // Flat rate shipping & insurance
   const FLAT_RATE = 7.69;
-  const FREE_SHIPPING_THRESHOLD = 89;
+  const FREE_THRESHOLD = 89;
   const INSURANCE_FEE = 3.00;
   const [useFlatRate, setUseFlatRate] = useState(false);
   const [useInsurance, setUseInsurance] = useState(true);
@@ -220,6 +225,7 @@ const CheckoutPage = () => {
       }
       return;
     }
+    // Flat rate - no carrier lookup needed
     setFormData(formData);
     setUseFlatRate(true);
     setTemp(true);
@@ -234,7 +240,10 @@ const CheckoutPage = () => {
       }
       return;
     }
-
+    if (!selectedShippingRate) {
+      toast.error("Please select a shipping carrier choice");
+      return;
+    }
     if (!formData) {
       toast.error("Form data is missing. Please try again.");
       return;
@@ -280,10 +289,11 @@ const CheckoutPage = () => {
   const discountAmount = originalTotalAmount - totalAmount;
 
   // Calculate shipping amount
-  const isFreeShippingEligible = totalAmount >= FREE_SHIPPING_THRESHOLD;
-  const shippingAmount = useFlatRate ? (isFreeShippingEligible ? 0 : FLAT_RATE)
-    : 0;
+  const isFreeShipping = totalAmount >= FREE_THRESHOLD;
+  const shippingAmount = useFlatRate ? (isFreeShipping ? 0 : FLAT_RATE) : (selectedShippingRate?.amount ? parseFloat(selectedShippingRate.amount) : 0);
   const insuranceAmount = useInsurance ? INSURANCE_FEE : 0;
+
+  // Calculate final total
   const finalTotal = totalAmount + shippingAmount + insuranceAmount;
 
   const [paymentProcessing, setPaymentProcessing] = useState(false);
@@ -325,6 +335,8 @@ const CheckoutPage = () => {
           shippingState: selectedCard?.state,
           shippingCity: selectedCard?.city,
           shippingZipCode: selectedCard?.zipCode,
+          shippingRateId: selectedShippingRate?.object_id,
+          carrier: selectedShippingRate?.provider,
           shippingAmount: shippingAmount.toFixed(2),
         }),
       });
@@ -453,8 +465,8 @@ const CheckoutPage = () => {
                             <span>Shipping</span>
                             <span className="font-semibold">
                               {useFlatRate
-                                ? (isFreeShippingEligible ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                                : "—"}
+                                ? (isFreeShipping ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
+                                : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
                             </span>
                           </p>
                         </div>
@@ -487,27 +499,30 @@ const CheckoutPage = () => {
                   </form>
 
                   <div className="my-4">
-                    {/* Flat rate - always shown after address */}
                     {temp && (
-                      <div className="bg-white p-4 md:p-0 rounded-md mb-4">
-                        <h3 className="font-semibold lg:font-medium mb-3">Shipping</h3>
-                        <div className="flex items-center space-x-3 p-3 border rounded-lg bg-gray-50">
-                          <input type="radio" checked readOnly className="form-radio" />
-                          <span>
-                            <strong>Standard Shipping</strong>{" "}
-                            {isFreeShippingEligible
-                              ? <span className="text-green-600 font-semibold">FREE (Order over $89)</span>
-                              : <strong style={{color:"#fe3500"}}>${FLAT_RATE.toFixed(2)}</strong>}
-                          </span>
-                        </div>
-                        <div className="mt-3 p-3 border rounded-lg bg-blue-50">
-                          <label className="flex items-start space-x-3 cursor-pointer">
-                            <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)} className="form-checkbox mt-0.5" />
-                            <span className="text-sm">
-                              <strong>Shipping Insurance</strong> - $3.00{" "}
-                              <span className="text-gray-500">(Protects against loss or damage)</span>
+                      <div className="bg-white p-4 md:p-0 rounded-md">
+                        <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
+                          Shipping
+                        </h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-3 p-3 border rounded-lg bg-gray-50">
+                            <input type="radio" checked readOnly className="form-radio" />
+                            <span>
+                              <strong>Standard Shipping</strong>{" "}
+                              {isFreeShipping
+                                ? <span className="text-green-600 font-semibold">FREE (Order over $89)</span>
+                                : <strong style={{color:"#fe3500"}}>${FLAT_RATE.toFixed(2)}</strong>}
                             </span>
-                          </label>
+                          </div>
+                          <div className="p-3 border rounded-lg bg-blue-50">
+                            <label className="flex items-start space-x-3 cursor-pointer">
+                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)} className="form-checkbox mt-0.5" />
+                              <span className="text-sm">
+                                <strong>Shipping Insurance</strong>{" - $3.00 "}
+                                <span className="text-gray-500">(Protects against loss or damage)</span>
+                              </span>
+                            </label>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -714,8 +729,8 @@ const CheckoutPage = () => {
                   <span>Shipping</span>
                   <span className="font-medium">
                     {useFlatRate
-                      ? (isFreeShippingEligible ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                      : "—"}
+                      ? (isFreeShipping ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
+                      : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
                   </span>
                 </p>
               </div>

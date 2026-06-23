@@ -12,7 +12,7 @@ export const newsletterConfirmTemplate = (email: string) => `<!DOCTYPE html>
         Thanks for subscribing to GetSmoke news.<br/>
         You'll be the first to know about new arrivals, deals, and product drops.
       </p>
-      <a href="https://gsclub-client-jade.vercel.app" style="display:inline-block;margin-top:16px;background:#fe3500;color:#fff;padding:12px 28px;border-radius:9999px;text-decoration:none;font-weight:bold;font-size:14px;">Shop Now</a>
+      <a href="https://getsmoke.com" style="display:inline-block;margin-top:16px;background:#fe3500;color:#fff;padding:12px 28px;border-radius:9999px;text-decoration:none;font-weight:bold;font-size:14px;">Shop Now</a>
     </div>
     <div style="background:#111;padding:20px 32px;text-align:center;">
       <p style="color:#777;font-size:12px;margin:0;">

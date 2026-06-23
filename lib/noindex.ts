@@ -1,7 +1,4 @@
 // lib/noindex.ts
-export const noIndex = {
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+// noIndex has been removed - site is now live and indexable
+// Keeping this file to avoid import errors across 19+ pages
+export const noIndex = {};

@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       carrier,
       shippingAmount,
       insuranceAmount,
+      nameOnCard,
       billingStreetAddress,
       billingCity,
       billingState,
@@ -192,7 +193,8 @@ export async function POST(req: NextRequest) {
     });
 
     // Step 5: Prepare the request to NMI Payment API with order ID and calculated amount
-    const nameParts = shippingName.split(" ");
+    const cardName = (nameOnCard || shippingName || "").trim();
+    const nameParts = cardName.split(" ");
     const nmiRequestData: Record<string, string> = {
       security_key: securityKey,
       payment_token: token.toString(),

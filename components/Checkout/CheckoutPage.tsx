@@ -105,6 +105,7 @@ const CheckoutPage = () => {
   const [useFlatRate, setUseFlatRate] = useState(true);
   const [billingDifferent, setBillingDifferent] = useState(false);
   const [billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
+  const [nameOnCard, setNameOnCard] = useState("");
   const [useInsurance, setUseInsurance] = useState(true);
 
   // Add state for NMI script loading
@@ -338,6 +339,7 @@ const CheckoutPage = () => {
           carrier: selectedShippingRate?.provider,
           shippingAmount: shippingAmount.toFixed(2),
           insuranceAmount: insuranceAmount.toFixed(2),
+          nameOnCard: nameOnCard || selectedCard?.name,
           billingStreetAddress: billingDifferent && billingAddress?.streetAddress ? billingAddress.streetAddress : selectedCard?.streetAddress,
           billingCity: billingDifferent && billingAddress?.city ? billingAddress.city : selectedCard?.city,
           billingState: billingDifferent && billingAddress?.state ? billingAddress.state : selectedCard?.state,
@@ -623,6 +625,16 @@ const CheckoutPage = () => {
                   {/* NMI Payment Form */}
                   <div className="w-full">
                     <form className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Name on Card</label>
+                        <input
+                          type="text"
+                          value={nameOnCard}
+                          onChange={e => setNameOnCard(e.target.value)}
+                          placeholder="As it appears on your card"
+                          className="w-full border border-gray-300 rounded-md p-3 text-sm"
+                        />
+                      </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Card Number</label>
                         {fieldsReady ? (

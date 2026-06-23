@@ -107,9 +107,10 @@ const ShippingAddressForm = ({ onSubmit, defaultValues, setShowModal }: Shipping
                     Cancel
                 </Button>
                 <Button
-                    type="submit"
+                    type="button"
                     variant="primary"
                     disabled={isSubmitting}
+                    onClick={handleSubmit(onSubmit)}
                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isSubmitting ? "Submitting..." : "Save"}

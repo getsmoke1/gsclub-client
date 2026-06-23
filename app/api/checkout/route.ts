@@ -217,6 +217,10 @@ export async function POST(req: NextRequest) {
     if (isSubscription && subscriptionFrequency) {
       nmiRequestData.customer_vault = "add_customer";
     }
+    // Debug: log what we're sending to NMI (exclude security_key from log)
+    const debugData = {...nmiRequestData, security_key: "[hidden]"};
+    console.log("NMI Request:", JSON.stringify(debugData));
+
     // Make the API request to NMI
     const response = await fetch("https://secure.nmi.com/api/transact.php", {
       method: "POST",
@@ -226,6 +230,7 @@ export async function POST(req: NextRequest) {
 
     // NMI returns data in a specific format that needs parsing
     const responseText = await response.text();
+    console.log("NMI Raw Response:", responseText);
     const responseData = parseNmiResponse(responseText);
 
     if (responseData.response === "1") {

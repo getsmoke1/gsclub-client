@@ -100,7 +100,7 @@ const CheckoutPage = () => {
     null
   );
   // Flat rate + free shipping + insurance
-  const FLAT_RATE = 7.65;
+  const FLAT_RATE = 7.69;
   const FREE_SHIPPING_THRESHOLD = 89;
   const INSURANCE_FEE = 3.00;
   const [useFlatRate, setUseFlatRate] = useState(false);
@@ -226,9 +226,14 @@ const CheckoutPage = () => {
       }
       return;
     }
+    // Flat rate auto-selected - skip Shippo
+    setUseFlatRate(true);
+    setFormData(formData);
+    setTemp(true);
+  };
 
+  const _unusedShippo = async (formData: FormData) => {
     setLoading(true);
-
     try {
       // Step 1: Create Recipient Address
       const recipientAddressResponse = await axios.post(
@@ -596,47 +601,22 @@ const CheckoutPage = () => {
                     {/* Flat Rate Shipping Option */}
                     <div className="bg-white p-4 md:p-0 rounded-md">
                       <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
-                        Shipping Options
+                        Shipping
                       </h3>
                       <div className="space-y-3">
-                        {/* Flat Rate */}
-                        <label className="flex items-center space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50">
-                          <input
-                            type="radio"
-                            name="shippingOption"
-                            checked={useFlatRate && !(isFreeShippingEligible && useFlatRate)}
-                            onChange={() => { setUseFlatRate(true); setSelectedShippingRate(null); }}
-                            className="form-radio"
-                          />
+                        {/* Flat Rate - only option */}
+                        <div className="flex items-center space-x-3 p-3 border rounded-lg bg-gray-50">
+                          <input type="radio" checked readOnly className="form-radio" />
                           <span>
-                            <strong>Standard Shipping</strong> - Flat Rate{" "}
-                            <strong style={{ color: "#fe3500" }}>${FLAT_RATE.toFixed(2)}</strong>
-                            {isFreeShippingEligible && (
-                              <span className="ml-2 text-green-600 font-semibold">(FREE - Order over $89!)</span>
-                            )}
+                            <strong>Standard Shipping</strong>{" "}
+                            {isFreeShippingEligible
+                              ? <span className="text-green-600 font-semibold">FREE (Order over $89)</span>
+                              : <strong style={{ color: "#fe3500" }}>${FLAT_RATE.toFixed(2)}</strong>
+                            }
                           </span>
-                        </label>
+                        </div>
 
-                        {/* Carrier rates from Shippo */}
-                        {shippingRates && shippingRates.map((rate) => (
-                          <label
-                            key={rate.object_id}
-                            className="flex items-center space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50"
-                          >
-                            <input
-                              type="radio"
-                              name="shippingOption"
-                              value={rate.object_id}
-                              checked={!useFlatRate && selectedShippingRate?.object_id === rate.object_id}
-                              onChange={() => { setSelectedShippingRate(rate); setUseFlatRate(false); }}
-                              className="form-radio"
-                            />
-                            <span>
-                              <strong>{rate.provider}</strong> - {rate.servicelevel.name} ({rate.duration_terms}):{" "}
-                              <strong>${rate.amount}</strong>
-                            </span>
-                          </label>
-                        ))}
+
                       </div>
 
                       {/* Shipping Insurance */}

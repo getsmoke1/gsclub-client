@@ -103,6 +103,8 @@ const CheckoutPage = () => {
   const FREE_THRESHOLD = 89;
   const INSURANCE_FEE = 3.00;
   const [useFlatRate, setUseFlatRate] = useState(true);
+  const [billingDifferent, setBillingDifferent] = useState(false);
+  const [billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
   const [useInsurance, setUseInsurance] = useState(true);
 
   // Add state for NMI script loading
@@ -335,6 +337,11 @@ const CheckoutPage = () => {
           shippingRateId: selectedShippingRate?.object_id,
           carrier: selectedShippingRate?.provider,
           shippingAmount: shippingAmount.toFixed(2),
+          insuranceAmount: insuranceAmount.toFixed(2),
+          billingStreetAddress: billingDifferent && billingAddress?.streetAddress ? billingAddress.streetAddress : selectedCard?.streetAddress,
+          billingCity: billingDifferent && billingAddress?.city ? billingAddress.city : selectedCard?.city,
+          billingState: billingDifferent && billingAddress?.state ? billingAddress.state : selectedCard?.state,
+          billingZipCode: billingDifferent && billingAddress?.zipCode ? billingAddress.zipCode : selectedCard?.zipCode,
         }),
       });
 
@@ -572,6 +579,37 @@ const CheckoutPage = () => {
                         selectedCard={selectedCard}
                         onAddressSubmit={handleAddressSubmit}
                       />
+                    )}
+                  </div>
+
+                  {/* Billing Address Section */}
+                  <div style={{marginTop:16}}>
+                    <button type="button"
+                      onClick={() => setBillingDifferent(!billingDifferent)}
+                      style={{display:"flex",alignItems:"center",gap:6,fontSize:13,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:0}}>
+                      <span style={{fontSize:18,lineHeight:1}}>{billingDifferent ? "−" : "+"}</span>
+                      <span>Billing address is different?</span>
+                    </button>
+                    {billingDifferent && (
+                      <div style={{marginTop:12,padding:"16px",border:"1px solid #e5e7eb",borderRadius:8}}>
+                        <h3 style={{fontSize:14,fontWeight:600,marginBottom:12}}>Billing Address</h3>
+                        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                          <input placeholder="Street Address" 
+                            onChange={e => setBillingAddress(prev => ({...prev||{name:"",city:"",state:"",zipCode:""},streetAddress:e.target.value}))}
+                            style={{width:"100%",padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
+                          <div style={{display:"flex",gap:8}}>
+                            <input placeholder="City"
+                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",state:"",zipCode:""},city:e.target.value}))}
+                              style={{flex:1,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
+                            <input placeholder="State" maxLength={2}
+                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",city:"",zipCode:""},state:e.target.value.toUpperCase()}))}
+                              style={{width:70,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
+                            <input placeholder="ZIP"
+                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",city:"",state:""},zipCode:e.target.value}))}
+                              style={{width:90,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

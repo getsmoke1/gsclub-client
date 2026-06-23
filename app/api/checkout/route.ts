@@ -3,6 +3,7 @@ import { CartItem } from "@/types/cart";
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/mail";
 import { orderConfirmationTemplate } from "@/emails/orderConfirmationTemplate";
+import { SUBSCRIPTION_FREQUENCIES, FrequencyValue, getNextBillingDate, calcSubscriptionPrice } from "@/lib/nmi";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,6 +20,9 @@ export async function POST(req: NextRequest) {
       shippingRateId,
       carrier,
       shippingAmount,
+      // Subscription fields (optional)
+      isSubscription,
+      subscriptionFrequency,
     } = body;
 
     // Step 0: Validate the request
@@ -183,22 +187,28 @@ export async function POST(req: NextRequest) {
     });
 
     // Step 5: Prepare the request to NMI Payment API with order ID and calculated amount
+    const nameParts = shippingName.split(" ");
     const nmiRequestData: Record<string, string> = {
       security_key: securityKey,
       payment_token: token.toString(),
-      amount: finalTotal.toFixed(2), // Format to 2 decimal places
+      amount: finalTotal.toFixed(2),
       order_id: order.id,
       shipping: shippingCost.toFixed(2),
       type: "sale",
-      // Add billing address information (using shipping address as billing)
-      firstname: shippingName.split(" ")[0], // Assuming the first part is the first name
-      lastname: shippingName.split(" ").slice(1).join(" "), // Assuming the rest is the last name
+      firstname: nameParts[0],
+      lastname: nameParts.slice(1).join(" ") || nameParts[0],
       address1: shippingStreetAddress,
       city: shippingCity,
       state: shippingState,
       zip: shippingZipCode,
       country: "US",
+      email: email,
     };
+
+    // For subscriptions: add the card to Customer Vault during this transaction
+    if (isSubscription && subscriptionFrequency) {
+      nmiRequestData.customer_vault = "add_customer";
+    }
     // Make the API request to NMI
     const response = await fetch("https://secure.nmi.com/api/transact.php", {
       method: "POST",
@@ -216,6 +226,54 @@ export async function POST(req: NextRequest) {
         where: { id: order.id },
         data: { isPaid: true },
       });
+
+      // If subscription: save vault ID and create Subscription records for each item
+      if (isSubscription && subscriptionFrequency && responseData.customer_vault_id) {
+        const vaultId = responseData.customer_vault_id;
+        const freq = SUBSCRIPTION_FREQUENCIES.find(f => f.value === subscriptionFrequency) as typeof SUBSCRIPTION_FREQUENCIES[number] | undefined;
+
+        if (freq) {
+          const dbUser = await prisma.user.findUnique({ where: { email } });
+
+          if (dbUser) {
+            // Create or update CustomerVault record
+            const vault = await prisma.customerVault.upsert({
+              where: { userId: dbUser.id },
+              create: {
+                userId: dbUser.id,
+                vaultId: vaultId,
+                lastFour: responseData.cc_number?.slice(-4) || "****",
+                cardType: responseData.cc_type || "card",
+              },
+              update: {
+                vaultId: vaultId,
+                lastFour: responseData.cc_number?.slice(-4) || "****",
+                cardType: responseData.cc_type || "card",
+              },
+            });
+
+            // Create a subscription for each product in the order
+            for (const item of orderItemsData) {
+              const product = productsWithDetails.find(p => p.id === item.productId);
+              if (!product) continue;
+              const discountedPrice = calcSubscriptionPrice(product.currentPrice, freq.discountPct);
+              await prisma.subscription.create({
+                data: {
+                  userId: dbUser.id,
+                  productId: item.productId,
+                  vaultId: vault.id,
+                  frequency: freq.value,
+                  discountPct: freq.discountPct,
+                  price: discountedPrice,
+                  quantity: item.quantity,
+                  status: "active",
+                  nextBillingDate: getNextBillingDate(freq.value as FrequencyValue),
+                },
+              });
+            }
+          }
+        }
+      }
 
       // Send order confirmation email to customer
       try {

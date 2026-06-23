@@ -379,8 +379,14 @@ const CheckoutPage = () => {
       const lineItems = items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
-        attributeId: item.attributeId || null
+        attributeId: item.attributeId || null,
+        isSubscription: item.isSubscription || false,
+        subscriptionFrequency: item.subscriptionFrequency || null,
       }));
+
+      // Detect if any item is a subscription
+      const hasSubscription = items.some(i => i.isSubscription);
+      const subscriptionFrequency = items.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
       // Use authenticated user email or guest email from form
       const emailToSend = status === "authenticated" ? session?.user?.email : formData?.email || "";
@@ -395,6 +401,8 @@ const CheckoutPage = () => {
           token,
           email: emailToSend,
           items: lineItems,
+          isSubscription: hasSubscription,
+          subscriptionFrequency: subscriptionFrequency,
           shippingName: selectedCard?.name,
           shippingStreetAddress: selectedCard?.streetAddress,
           shippingState: selectedCard?.state,

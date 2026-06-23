@@ -240,8 +240,8 @@ const CheckoutPage = () => {
       }
       return;
     }
-    if (!selectedShippingRate) {
-      toast.error("Please select a shipping carrier choice");
+    if (!selectedShippingRate && !useFlatRate) {
+      toast.error("Please select a shipping option");
       return;
     }
     if (!formData) {
@@ -516,7 +516,7 @@ const CheckoutPage = () => {
                           </div>
                           <div className="p-3 border rounded-lg bg-blue-50">
                             <label className="flex items-start space-x-3 cursor-pointer">
-                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)} className="form-checkbox mt-0.5" />
+                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)} style={{width:18,height:18,minWidth:18,accentColor:"#fe3500",cursor:"pointer",marginTop:2}} />
                               <span className="text-sm">
                                 <strong>Shipping Insurance</strong>{" - $3.00 "}
                                 <span className="text-gray-500">(Protects against loss or damage)</span>

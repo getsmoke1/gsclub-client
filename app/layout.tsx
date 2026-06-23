@@ -43,6 +43,15 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: SITE_URL,
     },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: [
+        { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      ],
+    },
   };
 
   if (!seoData) return metadata;

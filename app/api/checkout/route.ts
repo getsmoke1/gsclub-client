@@ -230,8 +230,16 @@ export async function POST(req: NextRequest) {
 
     // NMI returns data in a specific format that needs parsing
     const responseText = await response.text();
-    console.log("NMI Raw Response:", responseText);
     const responseData = parseNmiResponse(responseText);
+    console.log("NMI Response:", JSON.stringify({
+      response: responseData.response,
+      responsetext: responseData.responsetext,
+      response_code: responseData.response_code,
+      transactionid: responseData.transactionid,
+      amount: finalTotal.toFixed(2),
+      hasToken: !!token,
+      hasAddress: !!billingStreetAddress || !!shippingStreetAddress,
+    }));
 
     if (responseData.response === "1") {
       // Payment was successful - update order to paid

@@ -374,9 +374,11 @@ const CheckoutPage = () => {
         toast.success("Payment successful!");
         router.push(`/checkout/success`);
       } else {
-        // Payment failed
-        setPaymentError(data.message || "Payment failed. Please try again.");
-        toast.error(data.message || "Payment failed. Please try again.");
+        // Payment failed - show full NMI error details
+        const errMsg = data.message || "Payment failed. Please try again.";
+        const errCode = data.errorDetails?.response_code ? ` (code: ${data.errorDetails.response_code})` : "";
+        setPaymentError(errMsg + errCode);
+        toast.error(errMsg + errCode);
         // router.push(`/checkout/failure`);
       }
     } catch (error) {

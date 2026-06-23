@@ -216,6 +216,7 @@ const CheckoutPage = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<FormData>({
   });
 
@@ -315,8 +316,10 @@ const CheckoutPage = () => {
       const hasSubscription = items.some(i => i.isSubscription);
       const subscriptionFrequency = items.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
-      // Use authenticated user email or guest email from form
-      const emailToSend = status === "authenticated" ? session?.user?.email : formData?.email || "";
+      // Use authenticated user email or guest email - read directly from form input
+      const emailToSend = status === "authenticated"
+        ? session?.user?.email
+        : (getValues("email") || formData?.email || "");
 
       if (!emailToSend) {
         setPaymentError("Please enter your email address before paying.");

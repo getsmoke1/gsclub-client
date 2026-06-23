@@ -240,10 +240,7 @@ const CheckoutPage = () => {
       }
       return;
     }
-    if (!selectedShippingRate && !useFlatRate) {
-      toast.error("Please select a shipping option");
-      return;
-    }
+    // Flat rate always selected - no shipping validation needed
     if (!formData) {
       toast.error("Form data is missing. Please try again.");
       return;

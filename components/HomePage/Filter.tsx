@@ -109,6 +109,14 @@ const Filter = ({ productType }: { productType?: string }) => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Close on scroll
+  useEffect(() => {
+    if (!openDropdown) return;
+    const handleScroll = () => setOpenDropdown(null);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [openDropdown]);
+
   const toggle = (name: string) => {
     if (openDropdown === name) {
       setOpenDropdown(null);

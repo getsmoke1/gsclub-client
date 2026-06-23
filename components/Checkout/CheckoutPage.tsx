@@ -469,10 +469,16 @@ const CheckoutPage = () => {
                                 : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
                             </span>
                           </p>
+                          {useInsurance && (
+                            <p className="border-b flex justify-between py-2 border-gray-300">
+                              <span>Shipping Insurance</span>
+                              <span className="font-semibold">${INSURANCE_FEE.toFixed(2)}</span>
+                            </p>
+                          )}
                         </div>
                         <div className="flex justify-between font-bold mt-2">
                           <span>Total</span>
-                          <span>${totalAmount.toFixed(2)}</span>
+                          <span>${finalTotal.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -748,6 +754,12 @@ const CheckoutPage = () => {
                       : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
                   </span>
                 </p>
+                {useInsurance && (
+                  <p className="border-b border-gray-300 flex justify-between py-2">
+                    <span>Shipping Insurance</span>
+                    <span className="font-medium">${INSURANCE_FEE.toFixed(2)}</span>
+                  </p>
+                )}
               </div>
               <div className="flex justify-between font-semibold mt-2">
                 <span>Total</span>

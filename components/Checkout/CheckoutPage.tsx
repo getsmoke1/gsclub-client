@@ -105,7 +105,7 @@ const CheckoutPage = () => {
   const INSURANCE_FEE = 3.00;
   const [useFlatRate, setUseFlatRate] = useState(true);
   const [billingDifferent, setBillingDifferent] = useState(false);
-  const [billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
+  const [_billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
   const billingAddressRef = useRef<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
   const billingDifferentRef = useRef(false);
   const [nameOnCard, setNameOnCard] = useState("");
@@ -114,7 +114,6 @@ const CheckoutPage = () => {
   const paymentEmailRef = useRef("");
   const [useInsurance, setUseInsurance] = useState(true);
   const useInsuranceRef = useRef(true);
-  const useFlatRateRef = useRef(true);
 
   // Add state for NMI script loading
   const [scriptLoaded, setScriptLoaded] = useState(false);

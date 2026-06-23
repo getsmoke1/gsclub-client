@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import useCart from "@/hooks/useCart";
 import { useSession } from "next-auth/react";
@@ -91,6 +91,7 @@ const CheckoutPage = () => {
   const [loading, _setLoading] = useState(false);
   // const [loading2, setLoading2] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const selectedCardRef = useRef<Card | null>(null);
   const [temp, setTemp] = useState(false);
   const [temp2, setTemp2] = useState(false);
   const [selectedShippingRate, _setSelectedShippingRate] =
@@ -105,9 +106,15 @@ const CheckoutPage = () => {
   const [useFlatRate, setUseFlatRate] = useState(true);
   const [billingDifferent, setBillingDifferent] = useState(false);
   const [billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
+  const billingAddressRef = useRef<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
+  const billingDifferentRef = useRef(false);
   const [nameOnCard, setNameOnCard] = useState("");
+  const nameOnCardRef = useRef("");
   const [paymentEmail, setPaymentEmail] = useState("");
+  const paymentEmailRef = useRef("");
   const [useInsurance, setUseInsurance] = useState(true);
+  const useInsuranceRef = useRef(true);
+  const useFlatRateRef = useRef(true);
 
   // Add state for NMI script loading
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -260,11 +267,13 @@ const CheckoutPage = () => {
 
   const handleCardSelect = (card: Card) => {
     setSelectedCard(card);
+    selectedCardRef.current = card;
     setValue("addressId", card.id);
   };
 
   const handleAddressSubmit = (address: Card) => {
     setSelectedCard(address);
+    selectedCardRef.current = address;
   };
 
   // Calculate original total amount (before any discounts)
@@ -317,10 +326,10 @@ const CheckoutPage = () => {
       const hasSubscription = items.some(i => i.isSubscription);
       const subscriptionFrequency = items.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
-      // Use authenticated user email or guest email from payment form
+      // Use refs to avoid stale closure - refs always have current values
       const emailToSend = status === "authenticated"
         ? session?.user?.email
-        : (paymentEmail || getValues("email") || formData?.email || "");
+        : (paymentEmailRef.current || getValues("email") || formData?.email || "");
 
       if (!emailToSend) {
         setPaymentError("Please enter your email address before paying.");
@@ -341,20 +350,21 @@ const CheckoutPage = () => {
           items: lineItems,
           isSubscription: hasSubscription,
           subscriptionFrequency: subscriptionFrequency,
-          shippingName: selectedCard?.name,
-          shippingStreetAddress: selectedCard?.streetAddress,
-          shippingState: selectedCard?.state,
-          shippingCity: selectedCard?.city,
-          shippingZipCode: selectedCard?.zipCode,
+          // Use refs to avoid stale closure from Collect.js callback
+          shippingName: selectedCardRef.current?.name,
+          shippingStreetAddress: selectedCardRef.current?.streetAddress,
+          shippingState: selectedCardRef.current?.state,
+          shippingCity: selectedCardRef.current?.city,
+          shippingZipCode: selectedCardRef.current?.zipCode,
           shippingRateId: selectedShippingRate?.object_id,
           carrier: selectedShippingRate?.provider,
           shippingAmount: shippingAmount.toFixed(2),
-          insuranceAmount: insuranceAmount.toFixed(2),
-          nameOnCard: nameOnCard || selectedCard?.name,
-          billingStreetAddress: billingDifferent && billingAddress?.streetAddress ? billingAddress.streetAddress : selectedCard?.streetAddress,
-          billingCity: billingDifferent && billingAddress?.city ? billingAddress.city : selectedCard?.city,
-          billingState: billingDifferent && billingAddress?.state ? billingAddress.state : selectedCard?.state,
-          billingZipCode: billingDifferent && billingAddress?.zipCode ? billingAddress.zipCode : selectedCard?.zipCode,
+          insuranceAmount: (useInsuranceRef.current ? 3.00 : 0).toFixed(2),
+          nameOnCard: nameOnCardRef.current || selectedCardRef.current?.name,
+          billingStreetAddress: billingDifferentRef.current && billingAddressRef.current?.streetAddress ? billingAddressRef.current.streetAddress : selectedCardRef.current?.streetAddress,
+          billingCity: billingDifferentRef.current && billingAddressRef.current?.city ? billingAddressRef.current.city : selectedCardRef.current?.city,
+          billingState: billingDifferentRef.current && billingAddressRef.current?.state ? billingAddressRef.current.state : selectedCardRef.current?.state,
+          billingZipCode: billingDifferentRef.current && billingAddressRef.current?.zipCode ? billingAddressRef.current.zipCode : selectedCardRef.current?.zipCode,
         }),
       });
 
@@ -539,12 +549,12 @@ const CheckoutPage = () => {
                           </div>
                           <div style={{padding:"10px 12px",border:"1px solid #e5e7eb",borderRadius:8,background:"#f9fafb",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                             <label style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}}>
-                              <input type="checkbox" checked={useInsurance} onChange={e => setUseInsurance(e.target.checked)}
+                              <input type="checkbox" checked={useInsurance} onChange={e => { setUseInsurance(e.target.checked); useInsuranceRef.current = e.target.checked; }}
                                 style={{width:18,height:18,accentColor:"#fe3500",cursor:"pointer",flexShrink:0}} />
                               <span style={{fontSize:13,fontWeight:600}}>Shipping Insurance - $3.00</span>
                             </label>
                             {useInsurance && (
-                              <button type="button" onClick={() => setUseInsurance(false)}
+                              <button type="button" onClick={() => { setUseInsurance(false); useInsuranceRef.current = false; }}
                                 style={{fontSize:12,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:"2px 6px",textDecoration:"underline"}}>
                                 No Thanks
                               </button>
@@ -642,7 +652,7 @@ const CheckoutPage = () => {
                           <input
                             type="email"
                             value={paymentEmail || getValues("email") || ""}
-                            onChange={e => setPaymentEmail(e.target.value)}
+                            onChange={e => { setPaymentEmail(e.target.value); paymentEmailRef.current = e.target.value; }}
                             placeholder="your@email.com"
                             className="w-full border border-gray-300 rounded-md p-3 text-sm"
                             required
@@ -654,7 +664,7 @@ const CheckoutPage = () => {
                         <input
                           type="text"
                           value={nameOnCard}
-                          onChange={e => setNameOnCard(e.target.value)}
+                          onChange={e => { setNameOnCard(e.target.value); nameOnCardRef.current = e.target.value; }}
                           placeholder="As it appears on your card"
                           className="w-full border border-gray-300 rounded-md p-3 text-sm"
                         />

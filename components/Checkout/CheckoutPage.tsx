@@ -99,6 +99,12 @@ const CheckoutPage = () => {
   const [shippingRates, setShippingRates] = useState<ShippingRate[] | null>(
     null
   );
+  // Flat rate + free shipping + insurance
+  const FLAT_RATE = 7.65;
+  const FREE_SHIPPING_THRESHOLD = 89;
+  const INSURANCE_FEE = 3.00;
+  const [useFlatRate, setUseFlatRate] = useState(false);
+  const [useInsurance, setUseInsurance] = useState(true); // checked by default
 
   // Add state for NMI script loading
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -315,8 +321,8 @@ const CheckoutPage = () => {
       }
       return;
     }
-    if (!selectedShippingRate) {
-      toast.error("Please select a shipping carrier choice");
+    if (!selectedShippingRate && !useFlatRate) {
+      toast.error("Please select a shipping option");
       return;
     }
     if (!formData) {
@@ -364,10 +370,16 @@ const CheckoutPage = () => {
   const discountAmount = originalTotalAmount - totalAmount;
 
   // Calculate shipping amount
-  const shippingAmount = selectedShippingRate?.amount ? parseFloat(selectedShippingRate.amount) : 0;
+  const carrierShipping = selectedShippingRate?.amount ? parseFloat(selectedShippingRate.amount) : 0;
+  const isFreeShippingEligible = totalAmount >= FREE_SHIPPING_THRESHOLD;
+  // Effective shipping: flat rate OR carrier rate (if selected), 0 if free
+  const shippingAmount = useFlatRate
+    ? (isFreeShippingEligible ? 0 : FLAT_RATE)
+    : carrierShipping;
+  const insuranceAmount = useInsurance ? INSURANCE_FEE : 0;
 
   // Calculate final total
-  const finalTotal = totalAmount + shippingAmount;
+  const finalTotal = totalAmount + shippingAmount + insuranceAmount;
 
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState("");
@@ -403,14 +415,15 @@ const CheckoutPage = () => {
           items: lineItems,
           isSubscription: hasSubscription,
           subscriptionFrequency: subscriptionFrequency,
+          insuranceAmount: insuranceAmount,
           shippingName: selectedCard?.name,
           shippingStreetAddress: selectedCard?.streetAddress,
           shippingState: selectedCard?.state,
           shippingCity: selectedCard?.city,
           shippingZipCode: selectedCard?.zipCode,
           shippingRateId: selectedShippingRate?.object_id,
-          carrier: selectedShippingRate?.provider,
-          shippingAmount: selectedShippingRate?.amount,
+          carrier: selectedShippingRate?.provider || (useFlatRate ? "Flat Rate" : null),
+          shippingAmount: shippingAmount.toFixed(2),
         }),
       });
 
@@ -537,11 +550,19 @@ const CheckoutPage = () => {
                           <p className="border-b flex justify-between py-2 border-gray-300">
                             <span>Shipping</span>
                             <span className="font-semibold">
-                              {selectedShippingRate?.amount
-                                ? `$${selectedShippingRate.amount}`
-                                : "Select shipping rate"}
+                              {useFlatRate
+                                ? (isFreeShippingEligible ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
+                                : (selectedShippingRate?.amount
+                                  ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}`
+                                  : "Select shipping")}
                             </span>
                           </p>
+                          {useInsurance && (
+                            <p className="border-b flex justify-between py-2 border-gray-300">
+                              <span>Shipping Insurance</span>
+                              <span className="font-semibold">${INSURANCE_FEE.toFixed(2)}</span>
+                            </p>
+                          )}
                         </div>
                         <div className="flex justify-between font-bold mt-2">
                           <span>Total</span>
@@ -572,37 +593,68 @@ const CheckoutPage = () => {
                   </form>
 
                   <div className="my-4">
-                    {shippingRates && (
-                      <div className="bg-white p-6 md:p-0 rounded-md">
-                        <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
-                          Select shipping carrier choices:
-                        </h3>
-                        <div className="space-y-2 h-[12rem] overflow-x-auto scrollbar-thin">
-                          {shippingRates.map((rate) => (
-                            <label
-                              key={rate.object_id}
-                              className="flex items-center space-x-3 cursor-pointer"
-                            >
-                              <input
-                                type="radio"
-                                name="shippingOption"
-                                value={rate.object_id}
-                                checked={
-                                  selectedShippingRate?.object_id === rate.object_id
-                                }
-                                onChange={() => setSelectedShippingRate(rate)}
-                                className="form-radio"
-                              />
-                              <span>
-                                <strong>{rate.provider}</strong> -{" "}
-                                {rate.servicelevel.name}({rate.duration_terms}):{" "}
-                                {rate.amount} {rate.currency}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
+                    {/* Flat Rate Shipping Option */}
+                    <div className="bg-white p-4 md:p-0 rounded-md">
+                      <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
+                        Shipping Options
+                      </h3>
+                      <div className="space-y-3">
+                        {/* Flat Rate */}
+                        <label className="flex items-center space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50">
+                          <input
+                            type="radio"
+                            name="shippingOption"
+                            checked={useFlatRate && !(isFreeShippingEligible && useFlatRate)}
+                            onChange={() => { setUseFlatRate(true); setSelectedShippingRate(null); }}
+                            className="form-radio"
+                          />
+                          <span>
+                            <strong>Standard Shipping</strong> - Flat Rate{" "}
+                            <strong style={{ color: "#fe3500" }}>${FLAT_RATE.toFixed(2)}</strong>
+                            {isFreeShippingEligible && (
+                              <span className="ml-2 text-green-600 font-semibold">(FREE - Order over $89!)</span>
+                            )}
+                          </span>
+                        </label>
+
+                        {/* Carrier rates from Shippo */}
+                        {shippingRates && shippingRates.map((rate) => (
+                          <label
+                            key={rate.object_id}
+                            className="flex items-center space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50"
+                          >
+                            <input
+                              type="radio"
+                              name="shippingOption"
+                              value={rate.object_id}
+                              checked={!useFlatRate && selectedShippingRate?.object_id === rate.object_id}
+                              onChange={() => { setSelectedShippingRate(rate); setUseFlatRate(false); }}
+                              className="form-radio"
+                            />
+                            <span>
+                              <strong>{rate.provider}</strong> - {rate.servicelevel.name} ({rate.duration_terms}):{" "}
+                              <strong>${rate.amount}</strong>
+                            </span>
+                          </label>
+                        ))}
                       </div>
-                    )}
+
+                      {/* Shipping Insurance */}
+                      <div className="mt-4 p-3 border rounded-lg bg-blue-50">
+                        <label className="flex items-start space-x-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={useInsurance}
+                            onChange={e => setUseInsurance(e.target.checked)}
+                            className="form-checkbox mt-0.5"
+                          />
+                          <span className="text-sm">
+                            <strong>Shipping Insurance</strong> - ${INSURANCE_FEE.toFixed(2)}{" "}
+                            <span className="text-gray-500">(Recommended - protects your order against loss or damage)</span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
                   </div>
 
                   {temp && (

@@ -133,7 +133,6 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity,
         productId: product.id,
         purchasePrice: itemPrice, // Store per-item price
-        attributeId: item.attributeId || null, // Store the attributeId if exists
         productSnapshot: {
           id: product.id,
           name: product.name,

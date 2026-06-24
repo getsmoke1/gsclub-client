@@ -206,18 +206,18 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    // Note: address intentionally NOT sent to NMI for payment_token transactions
-    // The $8.70 successful payment confirmed payment_token works without address
-    // "address1 required" only appears for direct card number (not payment_token)
-    // AVS mismatch was causing hard declines - address skipped to bypass
-    // If customer uses "Billing address different" toggle, send that billing address only
-    if (billingDifferent && billingStreetAddress) {
-      nmiRequestData.address1 = billingStreetAddress;
-      if (billingCity)    nmiRequestData.city    = billingCity;
-      if (billingState)   nmiRequestData.state   = billingState;
-      if (billingZipCode) nmiRequestData.zip     = billingZipCode;
-      nmiRequestData.country = "US";
-    }
+    // Use billing address if set and different; otherwise use shipping address
+    // NMI requires address1 for this merchant account
+    const finalAddrStreet = (billingDifferent && billingStreetAddress) ? billingStreetAddress : shippingStreetAddress;
+    const finalAddrCity   = (billingDifferent && billingCity)          ? billingCity          : shippingCity;
+    const finalAddrState  = (billingDifferent && billingState)         ? billingState         : shippingState;
+    const finalAddrZip    = (billingDifferent && billingZipCode)       ? billingZipCode       : shippingZipCode;
+    console.log("NMI address:", { street: finalAddrStreet, city: finalAddrCity, state: finalAddrState, zip: finalAddrZip });
+    if (finalAddrStreet) nmiRequestData.address1 = finalAddrStreet;
+    if (finalAddrCity)   nmiRequestData.city     = finalAddrCity;
+    if (finalAddrState)  nmiRequestData.state    = finalAddrState;
+    if (finalAddrZip)    nmiRequestData.zip      = finalAddrZip;
+    nmiRequestData.country = "US";
     if (email)  nmiRequestData.email = email;
 
     // For subscriptions: add the card to Customer Vault during this transaction

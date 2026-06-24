@@ -289,8 +289,10 @@ const CheckoutPage = () => {
         router.push("/checkout/success");
       } else {
         const msg = getNmiUserMessage(data.message || "", data.errorDetails?.response_code);
-        setPaymentError(msg);
+        const debugMsg = `${msg} [${data.message || "unknown"}]`;
+        setPaymentError(debugMsg);
         toast.error(msg);
+        console.error("[Payment error]", data);
       }
     } catch (err) {
       console.error("Payment error:", err);

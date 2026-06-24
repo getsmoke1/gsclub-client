@@ -14,6 +14,7 @@ import { FaSpinner } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { Product } from "@/types/product";
 import { useRouter } from "next/navigation";
+import { getNmiUserMessage } from "@/lib/nmiErrorMessages";
 
 interface TokenResponse {
   token: string;
@@ -381,10 +382,12 @@ const CheckoutPage = () => {
         router.push(`/checkout/success`);
       } else {
         // Payment failed - show full NMI error details
-        const errMsg = data.message || "Payment failed. Please try again.";
-        const details = data.errorDetails ? ` [r:${data.errorDetails.response}|c:${data.errorDetails.response_code}|tx:${data.errorDetails.transactionid}]` : "";
-        setPaymentError(errMsg + details);
-        toast.error(errMsg + details);
+        const friendlyMsg = getNmiUserMessage(
+          data.message || "",
+          data.errorDetails?.response_code
+        );
+        setPaymentError(friendlyMsg);
+        toast.error(friendlyMsg);
         // router.push(`/checkout/failure`);
       }
     } catch (error) {

@@ -88,6 +88,8 @@ const CheckoutPage = () => {
   const { data: session, status } = useSession();
   const _email = session?.user?.email || "";
   const { items } = useCart();
+  const itemsRef = useRef(items);
+  useEffect(() => { itemsRef.current = items; }, [items]);
   const [loading, _setLoading] = useState(false);
   // const [loading2, setLoading2] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
@@ -311,7 +313,8 @@ const CheckoutPage = () => {
     setPaymentProcessing(true);
     try {
       // Create line items from cart items
-      const lineItems = items.map((item) => ({
+      const currentItems = itemsRef.current;
+      const lineItems = currentItems.map((item) => ({
         id: item.id,
         quantity: item.quantity,
         attributeId: item.attributeId || null,
@@ -320,8 +323,8 @@ const CheckoutPage = () => {
       }));
 
       // Detect if any item is a subscription
-      const hasSubscription = items.some(i => i.isSubscription);
-      const subscriptionFrequency = items.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
+      const hasSubscription = currentItems.some(i => i.isSubscription);
+      const subscriptionFrequency = currentItems.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
       // Use refs to avoid stale closure - refs always have current values
       const emailToSend = status === "authenticated"

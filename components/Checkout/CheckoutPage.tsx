@@ -121,6 +121,7 @@ const CheckoutPage = () => {
   // Add state for NMI script loading
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [fieldsReady, setFieldsReady] = useState(false);
+  const collectJsConfigured = useRef(false);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [productLoading, setProductLoading] = useState(false);
@@ -210,13 +211,19 @@ const CheckoutPage = () => {
     });
   },[]);
 
-  // Configure NMI once when payment form is shown
+  // Configure NMI once when both script is loaded AND payment form is shown
+  // Uses ref guard to prevent double-registration (fixes mobile where script loads after temp2)
   useEffect(() => {
-    if (scriptLoaded && temp2 && window.CollectJS) {
+    if (scriptLoaded && temp2 && window.CollectJS && !collectJsConfigured.current) {
       configureCollectJS();
+      collectJsConfigured.current = true;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [temp2]); // Only re-run when temp2 changes, not on every scriptLoaded update
+  }, [scriptLoaded, temp2, configureCollectJS]);
+
+  // Reset guard when payment form is hidden
+  useEffect(() => {
+    if (!temp2) collectJsConfigured.current = false;
+  }, [temp2]);
 
   // Function to configure CollectJS
 

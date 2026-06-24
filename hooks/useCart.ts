@@ -105,7 +105,7 @@ const useCart = create<CartStore>((set, get) => ({
 
         if (response.status === 200) {
           set({ items: updatedItems });
-          toast.success("Item added to cart");
+          
           set({ loading: false });
           return true;
         }
@@ -118,7 +118,7 @@ const useCart = create<CartStore>((set, get) => ({
       // Save to local storage
       localStorage.setItem("cart", JSON.stringify(updatedItems));
       set({ items: updatedItems });
-      toast.success("Item added to cart");
+      
       set({ loading: false });
       return true;
     }
@@ -169,7 +169,7 @@ const useCart = create<CartStore>((set, get) => ({
 
         if (response.status === 200) {
           set({ items: updatedItems });
-          toast.success("Items added to cart");
+          
           set({ loading: false });
           return true;
         }
@@ -182,7 +182,7 @@ const useCart = create<CartStore>((set, get) => ({
       // Save to local storage
       localStorage.setItem("cart", JSON.stringify(updatedItems));
       set({ items: updatedItems });
-      toast.success("Items added to cart");
+      
       set({ loading: false });
       return true;
     }

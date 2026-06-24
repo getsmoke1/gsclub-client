@@ -22,10 +22,11 @@ export async function POST(req: NextRequest) {
       shippingAmount,
       _insuranceAmount,  // prefixed to avoid ESLint warning
       nameOnCard,
-      billingStreetAddress: _billingStreetAddress,
-      billingCity: _billingCity,
-      billingState: _billingState,
-      billingZipCode: _billingZipCode,
+      billingStreetAddress,
+      billingCity,
+      billingState,
+      billingZipCode,
+      billingDifferent,
       // Subscription fields (optional)
       isSubscription,
       subscriptionFrequency,
@@ -205,11 +206,15 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    // Merchant account requires address1 field - send shipping address as billing
-    if (shippingStreetAddress) nmiRequestData.address1 = shippingStreetAddress;
-    if (shippingCity) nmiRequestData.city = shippingCity;
-    if (shippingState) nmiRequestData.state = shippingState;
-    if (shippingZipCode) nmiRequestData.zip = shippingZipCode;
+    // Use billing address if explicitly set (billing != shipping), else fall back to shipping
+    const addrStreet = (billingDifferent && billingStreetAddress) ? billingStreetAddress : shippingStreetAddress;
+    const addrCity   = (billingDifferent && billingCity)          ? billingCity          : shippingCity;
+    const addrState  = (billingDifferent && billingState)         ? billingState         : shippingState;
+    const addrZip    = (billingDifferent && billingZipCode)       ? billingZipCode       : shippingZipCode;
+    if (addrStreet) nmiRequestData.address1 = addrStreet;
+    if (addrCity)   nmiRequestData.city     = addrCity;
+    if (addrState)  nmiRequestData.state    = addrState;
+    if (addrZip)    nmiRequestData.zip      = addrZip;
     nmiRequestData.country = "US";
     if (email)  nmiRequestData.email = email;
 

@@ -390,10 +390,11 @@ const CheckoutPage = () => {
           shippingAmount: shippingAmount.toFixed(2),
           insuranceAmount: (useInsuranceRef.current ? 3.00 : 0).toFixed(2),
           nameOnCard: nameOnCardRef.current || selectedCardRef.current?.name,
-          billingStreetAddress: billingDifferentRef.current && billingAddressRef.current?.streetAddress ? billingAddressRef.current.streetAddress : selectedCardRef.current?.streetAddress,
-          billingCity: billingDifferentRef.current && billingAddressRef.current?.city ? billingAddressRef.current.city : selectedCardRef.current?.city,
-          billingState: billingDifferentRef.current && billingAddressRef.current?.state ? billingAddressRef.current.state : selectedCardRef.current?.state,
-          billingZipCode: billingDifferentRef.current && billingAddressRef.current?.zipCode ? billingAddressRef.current.zipCode : selectedCardRef.current?.zipCode,
+          billingDifferent: billingDifferentRef.current,
+          billingStreetAddress: billingAddressRef.current?.streetAddress,
+          billingCity: billingAddressRef.current?.city,
+          billingState: billingAddressRef.current?.state,
+          billingZipCode: billingAddressRef.current?.zipCode,
         }),
       });
 

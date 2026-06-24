@@ -127,6 +127,13 @@ const CheckoutPage = () => {
   const [fieldsReady, setFieldsReady] = useState(false);
   const collectJsConfigured = useRef(false);
 
+  // If CollectJS script is already loaded from cache (navigation back), set scriptLoaded immediately
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as Window & { CollectJS?: unknown }).CollectJS) {
+      setScriptLoaded(true);
+    }
+  }, []);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [productLoading, setProductLoading] = useState(false);
 
@@ -723,7 +730,23 @@ const CheckoutPage = () => {
                       </div>
 
                       {paymentError && (
-                        <div className="text-red-500 text-sm py-2">{paymentError}</div>
+                        <div className="py-2">
+                          <div className="text-red-500 text-sm mb-2">{paymentError}</div>
+                          {paymentError.toLowerCase().includes("address") && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPaymentError("");
+                                setTemp2(false);
+                                setFieldsReady(false);
+                                collectJsConfigured.current = false;
+                              }}
+                              className="text-sm underline text-gray-600"
+                            >
+                              Edit shipping address
+                            </button>
+                          )}
+                        </div>
                       )}
 
                       <Button

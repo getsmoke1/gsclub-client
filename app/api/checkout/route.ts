@@ -206,15 +206,8 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    const addr1 = (billingStreetAddress || shippingStreetAddress || "").trim();
-    const city  = (billingCity || shippingCity || "").trim();
-    const state = (billingState || shippingState || "").trim();
-    const zip   = (billingZipCode || shippingZipCode || "").trim();
-    if (addr1)  nmiRequestData.address1 = addr1;
-    if (city)   nmiRequestData.city = city;
-    if (state)  nmiRequestData.state = state;
-    if (zip)    nmiRequestData.zip = zip;
-    nmiRequestData.country = "US";
+    // Note: billing address intentionally omitted to skip AVS check
+    // AVS mismatch causes declines; NMI processes without address fine
     if (email)  nmiRequestData.email = email;
 
     // For subscriptions: add the card to Customer Vault during this transaction

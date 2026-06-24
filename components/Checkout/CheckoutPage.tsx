@@ -1,343 +1,252 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import useCart from "@/hooks/useCart";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
-import Link from "next/link";
-import { IoIosArrowBack } from "react-icons/io";
 import Script from "next/script";
-import Image from "next/image";
-import ShippingAddress from "./../myAccount/ShippingAddress";
-import ShippingAddressModal from "./ShippingAddressModal";
-import { FaSpinner } from "react-icons/fa";
-import { Button } from "../ui/button";
-import { Product } from "@/types/product";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { IoIosArrowBack } from "react-icons/io";
+import { FaSpinner, FaLock } from "react-icons/fa";
+import useCart from "@/hooks/useCart";
+import { Product } from "@/types/product";
 import { getNmiUserMessage } from "@/lib/nmiErrorMessages";
+import ShippingAddress from "./../myAccount/ShippingAddress";
 
-interface TokenResponse {
-  token: string;
-  card?: {
-    type?: string;
-    last4?: string;
-    exp_month?: string;
-    exp_year?: string;
-  }
-}
-
-interface CollectJSFieldConfig {
-  selector: string;
-  title: string;
-  placeholder: string;
-}
-
-interface CollectJSConfig {
-  paymentSelector: string;
-  variant: string;
-  fields: {
-    ccnumber: CollectJSFieldConfig;
-    ccexp: CollectJSFieldConfig;
-    cvv: CollectJSFieldConfig;
-  };
-  customCss?: Record<string, string>;
-  fieldsAvailableCallback?: () => void;
-  validationCallback?: (field: string, status: boolean, message: string) => void;
-  callback: (response: TokenResponse) => void;
-}
-
-declare global {
-  interface Window {
-    CollectJS: {
-      configure: (config: CollectJSConfig) => void;
-    }
-  }
-}
-
-interface ServiceLevel {
-  name: string;
-}
-
-interface ShippingRate {
-  object_id: string;
-  provider: string;
-  servicelevel: ServiceLevel;
-  duration_terms: string;
-  amount: string;
-  currency: string;
-}
-
+// ─── Types ───────────────────────────────────────────────────────────────────
 interface Card {
   id: string;
   name: string;
   streetAddress: string;
-  state: string;
   city: string;
+  state: string;
   zipCode: string;
 }
-
-interface FormData {
-  email?: string;
-  phone: string;
-  deliveryType: "one_time" | "recurring";
-  deliveryFrequency?: string;
-  addressId?: string;
+interface CartItem {
+  id: string;
+  quantity: number;
+  price: number;
+  attributeId?: string | null;
+  isSubscription?: boolean;
+  subscriptionFrequency?: string | null;
+  productSnapshot?: { name: string; currentPrice: number };
+}
+interface CollectJSConfig {
+  paymentSelector: string;
+  variant: string;
+  fields: Record<string, { selector: string; title: string; placeholder: string }>;
+  customCss: Record<string, string>;
+  fieldsAvailableCallback: () => void;
+  validationCallback: (field: string, status: boolean, message: string) => void;
+  callback: (response: { token: string }) => void;
+}
+declare global {
+  interface Window {
+    CollectJS: { configure: (config: CollectJSConfig) => void };
+  }
 }
 
+// ─── Constants ───────────────────────────────────────────────────────────────
+const FLAT_RATE = 7.69;
+const FREE_THRESHOLD = 89;
+const INSURANCE_FEE = 3.00;
+
+const US_STATES = [
+  "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut",
+  "Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa",
+  "Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan",
+  "Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada",
+  "New Hampshire","New Jersey","New Mexico","New York","North Carolina",
+  "North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island",
+  "South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont",
+  "Virginia","Washington","West Virginia","Wisconsin","Wyoming",
+];
+
+// ─── Component ───────────────────────────────────────────────────────────────
 const CheckoutPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const _email = session?.user?.email || "";
-  const statusRef = useRef(status);
-  const sessionRef = useRef(session);
-  useEffect(() => { statusRef.current = status; }, [status]);
-  useEffect(() => { sessionRef.current = session; }, [session]);
   const { items } = useCart();
-  const itemsRef = useRef(items);
-  useEffect(() => { itemsRef.current = items; }, [items]);
-  const [loading, _setLoading] = useState(false);
-  // const [loading2, setLoading2] = useState(false);
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+
+  // Stale closure refs
+  const itemsRef = useRef<CartItem[]>(items as CartItem[]);
+  useEffect(() => { itemsRef.current = items as CartItem[]; }, [items]);
+  const statusRef = useRef(status);
+  useEffect(() => { statusRef.current = status; }, [status]);
+  const sessionRef = useRef(session);
+  useEffect(() => { sessionRef.current = session; }, [session]);
+
+  // Address
+  const [_selectedCard, setSelectedCard] = useState<Card | null>(null);
   const selectedCardRef = useRef<Card | null>(null);
-  const [temp, setTemp] = useState(false);
-  const [temp2, setTemp2] = useState(false);
-  const [selectedShippingRate, _setSelectedShippingRate] =
-    useState<ShippingRate | null>(null);
-  const [_shippingRates, _setShippingRates] = useState<ShippingRate[] | null>(
-    null
-  );
-  // Flat rate shipping & insurance
-  const FLAT_RATE = 7.69;
-  const FREE_THRESHOLD = 89;
-  const INSURANCE_FEE = 3.00;
-  const [useFlatRate, setUseFlatRate] = useState(true);
+
+  // Guest form fields (controlled inputs)
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [guestFirstName, setGuestFirstName] = useState("");
+  const [guestLastName, setGuestLastName] = useState("");
+  const [guestStreet, setGuestStreet] = useState("");
+  const [guestCity, setGuestCity] = useState("");
+  const [guestState, setGuestState] = useState("");
+  const [guestZip, setGuestZip] = useState("");
+
+  // Refs for guest fields (stale closure prevention)
+  const guestEmailRef = useRef("");
+  const guestFirstNameRef = useRef("");
+  const guestLastNameRef = useRef("");
+  const guestStreetRef = useRef("");
+  const guestCityRef = useRef("");
+  const guestStateRef = useRef("");
+  const guestZipRef = useRef("");
+
+  // Billing address
   const [billingDifferent, setBillingDifferent] = useState(false);
-  const [_billingAddress, setBillingAddress] = useState<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
-  const billingAddressRef = useRef<{name:string;streetAddress:string;city:string;state:string;zipCode:string} | null>(null);
   const billingDifferentRef = useRef(false);
+  const [billingStreet, setBillingStreet] = useState("");
+  const [billingCity, setBillingCity] = useState("");
+  const [billingState, setBillingState] = useState("");
+  const [billingZip, setBillingZip] = useState("");
+  const billingRef = useRef({ street: "", city: "", state: "", zip: "" });
+
+  // Insurance
+  const [useInsurance, setUseInsurance] = useState(true);
+  const useInsuranceRef = useRef(true);
+
+  // Payment form fields
   const [nameOnCard, setNameOnCard] = useState("");
   const nameOnCardRef = useRef("");
   const [paymentEmail, setPaymentEmail] = useState("");
   const paymentEmailRef = useRef("");
-  const [useInsurance, setUseInsurance] = useState(true);
-  const useInsuranceRef = useRef(true);
 
-  // Add state for NMI script loading
+  // NMI / CollectJS
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [fieldsReady, setFieldsReady] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const collectJsConfigured = useRef(false);
 
-  // If CollectJS script is already loaded from cache (navigation back), set scriptLoaded immediately
+  // Products for display
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // If script already cached from prior navigation
   useEffect(() => {
     if (typeof window !== "undefined" && (window as Window & { CollectJS?: unknown }).CollectJS) {
       setScriptLoaded(true);
     }
   }, []);
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [productLoading, setProductLoading] = useState(false);
-
+  // Fetch products for display
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (items.length === 0) {
-        setProducts([]);
-        return;
-      }
-
-      setProductLoading(true);
-      try {
-        const uniqueProductIds = [...new Set(items.map(item => item.id))];
-        const productIds = uniqueProductIds.join("&id=");
-        const res = await fetch(`/api/products?id=${productIds}`);
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setProductLoading(false);
-      }
-    };
-
-    fetchProducts();
+    if (items.length === 0) { setProducts([]); return; }
+    const ids = [...new Set(items.map((i) => i.id))].join("&id=");
+    fetch(`/api/products?id=${ids}`)
+      .then((r) => r.json())
+      .then((d) => setProducts(d.products || []))
+      .catch(() => {});
   }, [items]);
 
-
-  const getFlavorName = (product: Product, attributeId?: string) => {
-    if (!attributeId || !product.productFlavors || product.productFlavors.length === 0) {
-      return null;
-    }
-    const flavorItem = product.productFlavors.find(pf => pf.flavorId === attributeId);
-    if (flavorItem && flavorItem.flavor) {
-      return flavorItem.flavor.name;
-    }
-    return null;
-  };
-
-  const getProductNameWithFlavor = (product: Product, attributeId?: string) => {
-    const baseName = product.name.charAt(0).toUpperCase() + product.name.slice(1);
-    const flavorName = getFlavorName(product, attributeId);
-    if (flavorName) {
-      return `${baseName} - ${flavorName}`;
-    }
-    return baseName;
-  };
-
-    const configureCollectJS = useCallback(() => {
+  // NMI CollectJS configuration
+  const configureCollectJS = useCallback(() => {
     window.CollectJS.configure({
-      paymentSelector: "#payButton",
+      paymentSelector: "#placeOrderBtn",
       variant: "inline",
       fields: {
-        ccnumber: {
-          selector: "#ccnumber",
-          title: "Card Number",
-          placeholder: "0000 0000 0000 0000",
-        },
-        ccexp: {
-          selector: "#ccexp",
-          title: "Card Expiration",
-          placeholder: "MM / YY",
-        },
-        cvv: {
-          selector: "#cvv",
-          title: "CVV Code",
-          placeholder: "***",
-        }
+        ccnumber: { selector: "#ccnumber", title: "Card Number", placeholder: "0000 0000 0000 0000" },
+        ccexp:    { selector: "#ccexp",    title: "Expiration Date", placeholder: "MM / YY" },
+        cvv:      { selector: "#cvv",      title: "CVV", placeholder: "***" },
       },
-
-      customCss: {
-        'border-radius': '0.375rem',
-        'padding': '0.75rem',
-      },
-      fieldsAvailableCallback: function () {
-        console.log("Collect.js fields are now available");
-        setFieldsReady(true);
-      },
-      validationCallback: function (field: string, status: boolean, message: string) {
-        console.log(`${field} is ${status ? 'valid' : 'invalid'}: ${message}`);
-      },
-      callback: function (response: { token: string }) {
-        console.log("Payment token created:", response.token);
+      customCss: { "border-radius": "0.375rem", "padding": "0.75rem", "font-size": "14px" },
+      fieldsAvailableCallback: () => { setFieldsReady(true); },
+      validationCallback: (field, valid, msg) => { console.log(field, valid, msg); },
+      callback: (response: { token: string }) => {
         handlePaymentComplete(response.token);
-      }
+      },
     });
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Configure NMI once when both script is loaded AND payment form is shown
-  // Uses ref guard to prevent double-registration (fixes mobile where script loads after temp2)
+  // Configure when script ready
   useEffect(() => {
-    if (scriptLoaded && temp2 && window.CollectJS && !collectJsConfigured.current) {
+    if (scriptLoaded && window.CollectJS && !collectJsConfigured.current) {
       configureCollectJS();
       collectJsConfigured.current = true;
     }
-  }, [scriptLoaded, temp2, configureCollectJS]);
+  }, [scriptLoaded, configureCollectJS]);
 
-  // Reset guard when payment form is hidden
-  useEffect(() => {
-    if (!temp2) collectJsConfigured.current = false;
-  }, [temp2]);
+  // ── Totals ──────────────────────────────────────────────────────────────────
+  const getProductForItem = (id: string) => products.find((p) => p.id === id);
+  const subtotal = items.reduce((sum, item) => {
+    const prod = getProductForItem(item.id);
+    const price = prod ? (prod.currentPrice ?? item.price ?? 0) : (item.price ?? 0);
+    return sum + price * item.quantity;
+  }, 0);
+  const originalTotal = items.reduce((sum, item) => {
+    const prod = getProductForItem(item.id);
+    const price = prod ? (prod.currentPrice ?? item.price ?? 0) : (item.price ?? 0);
+    return sum + price * item.quantity;
+  }, 0);
+  const discount = originalTotal > subtotal ? originalTotal - subtotal : 0;
+  const isFreeShipping = subtotal >= FREE_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : FLAT_RATE;
+  const insuranceCost = useInsurance ? INSURANCE_FEE : 0;
+  const total = subtotal + shippingCost + insuranceCost;
 
-  // Function to configure CollectJS
-
-
-  const [formData, setFormData] = useState<FormData | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    getValues,
-  } = useForm<FormData>({
-  });
-
-  const onSubmit = async (formData: FormData) => {
-    if (!selectedCard) {
-      if (status === "unauthenticated") {
-        toast.error("Please complete your shipping address");
-      } else {
-        toast.error("Please select a shipping address");
-      }
-      return;
-    }
-    // Flat rate - no carrier lookup needed
-    setFormData(formData);
-    setUseFlatRate(true);
-    setTemp(true);
-  };
-
-  const handlePay = async () => {
-    if (items.length === 0) {
-      toast.error("Your cart is empty. Please add items before checking out.");
-      router.push("/");
-      return;
-    }
-    if (!selectedCard) {
-      if (status === "unauthenticated") {
-        toast.error("Please complete your shipping address");
-      } else {
-        toast.error("Please select a shipping address");
-      }
-      return;
-    }
-    // Flat rate always selected - no shipping validation needed
-    if (!formData) {
-      toast.error("Form data is missing. Please try again.");
-      return;
-    }
-
-    setTemp2(true);
-    // configureCollectJS will be called by useEffect when temp2=true
-  };
-
+  // ── Card select (authenticated users) ──────────────────────────────────────
   const handleCardSelect = (card: Card) => {
     setSelectedCard(card);
     selectedCardRef.current = card;
-    setValue("addressId", card.id);
   };
 
-  const handleAddressSubmit = (address: Card) => {
-    setSelectedCard(address);
-    selectedCardRef.current = address;
-  };
-
-  // Calculate original total amount (before any discounts)
-  const originalTotalAmount = items.reduce((total, item) => {
-    const product = products.find(p => p.id === item.id);
-    if (!product) return total;
-
-    const packCount = product.packCount || 1;
-    const quantity = item.quantity;
-    return total + ((product.originalPrice / packCount) * quantity);
-  }, 0);
-
-  // Calculate current total amount (with product-specific discounts)
-  const totalAmount = items.reduce((total, item) => {
-    const product = products.find(p => p.id === item.id);
-    if (!product) return total;
-
-    const packCount = product.packCount || 1;
-    const quantity = item.quantity;
-    return total + ((product.currentPrice / packCount) * quantity);
-  }, 0);
-
-  // Calculate discount amount
-  const discountAmount = originalTotalAmount - totalAmount;
-
-  // Calculate shipping amount
-  const isFreeShipping = totalAmount >= FREE_THRESHOLD;
-  const shippingAmount = useFlatRate ? (isFreeShipping ? 0 : FLAT_RATE) : (selectedShippingRate?.amount ? parseFloat(selectedShippingRate.amount) : 0);
-  const insuranceAmount = useInsurance ? INSURANCE_FEE : 0;
-
-  // Calculate final total
-  const finalTotal = totalAmount + shippingAmount + insuranceAmount;
-
-  const [paymentProcessing, setPaymentProcessing] = useState(false);
-  const [paymentError, setPaymentError] = useState("");
-
-  const handlePaymentComplete = async (token: string) => {
+  // ── Payment complete (CollectJS callback) ──────────────────────────────────
+  const handlePaymentComplete = useCallback(async (token: string) => {
     setPaymentProcessing(true);
     try {
-      // Create line items from cart items
-      const currentItems = itemsRef.current;
+      const currentStatus  = statusRef.current;
+      const currentSession = sessionRef.current;
+      const currentItems   = itemsRef.current;
+
+      // Resolve email
+      const emailToSend =
+        currentStatus === "authenticated"
+          ? currentSession?.user?.email
+          : (paymentEmailRef.current || guestEmailRef.current || "");
+
+      if (!emailToSend) {
+        setPaymentError("Please enter your email address.");
+        toast.error("Please enter your email address.");
+        setPaymentProcessing(false);
+        return;
+      }
+
+      if (!currentItems.length) {
+        setPaymentError("Your cart is empty.");
+        setPaymentProcessing(false);
+        return;
+      }
+
+      // Resolve shipping address
+      const addr = selectedCardRef.current;
+      if (!addr && currentStatus === "unauthenticated") {
+        // Build from guest form refs
+        if (!guestStreetRef.current || !guestCityRef.current || !guestStateRef.current || !guestZipRef.current) {
+          setPaymentError("Please complete your shipping address.");
+          toast.error("Please complete your shipping address.");
+          setPaymentProcessing(false);
+          return;
+        }
+      } else if (!addr && currentStatus === "authenticated") {
+        setPaymentError("Please select a shipping address.");
+        toast.error("Please select a shipping address.");
+        setPaymentProcessing(false);
+        return;
+      }
+
+      const shippingName   = addr ? addr.name            : `${guestFirstNameRef.current} ${guestLastNameRef.current}`.trim();
+      const shippingStreet = addr ? addr.streetAddress   : guestStreetRef.current;
+      const shippingCity   = addr ? addr.city            : guestCityRef.current;
+      const shippingState  = addr ? addr.state           : guestStateRef.current;
+      const shippingZip    = addr ? addr.zipCode         : guestZipRef.current;
+
       const lineItems = currentItems.map((item) => ({
         id: item.id,
         quantity: item.quantity,
@@ -346,545 +255,413 @@ const CheckoutPage = () => {
         subscriptionFrequency: item.subscriptionFrequency || null,
       }));
 
-      // Detect if any item is a subscription
-      const hasSubscription = currentItems.some(i => i.isSubscription);
-      const subscriptionFrequency = currentItems.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
+      const hasSubscription     = currentItems.some((i) => i.isSubscription);
+      const subscriptionFreq    = currentItems.find((i) => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
-      // Use refs to avoid stale closure - refs always have current values
-      const currentStatus = statusRef.current;
-      const currentSession = sessionRef.current;
-      const emailToSend = currentStatus === "authenticated"
-        ? currentSession?.user?.email
-        : (paymentEmailRef.current || getValues("email") || formData?.email || "");
-
-      // Log what we have for debugging
-      console.log("[Checkout] status:", currentStatus, "email:", emailToSend, "addr:", selectedCardRef.current?.streetAddress);
-
-      if (!emailToSend) {
-        setPaymentError("Please enter your email address before paying.");
-        toast.error("Please enter your email address.");
-        setPaymentProcessing(false);
-        return;
-      }
-
-      // Make API request to your backend
       const response = await fetch("/api/checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           token,
           email: emailToSend,
           items: lineItems,
           isSubscription: hasSubscription,
-          subscriptionFrequency: subscriptionFrequency,
-          // Use refs to avoid stale closure from Collect.js callback
-          shippingName: selectedCardRef.current?.name,
-          shippingStreetAddress: selectedCardRef.current?.streetAddress,
-          shippingState: selectedCardRef.current?.state,
-          shippingCity: selectedCardRef.current?.city,
-          shippingZipCode: selectedCardRef.current?.zipCode,
-          shippingRateId: selectedShippingRate?.object_id,
-          carrier: selectedShippingRate?.provider,
-          shippingAmount: shippingAmount.toFixed(2),
-          insuranceAmount: (useInsuranceRef.current ? 3.00 : 0).toFixed(2),
-          nameOnCard: nameOnCardRef.current || selectedCardRef.current?.name,
+          subscriptionFrequency: subscriptionFreq,
+          shippingName,
+          shippingStreetAddress: shippingStreet,
+          shippingCity,
+          shippingState,
+          shippingZipCode: shippingZip,
+          shippingAmount: shippingCost.toFixed(2),
+          insuranceAmount: (useInsuranceRef.current ? INSURANCE_FEE : 0).toFixed(2),
+          nameOnCard: nameOnCardRef.current || shippingName,
           billingDifferent: billingDifferentRef.current,
-          billingStreetAddress: billingAddressRef.current?.streetAddress,
-          billingCity: billingAddressRef.current?.city,
-          billingState: billingAddressRef.current?.state,
-          billingZipCode: billingAddressRef.current?.zipCode,
+          billingStreetAddress: billingRef.current.street,
+          billingCity: billingRef.current.city,
+          billingState: billingRef.current.state,
+          billingZipCode: billingRef.current.zip,
         }),
       });
 
       const data = await response.json();
-
       if (data.success) {
-        // Payment successful
         toast.success("Payment successful!");
-        router.push(`/checkout/success`);
+        router.push("/checkout/success");
       } else {
-        // Payment failed
-        const friendlyMsg = getNmiUserMessage(
-          data.message || "",
-          data.errorDetails?.response_code
-        );
-        setPaymentError(friendlyMsg);
-        toast.error(friendlyMsg);
-        // router.push(`/checkout/failure`);
+        const msg = getNmiUserMessage(data.message || "", data.errorDetails?.response_code);
+        setPaymentError(msg);
+        toast.error(msg);
       }
-    } catch (error) {
-      console.error("Payment error:", error);
-      setPaymentError("Something went wrong with your payment. Please try again.");
-      toast.error("Something went wrong with your payment. Please try again.");
+    } catch (err) {
+      console.error("Payment error:", err);
+      setPaymentError("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setPaymentProcessing(false);
     }
-  };
+  }, [router, shippingCost]);
 
+  // ── Input helper ─────────────────────────────────────────────────────────────
+  const inputCls = "w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-red-400";
+  const labelCls = "block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide";
+
+  // ── Render ───────────────────────────────────────────────────────────────────
   return (
-    <main className="bg-white text-black pt-5 pb-16 min-h-[100vh]">
-      {/* Preload the NMI script as soon as page loads */}
+    <main className="bg-white text-black pt-5 pb-20 min-h-screen">
       <Script
         src="https://secure.nmi.com/token/Collect.js"
         data-tokenization-key={process.env.NEXT_PUBLIC_NMI_TOKEN_KEY}
         data-variant="inline"
         strategy="afterInteractive"
-        onLoad={() => {
-          console.log("NMI Script loaded");
-          setScriptLoaded(true);
-        }}
+        onLoad={() => { setScriptLoaded(true); }}
       />
 
-      <article className="w-11/12 mx-auto font-unbounded">
+      <article className="w-11/12 mx-auto max-w-6xl font-unbounded">
         <Link href="/cart">
-          <span className="font-bold flex items-center gap-1 hover:underline mb-4 lg:mb-7">
-            <IoIosArrowBack />
-            Go back
+          <span className="font-bold flex items-center gap-1 hover:underline mb-6 text-sm">
+            <IoIosArrowBack /> Go back
           </span>
         </Link>
-        <section className="flex flex-col-reverse lg:flex-row justify-between gap-4 w-full">
-          <div className="rounded-md flex flex-col-reverse md:grid md:grid-cols-2 gap-6 w-full lg:w-8/12 lg:h-[90vh] md:border border-gray-300">
-            {!temp2 && (
-              <>
-                <div className="p-0 md:p-6">
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-6 mt-2 md:mt-0"
-                  >
-                    <div className="space-y-6 p-6 md:p-0 bg-white rounded-md">
-                      {status === "unauthenticated" && (
-                        <div>
-                          <label className="block mb-1 font-medium">E-Mail</label>
-                          <input
-                            type="email"
-                            {...register("email", {
-                              required: "Email is required",
-                              pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                message: "Please enter a valid email address",
-                              },
-                            })}
-                            className={`w-full p-2 border rounded ${errors.email ? "border-red-500" : "border-gray-300"
-                              }`}
-                          />
-                          {errors.email && (
-                            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-                          )}
-                        </div>
-                      )}
-                      <div>
-                        <label className="block mb-1 font-medium">Phone Number</label>
-                        <input
-                          type="tel"
-                          {...register("phone", {
-                            required: "Phone number is required",
-                            pattern: {
-                              value: /^[0-9]*$/,
-                              message: "Only numbers are allowed"
-                            },
-                            maxLength: {
-                              value: 15,
-                              message: "Phone number is too long"
-                            }
-                          })}
-                          className={`w-full p-2 border rounded ${errors.phone ? "border-red-500" : "border-gray-300"
-                            }`}
-                          onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            }
-                          }}
-                        />
-                        {errors.phone && (
-                          <p className="text-red-500 text-sm mt-1">
-                            {errors.phone.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
 
-                    {/* for small screen */}
-                    <div className="block md:hidden pt-2">
-                      <div className="p-6 md:p-0 bg-white rounded-md">
-                        <h3 className="font-semibold pb-4">Cart Total</h3>
-                        <div>
-                          <p className="border-b flex justify-between py-2 border-gray-300">
-                            <span>{items.length} Items</span>
-                            <span className="font-semibold">
-                              ${originalTotalAmount.toFixed(2)}
-                            </span>
-                          </p>
-                          <p className="border-b flex justify-between py-2 border-gray-300">
-                            <span>Discount</span>
-                            <span className="font-semibold">
-                              -${discountAmount.toFixed(2)}
-                            </span>
-                          </p>
-                          <p className="border-b flex justify-between py-2 border-gray-300">
-                            <span>Shipping</span>
-                            <span className="font-semibold">
-                              {useFlatRate
-                                ? (isFreeShipping ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                                : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
-                            </span>
-                          </p>
-                          {useInsurance && (
-                            <p className="border-b flex justify-between py-2 border-gray-300">
-                              <span>Shipping Insurance</span>
-                              <span className="font-semibold">${INSURANCE_FEE.toFixed(2)}</span>
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex justify-between font-bold mt-2">
-                          <span>Total</span>
-                          <span>${finalTotal.toFixed(2)}</span>
-                        </div>
-                      </div>
-                    </div>
+        <div className="flex flex-col lg:flex-row gap-8">
 
-                    {!temp && (
-                      <div className="">
-                        <Button
-                          variant="primary"
-                          type="submit"
-                          disabled={loading || items.length === 0}
-                          className="w-full"
-                        >
-                          {loading ? (
-                            <div className="flex items-center gap-2 justify-center">
-                              <span>Generating shipping carrier choices</span>
-                              <FaSpinner className="animate-spin" />
-                            </div>
-                          ) : (
-                            "Continue"
-                          )}
-                        </Button>
-                      </div>
-                    )}
-                  </form>
+          {/* ── LEFT: Forms ──────────────────────────────────────────────────── */}
+          <div className="w-full lg:w-7/12 flex flex-col gap-6">
 
-                  <div className="my-4">
-                    {temp && (
-                      <div className="bg-white p-4 md:p-0 rounded-md">
-                        <h3 className="font-semibold lg:font-medium mb-3 lg:mb-2">
-                          Shipping
-                        </h3>
-                        <div className="space-y-3">
-                          <div className="flex items-center space-x-3 p-3 border rounded-lg bg-gray-50">
-                            <input type="radio" checked readOnly className="form-radio" />
-                            <span>
-                              <strong>Standard Shipping</strong>{" "}
-                              {isFreeShipping
-                                ? <span className="text-green-600 font-semibold">FREE (Order over $89)</span>
-                                : <strong style={{color:"#fe3500"}}>${FLAT_RATE.toFixed(2)}</strong>}
-                            </span>
-                          </div>
-                          <div style={{padding:"10px 12px",border:"1px solid #e5e7eb",borderRadius:8,background:"#f9fafb",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-                            <label style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}}>
-                              <input type="checkbox" checked={useInsurance} onChange={e => { setUseInsurance(e.target.checked); useInsuranceRef.current = e.target.checked; }}
-                                style={{width:18,height:18,accentColor:"#fe3500",cursor:"pointer",flexShrink:0}} />
-                              <span style={{fontSize:13,fontWeight:600}}>Shipping Insurance - $3.00</span>
-                            </label>
-                            {useInsurance && (
-                              <button type="button" onClick={() => { setUseInsurance(false); useInsuranceRef.current = false; }}
-                                style={{fontSize:12,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:"2px 6px",textDecoration:"underline"}}>
-                                No Thanks
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+            {/* Shipping Information */}
+            <section className="border border-gray-200 rounded-xl p-5">
+              <h2 className="font-semibold text-base mb-4">Shipping Information</h2>
 
-                  {temp && (
-                    <div>
-                      <Button
-                        variant="primary"
-                        onClick={handlePay}
-                        disabled={items.length === 0}
-                        className="w-full"
-                      >
-                        {/* {loading2 ? (
-                          <div className="flex items-center gap-2 justify-center">
-                            <span>Processing</span>
-                            <FaSpinner className="animate-spin" />
-                          </div>
-                        ) : ( */}
-                        Place Your Order
-                        {/* )} */}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-6 md:border-l border-gray-300 p-4 md:p-6 bg-white rounded-lg mt-4 lg:mt-0">
-                  <div>
-                    <h1 className="text-xl text-center md:text-left font-medium mb-2 md:mb-4 mt-3 md:mt-0">
-                      Shipping Address
-                    </h1>
-
-                    {status === "authenticated" ? (
-                      <ShippingAddress
-                        onSelectCard={handleCardSelect}
-                        ischeckoutPage={true}
-                      />
-                    ) : (
-                      <ShippingAddressModal
-                        selectedCard={selectedCard}
-                        onAddressSubmit={handleAddressSubmit}
-                      />
-                    )}
-                  </div>
-
-                  {/* Billing Address Section */}
-                  <div style={{marginTop:16}}>
-                    <button type="button"
-                      onClick={() => { const v = !billingDifferent; setBillingDifferent(v); billingDifferentRef.current = v; }}
-                      style={{display:"flex",alignItems:"center",gap:6,fontSize:13,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:0}}>
-                      <span style={{fontSize:18,lineHeight:1}}>{billingDifferent ? "−" : "+"}</span>
-                      <span>Billing address is different?</span>
-                    </button>
-                    {billingDifferent && (
-                      <div style={{marginTop:12,padding:"16px",border:"1px solid #e5e7eb",borderRadius:8}}>
-                        <h3 style={{fontSize:14,fontWeight:600,marginBottom:12}}>Billing Address</h3>
-                        <div style={{display:"flex",flexDirection:"column",gap:10}}>
-                          <input placeholder="Street Address" 
-                            onChange={e => { const v = {...(billingAddressRef.current||{name:'',city:'',state:'',zipCode:''}),streetAddress:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
-                            style={{width:"100%",padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
-                          <div style={{display:"flex",gap:8}}>
-                            <input placeholder="City"
-                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',state:'',zipCode:''}),city:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
-                              style={{flex:1,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
-                            <input placeholder="State" maxLength={2}
-                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',city:'',zipCode:''}),state:e.target.value.toUpperCase()}; setBillingAddress(v); billingAddressRef.current = v; }}
-                              style={{width:70,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
-                            <input placeholder="ZIP"
-                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',city:'',state:''}),zipCode:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
-                              style={{width:90,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {temp2 && (
-              <div className="w-full md:col-span-2 p-4 md:p-6">
-                <div className="p-2">
-                  <h3 className="font-semibold mb-5 ">Payment Method</h3>
-                  {/* NMI Payment Form */}
-                  <div className="w-full">
-                    <form className="space-y-4">
-                      {status === "unauthenticated" && (
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Email</label>
-                          <input
-                            type="email"
-                            value={paymentEmail || getValues("email") || ""}
-                            onChange={e => { setPaymentEmail(e.target.value); paymentEmailRef.current = e.target.value; }}
-                            placeholder="your@email.com"
-                            className="w-full border border-gray-300 rounded-md p-3 text-sm"
-                            required
-                          />
-                        </div>
-                      )}
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Name on Card</label>
-                        <input
-                          type="text"
-                          value={nameOnCard}
-                          onChange={e => { setNameOnCard(e.target.value); nameOnCardRef.current = e.target.value; }}
-                          placeholder="As it appears on your card"
-                          className="w-full border border-gray-300 rounded-md p-3 text-sm"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">Card Number</label>
-                        {/* Single stable div - never conditionally unmounted (CollectJS iframes live here) */}
-                        <div
-                          id="ccnumber"
-                          className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium mb-1">Expiration Date</label>
-                          <div
-                            id="ccexp"
-                            className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium mb-1">CVV</label>
-                          <div
-                            id="cvv"
-                            className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
-                          />
-                        </div>
-                      </div>
-
-                      {paymentError && (
-                        <div className="py-2">
-                          <div className="text-red-500 text-sm mb-2">{paymentError}</div>
-                          {paymentError.toLowerCase().includes("address") && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setPaymentError("");
-                                setTemp2(false);
-                                setFieldsReady(false);
-                                collectJsConfigured.current = false;
-                              }}
-                              className="text-sm underline text-gray-600"
-                            >
-                              Edit shipping address
-                            </button>
-                          )}
-                        </div>
-                      )}
-
-                      <Button
-                        variant='primary'
-                        id="payButton"
-                        type="button"
-                        disabled={paymentProcessing || !fieldsReady}
-                        className="w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {paymentProcessing ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <span>Processing Payment</span>
-                            <div className="h-4 w-4 rounded-full bg-gray-300 animate-pulse"></div>
-                          </div>
-                        ) : !fieldsReady ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <span>Preparing Payment Form</span>
-                            <div className="h-4 w-4 rounded-full bg-gray-300 animate-pulse"></div>
-                          </div>
-                        ) : (
-                          `Pay $${finalTotal.toFixed(2)}`
-                        )}
-                      </Button>
-                    </form>
-
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="w-full lg:w-4/12 md:border border-gray-300 rounded-md md:p-4">
-            <div className="space-y-5 w-full max-h-[60vh] overflow-y-scroll scrollbar-thin">
-              {productLoading ? (
-                // Show shimmer loading state while products are being fetched
-                Array(items.length).fill(0).map((_, index) => (
-                  <div className="flex gap-5 w-full animate-pulse" key={index}>
-                    <div className="p-2 rounded-md shadow-md bg-gray-200">
-                      <div className="h-[8rem] w-[8rem]"></div>
-                    </div>
-                    <div className="flex flex-col mb-2 w-full">
-                      <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                      <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-                      <div className="h-6 bg-gray-200 rounded w-1/3 mb-2"></div>
-                    </div>
-                  </div>
-                ))
+              {status === "authenticated" ? (
+                <ShippingAddress onSelectCard={handleCardSelect} ischeckoutPage={true} />
               ) : (
-                items.map((item) => {
-                  // Find the corresponding product
-                  const product = products.find(p => p.id === item.id);
-                  if (!product) return null;
-
-                  return (
-                    <div key={`${item.id}-${item.attributeId || 'default'}`} className="flex gap-5 w-full">
-                      <div className="p-2 rounded-md shadow-md border border-gray-200 bg-white md:bg-transparent">
-                        <div className="h-[8rem] w-[8rem]">
-                          {product.images.length > 0 && (
-                            <Image
-                              src={product.images[0]?.url}
-                              alt={product.name}
-                              width={500}
-                              height={500}
-                              className="h-full w-full object-cover rounded-md"
-                            />
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col mb-2">
-                        {product.brand && <h3 className="text-sm">{product.brand.name}</h3>}
-                        <p className="text-md font-semibold line-clamp-2 overflow-hidden text-ellipsis">
-                          {getProductNameWithFlavor(product, item.attributeId)}
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-lg">
-                            ${(product.currentPrice / (product.packCount || 1)).toFixed(2)}
-                          </p>
-                          {product.originalPrice && (
-                            <del className="text-sm text-gray-500">
-                              ${(product.originalPrice / (product.packCount || 1)).toFixed(2)}
-                            </del>
-                          )}
-                        </div>
-                        <p className="text-sm">{item.quantity} pieces</p>
-                      </div>
+                <div className="flex flex-col gap-3">
+                  <div>
+                    <label className={labelCls}>Email *</label>
+                    <input type="email" value={guestEmail} placeholder="your@email.com"
+                      onChange={e => { setGuestEmail(e.target.value); guestEmailRef.current = e.target.value; }}
+                      className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Phone</label>
+                    <input type="tel" value={guestPhone} placeholder="(305) 000-0000"
+                      onChange={e => setGuestPhone(e.target.value.replace(/\D/g, ""))}
+                      className={inputCls} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>First Name *</label>
+                      <input type="text" value={guestFirstName} placeholder="John"
+                        onChange={e => { setGuestFirstName(e.target.value); guestFirstNameRef.current = e.target.value; }}
+                        className={inputCls} />
                     </div>
-                  );
-                })
+                    <div>
+                      <label className={labelCls}>Last Name *</label>
+                      <input type="text" value={guestLastName} placeholder="Doe"
+                        onChange={e => { setGuestLastName(e.target.value); guestLastNameRef.current = e.target.value; }}
+                        className={inputCls} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Street Address *</label>
+                    <input type="text" value={guestStreet} placeholder="123 Main St"
+                      onChange={e => { setGuestStreet(e.target.value); guestStreetRef.current = e.target.value; }}
+                      className={inputCls} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>Town / City *</label>
+                      <input type="text" value={guestCity} placeholder="Miami"
+                        onChange={e => { setGuestCity(e.target.value); guestCityRef.current = e.target.value; }}
+                        className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Postcode *</label>
+                      <input type="text" value={guestZip} placeholder="33101" maxLength={10}
+                        onChange={e => { setGuestZip(e.target.value); guestZipRef.current = e.target.value; }}
+                        className={inputCls} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>State *</label>
+                      <select value={guestState}
+                        onChange={e => { setGuestState(e.target.value); guestStateRef.current = e.target.value; }}
+                        className={inputCls}>
+                        <option value="">Select state...</option>
+                        {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className={labelCls}>Country</label>
+                      <input type="text" value="United States (US)" readOnly
+                        className={`${inputCls} bg-gray-50 text-gray-500 cursor-not-allowed`} />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Billing different toggle */}
+              <div className="mt-4">
+                <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600">
+                  <input type="checkbox" checked={billingDifferent}
+                    onChange={e => { setBillingDifferent(e.target.checked); billingDifferentRef.current = e.target.checked; }}
+                    className="w-4 h-4 accent-red-500" />
+                  Use a different billing address (optional)
+                </label>
+              </div>
+
+              {billingDifferent && (
+                <div className="mt-3 flex flex-col gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div>
+                    <label className={labelCls}>Billing Street Address</label>
+                    <input type="text" value={billingStreet} placeholder="123 Main St"
+                      onChange={e => { setBillingStreet(e.target.value); billingRef.current = { ...billingRef.current, street: e.target.value }; }}
+                      className={inputCls} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelCls}>City</label>
+                      <input type="text" value={billingCity} placeholder="Miami"
+                        onChange={e => { setBillingCity(e.target.value); billingRef.current = { ...billingRef.current, city: e.target.value }; }}
+                        className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>Zip</label>
+                      <input type="text" value={billingZip} placeholder="33101"
+                        onChange={e => { setBillingZip(e.target.value); billingRef.current = { ...billingRef.current, zip: e.target.value }; }}
+                        className={inputCls} />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelCls}>State</label>
+                    <select value={billingState}
+                      onChange={e => { setBillingState(e.target.value); billingRef.current = { ...billingRef.current, state: e.target.value }; }}
+                      className={inputCls}>
+                      <option value="">Select state...</option>
+                      {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* Order summary - mobile only */}
+            <section className="lg:hidden border border-gray-200 rounded-xl p-5">
+              <h2 className="font-semibold text-base mb-4">Order Summary</h2>
+              {items.map((item) => {
+                const prod = getProductForItem(item.id);
+                const price = prod ? (prod.currentPrice ?? item.price ?? 0) : (item.price ?? 0);
+                return (
+                  <div key={item.id} className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 last:border-0">
+                    {prod?.images?.[0]?.url && (
+                      <Image src={prod.images[0].url} alt={prod.name} width={48} height={48}
+                        className="rounded-md object-cover w-12 h-12 flex-shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium truncate">{prod?.name || "Product"}</p>
+                      <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                    </div>
+                    <span className="text-sm font-semibold">${(price * item.quantity).toFixed(2)}</span>
+                  </div>
+                );
+              })}
+              <OrderTotals subtotal={subtotal} discount={discount} shippingCost={shippingCost}
+                isFreeShipping={isFreeShipping} useInsurance={useInsurance} total={total} />
+            </section>
+
+            {/* Shipping Insurance */}
+            <section className="border border-gray-200 rounded-xl p-5">
+              <h2 className="font-semibold text-base mb-3">Shipping Insurance</h2>
+              <p className="text-xs text-gray-500 mb-3">Protect your order against loss, theft, or damage in transit.</p>
+              <div className="flex gap-3">
+                <button type="button"
+                  onClick={() => { setUseInsurance(true); useInsuranceRef.current = true; }}
+                  style={useInsurance ? { background: "#111", color: "#fff", border: "2px solid #111" } : { background: "#fff", color: "#111", border: "2px solid #d1d5db" }}
+                  className="rounded-full px-5 py-2 text-sm font-semibold transition-all">
+                  ${INSURANCE_FEE.toFixed(0)}
+                </button>
+                <button type="button"
+                  onClick={() => { setUseInsurance(false); useInsuranceRef.current = false; }}
+                  style={!useInsurance ? { background: "#111", color: "#fff", border: "2px solid #111" } : { background: "#fff", color: "#111", border: "2px solid #d1d5db" }}
+                  className="rounded-full px-5 py-2 text-sm font-semibold transition-all">
+                  No, Thanks!
+                </button>
+              </div>
+            </section>
+
+            {/* Payment Information */}
+            <section className="border border-gray-200 rounded-xl p-5">
+              <h2 className="font-semibold text-base mb-1">Payment Information</h2>
+              <p className="text-xs text-gray-500 flex items-center gap-1 mb-4">
+                <FaLock className="text-green-600" />
+                All transactions are secure and encrypted. Credit card information is never stored on our servers.
+              </p>
+
+              {/* Card brand logos */}
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                {["VISA","MC","AMEX","DISC"].map(b => (
+                  <span key={b} className="border border-gray-200 rounded px-2 py-1 text-xs font-bold text-gray-600 bg-gray-50">{b}</span>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {/* Email field for guests */}
+                {status === "unauthenticated" && (
+                  <div>
+                    <label className={labelCls}>Email for order confirmation *</label>
+                    <input type="email" value={paymentEmail} placeholder="your@email.com"
+                      onChange={e => { setPaymentEmail(e.target.value); paymentEmailRef.current = e.target.value; }}
+                      className={inputCls} />
+                    <p className="text-xs text-gray-400 mt-1">We&apos;ll send your order confirmation here.</p>
+                  </div>
+                )}
+
+                {/* Name on card */}
+                <div>
+                  <label className={labelCls}>Name on Card</label>
+                  <input type="text" value={nameOnCard} placeholder="John Doe"
+                    onChange={e => { setNameOnCard(e.target.value); nameOnCardRef.current = e.target.value; }}
+                    className={inputCls} />
+                </div>
+
+                {/* Card Number */}
+                <div>
+                  <label className={labelCls}>Card Number</label>
+                  <div id="ccnumber"
+                    className={`border rounded-md min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white p-3" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                  />
+                </div>
+
+                {/* Expiry + CVV */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className={labelCls}>Expiration Date</label>
+                    <div id="ccexp"
+                      className={`border rounded-md min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white p-3" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                    />
+                  </div>
+                  <div>
+                    <label className={labelCls}>CVV</label>
+                    <div id="cvv"
+                      className={`border rounded-md min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white p-3" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                    />
+                  </div>
+                </div>
+
+                {/* Error */}
+                {paymentError && (
+                  <div className="bg-red-50 border border-red-200 rounded-md p-3 text-sm text-red-700">
+                    {paymentError}
+                  </div>
+                )}
+
+                {/* Submit */}
+                <button
+                  id="placeOrderBtn"
+                  type="button"
+                  disabled={paymentProcessing || !fieldsReady || items.length === 0}
+                  className="w-full py-3 rounded-xl text-white font-semibold text-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{ background: fieldsReady && !paymentProcessing ? "#fe3500" : "#ccc" }}
+                >
+                  {paymentProcessing ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <FaSpinner className="animate-spin" /> Processing...
+                    </span>
+                  ) : !fieldsReady ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <FaSpinner className="animate-spin" /> Preparing Payment Form...
+                    </span>
+                  ) : (
+                    `Place Your Order - $${total.toFixed(2)}`
+                  )}
+                </button>
+
+                <p className="text-center text-xs text-gray-400">
+                  By placing your order you agree to our{" "}
+                  <Link href="/terms-and-conditions" className="underline">Terms & Conditions</Link>.
+                </p>
+              </div>
+            </section>
+
+          </div>{/* end LEFT */}
+
+          {/* ── RIGHT: Order Summary (desktop) ───────────────────────────────── */}
+          <div className="hidden lg:block lg:w-5/12">
+            <div className="sticky top-6 border border-gray-200 rounded-xl p-5">
+              <h2 className="font-semibold text-base mb-4">Order Summary</h2>
+
+              {items.length === 0 ? (
+                <p className="text-sm text-gray-400">Your cart is empty.</p>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-3 mb-4">
+                    {items.map((item) => {
+                      const prod = getProductForItem(item.id);
+                      const price = prod ? (prod.currentPrice ?? item.price ?? 0) : (item.price ?? 0);
+                      return (
+                        <div key={item.id} className="flex items-center gap-3">
+                          {prod?.images?.[0]?.url && (
+                            <Image src={prod.images[0].url} alt={prod.name} width={56} height={56}
+                              className="rounded-md object-cover w-14 h-14 flex-shrink-0" />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium">{prod?.name || "Product"}</p>
+                            <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
+                          </div>
+                          <span className="text-sm font-semibold">${(price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <OrderTotals subtotal={subtotal} discount={discount} shippingCost={shippingCost}
+                    isFreeShipping={isFreeShipping} useInsurance={useInsurance} total={total} />
+                </>
               )}
             </div>
-
-            {/* for large screen */}
-            <div className="mt-4 pt-2 hidden md:block">
-              <h3 className="font-semibold py-4">Cart Total</h3>
-              <div>
-                <p className="border-b border-gray-300 flex justify-between py-2">
-                  <span>{items.length} Items</span>
-                  <span className="font-medium">
-                    ${originalTotalAmount.toFixed(2)}
-                  </span>
-                </p>
-                <p className="border-b border-gray-300 flex justify-between py-2">
-                  <span>Discount</span>
-                  <span className="font-medium">
-                    -${discountAmount.toFixed(2)}
-                  </span>
-                </p>
-
-                <p className="border-b border-gray-300 flex justify-between py-2">
-                  <span>Shipping</span>
-                  <span className="font-medium">
-                    {useFlatRate
-                      ? (isFreeShipping ? "FREE" : `$${FLAT_RATE.toFixed(2)}`)
-                      : (selectedShippingRate?.amount ? `$${parseFloat(selectedShippingRate.amount).toFixed(2)}` : "—")}
-                  </span>
-                </p>
-                {useInsurance && (
-                  <p className="border-b border-gray-300 flex justify-between py-2">
-                    <span>Shipping Insurance</span>
-                    <span className="font-medium">${INSURANCE_FEE.toFixed(2)}</span>
-                  </p>
-                )}
-              </div>
-              <div className="flex justify-between font-semibold mt-2">
-                <span>Total</span>
-                <span>
-                  ${finalTotal.toFixed(2)}
-                </span>
-              </div>
-            </div>
           </div>
-        </section>
+
+        </div>{/* end flex */}
       </article>
     </main>
   );
 };
+
+// ─── Order Totals sub-component ──────────────────────────────────────────────
+function OrderTotals({ subtotal, discount, shippingCost, isFreeShipping, useInsurance, total }: {
+  subtotal: number; discount: number; shippingCost: number; isFreeShipping: boolean; useInsurance: boolean; total: number;
+}) {
+  return (
+    <div className="border-t border-gray-200 pt-3 space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className="text-gray-600">Subtotal</span>
+        <span className="font-medium">${subtotal.toFixed(2)}</span>
+      </div>
+      {discount > 0 && (
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-600">Discount</span>
+          <span className="font-medium text-green-600">-${discount.toFixed(2)}</span>
+        </div>
+      )}
+      <div className="flex justify-between text-sm">
+        <span className="text-gray-600">Shipping</span>
+        <span className="font-medium">
+          {isFreeShipping ? <span className="text-green-600">FREE</span> : `$${shippingCost.toFixed(2)}`}
+        </span>
+      </div>
+      {useInsurance && (
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-600">Shipping Insurance</span>
+          <span className="font-medium">${INSURANCE_FEE.toFixed(2)}</span>
+        </div>
+      )}
+      <div className="flex justify-between font-bold text-base border-t border-gray-200 pt-2 mt-2">
+        <span>Total</span>
+        <span style={{ color: "#fe3500" }}>${total.toFixed(2)}</span>
+      </div>
+    </div>
+  );
+}
 
 export default CheckoutPage;

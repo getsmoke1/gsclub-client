@@ -207,12 +207,13 @@ const CheckoutPage = () => {
     });
   },[]);
 
-  // Configure NMI when script is loaded
+  // Configure NMI once when payment form is shown
   useEffect(() => {
     if (scriptLoaded && temp2 && window.CollectJS) {
       configureCollectJS();
     }
-  }, [scriptLoaded,configureCollectJS, temp2]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [temp2]); // Only re-run when temp2 changes, not on every scriptLoaded update
 
   // Function to configure CollectJS
 
@@ -258,10 +259,7 @@ const CheckoutPage = () => {
     }
 
     setTemp2(true);
-    // If script is already loaded, configure NMI immediately
-    if (scriptLoaded && window.CollectJS) {
-      configureCollectJS();
-    }
+    // configureCollectJS will be called by useEffect when temp2=true
   };
 
   const handleCardSelect = (card: Card) => {

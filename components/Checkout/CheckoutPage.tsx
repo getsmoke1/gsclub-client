@@ -397,8 +397,7 @@ const CheckoutPage = () => {
         toast.success("Payment successful!");
         router.push(`/checkout/success`);
       } else {
-        // Payment failed - log full response for debugging
-        console.error("[Checkout] API error response:", JSON.stringify(data));
+        // Payment failed
         const friendlyMsg = getNmiUserMessage(
           data.message || "",
           data.errorDetails?.response_code

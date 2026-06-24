@@ -22,10 +22,10 @@ export async function POST(req: NextRequest) {
       shippingAmount,
       _insuranceAmount,  // prefixed to avoid ESLint warning
       nameOnCard,
-      billingStreetAddress,
-      billingCity,
-      billingState,
-      billingZipCode,
+      billingStreetAddress: _billingStreetAddress,
+      billingCity: _billingCity,
+      billingState: _billingState,
+      billingZipCode: _billingZipCode,
       // Subscription fields (optional)
       isSubscription,
       subscriptionFrequency,
@@ -235,7 +235,7 @@ export async function POST(req: NextRequest) {
       transactionid: responseData.transactionid,
       amount: finalTotal.toFixed(2),
       hasToken: !!token,
-      hasAddress: !!billingStreetAddress || !!shippingStreetAddress,
+      hasAddress: !!shippingStreetAddress,
     }));
 
     if (responseData.response === "1") {
@@ -295,16 +295,16 @@ export async function POST(req: NextRequest) {
 
       // Send order confirmation email to customer
       try {
-        const emailItems = orderItemsData.map((item: { name: string; quantity: number; price: number }) => ({
-          name: item.name,
+        const emailItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number }; quantity: number; purchasePrice: number }) => ({
+          name: item.productSnapshot?.name || "Product",
           quantity: item.quantity,
-          price: item.price,
+          price: item.purchasePrice,
         }));
         const subtotal = emailItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
         const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
         await sendEmail(
           email,
-          `Order Confirmed - GetSmoke #${order.id.slice(-8).toUpperCase()}`,
+          `[getsmoke]: Order Confirmed #${order.id.slice(-8).toUpperCase()}`,
           orderConfirmationTemplate(
             shippingName,
             order.id.slice(-8).toUpperCase(),
@@ -318,7 +318,7 @@ export async function POST(req: NextRequest) {
         // Notify store
         await sendEmail(
           "info@getsmoke.com",
-          `New Order #${order.id.slice(-8).toUpperCase()} - $${finalTotal.toFixed(2)}`,
+          `[getsmoke]: New order #${order.id.slice(-8).toUpperCase()}`,
           orderConfirmationTemplate(
             shippingName,
             order.id.slice(-8).toUpperCase(),

@@ -7,7 +7,7 @@ export default function SuccessPage() {
   const { clearCart } = useCart();
 
   useEffect(() => {
-    clearCart();
+    clearCart(null);
   }, [clearCart]);
 
   return (

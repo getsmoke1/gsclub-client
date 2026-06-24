@@ -268,6 +268,11 @@ const CheckoutPage = () => {
   };
 
   const handlePay = async () => {
+    if (items.length === 0) {
+      toast.error("Your cart is empty. Please add items before checking out.");
+      router.push("/");
+      return;
+    }
     if (!selectedCard) {
       if (status === "unauthenticated") {
         toast.error("Please complete your shipping address");

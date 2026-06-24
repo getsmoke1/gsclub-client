@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
     } = body;
 
     // Step 0: Validate the request
+    console.log("[Checkout] token:", !!token, "email:", email, "items:", items?.length);
     if (!token) {
       return NextResponse.json(
         { success: false, message: "Missing payment token" },
@@ -49,11 +50,12 @@ export async function POST(req: NextRequest) {
     }
 
     if (!email) {
+      console.log("[Checkout] FAIL: email missing");
       return NextResponse.json({ success: false, message: "Email is required" }, { status: 400 });
     }
 
     if (!items || !items.length) {
-      console.error("No items provided");
+      console.log("[Checkout] FAIL: items empty, received:", JSON.stringify(items));
       return NextResponse.json({ success: false, message: "No items provided in cart" }, { status: 400 });
     }
 

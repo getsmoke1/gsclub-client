@@ -376,9 +376,9 @@ const CheckoutPage = () => {
       } else {
         // Payment failed - show full NMI error details
         const errMsg = data.message || "Payment failed. Please try again.";
-        const errCode = data.errorDetails?.response_code ? ` (code: ${data.errorDetails.response_code})` : "";
-        setPaymentError(errMsg + errCode);
-        toast.error(errMsg + errCode);
+        const details = data.errorDetails ? ` [r:${data.errorDetails.response}|c:${data.errorDetails.response_code}|tx:${data.errorDetails.transactionid}]` : "";
+        setPaymentError(errMsg + details);
+        toast.error(errMsg + details);
         // router.push(`/checkout/failure`);
       }
     } catch (error) {

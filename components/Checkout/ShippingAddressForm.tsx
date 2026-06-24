@@ -1,5 +1,5 @@
-import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
 
 interface ShippingAddressFormData {
     id: string;
@@ -14,26 +14,40 @@ interface ShippingAddressFormProps {
     onSubmit: (data: ShippingAddressFormData) => void;
     defaultValues?: ShippingAddressFormData;
     setShowModal: (show: boolean) => void;
+    isEditing?: boolean;
 }
 
-const ShippingAddressForm = ({ onSubmit, defaultValues, setShowModal }: ShippingAddressFormProps) => {
+const ShippingAddressForm = ({ onSubmit, defaultValues, setShowModal, isEditing }: ShippingAddressFormProps) => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        control,
+        formState: { errors },
     } = useForm<ShippingAddressFormData>({
         defaultValues,
+        mode: "onChange",
     });
 
+    const watched = useWatch({ control });
+
+    // Auto-save when all required fields are filled
+    useEffect(() => {
+        const { name, streetAddress, state, city, zipCode } = watched;
+        if (name && streetAddress && state && city && zipCode) {
+            handleSubmit(onSubmit)();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watched.name, watched.streetAddress, watched.state, watched.city, watched.zipCode]);
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
                 {/* Name Field */}
                 <label className="font-bold text-[#8E8E93] text-[0.8rem]">
                     Name
                     <input
                         {...register("name", { required: "Name is required" })}
-                        placeholder="Name"
+                        placeholder="Full name"
                         className="p-2 mt-1 font-normal text-sm bg-transparent outline-none border rounded-lg w-full"
                     />
                     {errors.name && (
@@ -46,7 +60,7 @@ const ShippingAddressForm = ({ onSubmit, defaultValues, setShowModal }: Shipping
                     Address
                     <textarea
                         {...register("streetAddress", { required: "Address is required" })}
-                        placeholder="Address"
+                        placeholder="Street address"
                         className="p-2 mt-1 font-normal text-sm bg-transparent outline-none border rounded-lg w-full"
                     />
                     {errors.streetAddress && (
@@ -96,26 +110,18 @@ const ShippingAddressForm = ({ onSubmit, defaultValues, setShowModal }: Shipping
                 </label>
             </div>
 
-            {/* Buttons */}
-            <div className="flex justify-end gap-4">
-                <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className=""
-                >
-                    Cancel
-                </Button>
-                <Button
-                    type="button"
-                    variant="primary"
-                    disabled={isSubmitting}
-                    onClick={handleSubmit(onSubmit)}
-                    className="disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    {isSubmitting ? "Submitting..." : "Save"}
-                </Button>
-            </div>
+            {/* Cancel button only shown when editing existing address */}
+            {isEditing && (
+                <div className="flex justify-end">
+                    <button
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                        className="text-sm text-gray-500 hover:text-gray-800 underline"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
         </form>
     );
 };

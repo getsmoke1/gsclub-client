@@ -31,6 +31,7 @@ const ShippingAddressModal = ({ selectedCard, onAddressSubmit }: ShippingAddress
             <ShippingAddressForm
                 onSubmit={handleFormSubmit}
                 setShowModal={() => {}}
+                isEditing={false}
             />
         );
     }
@@ -42,6 +43,7 @@ const ShippingAddressModal = ({ selectedCard, onAddressSubmit }: ShippingAddress
                 onSubmit={handleFormSubmit}
                 defaultValues={selectedCard}
                 setShowModal={() => setEditing(false)}
+                isEditing={true}
             />
         );
     }

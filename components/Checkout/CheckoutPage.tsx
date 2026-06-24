@@ -88,6 +88,10 @@ const CheckoutPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const _email = session?.user?.email || "";
+  const statusRef = useRef(status);
+  const sessionRef = useRef(session);
+  useEffect(() => { statusRef.current = status; }, [status]);
+  useEffect(() => { sessionRef.current = session; }, [session]);
   const { items } = useCart();
   const itemsRef = useRef(items);
   useEffect(() => { itemsRef.current = items; }, [items]);
@@ -335,14 +339,14 @@ const CheckoutPage = () => {
       const subscriptionFrequency = currentItems.find(i => i.subscriptionFrequency)?.subscriptionFrequency || null;
 
       // Use refs to avoid stale closure - refs always have current values
-      const emailToSend = status === "authenticated"
-        ? session?.user?.email
+      const currentStatus = statusRef.current;
+      const currentSession = sessionRef.current;
+      const emailToSend = currentStatus === "authenticated"
+        ? currentSession?.user?.email
         : (paymentEmailRef.current || getValues("email") || formData?.email || "");
 
       // Log what we have for debugging
-      console.log("[Checkout] selectedCardRef:", JSON.stringify(selectedCardRef.current));
-      console.log("[Checkout] billingDifferentRef:", billingDifferentRef.current);
-      console.log("[Checkout] email:", emailToSend);
+      console.log("[Checkout] status:", currentStatus, "email:", emailToSend, "addr:", selectedCardRef.current?.streetAddress);
 
       if (!emailToSend) {
         setPaymentError("Please enter your email address before paying.");

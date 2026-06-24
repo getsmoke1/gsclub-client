@@ -206,17 +206,11 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    // Use billing address if set and different; otherwise use shipping address
-    // NMI requires address1 for this merchant account
-    const finalAddrStreet = (billingDifferent && billingStreetAddress) ? billingStreetAddress : shippingStreetAddress;
-    const finalAddrCity   = (billingDifferent && billingCity)          ? billingCity          : shippingCity;
-    const finalAddrState  = (billingDifferent && billingState)         ? billingState         : shippingState;
-    const finalAddrZip    = (billingDifferent && billingZipCode)       ? billingZipCode       : shippingZipCode;
-    console.log("NMI address:", { street: finalAddrStreet, city: finalAddrCity, state: finalAddrState, zip: finalAddrZip });
-    if (finalAddrStreet) nmiRequestData.address1 = finalAddrStreet;
-    if (finalAddrCity)   nmiRequestData.city     = finalAddrCity;
-    if (finalAddrState)  nmiRequestData.state    = finalAddrState;
-    if (finalAddrZip)    nmiRequestData.zip      = finalAddrZip;
+    // Send only zip code for AVS (zip match is more reliable than full address)
+    // Full street address causes AVS hard decline when format doesn't match bank records
+    // Billing address used if explicitly provided, else shipping zip
+    const finalZip = (billingDifferent && billingZipCode) ? billingZipCode : shippingZipCode;
+    if (finalZip) nmiRequestData.zip = finalZip;
     nmiRequestData.country = "US";
     if (email)  nmiRequestData.email = email;
 

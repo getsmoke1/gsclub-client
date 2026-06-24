@@ -328,6 +328,11 @@ const CheckoutPage = () => {
         ? session?.user?.email
         : (paymentEmailRef.current || getValues("email") || formData?.email || "");
 
+      // Log what we have for debugging
+      console.log("[Checkout] selectedCardRef:", JSON.stringify(selectedCardRef.current));
+      console.log("[Checkout] billingDifferentRef:", billingDifferentRef.current);
+      console.log("[Checkout] email:", emailToSend);
+
       if (!emailToSend) {
         setPaymentError("Please enter your email address before paying.");
         toast.error("Please enter your email address.");
@@ -607,7 +612,7 @@ const CheckoutPage = () => {
                   {/* Billing Address Section */}
                   <div style={{marginTop:16}}>
                     <button type="button"
-                      onClick={() => setBillingDifferent(!billingDifferent)}
+                      onClick={() => { const v = !billingDifferent; setBillingDifferent(v); billingDifferentRef.current = v; }}
                       style={{display:"flex",alignItems:"center",gap:6,fontSize:13,color:"#6b7280",background:"none",border:"none",cursor:"pointer",padding:0}}>
                       <span style={{fontSize:18,lineHeight:1}}>{billingDifferent ? "−" : "+"}</span>
                       <span>Billing address is different?</span>
@@ -617,17 +622,17 @@ const CheckoutPage = () => {
                         <h3 style={{fontSize:14,fontWeight:600,marginBottom:12}}>Billing Address</h3>
                         <div style={{display:"flex",flexDirection:"column",gap:10}}>
                           <input placeholder="Street Address" 
-                            onChange={e => setBillingAddress(prev => ({...prev||{name:"",city:"",state:"",zipCode:""},streetAddress:e.target.value}))}
+                            onChange={e => { const v = {...(billingAddressRef.current||{name:'',city:'',state:'',zipCode:''}),streetAddress:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
                             style={{width:"100%",padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
                           <div style={{display:"flex",gap:8}}>
                             <input placeholder="City"
-                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",state:"",zipCode:""},city:e.target.value}))}
+                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',state:'',zipCode:''}),city:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
                               style={{flex:1,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
                             <input placeholder="State" maxLength={2}
-                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",city:"",zipCode:""},state:e.target.value.toUpperCase()}))}
+                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',city:'',zipCode:''}),state:e.target.value.toUpperCase()}; setBillingAddress(v); billingAddressRef.current = v; }}
                               style={{width:70,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
                             <input placeholder="ZIP"
-                              onChange={e => setBillingAddress(prev => ({...prev||{name:"",streetAddress:"",city:"",state:""},zipCode:e.target.value}))}
+                              onChange={e => { const v = {...(billingAddressRef.current||{name:'',streetAddress:'',city:'',state:''}),zipCode:e.target.value}; setBillingAddress(v); billingAddressRef.current = v; }}
                               style={{width:90,padding:"8px 10px",border:"1px solid #d1d5db",borderRadius:6,fontSize:13}} />
                           </div>
                         </div>

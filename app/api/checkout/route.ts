@@ -196,22 +196,27 @@ export async function POST(req: NextRequest) {
     // Step 5: Prepare the request to NMI Payment API with order ID and calculated amount
     const cardName = (nameOnCard || shippingName || "").trim();
     const nameParts = cardName.split(" ");
+    // Build NMI request - only send fields that have values (undefined → skip)
     const nmiRequestData: Record<string, string> = {
       security_key: securityKey,
       payment_token: token.toString(),
       amount: finalTotal.toFixed(2),
-      order_id: order.id,
-      shipping: shippingCost.toFixed(2),
       type: "sale",
-      firstname: nameParts[0],
-      lastname: nameParts.slice(1).join(" ") || nameParts[0],
-      address1: billingStreetAddress || shippingStreetAddress,
-      city: billingCity || shippingCity,
-      state: billingState || shippingState,
-      zip: billingZipCode || shippingZipCode,
-      country: "US",
-      email: email,
     };
+    // Only add optional fields if they have real values (not undefined/empty)
+    if (order.id) nmiRequestData.order_id = order.id;
+    if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
+    if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
+    const addr1 = (billingStreetAddress || shippingStreetAddress || "").trim();
+    const city  = (billingCity || shippingCity || "").trim();
+    const state = (billingState || shippingState || "").trim();
+    const zip   = (billingZipCode || shippingZipCode || "").trim();
+    if (addr1)  nmiRequestData.address1 = addr1;
+    if (city)   nmiRequestData.city = city;
+    if (state)  nmiRequestData.state = state;
+    if (zip)    nmiRequestData.zip = zip;
+    nmiRequestData.country = "US";
+    if (email)  nmiRequestData.email = email;
 
     // For subscriptions: add the card to Customer Vault during this transaction
     if (isSubscription && subscriptionFrequency) {

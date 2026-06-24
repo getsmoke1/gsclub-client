@@ -697,36 +697,28 @@ const CheckoutPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Card Number</label>
-                        {fieldsReady ? (
-                          <div id="ccnumber" className="border border-gray-300 rounded-md p-3 min-h-10 bg-white">
-                            {/* payment card input will mount here */}
-                          </div>
-                        ) : (
-                          <div id="ccnumber" className="border border-gray-300 rounded-md min-h-10 bg-gray-200 animate-pulse"></div>
-                        )}
+                        {/* Single stable div - never conditionally unmounted (CollectJS iframes live here) */}
+                        <div
+                          id="ccnumber"
+                          className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                        />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">Expiration Date</label>
-                          {fieldsReady ? (
-                            <div id="ccexp" className="border border-gray-300 rounded-md p-3 min-h-10 bg-white">
-                              {/* expiration field will mount here */}
-                            </div>
-                          ) : (
-                            <div id="ccexp" className="border border-gray-300 rounded-md min-h-10 bg-gray-200 animate-pulse"></div>
-                          )}
+                          <div
+                            id="ccexp"
+                            className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                          />
                         </div>
 
                         <div>
                           <label className="block text-sm font-medium mb-1">CVV</label>
-                          {fieldsReady ? (
-                            <div id="cvv" className="border border-gray-300 rounded-md p-3 min-h-10 bg-white">
-                              {/* CVV field will mount here */}
-                            </div>
-                          ) : (
-                            <div id="cvv" className="border border-gray-300 rounded-md min-h-10 bg-gray-200 animate-pulse"></div>
-                          )}
+                          <div
+                            id="cvv"
+                            className={`border rounded-md p-3 min-h-[44px] transition-colors ${fieldsReady ? "border-gray-300 bg-white" : "border-gray-200 bg-gray-100 animate-pulse"}`}
+                          />
                         </div>
                       </div>
 

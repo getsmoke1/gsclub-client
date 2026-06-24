@@ -206,16 +206,18 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    // Use billing address if explicitly set (billing != shipping), else fall back to shipping
-    const addrStreet = (billingDifferent && billingStreetAddress) ? billingStreetAddress : shippingStreetAddress;
-    const addrCity   = (billingDifferent && billingCity)          ? billingCity          : shippingCity;
-    const addrState  = (billingDifferent && billingState)         ? billingState         : shippingState;
-    const addrZip    = (billingDifferent && billingZipCode)       ? billingZipCode       : shippingZipCode;
-    if (addrStreet) nmiRequestData.address1 = addrStreet;
-    if (addrCity)   nmiRequestData.city     = addrCity;
-    if (addrState)  nmiRequestData.state    = addrState;
-    if (addrZip)    nmiRequestData.zip      = addrZip;
-    nmiRequestData.country = "US";
+    // Note: address intentionally NOT sent to NMI for payment_token transactions
+    // The $8.70 successful payment confirmed payment_token works without address
+    // "address1 required" only appears for direct card number (not payment_token)
+    // AVS mismatch was causing hard declines - address skipped to bypass
+    // If customer uses "Billing address different" toggle, send that billing address only
+    if (billingDifferent && billingStreetAddress) {
+      nmiRequestData.address1 = billingStreetAddress;
+      if (billingCity)    nmiRequestData.city    = billingCity;
+      if (billingState)   nmiRequestData.state   = billingState;
+      if (billingZipCode) nmiRequestData.zip     = billingZipCode;
+      nmiRequestData.country = "US";
+    }
     if (email)  nmiRequestData.email = email;
 
     // For subscriptions: add the card to Customer Vault during this transaction

@@ -21,6 +21,7 @@ const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (data: FormValues) => {
     setLoading(true);
@@ -36,6 +37,7 @@ const Contact = () => {
       console.log('Enquiry submitted:', response.data);
       toast.success('Enquiry submitted successfully!');
       reset();
+      setSubmitted(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Submission error:', error.response?.data);
@@ -101,6 +103,24 @@ const Contact = () => {
 
           <p className=' text-slate w-10/12'>For any inquiries, assistance, or further information, please feel free to reach out to us, and our dedicated team will be delighted to assist you as promptly as possible.</p>
 
+          {submitted ? (
+            <div className='flex flex-col items-center justify-center gap-4 py-12 text-center'>
+              <div style={{width:72,height:72,borderRadius:'50%',background:'#22c55e',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:8}}>
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <path d="M9 18L15 24L27 12" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h3 className='text-xl font-semibold'>Message Sent!</h3>
+              <p className='text-gray-500 text-sm max-w-xs'>Thank you for reaching out. Our team will get back to you as soon as possible.</p>
+              <button
+                type='button'
+                onClick={() => setSubmitted(false)}
+                className='mt-2 text-sm text-red-500 underline underline-offset-2'
+              >
+                Send another message
+              </button>
+            </div>
+          ) : (
           <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 
             <div>
@@ -137,6 +157,7 @@ const Contact = () => {
             </div>
 
           </form>
+          )}
 
         </div>
         <div>

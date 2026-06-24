@@ -208,8 +208,12 @@ export async function POST(req: NextRequest) {
     if (order.id) nmiRequestData.order_id = order.id;
     if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
     if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
-    // Note: billing address intentionally omitted to skip AVS check
-    // AVS mismatch causes declines; NMI processes without address fine
+    // Merchant account requires address1 field - send shipping address as billing
+    if (shippingStreetAddress) nmiRequestData.address1 = shippingStreetAddress;
+    if (shippingCity) nmiRequestData.city = shippingCity;
+    if (shippingState) nmiRequestData.state = shippingState;
+    if (shippingZipCode) nmiRequestData.zip = shippingZipCode;
+    nmiRequestData.country = "US";
     if (email)  nmiRequestData.email = email;
 
     // For subscriptions: add the card to Customer Vault during this transaction

@@ -208,18 +208,8 @@ const CheckoutPage = () => {
       validationCallback: function (field: string, status: boolean, message: string) {
         console.log(`${field} is ${status ? 'valid' : 'invalid'}: ${message}`);
       },
-      callback: async function (response: { token: string }) {
+      callback: function (response: { token: string }) {
         console.log("Payment token created:", response.token);
-        // DEBUG: test token directly
-        try {
-          const testRes = await fetch("/api/test-nmi", {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify({ token: response.token, amount: "1.01" }),
-          });
-          const testData = await testRes.json();
-          console.log("[NMI TEST]", JSON.stringify(testData.parsed));
-        } catch(e) { console.log("[NMI TEST] error", e); }
         handlePaymentComplete(response.token);
       }
     });

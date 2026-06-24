@@ -8,6 +8,7 @@ export function getNmiUserMessage(responsetext: string, responseCode?: string): 
   if (text.includes("expired") || text.includes("expir")) return "Your card has expired. Please use a different card.";
   if (text.includes("invalid card") || text.includes("invalid account")) return "Invalid card number. Please check your card details and try again.";
   if (text.includes("do not honor") || text.includes("declined") || text.includes("decline")) return "Your card was declined. Please contact your bank or try a different card.";
+  if (text.includes("rejected") || text.includes("contact cust")) return "Your card was rejected by your bank. Please try a different card or contact your bank to authorize this transaction.";
   if (text.includes("lost") || text.includes("stolen")) return "This card has been reported lost or stolen. Please use a different card.";
   if (text.includes("limit exceeded") || text.includes("activity limit")) return "Transaction limit reached. Please try again later or contact your bank.";
   if (text.includes("invalid amount") || text.includes("invalid transaction")) return "Transaction error. Please try again.";

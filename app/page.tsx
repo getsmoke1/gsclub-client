@@ -104,6 +104,10 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
       />
+      {/* SEO H1 — visually hidden, present in DOM for crawlers */}
+      <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+        GetSmoke - Premium Disposable Vapes & E-Cigarettes Online
+      </h1>
       <HomePage
         initialProducts={initialProducts}
         newestProducts={newestProducts}

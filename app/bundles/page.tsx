@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
-import { noIndex } from "@/lib/noindex";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@/types/product";
@@ -8,9 +7,10 @@ import { Product } from "@/types/product";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  ...noIndex,
   title: "Bundle Deals | GetSmoke",
   description: "Shop all vape bundle deals at GetSmoke. Pack of 3, 5, and 10 at unbeatable prices.",
+  alternates: { canonical: "https://getsmoke.com/bundles" },
+  openGraph: { title: "Bundle Deals | GetSmoke", url: "https://getsmoke.com/bundles", siteName: "GetSmoke" },
 };
 
 const getCachedBundles = unstable_cache(

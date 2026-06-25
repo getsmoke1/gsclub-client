@@ -38,9 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description,
+    alternates: { canonical: `https://getsmoke.com/brands/${brandSlug}` },
     openGraph: {
       title,
       description,
+      url: `https://getsmoke.com/brands/${brandSlug}`,
+      siteName: "GetSmoke",
       type: "website",
     },
   };

@@ -13,7 +13,6 @@ import AgeVerification from "@/components/AgeVerification/AgeVerification";
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
 import CookieBanner from "@/components/CookieBanner/CookieBanner";
 import { getSEOData } from "@/lib/seo";
-import { noIndex } from "@/lib/noindex";
 
 const SITE_URL = "https://getsmoke.com";
 const GTM_ID = "GTM-TLGTR33M"; // TODO: replace with GetSmoke GTM container ID when created
@@ -38,10 +37,18 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoData = await getSEOData("/*");
 
   const metadata: Metadata = {
-    ...noIndex,
     metadataBase: new URL(SITE_URL),
     // No global canonical - each page sets its own via generateMetadata
     // Setting it here would override all child page canonicals with homepage URL
+    openGraph: {
+      siteName: "GetSmoke",
+      type: "website",
+      images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "GetSmoke - Premium Disposable Vapes" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/og-default.jpg"],
+    },
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
@@ -70,6 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "GetSmoke",
       locale: "en_US",
       type: "website",
+      images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "GetSmoke" }],
     };
     if (ogTitle) metadata.openGraph.title = ogTitle;
     if (ogDescription) metadata.openGraph.description = ogDescription;

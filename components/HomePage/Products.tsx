@@ -248,7 +248,9 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                     <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
                       {product.name}
                     </h3>
-                    <p className="text-center text-xs mt-1">Pack Of 10</p>
+                    {product.packCount > 1 && (
+                      <p className="text-center text-xs mt-1">Pack Of {product.packCount}</p>
+                    )}
                   </div>
                 </Link>
                 <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2" style={{ paddingLeft: '12px', paddingRight: '12px', paddingBottom: '12px' }}>

@@ -32,6 +32,18 @@ export async function POST(req: NextRequest) {
       subscriptionFrequency,
     } = body;
 
+    // Step 0: Geographic restriction check
+    const RESTRICTED_STATES = new Set([
+      "California","District of Columbia","Georgia","Maine","Massachusetts",
+      "Nebraska","New York","Oregon","South Dakota","Utah","Vermont",
+    ]);
+    if (shippingState && RESTRICTED_STATES.has(shippingState)) {
+      return NextResponse.json(
+        { success: false, message: `We're sorry - we do not ship to ${shippingState} due to state regulations on online vape sales.` },
+        { status: 400 }
+      );
+    }
+
     // Step 0: Validate the request
     if (!token) {
       return NextResponse.json(

@@ -62,11 +62,21 @@ const US_STATES = [
   "Virginia","Washington","West Virginia","Wisconsin","Wyoming",
 ];
 
+// States where online vape sales are prohibited — removed from dropdown
+const RESTRICTED_STATES = new Set([
+  "California","District of Columbia","Georgia","Maine","Massachusetts",
+  "Nebraska","New York","Oregon","South Dakota","Utah","Vermont",
+]);
+
+
 // ─── Component ───────────────────────────────────────────────────────────────
 const CheckoutPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { items } = useCart();
+
+  // Available states — remove all restricted states from dropdown
+  const availableStates = US_STATES.filter(state => !RESTRICTED_STATES.has(state));
 
   // Stale closure refs
   const itemsRef = useRef<CartItem[]>(items as CartItem[]);
@@ -390,8 +400,12 @@ const CheckoutPage = () => {
                         onChange={e => { setGuestState(e.target.value); guestStateRef.current = e.target.value; }}
                         className={inputCls}>
                         <option value="">Select state...</option>
-                        {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                        {availableStates.map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
+                      <p className="text-xs text-gray-400 mt-1">
+                        CA, NY, MA and other states with flavor restrictions are not available.{" "}
+                        <a href="/shipping-policy" className="underline">Learn more</a>
+                      </p>
                     </div>
                     <div>
                       <label className={labelCls}>Country</label>
@@ -440,7 +454,7 @@ const CheckoutPage = () => {
                       onChange={e => { setBillingState(e.target.value); billingRef.current = { ...billingRef.current, state: e.target.value }; }}
                       className={inputCls}>
                       <option value="">Select state...</option>
-                      {US_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                      {availableStates.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
                 </div>

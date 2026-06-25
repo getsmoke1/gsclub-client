@@ -367,7 +367,7 @@ export async function POST(req: NextRequest) {
         }));
         const failedSubtotal = failedItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
         const failedShipping = parseFloat(shippingAmount) || 0;
-        const failedTotal = failedSubtotal + failedShipping + (parseFloat(insuranceAmount) || 0);
+        const failedTotal = failedSubtotal + failedShipping + (parseFloat(_insuranceAmount) || 0);
         const failedOrderNum = order.id.slice(-8).toUpperCase();
         const failedReason = responseData.responsetext || "Payment processing error";
         const failedAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;

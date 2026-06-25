@@ -184,8 +184,16 @@ export async function POST(req: NextRequest) {
       shippingRateId,
     };
 
+    // Generate atomic order number starting from 30000 (above last WP order #22741)
+    const counter = await prisma.counter.upsert({
+      where: { name: "orderNumber" },
+      update: { value: { increment: 1 } },
+      create: { name: "orderNumber", value: 30001 },
+    });
+    const orderNumber = counter.value;
+
     const order = await prisma.order.create({
-      data: orderData,
+      data: { ...orderData, orderNumber },
       include: {
         orderItems: true,
         Shipment: true,
@@ -314,10 +322,10 @@ export async function POST(req: NextRequest) {
         const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
         await sendEmail(
           email,
-          `[getsmoke]: Order Confirmed #${order.id.slice(-8).toUpperCase()}`,
+          `[getsmoke]: Order Confirmed #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`,
           orderConfirmationTemplate(
             shippingName,
-            order.id.slice(-8).toUpperCase(),
+            String(order.orderNumber || order.id.slice(-8).toUpperCase()),
             emailItems,
             subtotal,
             parseFloat(shippingAmount) || 0,
@@ -328,10 +336,10 @@ export async function POST(req: NextRequest) {
         // Notify store
         await sendEmail(
           "info@getsmoke.com",
-          `[getsmoke]: New order #${order.id.slice(-8).toUpperCase()}`,
+          `[getsmoke]: New order #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`,
           orderConfirmationTemplate(
             shippingName,
-            order.id.slice(-8).toUpperCase(),
+            String(order.orderNumber || order.id.slice(-8).toUpperCase()),
             emailItems,
             subtotal,
             parseFloat(shippingAmount) || 0,
@@ -368,7 +376,7 @@ export async function POST(req: NextRequest) {
         const failedSubtotal = failedItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
         const failedShipping = parseFloat(shippingAmount) || 0;
         const failedTotal = failedSubtotal + failedShipping + (parseFloat(_insuranceAmount) || 0);
-        const failedOrderNum = order.id.slice(-8).toUpperCase();
+        const failedOrderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
         const failedReason = responseData.responsetext || "Payment processing error";
         const failedAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
 

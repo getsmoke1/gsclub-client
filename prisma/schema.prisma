@@ -218,6 +218,7 @@ model Cart {
 
 model Order {
   id                    String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber           Int?        @unique
   userEmail             String
   user                  User        @relation(fields: [userEmail], references: [email])
   orderItems            OrderItem[]
@@ -236,6 +237,12 @@ model Order {
   shippingRateId        String?
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
+}
+
+model Counter {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+  value Int
 }
 
 model OrderItem {

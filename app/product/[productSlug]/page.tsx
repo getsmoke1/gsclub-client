@@ -9,6 +9,7 @@
 import ProductPage from "@/components/ProductPage/ProductPage";
 import React, { cache } from "react";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@/types/product";
 
@@ -165,6 +166,11 @@ function buildBreadcrumbSchema(product: Product, slug: string) {
 const page = async ({ params }: Props) => {
   const { productSlug } = await params;
   const product = await getProductForPage(productSlug);
+
+  // Product not found → proper 404 (HTTP 404 status, no indexing)
+  if (!product) {
+    notFound();
+  }
 
   return (
     <>

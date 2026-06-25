@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const categories = [
     { label: 'DISPOSABLES', href: '/vapes',      img: '/categories/disposables.webp', desktopOnly: false },
-    { label: 'DELTA',       href: '/delta',       img: '/categories/delta.webp',       desktopOnly: false, mobileOnly: true },
+    { label: 'PODS',        href: '/pods',        img: '/categories/pods.webp',        desktopOnly: false, mobileOnly: true },
     { label: 'VAPE JUICE',  href: '/vape-juice',  img: '/categories/vape-juice.webp',  desktopOnly: false },
     { label: 'HOOKAH',      href: '/hookah',      img: '/categories/hookah.webp',      desktopOnly: false },
 ];

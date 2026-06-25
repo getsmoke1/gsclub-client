@@ -342,8 +342,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
             >
               {model.brand}
             </Link>
-            <h1 className="font-unbounded font-bold text-2xl mt-1">{model.shortName}</h1>
-            <p className="text-sm text-gray-500 mt-1">{model.puffs} Puffs - Disposable Vape</p>
+            <h1 className="font-unbounded font-bold text-2xl mt-1">{model.name}</h1>
 
             {/* Stars */}
             <div className="flex items-center gap-2 mt-2">

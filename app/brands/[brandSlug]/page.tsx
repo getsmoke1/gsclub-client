@@ -45,6 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://getsmoke.com/brands/${brandSlug}`,
       siteName: "GetSmoke",
       type: "website",
+      images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: title }],
     },
   };
 }

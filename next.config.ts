@@ -1337,6 +1337,37 @@ const nextConfig: NextConfig = {
         destination: '/blog/how-much-nicotine-is-in-a-vape',
         permanent: true,
       },
+      // Product slug corrections — SEO records used short slugs, DB has full slugs
+      {
+        source: '/product/mango-watermelon-hqd-cuvie-bar',
+        destination: '/product/mango-watermelon-hqd-cuvie-bar-disposable-vape',
+        permanent: true,
+      },
+      {
+        source: '/product/clear-hqd-cuvie-bar',
+        destination: '/product/clear-hqd-cuvie-bar-disposable-vape',
+        permanent: true,
+      },
+      {
+        source: '/product/raspberry-watermelon-hqd-cuvie-mars',
+        destination: '/product/raspberry-watermelon-hqd-cuvie-mars-disposable-vape',
+        permanent: true,
+      },
+      {
+        source: '/product/white-gummy-hqd-cuvie-bar',
+        destination: '/product/white-gummy-hqd-cuvie-mars',
+        permanent: true,
+      },
+      {
+        source: '/product/blueberry-raspberry-hqd-cuvie-bar',
+        destination: '/product/blueberry-raspberry-hqd-cuvie-mars',
+        permanent: true,
+      },
+      {
+        source: '/product/mexican-mango-ice-juicy-bar-jb5000',
+        destination: '/product/mexican-mango-ice-juicy-bar-jb25000-pro-max',
+        permanent: true,
+      },
     ];
   },
   images: {

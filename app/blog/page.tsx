@@ -4,14 +4,17 @@ import React from "react";
 import type { Metadata } from "next";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";
-import { noIndex } from "@/lib/noindex";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const seoData = await getSEOData("/blog");
-    return { ...noIndex, ...buildSeoMetadata(seoData, "/blog") };
+    const meta = buildSeoMetadata(seoData, "/blog");
+    if (meta.openGraph && !meta.openGraph.images) {
+      meta.openGraph.images = [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "GetSmoke Vape Blog" }];
+    }
+    return meta;
   } catch {
     return { title: "Blog | GetSmoke", description: "Explore our latest vape articles." };
   }

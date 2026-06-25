@@ -50,7 +50,7 @@ const BestSellersSection = ({ initialProducts }: BestSellersSectionProps) => {
                         search="pack"
                         initialProducts={initialProducts}
                         compactCart={true}
-                        featuredModelSlugs={["raz-dc25000", "lost-mary-turbo", "geek-bar-pulse", "hqd-cuvie-glaze"]}
+                        featuredModelSlugs={["raz-dc25000-25000-puffs", "lost-mary-turbo-35000-puffs", "geek-bar-pulse-15000-puffs", "hqd-cuvie-glaze-15000-puffs"]}
                     />
                 )}
                 <div className="flex justify-center mt-4">

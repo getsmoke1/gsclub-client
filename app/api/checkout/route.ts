@@ -356,13 +356,75 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     } else {
-      // Payment failed - keep order in database for reference but mark as failed
+      // Payment failed - send admin notification and return error
       console.error("NMI Error:", responseData);
+
+      try {
+        const failedItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number }; quantity: number; purchasePrice: number }) => ({
+          name: item.productSnapshot?.name || "Product",
+          quantity: item.quantity,
+          price: item.purchasePrice,
+        }));
+        const failedSubtotal = failedItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
+        const failedShipping = parseFloat(shippingAmount) || 0;
+        const failedTotal = failedSubtotal + failedShipping + (parseFloat(insuranceAmount) || 0);
+        const failedOrderNum = order.id.slice(-8).toUpperCase();
+        const failedReason = responseData.responsetext || "Payment processing error";
+        const failedAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
+
+        const itemRows = failedItems.map((i: { name: string; quantity: number; price: number }) =>
+          `<tr><td style="padding:8px;border:1px solid #ddd">${i.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:center">${i.quantity}</td><td style="padding:8px;border:1px solid #ddd;text-align:right">$${(i.price * i.quantity).toFixed(2)}</td></tr>`
+        ).join("");
+
+        const failedEmailHtml = `
+          <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+            <div style="background:#c0392b;padding:24px;color:#fff">
+              <h1 style="margin:0;font-size:24px">Payment Failed: #${failedOrderNum}</h1>
+            </div>
+            <div style="padding:24px">
+              <p>Payment from <strong>${shippingName}</strong> (${email}) has failed.</p>
+              <p style="color:#c0392b"><strong>Reason: ${failedReason}</strong></p>
+              <h3>Order #${failedOrderNum}</h3>
+              <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
+                <thead>
+                  <tr style="background:#f5f5f5">
+                    <th style="padding:8px;border:1px solid #ddd;text-align:left">Product</th>
+                    <th style="padding:8px;border:1px solid #ddd;text-align:center">Qty</th>
+                    <th style="padding:8px;border:1px solid #ddd;text-align:right">Price</th>
+                  </tr>
+                </thead>
+                <tbody>${itemRows}</tbody>
+                <tfoot>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Subtotal</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right">$${failedSubtotal.toFixed(2)}</td></tr>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Shipping</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right">${failedShipping === 0 ? "Free" : "$" + failedShipping.toFixed(2)}</td></tr>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Total</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right"><strong>$${failedTotal.toFixed(2)}</strong></td></tr>
+                </tfoot>
+              </table>
+              <div style="display:flex;gap:24px">
+                <div style="flex:1">
+                  <h4 style="color:#c0392b">Billing / Shipping Address</h4>
+                  <p style="white-space:pre-line;background:#f9f9f9;padding:12px;border-radius:6px">${failedAddr}</p>
+                </div>
+              </div>
+              <p style="color:#888;font-size:12px;margin-top:16px">Payment method: Credit card (NMI) - Response code: ${responseData.response_code || responseData.response}</p>
+            </div>
+          </div>
+        `;
+
+        await sendEmail(
+          "info@getsmoke.com",
+          `[GetSmoke] Payment FAILED #${failedOrderNum} - ${shippingName} - $${failedTotal.toFixed(2)}`,
+          failedEmailHtml
+        );
+      } catch (notifyErr) {
+        console.error("Failed to send failed-payment notification:", notifyErr);
+      }
+
       return NextResponse.json(
         {
           success: false,
           message: responseData.responsetext || "Payment processing error",
-          errorDetails: responseData, // Include full error details for debugging
+          errorDetails: responseData,
         },
         { status: 400 }
       );

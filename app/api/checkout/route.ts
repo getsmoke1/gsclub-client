@@ -269,10 +269,15 @@ export async function POST(req: NextRequest) {
     }));
 
     if (responseData.response === "1") {
-      // Payment was successful - update order to paid
+      // Payment was successful - update order to paid and save NMI transaction ID
       await prisma.order.update({
         where: { id: order.id },
-        data: { isPaid: true },
+        data: {
+          isPaid: true,
+          nmiTransactionId: responseData.transactionid || null,
+          refundedAmount: 0,
+          refundStatus: "none",
+        },
       });
 
       // If subscription: save vault ID and create Subscription records for each item

@@ -236,6 +236,12 @@ model Order {
   shippingAmount        String?
   Shipment              Shipment?
   shippingRateId        String?
+  // NMI payment data
+  nmiTransactionId      String?     // NMI transaction ID for refunds
+  // Refund data
+  refundedAmount        Float?      @default(0)
+  refundStatus          String?     // "none" | "partial" | "full"
+  refundedAt            DateTime?
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
 }

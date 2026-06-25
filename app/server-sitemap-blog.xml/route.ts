@@ -41,7 +41,7 @@ ${articles
 
     return `
   <url>
-    <loc>https://www.getsmoke.com/blog/${urlPath}</loc>
+    <loc>https://getsmoke.com/blog/${urlPath}</loc>
     <lastmod>${article.updatedAt.toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -112,6 +112,21 @@ export default function RootLayout({
           }}
         />
         {/* End Google Tag Manager */}
+        {/* Yandex Metrika */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110132302', 'ym');
+              ym(110132302, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+            `,
+          }}
+        />
+        {/* End Yandex Metrika */}
         {/* Polyfills for Safari < 15.4 - must load before any other JS */}
         <script dangerouslySetInnerHTML={{ __html: `
           if (!Array.prototype.at) {
@@ -156,6 +171,13 @@ export default function RootLayout({
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+        {/* Yandex Metrika (noscript) */}
+        <noscript>
+          <div>
+            <img src="https://mc.yandex.ru/watch/110132302" style={{ position: "absolute", left: "-9999px" }} alt="" />
+          </div>
+        </noscript>
+        {/* End Yandex Metrika (noscript) */}
 
         <Providers>
           <ErrorBoundary>

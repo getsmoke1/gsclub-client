@@ -1368,6 +1368,252 @@ const nextConfig: NextConfig = {
         destination: '/product/mexican-mango-ice-juicy-bar-jb25000-pro-max',
         permanent: true,
       },
+      // Model pages: old slug -> puffs-in-URL slug (301)
+      {
+        source: '/models/adjust-mycool',
+        destination: '/models/adjust-mycool-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/adjust-myflavor',
+        destination: '/models/adjust-myflavor-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/adjust-mysour',
+        destination: '/models/adjust-mysour-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/adjust-mysweet',
+        destination: '/models/adjust-mysweet-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/beri-crush',
+        destination: '/models/beri-crush-50000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/ebcreate-bc-pro',
+        destination: '/models/ebcreate-bc-pro-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fifty-bar-black-series',
+        destination: '/models/fifty-bar-black-series-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fruitia-fifty-bar',
+        destination: '/models/fruitia-fifty-bar-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fifty-bar-hidden-hills',
+        destination: '/models/fifty-bar-hidden-hills-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/foger-bit',
+        destination: '/models/foger-bit-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/foger-switch-pro',
+        destination: '/models/foger-switch-pro-30000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/foger-switch-pro-pod',
+        destination: '/models/foger-switch-pro-pod-30000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-extra',
+        destination: '/models/fume-extra-1500-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-hookah',
+        destination: '/models/fume-hookah-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-infinity',
+        destination: '/models/fume-infinity-3500-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-nb-super-k',
+        destination: '/models/fume-nb-super-k-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-pro',
+        destination: '/models/fume-pro-30000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/fume-recharge-zero',
+        destination: '/models/fume-recharge-zero-5000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/geek-bar-meloso',
+        destination: '/models/geek-bar-meloso-30000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/geek-bar-meloso-mini',
+        destination: '/models/geek-bar-meloso-mini-1500-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/geek-bar-pulse-x',
+        destination: '/models/geek-bar-pulse-x-25000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/geek-bar-pulse',
+        destination: '/models/geek-bar-pulse-15000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-cuvie-bar',
+        destination: '/models/hqd-cuvie-bar-7000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-cuvie-glaze',
+        destination: '/models/hqd-cuvie-glaze-15000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-cuvie-mars',
+        destination: '/models/hqd-cuvie-mars-8000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-cuvie-plus',
+        destination: '/models/hqd-cuvie-plus-1200-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-cuvie-slick',
+        destination: '/models/hqd-cuvie-slick-6000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-everest',
+        destination: '/models/hqd-everest-25000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/hqd-shisha',
+        destination: '/models/hqd-shisha-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/juice-bar-jb5000',
+        destination: '/models/juice-bar-jb5000-5000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/juice-bar-jb7500',
+        destination: '/models/juice-bar-jb7500-7500-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/juice-bar-jb25000',
+        destination: '/models/juice-bar-jb25000-25000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/lost-mary-mo20000',
+        destination: '/models/lost-mary-mo20000-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/lost-mary-nera-fullview',
+        destination: '/models/lost-mary-nera-fullview-70000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/lost-mary-nera-pureview',
+        destination: '/models/lost-mary-nera-pureview-40000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/lost-mary-turbo',
+        destination: '/models/lost-mary-turbo-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/lost-mary-ultrasonic',
+        destination: '/models/lost-mary-ultrasonic-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/oxbar-astro-maze',
+        destination: '/models/oxbar-astro-maze-50000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/oxbar-ice-nic',
+        destination: '/models/oxbar-ice-nic-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/oxbar-ice-nic-pod-juice',
+        destination: '/models/oxbar-ice-nic-pod-juice-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/raz-dc25000',
+        destination: '/models/raz-dc25000-25000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/raz-dc25000-zero',
+        destination: '/models/raz-dc25000-zero-25000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/raz-tn9000',
+        destination: '/models/raz-tn9000-9000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/raz-vue-50k',
+        destination: '/models/raz-vue-50k-50000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/viho-supercharge',
+        destination: '/models/viho-supercharge-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/viho-supercharge-pro',
+        destination: '/models/viho-supercharge-pro-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/viho-supercharge-zero',
+        destination: '/models/viho-supercharge-zero-20000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/x-posed-35k',
+        destination: '/models/x-posed-35k-35000-puffs',
+        permanent: true,
+      },
+      {
+        source: '/models/x-posed-pod-35k',
+        destination: '/models/x-posed-pod-35k-35000-puffs',
+        permanent: true,
+      },
     ];
   },
   images: {

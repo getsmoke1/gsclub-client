@@ -27,6 +27,21 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/product-category/disposable-vapes:path*',
+        destination: '/vapes',
+        permanent: true,
+      },
+      {
+        source: '/product-category/:slug*',
+        destination: '/products',
+        permanent: true,
+      },
+      {
+        source: '/smok-vape',
+        destination: '/brands/smok',
+        permanent: true,
+      },
+      {
         source: '/shop:path*',
         destination: '/vapes',
         permanent: true,

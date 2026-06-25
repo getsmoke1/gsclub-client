@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { noIndex } from "@/lib/noindex";
 
 export const metadata: Metadata = {
-  ...noIndex,
   title: "About Us | GetSmoke",
   description: "Learn about GetSmoke - your trusted online vape and hookah shop in the USA.",
+  alternates: { canonical: "https://getsmoke.com/about-us" },
 };
 
 export default function AboutUsPage() {

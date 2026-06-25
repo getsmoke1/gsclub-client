@@ -10,7 +10,7 @@ import { Product } from "@/types/product";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoData = await getSEOData("/");
-  return { ...noIndex, ...buildSeoMetadata(seoData, "/") };
+  return { ...buildSeoMetadata(seoData, "/") };
 }
 
 export default async function Home() {

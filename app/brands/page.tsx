@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Vape Brands | GetSmoke",
   description: "Shop all vape brands at GetSmoke - Geek Bar, RAZ, HQD, Lost Mary, Juicy Bar, FUME and more.",
+  alternates: { canonical: "https://getsmoke.com/brands" },
 };
 
 export const dynamic = "force-dynamic";

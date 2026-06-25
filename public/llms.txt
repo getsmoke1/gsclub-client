@@ -4,39 +4,39 @@
 
 ## About
 
-- [About GetSmoke](https://gsclub-client-jade.vercel.app/about-us/): Company background and what we sell
-- [Contact](https://gsclub-client-jade.vercel.app/contact/): Customer support contact info
-- [Vape Shop Texas](https://gsclub-client-jade.vercel.app/vape-shop-texas/): Local Texas vape shop information
+- [About GetSmoke](https://getsmoke.com/about-us/): Company background and what we sell
+- [Contact](https://getsmoke.com/contact/): Customer support contact info
+- [Vape Shop Texas](https://getsmoke.com/vape-shop-texas/): Local Texas vape shop information
 
 ## Brands We Carry
 
-- [Geek Bar](https://gsclub-client-jade.vercel.app/product-tag/geek-bar/): 131 products including Geek Bar Pulse, Pulse X, Meloso Mini, Lush, and Skyview
-- [Juicy Bar](https://gsclub-client-jade.vercel.app/product-tag/juicy-bar-jb7500/): JB5000, JB7500, JB25000 PRO MAX lineup
-- [Lost Mary](https://gsclub-client-jade.vercel.app/product-tag/lost-mary/): MT35000 Turbo, MT15000, Ultrasonic, Nera Fullview/Pureview kits
-- [Raz](https://gsclub-client-jade.vercel.app/product-tag/raz/): DC25000, TN9000, TN9000 Zero, Frozen Edition
-- [HQD](https://gsclub-client-jade.vercel.app/product-tag/hqd/): Cuvie Plus, Cuvie Glaze, Cuvie Slick, Everest, Mars, Shisha
-- [FUME](https://gsclub-client-jade.vercel.app/product-tag/fume/): Extra, Pro, Hookah, Infinity, Eternity
-- [Fifty Bar](https://gsclub-client-jade.vercel.app/product-tag/fifty-bar/): Original, x Fruitia, White Series, Black Series
-- [Flum Pebble](https://gsclub-client-jade.vercel.app/product-tag/flum-pebble/): Compact pod-style disposable
-- [Foger](https://gsclub-client-jade.vercel.app/product-tag/foger/): Switch Pro Kit, Bit 35k, replacement pods
-- [VIHO](https://gsclub-client-jade.vercel.app/product-tag/viho/): TRX, Supercharge, Supercharge Pro, Turbo
-- [Oxbar](https://gsclub-client-jade.vercel.app/product-tag/oxbar/): Astro Maze and other Oxbar products
+- [Geek Bar](https://getsmoke.com/product-tag/geek-bar/): 131 products including Geek Bar Pulse, Pulse X, Meloso Mini, Lush, and Skyview
+- [Juicy Bar](https://getsmoke.com/product-tag/juicy-bar-jb7500/): JB5000, JB7500, JB25000 PRO MAX lineup
+- [Lost Mary](https://getsmoke.com/product-tag/lost-mary/): MT35000 Turbo, MT15000, Ultrasonic, Nera Fullview/Pureview kits
+- [Raz](https://getsmoke.com/product-tag/raz/): DC25000, TN9000, TN9000 Zero, Frozen Edition
+- [HQD](https://getsmoke.com/product-tag/hqd/): Cuvie Plus, Cuvie Glaze, Cuvie Slick, Everest, Mars, Shisha
+- [FUME](https://getsmoke.com/product-tag/fume/): Extra, Pro, Hookah, Infinity, Eternity
+- [Fifty Bar](https://getsmoke.com/product-tag/fifty-bar/): Original, x Fruitia, White Series, Black Series
+- [Flum Pebble](https://getsmoke.com/product-tag/flum-pebble/): Compact pod-style disposable
+- [Foger](https://getsmoke.com/product-tag/foger/): Switch Pro Kit, Bit 35k, replacement pods
+- [VIHO](https://getsmoke.com/product-tag/viho/): TRX, Supercharge, Supercharge Pro, Turbo
+- [Oxbar](https://getsmoke.com/product-tag/oxbar/): Astro Maze and other Oxbar products
 
 ## Popular Flavor Categories
 
-- [Strawberry](https://gsclub-client-jade.vercel.app/product-category/strawberry/): 127 strawberry-forward disposable vapes
-- [Mint](https://gsclub-client-jade.vercel.app/product-category/mint/): 96 mint and menthol-mint disposables
-- [Watermelon](https://gsclub-client-jade.vercel.app/product-category/watermelon/): 91 watermelon flavors
-- [Menthol](https://gsclub-client-jade.vercel.app/product-category/menthol/): 80 menthol options
-- [Tobacco](https://gsclub-client-jade.vercel.app/product-category/tobacco/): 71 tobacco-flavored vapes
-- [Blueberry](https://gsclub-client-jade.vercel.app/product-category/blueberry/): 61 blueberry products
-- [Mango](https://gsclub-client-jade.vercel.app/product-category/mango/): 55 mango-forward options
+- [Strawberry](https://getsmoke.com/product-category/strawberry/): 127 strawberry-forward disposable vapes
+- [Mint](https://getsmoke.com/product-category/mint/): 96 mint and menthol-mint disposables
+- [Watermelon](https://getsmoke.com/product-category/watermelon/): 91 watermelon flavors
+- [Menthol](https://getsmoke.com/product-category/menthol/): 80 menthol options
+- [Tobacco](https://getsmoke.com/product-category/tobacco/): 71 tobacco-flavored vapes
+- [Blueberry](https://getsmoke.com/product-category/blueberry/): 61 blueberry products
+- [Mango](https://getsmoke.com/product-category/mango/): 55 mango-forward options
 
 ## Resources and Guides
 
-- [Blog](https://gsclub-client-jade.vercel.app/blog/): Reviews, comparison guides, and how-to content for disposable vapes
-- [TSA Vape Rules in Texas](https://gsclub-client-jade.vercel.app/can-i-bring-a-vape-through-tsa-in-texas/): Travel guide for flying with disposable vapes
-- [Legal Age to Vape in Texas](https://gsclub-client-jade.vercel.app/what-is-the-legal-age-to-vape-in-texas/): State-specific age requirements
+- [Blog](https://getsmoke.com/blog/): Reviews, comparison guides, and how-to content for disposable vapes
+- [TSA Vape Rules in Texas](https://getsmoke.com/can-i-bring-a-vape-through-tsa-in-texas/): Travel guide for flying with disposable vapes
+- [Legal Age to Vape in Texas](https://getsmoke.com/what-is-the-legal-age-to-vape-in-texas/): State-specific age requirements
 
 ## Important Information
 

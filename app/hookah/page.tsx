@@ -4,9 +4,10 @@ import { noIndex } from "@/lib/noindex";
 import { prefetchProducts } from "@/lib/prefetch-products";
 
 export const metadata: Metadata = {
-  ...noIndex,
   title: "Hookah & E-Hookah | GetSmoke",
-  description: "Shop hookah, e-hookah and shisha vapes at GetSmoke.",
+  description: "Shop hookah, e-hookah and shisha vapes at GetSmoke. Premium brands, fast US shipping, 21+ only.",
+  alternates: { canonical: "https://getsmoke.com/hookah" },
+  openGraph: { title: "Hookah & E-Hookah | GetSmoke", url: "https://getsmoke.com/hookah", siteName: "GetSmoke" },
 };
 
 export default async function HookahPage() {

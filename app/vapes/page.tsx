@@ -6,9 +6,10 @@ import { getCachedProducts } from "@/lib/cached-queries";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  ...noIndex,
   title: "Shop All Vapes | GetSmoke",
-  description: "Shop all disposable vapes at GetSmoke.",
+  description: "Shop all disposable vapes, e-cigarettes, and hookah at GetSmoke. Best brands, fast US shipping, 21+ only.",
+  alternates: { canonical: "https://getsmoke.com/vapes" },
+  openGraph: { title: "Shop All Vapes | GetSmoke", url: "https://getsmoke.com/vapes", siteName: "GetSmoke" },
 };
 
 export default async function VapesPage() {

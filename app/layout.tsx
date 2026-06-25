@@ -40,9 +40,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadata: Metadata = {
     ...noIndex,
     metadataBase: new URL(SITE_URL),
-    alternates: {
-      canonical: SITE_URL,
-    },
+    // No global canonical - each page sets its own via generateMetadata
+    // Setting it here would override all child page canonicals with homepage URL
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },

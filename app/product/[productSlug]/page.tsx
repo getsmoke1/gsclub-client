@@ -23,10 +23,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .split("-")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
+  const canonicalUrl = `https://getsmoke.com/product/${productSlug}`;
   return {
-    ...noIndex,
     title: `${name} | GetSmoke`,
-    description: `Buy ${name} at GetSmoke. Fast US shipping.`,
+    description: `Buy ${name} at GetSmoke. Fast US shipping, 21+ only.`,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: `${name} | GetSmoke`,
+      description: `Buy ${name} at GetSmoke. Fast US shipping, 21+ only.`,
+      url: canonicalUrl,
+      siteName: "GetSmoke",
+      type: "website",
+    },
   };
 }
 

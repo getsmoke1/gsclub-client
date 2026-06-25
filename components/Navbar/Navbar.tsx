@@ -165,7 +165,7 @@ const Navbar = () => {
 
     const navItems = [
         { title: "Disposables", href: "/vapes" },
-        { title: "Pods", href: "/pods" },
+        { title: "Switch Pods", href: "/pods" },
         { title: "Brands", href: "/brands" },
         { title: "Vape Juice", href: "/vape-juice" },
         { title: "Hookah", href: "/hookah" },

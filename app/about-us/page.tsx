@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { noIndex } from "@/lib/noindex";
 
 export const metadata: Metadata = {
   title: "About Us | GetSmoke",

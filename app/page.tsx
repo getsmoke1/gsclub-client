@@ -3,7 +3,6 @@ import HomePage from "@/components/HomePage/HomePage";
 import BrandCircles from "@/components/HomePage/BrandCircles";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";
-import { noIndex } from "@/lib/noindex";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@/types/product";
@@ -68,12 +67,49 @@ export default async function Home() {
 
   const bundleProducts = rawBundles.map((p) => ({ ...p, puffs: [] }));
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "GetSmoke",
+    url: "https://getsmoke.com",
+    logo: "https://getsmoke.com/icon-192.png",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "info@getsmoke.com",
+      contactType: "customer support",
+      areaServed: "US",
+    },
+    sameAs: [],
+  };
+
+  const webSiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "GetSmoke",
+    url: "https://getsmoke.com",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://getsmoke.com/vapes?search={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
-    <HomePage
-      initialProducts={initialProducts}
-      newestProducts={newestProducts}
-      bundleProducts={bundleProducts}
-      brandCircles={<BrandCircles />}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+      />
+      <HomePage
+        initialProducts={initialProducts}
+        newestProducts={newestProducts}
+        bundleProducts={bundleProducts}
+        brandCircles={<BrandCircles />}
+      />
+    </>
   );
 }

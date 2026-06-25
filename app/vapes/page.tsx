@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
-import { noIndex } from "@/lib/noindex";
 import { getCachedProducts } from "@/lib/cached-queries";
 
 export const revalidate = 300;
@@ -14,5 +13,5 @@ export const metadata: Metadata = {
 
 export default async function VapesPage() {
   const initialProducts = await getCachedProducts("VAPES", 24);
-  return <VapePage productType="VAPES" initialProducts={initialProducts} />;
+  return <VapePage productType="VAPES" initialProducts={initialProducts} heading="Shop All Disposable Vapes" />;
 }

@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 
 export default async function VapeJuicePage() {
   const initialProducts = await prefetchProducts("VAPE_JUICE", 24);
-  return <VapePage productType="VAPE_JUICE" initialProducts={initialProducts} />;
+  return <VapePage productType="VAPE_JUICE" initialProducts={initialProducts} heading="Vape Juice" />;
 }

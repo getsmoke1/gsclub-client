@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function EHookahPage() {
-  return <VapePage productType="HOOKAH" />;
+  return <VapePage productType="HOOKAH" heading="E-Hookah Vapes" />;
 }

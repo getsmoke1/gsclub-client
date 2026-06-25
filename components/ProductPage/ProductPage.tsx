@@ -110,7 +110,7 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             src={resolvedProduct.images[0].url}
                             width={1000}
                             height={1000}
-                            alt="product image"
+                            alt={`${resolvedProduct.brand.name} ${resolvedProduct.name}${resolvedProduct.flavor?.name ? ` - ${resolvedProduct.flavor.name}` : ''}`}
                             className="w-full h-auto object-cover lg:mt-2 border-2 shadow-md border-gray-100 rounded-3xl"
                         />
                     ) : (

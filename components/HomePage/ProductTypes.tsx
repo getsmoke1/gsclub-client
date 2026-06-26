@@ -21,6 +21,7 @@ export default function ProductTypes() {
                                     src={type.img}
                                     alt={type.title}
                                     fill
+                                    loading="eager"
                                     className="object-cover"
                                 />
                             ) : (

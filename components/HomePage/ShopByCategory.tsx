@@ -25,6 +25,7 @@ const ShopByCategory = () => {
                                     src={cat.img}
                                     alt={cat.label}
                                     fill
+                                    loading="eager"
                                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                                     sizes="50vw"
                                 />
@@ -47,6 +48,7 @@ const ShopByCategory = () => {
                                     src={cat.img}
                                     alt={cat.label}
                                     fill
+                                    loading="eager"
                                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                                     sizes="33vw"
                                 />

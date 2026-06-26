@@ -18,6 +18,7 @@ const BrandProductCard = ({ product }: BrandProductCardProps) => {
                 src={product.images[0].url}
                 alt={product.name}
                 fill
+                loading="eager"
                 className="object-cover"
               />
             ) : (

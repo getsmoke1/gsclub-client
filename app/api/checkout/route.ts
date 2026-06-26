@@ -155,6 +155,7 @@ export async function POST(req: NextRequest) {
           brandName: product.brand.name,
           flavorName: flavorName,
           nicotineName: product.Nicotine.name,
+          stockStatus: product.stockStatus,
           // Include puffs data if available
           puffs: product.productPuffs.map((pp) => ({
             name: pp.puffs.name,
@@ -330,19 +331,25 @@ export async function POST(req: NextRequest) {
 
       // Send order confirmation email to customer
       try {
-        const emailItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number }; quantity: number; purchasePrice: number }) => ({
-          name: item.productSnapshot?.name || "Product",
+        const hasPreOrder = orderItemsData.some((item: { productSnapshot: { stockStatus?: string } }) =>
+          item.productSnapshot?.stockStatus === "PREORDER"
+        );
+        const emailItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number; stockStatus?: string }; quantity: number; purchasePrice: number }) => ({
+          name: item.productSnapshot?.stockStatus === "PREORDER"
+            ? `[PRE-ORDER] ${item.productSnapshot?.name || "Product"}`
+            : (item.productSnapshot?.name || "Product"),
           quantity: item.quantity,
           price: item.purchasePrice,
         }));
         const subtotal = emailItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
         const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
+        const orderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
         await sendEmail(
           email,
-          `[getsmoke]: Order Confirmed #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`,
+          `[getsmoke]: Order Confirmed #${orderNum}${hasPreOrder ? " - Contains Pre-Order Items" : ""}`,
           orderConfirmationTemplate(
             shippingName,
-            String(order.orderNumber || order.id.slice(-8).toUpperCase()),
+            orderNum,
             emailItems,
             subtotal,
             parseFloat(shippingAmount) || 0,
@@ -351,10 +358,10 @@ export async function POST(req: NextRequest) {
           )
         );
         // Notify store — send to both info@ and owner Gmail for reliability
-        const storeSubject = `[getsmoke]: New order #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`;
+        const storeSubject = `[getsmoke]: New order #${orderNum}${hasPreOrder ? " - PRE-ORDER" : ""}`;
         const storeHtml = orderConfirmationTemplate(
           shippingName,
-          String(order.orderNumber || order.id.slice(-8).toUpperCase()),
+          orderNum,
           emailItems,
           subtotal,
           parseFloat(shippingAmount) || 0,

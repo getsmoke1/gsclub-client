@@ -100,16 +100,23 @@ const AddToCartButton = ({ product, className = "", compact = false, subscriptio
         </button>
       </div>
 
-      {/* Add to cart button */}
-      <button
-        onClick={handleAdd}
-        disabled={loading}
-        className="flex-1 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity"
-        style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
-      >
-        <ShoppingCart size={13} />
-        add to cart
-      </button>
+      {/* Add to cart / Pre-Order button */}
+      {isOutOfStock ? (
+        <button disabled className="flex-1 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed"
+          style={{ background: "#9ca3af" }}>
+          Out of Stock
+        </button>
+      ) : (
+        <button
+          onClick={handleAdd}
+          disabled={loading}
+          className="flex-1 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-opacity"
+          style={{ background: isPreOrder ? "linear-gradient(90deg, #7c3aed 0%, #a855f7 100%)" : "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
+        >
+          <ShoppingCart size={13} />
+          {isPreOrder ? "pre-order" : "add to cart"}
+        </button>
+      )}
     </div>
   );
 };

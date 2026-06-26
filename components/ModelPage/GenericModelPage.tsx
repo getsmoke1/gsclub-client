@@ -526,11 +526,11 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
               )}
               <button
                 onClick={handleAddToCart}
-                disabled={cartLoading || products.length === 0}
+                disabled={cartLoading || products.length === 0 || selectedProduct?.stockStatus === "PREORDER"}
                 className="flex-1 py-3 px-6 rounded-full text-white font-bold text-sm disabled:opacity-60 transition-opacity"
-                style={{ background: "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
+                style={{ background: selectedProduct?.stockStatus === "PREORDER" ? "linear-gradient(90deg, #7c3aed 0%, #a855f7 100%)" : "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
               >
-                {cartLoading ? "Adding..." : products.length === 0 ? "Out of Stock" : "Add to Cart"}
+                {cartLoading ? "Adding..." : products.length === 0 ? "Out of Stock" : selectedProduct?.stockStatus === "PREORDER" ? "Pre-Order" : "Add to Cart"}
               </button>
             </div>
             <p className="text-[10px] text-gray-400 mt-2 text-center">

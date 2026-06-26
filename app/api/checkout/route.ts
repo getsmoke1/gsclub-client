@@ -350,20 +350,21 @@ export async function POST(req: NextRequest) {
             shippingAddr
           )
         );
-        // Notify store
-        await sendEmail(
-          "info@getsmoke.com",
-          `[getsmoke]: New order #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`,
-          orderConfirmationTemplate(
-            shippingName,
-            String(order.orderNumber || order.id.slice(-8).toUpperCase()),
-            emailItems,
-            subtotal,
-            parseFloat(shippingAmount) || 0,
-            finalTotal,
-            shippingAddr
-          )
+        // Notify store — send to both info@ and owner Gmail for reliability
+        const storeSubject = `[getsmoke]: New order #${String(order.orderNumber || order.id.slice(-8).toUpperCase())}`;
+        const storeHtml = orderConfirmationTemplate(
+          shippingName,
+          String(order.orderNumber || order.id.slice(-8).toUpperCase()),
+          emailItems,
+          subtotal,
+          parseFloat(shippingAmount) || 0,
+          finalTotal,
+          shippingAddr
         );
+        await Promise.allSettled([
+          sendEmail("info@getsmoke.com", storeSubject, storeHtml),
+          sendEmail("breakforlife11@gmail.com", storeSubject, storeHtml),
+        ]);
       } catch (emailErr) {
         console.error("Order confirmation email failed:", emailErr);
         // Don't fail the order if email fails
@@ -436,11 +437,11 @@ export async function POST(req: NextRequest) {
           </div>
         `;
 
-        await sendEmail(
-          "info@getsmoke.com",
-          `[GetSmoke] Payment FAILED #${failedOrderNum} - ${shippingName} - $${failedTotal.toFixed(2)}`,
-          failedEmailHtml
-        );
+        const failedSubject = `[GetSmoke] Payment FAILED #${failedOrderNum} - ${shippingName} - $${failedTotal.toFixed(2)}`;
+        await Promise.allSettled([
+          sendEmail("info@getsmoke.com", failedSubject, failedEmailHtml),
+          sendEmail("breakforlife11@gmail.com", failedSubject, failedEmailHtml),
+        ]);
       } catch (notifyErr) {
         console.error("Failed to send failed-payment notification:", notifyErr);
       }

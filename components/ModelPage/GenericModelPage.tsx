@@ -116,6 +116,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>(Array(10).fill(""));
   const [purchaseMode, setPurchaseMode] = useState<"one-time" | "subscribe">("one-time");
   const [subscriptionDiscountPct, setSubscriptionDiscountPct] = useState<number>(0);
+  const [invalidSlots, setInvalidSlots] = useState<boolean[]>([]);
 
   const { addItem, loading: cartLoading } = useCart();
   const { data: session } = useSession();
@@ -238,9 +239,22 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
     if (packOption === "single") {
       const id = selectedProductIds[0] || selectedProduct?.id;
       if (!id) return;
+      setInvalidSlots([]);
       await addItem(email, { id, quantity: qty, ...subscriptionMeta });
     } else {
-      for (const productId of selectedProductIds.slice(0, pack.count)) {
+      // Validate: all slots in the pack must be filled
+      const slots = selectedProductIds.slice(0, pack.count);
+      const invalid = slots.map(id => !id);
+      if (invalid.some(Boolean)) {
+        setInvalidSlots(invalid);
+        // Scroll to first empty slot
+        const firstEmpty = invalid.findIndex(v => v);
+        const el = document.getElementById(`flavor-slot-${firstEmpty}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      setInvalidSlots([]);
+      for (const productId of slots) {
         if (productId) await addItem(email, { id: productId, quantity: 1, ...subscriptionMeta });
       }
     }
@@ -401,36 +415,58 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                         }`}
                       >
                         {Array.from({ length: cfg.count }).map((_, i) => (
-                          <select
-                            key={i}
-                            value={selectedProductIds[i] || ""}
-                            onChange={e => handleDropdownChange(i, e.target.value)}
-                            className="rounded-full border border-gray-300 w-full py-2 px-4 text-sm bg-white appearance-none"
-                          >
-                            <option value="">Choose flavor</option>
-                            {products.map(p => {
-                              const oos = p.stockStatus === "OUTOFSTOCK";
-                              const preorder = p.stockStatus === "PREORDER";
-                              const label = oos
-                                ? `${getFlavorName(p)} — Out of Stock`
-                                : preorder
-                                  ? `${getFlavorName(p)} — Pre-Order`
-                                  : getFlavorName(p);
-                              return (
-                                <option
-                                  key={p.id}
-                                  value={p.id}
-                                  disabled={oos}
-                                  style={{
-                                    color: oos ? "#aaa" : "#000",
-                                    fontWeight: oos ? 400 : 600,
-                                  }}
-                                >
-                                  {label}
-                                </option>
-                              );
-                            })}
-                          </select>
+                          <React.Fragment key={i}>
+                            <select
+                              id={`flavor-slot-${i}`}
+                              value={selectedProductIds[i] || ""}
+                              onChange={e => {
+                                handleDropdownChange(i, e.target.value);
+                                if (e.target.value) {
+                                  setInvalidSlots(prev => {
+                                    const next = [...prev];
+                                    next[i] = false;
+                                    return next;
+                                  });
+                                }
+                              }}
+                              className="rounded-full w-full py-2 px-4 text-sm bg-white appearance-none"
+                              style={{
+                                border: invalidSlots[i]
+                                  ? "2px solid #ef4444"
+                                  : "1px solid #d1d5db",
+                                background: invalidSlots[i] ? "#fef2f2" : "#fff",
+                              }}
+                            >
+                              <option value="">Choose flavor</option>
+                              {products.map(p => {
+                                const oos = p.stockStatus === "OUTOFSTOCK";
+                                const preorder = p.stockStatus === "PREORDER";
+                                const label = oos
+                                  ? `${getFlavorName(p)} — Out of Stock`
+                                  : preorder
+                                    ? `${getFlavorName(p)} — Pre-Order`
+                                    : getFlavorName(p);
+                                return (
+                                  <option
+                                    key={p.id}
+                                    value={p.id}
+                                    disabled={oos}
+                                    style={{
+                                      color: oos ? "#aaa" : "#000",
+                                      fontWeight: oos ? 400 : 600,
+                                    }}
+                                  >
+                                    {label}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {invalidSlots[i] && (
+                              <p className="text-xs text-red-500 mt-1 pl-3">
+                                Please choose a flavor for slot {i + 1}
+                              </p>
+                            )}
+                          </React.Fragment>
                         ))}
                       </div>
                     )}

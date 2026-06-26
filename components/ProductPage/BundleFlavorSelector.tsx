@@ -17,7 +17,7 @@ interface FlavorProduct {
 
 interface BundleFlavorSelectorProps {
   productName: string;
-  packCount: number;
+  packCount: number; // from DB (may be null) or extracted from name
 }
 
 function detectModelSlug(productName: string): string | null {

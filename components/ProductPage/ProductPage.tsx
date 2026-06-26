@@ -176,12 +176,12 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                           }}
                         />
 
-                        {/* Add to Cart — bundle products get flavor selector, singles get standard button */}
+                        {/* Add to Cart — "Pack of 10" bundles get flavor selector, all others get standard button */}
                         <div className="py-2 mt-3">
-                          {resolvedProduct.packCount > 1 ? (
+                          {/pack\s*of\s*10/i.test(resolvedProduct.name) ? (
                             <BundleFlavorSelector
                               productName={resolvedProduct.name}
-                              packCount={resolvedProduct.packCount}
+                              packCount={10}
                             />
                           ) : (
                             <AddToCartButton

@@ -126,7 +126,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
     fetch(`/api/models/${modelSlug}`)
       .then(r => r.json())
       .then((data: ApiResponse) => {
-        setProducts(data.products ?? []);
+        setProducts((data.products ?? []).filter((p: ApiProduct) => !/pack\s*of/i.test(p.name)));
         setModel(data.model);
         setLoading(false);
       })

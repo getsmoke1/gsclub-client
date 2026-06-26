@@ -55,19 +55,21 @@ export default function BundleFlavorSelector({ productName, packCount }: BundleF
     fetch(`/api/models/${slug}`)
       .then(r => r.json())
       .then(data => {
-        const products: FlavorProduct[] = (data.products ?? []).map((p: {
-          id: string;
-          name: string;
-          flavor?: { name: string } | null;
-          images?: { url: string }[];
-          stockStatus?: string | null;
-        }) => ({
-          id: p.id,
-          name: p.name,
-          flavorName: p.flavor?.name ?? "",
-          imageUrl: p.images?.[0]?.url ?? null,
-          stockStatus: p.stockStatus ?? null,
-        }));
+        const products: FlavorProduct[] = (data.products ?? [])
+          .filter((p: { name: string }) => !/pack\s*of/i.test(p.name))
+          .map((p: {
+            id: string;
+            name: string;
+            flavor?: { name: string } | null;
+            images?: { url: string }[];
+            stockStatus?: string | null;
+          }) => ({
+            id: p.id,
+            name: p.name,
+            flavorName: p.flavor?.name ?? "",
+            imageUrl: p.images?.[0]?.url ?? null,
+            stockStatus: p.stockStatus ?? null,
+          }));
         setFlavors(products);
       })
       .catch(() => {})

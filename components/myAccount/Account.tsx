@@ -34,11 +34,12 @@ const Account: React.FC<AccountProps> = ({ orders }) => {
   const email = session?.user?.email
 
   useEffect(() => {
+    // Only redirect after session is fully resolved — never during "loading"
     if (status === 'unauthenticated') {
-      // Fix: Handle null pathname
       const callbackUrl = pathname ? encodeURIComponent(pathname) : '';
       router.replace(`/login?callbackUrl=${callbackUrl}`);
     }
+    // status === "loading" → wait; status === "authenticated" → stay on page
   }, [status, router, pathname]);
 
   useEffect(() => {

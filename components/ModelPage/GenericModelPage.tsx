@@ -307,11 +307,11 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                 return (
                   <button
                     key={product.id}
-                    onClick={() => !oos && handleProductSelect(product)}
-                    disabled={oos}
+                    onClick={() => !oos && !preorder && handleProductSelect(product)}
+                    disabled={oos || preorder}
                     className={`flex-shrink-0 flex flex-col items-center gap-1 p-1 rounded-xl border-2 transition-colors ${
                       isSelected ? "border-black" : "border-transparent"
-                    } ${oos ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
+                    } ${oos || preorder ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
                     title={oos ? "Out of Stock" : preorder ? "Pre-Order" : ""}
                   >
                     <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
@@ -320,7 +320,7 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                           src={imgUrl}
                           alt={getFlavorName(product)}
                           fill
-                          className={`object-cover ${oos ? "grayscale" : ""}`}
+                          className={`object-cover ${oos || preorder ? "grayscale" : ""}`}
                         />
                       ) : (
                         <div className="w-full h-full bg-gray-200" />
@@ -336,12 +336,32 @@ export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
                         </div>
                       )}
                     </div>
-                    <span className={`text-[9px] text-center leading-tight max-w-[44px] ${oos ? "text-gray-400" : "text-gray-700 font-semibold"}`}>
+                    <span className={`text-[9px] text-center leading-tight max-w-[44px] ${oos || preorder ? "text-gray-400" : "text-gray-700 font-semibold"}`}>
                       {getFlavorName(product)}
                     </span>
                   </button>
                 );
               })}
+              {/* Pre-order flavor chips from config (flavors not yet in DB) */}
+              {model.preorderFlavors?.filter(name =>
+                !products.some(p => getFlavorName(p).toLowerCase() === name.toLowerCase())
+              ).map(flavorName => (
+                <div
+                  key={`preorder-${flavorName}`}
+                  className="flex-shrink-0 flex flex-col items-center gap-1 p-1 rounded-xl border-2 border-transparent opacity-40 cursor-not-allowed"
+                  title="Pre-Order"
+                >
+                  <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <div className="w-full h-full bg-gray-200" />
+                    <div className="absolute inset-0 flex items-end justify-center pb-0.5">
+                      <span className="text-[7px] font-bold text-purple-600 bg-white/90 px-0.5 rounded">PRE</span>
+                    </div>
+                  </div>
+                  <span className="text-[9px] text-center leading-tight max-w-[44px] text-gray-400 line-through">
+                    {flavorName}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
         </div>

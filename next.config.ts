@@ -743,11 +743,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/geek-bar-pulse-x-review',
-        destination: '/blog/geek-bar-pulse-x-review',
-        permanent: true,
-      },
-      {
         source: '/raz-dc25000-nightcrawler-review',
         destination: '/blog/raz-dc25000-nightcrawler-review',
         permanent: true,

@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean-prisma": "rimraf node_modules/.prisma",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap && node scripts/purge-cf.mjs"
   },
   "dependencies": {
     "@csstools/postcss-oklab-function": "^5.0.5",

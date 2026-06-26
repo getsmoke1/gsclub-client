@@ -63,7 +63,7 @@ const ResetPassword = () => {
             if (res.ok) {
                 toast.success(data.message);
                 setTimeout(() => {
-                    router.push('/login');
+                    router.push('/login?callbackUrl=/my-account');
                 }, 2000);
             } else {
                 toast.error(data.message);

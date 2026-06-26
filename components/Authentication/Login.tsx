@@ -25,11 +25,11 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const [callbackUrl, setCallbackUrl] = useState("/");
+  const [callbackUrl, setCallbackUrl] = useState("/my-account");
   useEffect(() => {
     // This runs ONLY in the browser (after hydration)
     const searchParams = new URLSearchParams(window.location.search);
-    setCallbackUrl(searchParams.get("callbackUrl") || "/");
+    setCallbackUrl(searchParams.get("callbackUrl") || "/my-account");
   }, []);
 
   const {
@@ -55,7 +55,7 @@ const Login = () => {
       }
 
       toast.success("Login successful!");
-      router.push("/");
+      router.push(callbackUrl || "/my-account");
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Invalid credentials. Please try again.");

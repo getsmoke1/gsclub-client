@@ -225,6 +225,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                           fill
                           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           className="object-cover"
+                          loading="eager"
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full">

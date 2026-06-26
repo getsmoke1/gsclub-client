@@ -222,10 +222,11 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                         <Image
                           src={product.images[0].url}
                           alt={product.name}
-                          fill
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-cover"
+                          width={400}
+                          height={400}
+                          className="object-cover w-full h-full"
                           loading="eager"
+                          style={{ height: "100%", width: "100%" }}
                         />
                       ) : (
                         <div className="flex items-center justify-center h-full">

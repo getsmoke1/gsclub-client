@@ -106,16 +106,14 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                 {/* Product Images */}
                 <div className="w-full lg:w-[35%] ">
                     {resolvedProduct.images && resolvedProduct.images.length > 0 ? (
-                        <div className="relative w-full rounded-3xl overflow-hidden border-2 shadow-md border-gray-100 lg:mt-2" style={{ paddingTop: "100%" }}>
-                          <Image
+                        <Image
                             src={resolvedProduct.images[0].url}
+                            width={1000}
+                            height={1000}
                             alt={`${resolvedProduct.brand.name} ${resolvedProduct.name}${resolvedProduct.flavor?.name ? ` - ${resolvedProduct.flavor.name}` : ''}`}
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 35vw"
-                            className="object-cover"
+                            className="w-full rounded-3xl lg:mt-2 border-2 shadow-md border-gray-100"
                             priority
-                          />
-                        </div>
+                        />
                     ) : (
                         <div className="bg-gray-200 w-full h-80 flex items-center justify-center">
                             <p>No image available</p>

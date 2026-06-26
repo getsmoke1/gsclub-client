@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { r2src } from "@/lib/r2-image";
 import React from 'react';
 import Link from 'next/link';
 import { Article } from '@/types/article';
@@ -32,7 +33,7 @@ const Blog = ({ articles }: BlogProps) => {
             <div className="relative w-full rounded-xl overflow-hidden bg-gray-200" style={{ paddingBottom: '56%' }}>
               {article.images?.[0]?.url ? (
                 <Image
-                  src={article.images[0].url}
+                  src={r2src(article.images[0].url)}
                   alt={article.title}
                   fill
                   loading="eager"

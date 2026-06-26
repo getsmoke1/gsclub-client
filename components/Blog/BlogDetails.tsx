@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
+import { r2src } from "@/lib/r2-image";
 import Image from 'next/image';
 import Link from 'next/link';
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
@@ -78,7 +79,7 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
       />
       <header className="flex flex-col md:flex-row gap-7">
         <Image
-          src={article.images[0]?.url || '/placeholder.jpg'}
+          src={r2src(article.images[0]?.url)}
           alt={`Image for ${article.title}`}
           width={600}
           height={400}

@@ -1,4 +1,5 @@
 import { Product } from '@/types/product';
+import { r2src } from "@/lib/r2-image";
 import React, { useEffect, useState, useCallback } from 'react';
 import ProductShimmer from '../HomePage/ProductShimmer';
 import Link from 'next/link';
@@ -97,7 +98,7 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
                                 <div className="aspect-square relative bg-gray-100 h-[16rem] md:h-[32rem] lg:h-[22rem]">
                                     {product.images.length > 0 ? (
                                         <Image
-                                            src={product.images[0].url}
+                                            src={r2src(product.images[0].url)}
                                             alt={product.name}
                                             width={400}
                                             height={400}

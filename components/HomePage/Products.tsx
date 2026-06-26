@@ -7,6 +7,7 @@ import GenericModelCard from "@/components/ModelPage/GenericModelCard";
 import { MODELS } from "@/lib/models-config";
 import { Product } from "@/types/product";
 import Image from "next/image";
+import { r2src } from "@/lib/r2-image";
 import Link from "next/link";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
@@ -220,7 +221,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
                     <div className="absolute inset-0">
                       {product.images.length > 0 ? (
                         <Image
-                          src={product.images[0].url}
+                          src={r2src(product.images[0].url)}
                           alt={product.name}
                           width={400}
                           height={400}

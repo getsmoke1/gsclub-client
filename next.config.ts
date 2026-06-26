@@ -1611,6 +1611,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        // Proxy R2 images through getsmoke.com to avoid cross-origin CDN issues
+        source: '/r2/:path*',
+        destination: 'https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev/:path*',
+      },
+    ];
+  },
+
   images: {
     unoptimized: true, // bypass Vercel image optimizer (Hobby plan quota); R2 images already optimized
     remotePatterns: [

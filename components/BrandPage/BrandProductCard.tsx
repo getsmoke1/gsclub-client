@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { r2src } from "@/lib/r2-image";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,7 +16,7 @@ const BrandProductCard = ({ product }: BrandProductCardProps) => {
           <div className="absolute inset-0">
             {product.images[0]?.url ? (
               <Image
-                src={product.images[0].url}
+                src={r2src(product.images[0].url)}
                 alt={product.name}
                 fill
                 loading="eager"

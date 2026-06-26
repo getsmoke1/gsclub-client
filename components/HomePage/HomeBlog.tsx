@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
+import { r2src } from "@/lib/r2-image";
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -28,7 +29,7 @@ const HomeBlog = () => {
             <div className="relative rounded-2xl bg-gray-800" style={{ paddingBottom: '70%', marginBottom: '100px' }}>
                 <div className="absolute inset-0 rounded-2xl overflow-hidden">
                     {post.featuredImage ? (
-                        <Image src={post.featuredImage} alt={post.title} fill loading="eager" className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <Image src={r2src(post.featuredImage)} alt={post.title} fill loading="eager" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />
                     )}
@@ -95,7 +96,7 @@ const HomeBlog = () => {
                                     <div className="relative rounded-2xl bg-gray-800" style={{ paddingBottom: '65%', marginBottom: '70px' }}>
                                         <div className="absolute inset-0 rounded-2xl overflow-hidden">
                                             {post.featuredImage ? (
-                                                <Image src={post.featuredImage} alt={post.title} fill loading="eager" className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                <Image src={r2src(post.featuredImage)} alt={post.title} fill loading="eager" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                                             ) : (
                                                 <div className="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800" />
                                             )}

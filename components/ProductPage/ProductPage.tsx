@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { r2src } from "@/lib/r2-image";
 import { Product } from "@/types/product";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
@@ -107,7 +108,7 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                 <div className="w-full lg:w-[35%] ">
                     {resolvedProduct.images && resolvedProduct.images.length > 0 ? (
                         <Image
-                            src={resolvedProduct.images[0].url}
+                            src={r2src(resolvedProduct.images[0].url)}
                             width={1000}
                             height={1000}
                             alt={`${resolvedProduct.brand.name} ${resolvedProduct.name}${resolvedProduct.flavor?.name ? ` - ${resolvedProduct.flavor.name}` : ''}`}

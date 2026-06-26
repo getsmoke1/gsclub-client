@@ -344,9 +344,10 @@ export async function POST(req: NextRequest) {
         const subtotal = emailItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
         const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
         const orderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
+        const subjectSuffix = isSubscription ? " - SUBSCRIPTION" : hasPreOrder ? " - Contains Pre-Order Items" : "";
         await sendEmail(
           email,
-          `[getsmoke]: Order Confirmed #${orderNum}${hasPreOrder ? " - Contains Pre-Order Items" : ""}`,
+          `[getsmoke]: Order Confirmed #${orderNum}${subjectSuffix}`,
           orderConfirmationTemplate(
             shippingName,
             orderNum,
@@ -354,11 +355,14 @@ export async function POST(req: NextRequest) {
             subtotal,
             parseFloat(shippingAmount) || 0,
             finalTotal,
-            shippingAddr
+            shippingAddr,
+            !!isSubscription,
+            subscriptionFrequency || undefined
           )
         );
         // Notify store — send to both info@ and owner Gmail for reliability
-        const storeSubject = `[getsmoke]: New order #${orderNum}${hasPreOrder ? " - PRE-ORDER" : ""}`;
+        const storeSubjectSuffix = isSubscription ? ` - SUBSCRIPTION (${subscriptionFrequency || "recurring"})` : hasPreOrder ? " - PRE-ORDER" : "";
+        const storeSubject = `[getsmoke]: New order #${orderNum}${storeSubjectSuffix}`;
         const storeHtml = orderConfirmationTemplate(
           shippingName,
           orderNum,
@@ -366,7 +370,9 @@ export async function POST(req: NextRequest) {
           subtotal,
           parseFloat(shippingAmount) || 0,
           finalTotal,
-          shippingAddr
+          shippingAddr,
+          !!isSubscription,
+          subscriptionFrequency || undefined
         );
         await Promise.allSettled([
           sendEmail("info@getsmoke.com", storeSubject, storeHtml),

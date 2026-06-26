@@ -35,6 +35,7 @@ const Blog = ({ articles }: BlogProps) => {
                   src={article.images[0].url}
                   alt={article.title}
                   fill
+                  loading="eager"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               ) : (

@@ -14,6 +14,7 @@ import RelatedPRoduct from "./RelatedPRoduct";
 import { useProduct } from "./useProduct";
 import Loading from "./loading";
 import AddToCartButton from "@/components/Cart/AddToCartButton";
+import BundleFlavorSelector from "@/components/ProductPage/BundleFlavorSelector";
 import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
 import { FrequencyValue } from "@/lib/nmi";
 import Faq from "./Faq";
@@ -175,13 +176,20 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                           }}
                         />
 
-                        {/* Add to Cart */}
+                        {/* Add to Cart — bundle products get flavor selector, singles get standard button */}
                         <div className="py-2 mt-3">
+                          {resolvedProduct.packCount > 1 ? (
+                            <BundleFlavorSelector
+                              productName={resolvedProduct.name}
+                              packCount={resolvedProduct.packCount}
+                            />
+                          ) : (
                             <AddToCartButton
                               product={resolvedProduct as never}
                               subscriptionDiscountPct={subscriptionDiscountPct}
                               subscriptionFrequency={subscriptionFrequency}
                             />
+                          )}
                         </div>
 
                         {/* Product Description */}

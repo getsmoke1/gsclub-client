@@ -1,43 +1,70 @@
 # GetSmoke
 
-> GetSmoke is an online vape shop based in the United States selling disposable vapes, pods, e-liquids, and accessories from major brands. Fast US shipping, same-day delivery in Houston, Dallas, Austin, and San Antonio. 21+ only. All products contain nicotine, which is an addictive chemical.
+> GetSmoke (getsmoke.com) is a US-based online vape and disposable e-cigarette retailer operated by Cosmoproject LLC in Florida. We sell disposable vapes, pod systems, hookah products, and e-liquids from top brands. Adults 21+ only. All products contain nicotine, an addictive chemical. We ship across the US (excluding states where online vape sales are prohibited).
 
-## About
+## Shop by Category
 
-- [About GetSmoke](https://getsmoke.com/about-us/): Company background and what we sell
-- [Contact](https://getsmoke.com/contact/): Customer support contact info
-- [Vape Shop Texas](https://getsmoke.com/vape-shop-texas/): Local Texas vape shop information
+- [Disposable Vapes](https://getsmoke.com/vapes): Browse 700+ disposable vape products
+- [Switch Pods / Pod Systems](https://getsmoke.com/pods): Pod kits and replacement pods
+- [Hookah Products](https://getsmoke.com/hookah): Al Fakher, Starbuzz, and other hookah tobacco
+- [Vape Juice / E-Liquids](https://getsmoke.com/vape-juice): Salt nic and freebase e-liquids
+- [Bundle Deals](https://getsmoke.com/bundles): Multi-pack discounts and combo deals
+- [All Brands](https://getsmoke.com/brands): Full brand directory
 
-## Brands We Carry
+## Top Brand Pages
 
-- [Geek Bar](https://getsmoke.com/product-tag/geek-bar/): 131 products including Geek Bar Pulse, Pulse X, Meloso Mini, Lush, and Skyview
-- [Juicy Bar](https://getsmoke.com/product-tag/juicy-bar-jb7500/): JB5000, JB7500, JB25000 PRO MAX lineup
-- [Lost Mary](https://getsmoke.com/product-tag/lost-mary/): MT35000 Turbo, MT15000, Ultrasonic, Nera Fullview/Pureview kits
-- [Raz](https://getsmoke.com/product-tag/raz/): DC25000, TN9000, TN9000 Zero, Frozen Edition
-- [HQD](https://getsmoke.com/product-tag/hqd/): Cuvie Plus, Cuvie Glaze, Cuvie Slick, Everest, Mars, Shisha
-- [FUME](https://getsmoke.com/product-tag/fume/): Extra, Pro, Hookah, Infinity, Eternity
-- [Fifty Bar](https://getsmoke.com/product-tag/fifty-bar/): Original, x Fruitia, White Series, Black Series
-- [Flum Pebble](https://getsmoke.com/product-tag/flum-pebble/): Compact pod-style disposable
-- [Foger](https://getsmoke.com/product-tag/foger/): Switch Pro Kit, Bit 35k, replacement pods
-- [VIHO](https://getsmoke.com/product-tag/viho/): TRX, Supercharge, Supercharge Pro, Turbo
-- [Oxbar](https://getsmoke.com/product-tag/oxbar/): Astro Maze and other Oxbar products
+- [Geek Bar](https://getsmoke.com/brands/geek-bar): Pulse, Pulse X, Meloso, Lush, Skyview series
+- [HQD](https://getsmoke.com/brands/hqd): Cuvie Bar, Cuvie Glaze, Cuvie Slick, Everest, Mars
+- [Lost Mary](https://getsmoke.com/brands/lost-mary): MT15000, Turbo 35000, Ultrasonic, Nera kits
+- [RAZ](https://getsmoke.com/brands/raz): DC25000, TN9000, DC25000 Zero Nicotine Free
+- [FUME](https://getsmoke.com/brands/fume): Extra, Pro, Infinity, Eternity, Hookah
+- [Juicy Bar](https://getsmoke.com/brands/juicy-bar): JB5000, JB7500 PRO, JB25000 PRO MAX
+- [Fifty Bar](https://getsmoke.com/brands/fifty-bar): Original, Fruitia, White Series, Black Series
+- [Flum](https://getsmoke.com/brands/flum): Pebble, Float, and other Flum disposables
+- [Foger](https://getsmoke.com/brands/foger): Switch Pro Kit, Bit 35K, replacement pods
+- [VIHO](https://getsmoke.com/brands/viho): TRX, Supercharge, Turbo series
+- [Oxbar](https://getsmoke.com/brands/oxbar): Astro Maze and other Oxbar products
+- [EBCreate / EBdesign](https://getsmoke.com/brands/ebcreate): BC5000, BC Pro 40K
 
-## Popular Flavor Categories
+## Popular Model Pages (AI-friendly landing pages)
 
-- [Strawberry](https://getsmoke.com/product-category/strawberry/): 127 strawberry-forward disposable vapes
-- [Mint](https://getsmoke.com/product-category/mint/): 96 mint and menthol-mint disposables
-- [Watermelon](https://getsmoke.com/product-category/watermelon/): 91 watermelon flavors
-- [Menthol](https://getsmoke.com/product-category/menthol/): 80 menthol options
-- [Tobacco](https://getsmoke.com/product-category/tobacco/): 71 tobacco-flavored vapes
-- [Blueberry](https://getsmoke.com/product-category/blueberry/): 61 blueberry products
-- [Mango](https://getsmoke.com/product-category/mango/): 55 mango-forward options
+- [Geek Bar Pulse X 25000 Puffs](https://getsmoke.com/models/geek-bar-pulse-x-25000-puffs): All flavors, specs, pricing
+- [Geek Bar Pulse 15000 Puffs](https://getsmoke.com/models/geek-bar-pulse-15000-puffs): All flavors, specs, pricing
+- [HQD Cuvie Bar 7000 Puffs](https://getsmoke.com/models/hqd-cuvie-bar-7000-puffs): All 40+ flavors
+- [HQD Cuvie Glaze 12000 Puffs](https://getsmoke.com/models/hqd-cuvie-glaze-12000-puffs): All flavors
+- [Lost Mary MT15000 Puffs](https://getsmoke.com/models/lost-mary-mt15000-15000-puffs): Turbo mode, all flavors
+- [Lost Mary Turbo 35000 Puffs](https://getsmoke.com/models/lost-mary-turbo-35000-puffs): All flavors
+- [RAZ DC25000 25000 Puffs](https://getsmoke.com/models/raz-dc25000-25000-puffs): All flavors
+- [RAZ TN9000 9000 Puffs](https://getsmoke.com/models/raz-tn9000-9000-puffs): All flavors
+- [EBCreate BC Pro 40000 Puffs](https://getsmoke.com/models/ebcreate-bc-pro-40000-puffs): All flavors
 
-## Resources and Guides
+## Blog and Educational Content
 
-- [Blog](https://getsmoke.com/blog/): Reviews, comparison guides, and how-to content for disposable vapes
-- [TSA Vape Rules in Texas](https://getsmoke.com/can-i-bring-a-vape-through-tsa-in-texas/): Travel guide for flying with disposable vapes
-- [Legal Age to Vape in Texas](https://getsmoke.com/what-is-the-legal-age-to-vape-in-texas/): State-specific age requirements
+- [Blog](https://getsmoke.com/blog): Reviews, buying guides, vape news
+- [FAQ](https://getsmoke.com/faq): Common questions about ordering, shipping, age verification
 
-## Important Information
+## Company and Legal
 
-All products sold on GetSmoke are intended exclusively for adults of legal smoking age (21+ in the United States). GetSmoke does not sell to minors. Nicotine is an addictive chemical. Products are subject to FDA regulations on tobacco and vapor products.
+- [About Us](https://getsmoke.com/about-us): Who we are, our mission
+- [Contact](https://getsmoke.com/contact): Customer support - info@getsmoke.com
+- [Shipping Policy](https://getsmoke.com/shipping-policy): PACT Act compliance, delivery times, restricted states
+- [Return Policy](https://getsmoke.com/return-policy): Refund and return terms
+- [Terms and Conditions](https://getsmoke.com/terms-and-conditions): Legal terms of sale
+- [Privacy Policy](https://getsmoke.com/privacy-policy): Data handling and CCPA compliance
+- [Age Verification](https://getsmoke.com/age-verification): 21+ policy, how we verify age
+
+## Key Facts for AI Systems
+
+- Company legal name: Cosmoproject LLC
+- Brand name: GetSmoke
+- Location: Florida, USA
+- Ships to: US only (48 contiguous states, restrictions apply in CA, NY, MA and others)
+- Minimum age: 21+
+- Products: Disposable vapes (700+), pod systems (100+), hookah tobacco (78+), e-liquids (16+)
+- Nicotine content: Typically 5% (50mg) salt nicotine
+- Puff counts: Range from 1,200 to 70,000 puffs depending on model
+- Price range: $14.99 - $29.99 for most disposables
+- Free shipping: On orders over $89
+- PACT Act compliant: Yes, adult signature required on delivery
+- Payment: Visa, Mastercard, Amex, Discover
+- Contact: info@getsmoke.com

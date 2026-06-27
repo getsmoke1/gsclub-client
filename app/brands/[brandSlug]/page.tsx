@@ -18,10 +18,15 @@ type Props = { params: Promise<{ brandSlug: string }> };
 
 // Pre-render all brand pages as static HTML at build time
 export async function generateStaticParams() {
-  const brands = await prisma.brand.findMany({ select: { slug: true } });
-  return brands
-    .filter((b) => !!b.slug)
-    .map((b) => ({ brandSlug: b.slug as string }));
+  // Graceful fallback: if DB unavailable at build time, pages generate on first request via ISR
+  try {
+    const brands = await prisma.brand.findMany({ select: { slug: true } });
+    return brands
+      .filter((b) => !!b.slug)
+      .map((b) => ({ brandSlug: b.slug as string }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

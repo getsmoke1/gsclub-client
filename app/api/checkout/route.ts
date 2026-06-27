@@ -166,7 +166,11 @@ export async function POST(req: NextRequest) {
     });
 
     // Add shipping cost to calculate final total
-    const shippingCost = shippingAmount ? parseFloat(shippingAmount) : 0;
+    // Server-side validation: free shipping (0) only allowed when subtotal >= FREE_THRESHOLD
+    const FREE_THRESHOLD = 89;
+    const FLAT_RATE = 7.69;
+    const clientShipping = shippingAmount ? parseFloat(shippingAmount) : FLAT_RATE;
+    const shippingCost = clientShipping === 0 && subtotal >= FREE_THRESHOLD ? 0 : Math.min(clientShipping, FLAT_RATE);
     const insuranceCost = _insuranceAmount ? parseFloat(_insuranceAmount) : 0;
     const finalTotal = subtotal + shippingCost + insuranceCost;
 

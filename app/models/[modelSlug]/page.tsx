@@ -7,6 +7,9 @@ import Script from "next/script";
 
 const SITE_URL = "https://getsmoke.com";
 
+// ISR: revalidate model pages every 6 hours (not full SSG - avoids 49 concurrent DB calls at build)
+export const revalidate = 21600;
+
 type Props = { params: Promise<{ modelSlug: string }> };
 
 export async function generateStaticParams() {

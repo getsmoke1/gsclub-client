@@ -18,6 +18,8 @@ import BundleFlavorSelector from "@/components/ProductPage/BundleFlavorSelector"
 import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
 import { FrequencyValue } from "@/lib/nmi";
 import Faq from "./Faq";
+import Link from "next/link";
+import { findModelForProduct } from "@/lib/models-config";
 import { useDeleteReview } from "./useReview";
 import { Edit, X } from "lucide-react";
 import StarRating from "../ui/StarRating";
@@ -477,6 +479,30 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                     productName={resolvedProduct.name}
                 />
             </section>
+
+            {/* Model page link — SEO internal link to model listing */}
+            {(() => {
+                const model = findModelForProduct(resolvedProduct.name);
+                if (!model) return null;
+                return (
+                    <section className="w-11/12 mx-auto my-6">
+                        <Link
+                            href={`/models/${model.slug}`}
+                            className="flex items-center justify-between w-full border border-gray-200 rounded-2xl px-5 py-4 hover:border-orange-400 hover:bg-orange-50 transition-colors group"
+                        >
+                            <div>
+                                <p className="text-xs text-gray-400 uppercase tracking-wide mb-0.5">Shop all flavors</p>
+                                <p className="font-semibold text-sm text-gray-900 group-hover:text-orange-600">
+                                    {model.name} — {model.puffs} puffs, all {model.nicotine} flavors
+                                </p>
+                            </div>
+                            <svg className="w-5 h-5 text-gray-400 group-hover:text-orange-500 flex-shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                    </section>
+                );
+            })()}
 
             <section className="-mt-4 mb-28">
                 <Faq slug={resolvedProduct.slug} />

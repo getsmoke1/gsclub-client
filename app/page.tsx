@@ -105,6 +105,31 @@ export default async function Home() {
     }
   };
 
+  // LocalBusiness Schema — signals GetSmoke = US retailer in Florida to Google Knowledge Graph
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": ["OnlineStore", "LocalBusiness"],
+    name: "GetSmoke",
+    description: "Premium disposable vapes online store. Shop Geek Bar, RAZ, Lost Mary, HQD and more. Fast US shipping, adults 21+ only.",
+    url: "https://getsmoke.com",
+    logo: "https://getsmoke.com/icon-192.png",
+    email: "info@getsmoke.com",
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
+    currenciesAccepted: "USD",
+    paymentAccepted: "Credit Card",
+    priceRange: "$$",
+    openingHours: "Mo-Su 00:00-23:59",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "info@getsmoke.com",
+      contactType: "customer support",
+      availableLanguage: "English",
+    },
+  };
+
   return (
     <>
       <script
@@ -118,6 +143,10 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
       {/* SEO H1 — visually hidden, present in DOM for crawlers */}
       <h1 style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>

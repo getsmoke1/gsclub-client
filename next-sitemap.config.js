@@ -52,12 +52,19 @@ module.exports = {
       { loc: "/accessories", priority: 0.5, changefreq: "daily" },
       { loc: "/hookah", priority: 0.5, changefreq: "daily" },
       { loc: "/vapes", priority: 0.5, changefreq: "daily" },
-      // Collection pages (nicotine / puffs)
+      // Collection pages (nicotine / puffs / flavor)
       { loc: "/5-percent-nicotine-vapes", priority: 0.8, changefreq: "weekly" },
       { loc: "/nicotine-free-vapes", priority: 0.8, changefreq: "weekly" },
       { loc: "/20000-puff-vapes", priority: 0.8, changefreq: "weekly" },
       { loc: "/25000-puff-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/coffee-flavored-disposable-vapes", priority: 0.8, changefreq: "weekly" },
       { loc: "/new-in-stock", priority: 0.7, changefreq: "daily" },
+      // Definition / AI answer pages
+      { loc: "/what-is-a-disposable-vape", priority: 0.8, changefreq: "monthly" },
+      { loc: "/what-is-nicotine-salt", priority: 0.8, changefreq: "monthly" },
+      // How-To pages
+      { loc: "/how-to-use-geek-bar-pulse-x", priority: 0.8, changefreq: "monthly" },
+      { loc: "/how-to-charge-raz-vape", priority: 0.8, changefreq: "monthly" },
     ];
 
     staticPages.forEach((page) => {

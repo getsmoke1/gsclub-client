@@ -106,6 +106,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to R2 image CDN for faster LCP */}
+        <link rel="preconnect" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
+        <link rel="dns-prefetch" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{

@@ -73,3 +73,27 @@ export function getModelBySlug(slug: string): ModelConfig | undefined {
 export function getModelsByBrand(brandSlug: string): ModelConfig[] {
   return MODELS.filter(m => m.brandSlug === brandSlug);
 }
+
+/**
+ * Find the best-matching model for a product by its name.
+ * Matches dbSearchQuery against the product name (case-insensitive).
+ * Returns the most specific match (longest dbSearchQuery).
+ */
+export function findModelForProduct(productName: string): ModelConfig | null {
+  if (!productName) return null;
+  const nameLower = productName.toLowerCase();
+  // Filter models whose dbSearchQuery appears in the product name
+  const matches = MODELS.filter(m => {
+    if (!m.dbSearchQuery) return false;
+    const queryLower = m.dbSearchQuery.toLowerCase();
+    if (!nameLower.includes(queryLower)) return false;
+    // Check excludeQueries — if product name contains any exclusion, skip
+    if (m.excludeQueries?.some(eq => nameLower.includes(eq.toLowerCase()))) return false;
+    return true;
+  });
+  if (matches.length === 0) return null;
+  // Return the most specific match (longest dbSearchQuery = least ambiguous)
+  return matches.reduce((best, m) =>
+    m.dbSearchQuery.length > best.dbSearchQuery.length ? m : best
+  );
+}

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { Product } from "@/types/product";
 import { unstable_cache } from "next/cache";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Pod Systems & Pod Kits | GetSmoke",

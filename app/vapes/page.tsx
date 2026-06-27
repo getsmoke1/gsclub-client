@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
 import { getCachedProducts } from "@/lib/cached-queries";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shop All Vapes | GetSmoke",

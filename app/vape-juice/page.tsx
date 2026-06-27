@@ -3,7 +3,7 @@ import VapePage from "@/components/vapes/VapePage";
 import { noIndex } from "@/lib/noindex";
 import { prefetchProducts } from "@/lib/prefetch-products";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   ...noIndex,

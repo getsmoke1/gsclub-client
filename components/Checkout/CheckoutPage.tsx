@@ -102,6 +102,7 @@ const CheckoutPage = () => {
 
   // Refs for guest fields (stale closure prevention)
   const guestEmailRef = useRef("");
+  const guestPhoneRef = useRef("");
   const guestFirstNameRef = useRef("");
   const guestLastNameRef = useRef("");
   const guestStreetRef = useRef("");
@@ -239,6 +240,13 @@ const CheckoutPage = () => {
       // Resolve shipping address
       const addr = selectedCardRef.current;
       if (!addr && currentStatus === "unauthenticated") {
+        // Validate phone
+        if (!guestPhoneRef.current || guestPhoneRef.current.length < 7) {
+          setPaymentError("Please enter your phone number.");
+          toast.error("Please enter your phone number.");
+          setPaymentProcessing(false);
+          return;
+        }
         // Build from guest form refs
         if (!guestStreetRef.current || !guestCityRef.current || !guestStateRef.current || !guestZipRef.current) {
           setPaymentError("Please complete your shipping address.");
@@ -352,13 +360,19 @@ const CheckoutPage = () => {
                   <div>
                     <label className={labelCls}>Email *</label>
                     <input type="email" value={guestEmail} placeholder="your@email.com"
-                      onChange={e => { setGuestEmail(e.target.value); guestEmailRef.current = e.target.value; }}
+                      onChange={e => {
+                        setGuestEmail(e.target.value);
+                        guestEmailRef.current = e.target.value;
+                        // Auto-fill payment email
+                        setPaymentEmail(e.target.value);
+                        paymentEmailRef.current = e.target.value;
+                      }}
                       className={inputCls} />
                   </div>
                   <div>
-                    <label className={labelCls}>Phone</label>
+                    <label className={labelCls}>Phone *</label>
                     <input type="tel" value={guestPhone} placeholder="(305) 000-0000"
-                      onChange={e => setGuestPhone(e.target.value.replace(/\D/g, ""))}
+                      onChange={e => { const v = e.target.value.replace(/\D/g, ""); setGuestPhone(v); guestPhoneRef.current = v; }}
                       className={inputCls} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -545,8 +559,11 @@ const CheckoutPage = () => {
                     <label className={labelCls}>Email for order confirmation *</label>
                     <input type="email" value={paymentEmail} placeholder="your@email.com"
                       onChange={e => { setPaymentEmail(e.target.value); paymentEmailRef.current = e.target.value; }}
-                      className={inputCls} />
-                    <p className="text-xs text-gray-400 mt-1">We&apos;ll send your order confirmation here.</p>
+                      className={inputCls}
+                      style={guestEmail ? { background: "#f9fafb", color: "#374151" } : {}} />
+                    <p className="text-xs text-gray-400 mt-1">
+                      {guestEmail ? "Auto-filled from your email above." : "We'll send your order confirmation here."}
+                    </p>
                   </div>
                 )}
 

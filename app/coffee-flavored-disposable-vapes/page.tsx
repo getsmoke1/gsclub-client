@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 async function getCoffeeProducts() {
   return prisma.product.findMany({

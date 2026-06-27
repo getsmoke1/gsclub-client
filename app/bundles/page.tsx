@@ -39,5 +39,5 @@ const getCachedBundles = unstable_cache(
 
 export default async function BundlesPage() {
   const initialProducts = await getCachedBundles();
-  return <VapePage productType="VAPES" search="pack" initialProducts={initialProducts} faqSlug="/bundles" heading="Bundle Deals - Buy Vapes in Bulk" />;
+  return <VapePage productType="VAPES" search="pack" nameOnly={true} initialProducts={initialProducts} faqSlug="/bundles" heading="Bundle Deals - Buy Vapes in Bulk" />;
 }

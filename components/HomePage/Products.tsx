@@ -15,11 +15,12 @@ import AddToCartButton from "@/components/Cart/AddToCartButton";
 type ProductsProps = {
   productType?: string;
   search?: string; // e.g. "pack" to filter bundle products
+  nameOnly?: boolean; // strict name-only search (for bundles page)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialProducts?: any[];
 };
 
-const Products = ({ productType, search, initialProducts }: ProductsProps) => {
+const Products = ({ productType, search, nameOnly, initialProducts }: ProductsProps) => {
   const { brandId, flavorId, puffsId, nicotineId, clearFilters } = useFilter();
 
   // Clear filters when productType changes (navigating between sections)
@@ -52,6 +53,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     if (nicotineId) params.append("nicotineId", nicotineId);
     if (productType) params.append("productType", productType);
     if (search) params.append("search", search);
+    if (nameOnly) params.append("nameOnly", "true");
     params.append("page", pageParam.toString());
     params.append("limit", limit.toString());
 
@@ -69,7 +71,7 @@ const Products = ({ productType, search, initialProducts }: ProductsProps) => {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: ["products", productType, search, brandId, flavorId, puffsId, nicotineId],
+    queryKey: ["products", productType, search, nameOnly, brandId, flavorId, puffsId, nicotineId],
     queryFn: fetchProducts,
     getNextPageParam: (lastPage, pages) => {
       return pages.length < lastPage.totalPages ? pages.length + 1 : undefined;

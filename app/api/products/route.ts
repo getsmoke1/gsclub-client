@@ -22,6 +22,7 @@ export async function GET(req: Request) {
     const nicotineId = searchParams.get("nicotineId");
     const productType = searchParams.get("productType");
     const search = searchParams.get("search");
+    const nameOnly = searchParams.get("nameOnly") === "true"; // strict name-only search (for bundles)
     const sortBy = searchParams.get("sortBy"); // "newest" | undefined
     const archived = searchParams.has("archived")
       ? searchParams.get("archived") === "true"
@@ -81,14 +82,19 @@ export async function GET(req: Request) {
 
     // Add search filter if provided
     if (search) {
-      filter.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { eLiquidContent: { contains: search, mode: "insensitive" } },
-        { batteryCapacity: { contains: search, mode: "insensitive" } },
-        { coil: { contains: search, mode: "insensitive" } },
-        { firingMechanism: { contains: search, mode: "insensitive" } },
-        { type: { contains: search, mode: "insensitive" } },
-      ];
+      if (nameOnly) {
+        // Strict name-only filter (used for bundles page)
+        filter.name = { contains: search, mode: "insensitive" };
+      } else {
+        filter.OR = [
+          { name: { contains: search, mode: "insensitive" } },
+          { eLiquidContent: { contains: search, mode: "insensitive" } },
+          { batteryCapacity: { contains: search, mode: "insensitive" } },
+          { coil: { contains: search, mode: "insensitive" } },
+          { firingMechanism: { contains: search, mode: "insensitive" } },
+          { type: { contains: search, mode: "insensitive" } },
+        ];
+      }
     }
 
     // Enhanced flavor filtering that checks both direct flavor relation and productFlavors

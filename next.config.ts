@@ -33,7 +33,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/product-category/:slug*',
-        destination: '/products',
+        destination: '/vapes',
+        permanent: true,
+      },
+      {
+        source: '/products',
+        destination: '/vapes',
         permanent: true,
       },
       {

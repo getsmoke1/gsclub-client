@@ -1,0 +1,26 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /dashboard/*
+Disallow: /_next/*
+Disallow: /my-account/*
+Disallow: /cart/*
+Disallow: /checkout/*
+Disallow: /email-preview/*
+Disallow: /login/*
+Disallow: /signup/*
+Disallow: /reset-password/*
+Disallow: /forgot-password/*
+
+# Host
+Host: https://getsmoke.com
+
+# Sitemaps
+Sitemap: https://getsmoke.com/sitemap.xml
+Sitemap: https://www.getsmoke.com/server-sitemap-products.xml
+Sitemap: https://www.getsmoke.com/server-sitemap-blog.xml

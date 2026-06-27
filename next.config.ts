@@ -11,6 +11,13 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // www → non-www permanent redirect (301)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.getsmoke.com' }],
+        destination: 'https://getsmoke.com/:path*',
+        permanent: true,
+      },
       {
         source: '/product-tag/:brand*',
         destination: '/brands/:brand',
@@ -1310,6 +1317,37 @@ const nextConfig: NextConfig = {
       {
         source: '/how-to-do-a-ghost-inhale',
         destination: '/blog/how-to-do-a-ghost-inhale',
+        permanent: true,
+      },
+      // New comparison articles
+      {
+        source: '/raz-vape-vs-juicy-bar',
+        destination: '/blog/raz-vape-vs-juicy-bar-2026',
+        permanent: true,
+      },
+      {
+        source: '/raz-vs-juicy-bar',
+        destination: '/blog/raz-vape-vs-juicy-bar-2026',
+        permanent: true,
+      },
+      {
+        source: '/lost-mary-vs-geek-bar',
+        destination: '/blog/lost-mary-vs-geek-bar-2026',
+        permanent: true,
+      },
+      {
+        source: '/juicy-bar-vs-lost-mary',
+        destination: '/blog/juicy-bar-vs-lost-mary-2026',
+        permanent: true,
+      },
+      {
+        source: '/geek-bar-vs-raz',
+        destination: '/blog/geek-bar-vs-raz-2026',
+        permanent: true,
+      },
+      {
+        source: '/hqd-vs-geek-bar',
+        destination: '/blog/hqd-vs-geek-bar-2026',
         permanent: true,
       },
       {

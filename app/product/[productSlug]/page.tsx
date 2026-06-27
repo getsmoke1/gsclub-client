@@ -60,36 +60,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const productName = `${product.brand.name} ${product.name}`;
-  const flavor = product.flavor?.name ?? product.productFlavors?.[0]?.flavor?.name ?? null;
-  const fullName = flavor ? `${productName} - ${flavor}` : productName;
+  // product.name already contains brand + flavor (e.g. "Colombian Coffee Ice Juicy Bar JB5000")
+  // Don't prepend brand or append flavor - avoids duplicate like "Juicy Bar Colombian Coffee Ice Juicy Bar JB5000 - Colombian Coffee Ice"
+  const displayName = product.name;
   const price = product.currentPrice.toFixed(2);
   const image = product.images?.[0]?.url;
   const inStock = product.stockStatus !== "OUTOFSTOCK";
 
-  const title = `${fullName} | GetSmoke`;
-  const description = `Buy ${fullName} for $${price} at GetSmoke. ${inStock ? "In stock" : "Pre-order"}, fast US shipping. 21+ only.`;
+  const title = `${displayName} | GetSmoke`;
+  const description = `Buy ${displayName} for $${price} at GetSmoke. ${inStock ? "In stock" : "Pre-order"}, fast US shipping. 21+ only.`;
 
   return {
     title,
     description,
     alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: `${fullName} | GetSmoke`,
+      title: `${displayName} | GetSmoke`,
       description,
       url: canonicalUrl,
       siteName: "GetSmoke",
       type: "website",
-      ...(image ? { images: [{ url: image, width: 800, height: 800, alt: fullName }] } : {}),
+      ...(image ? { images: [{ url: image, width: 800, height: 800, alt: displayName }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${displayName} | GetSmoke`,
+      description,
+      ...(image ? { images: [image] } : {}),
     },
   };
 }
 
 // Build Product JSON-LD schema for Google rich snippets
 function buildProductSchema(product: Product, slug: string) {
-  const productName = `${product.brand.name} ${product.name}`;
-  const flavor = product.flavor?.name ?? product.productFlavors?.[0]?.flavor?.name ?? null;
-  const fullName = flavor ? `${productName} - ${flavor}` : productName;
+  // product.name already has brand + flavor baked in - use directly
+  const fullName = product.name;
   const image = product.images?.[0]?.url;
   const inStock = product.stockStatus !== "OUTOFSTOCK";
 
@@ -156,7 +161,7 @@ function buildBreadcrumbSchema(product: Product, slug: string) {
       {
         "@type": "ListItem",
         position: 4,
-        name: `${product.brand.name} ${product.name}`,
+        name: product.name,
         item: `https://getsmoke.com/product/${slug}`,
       },
     ],

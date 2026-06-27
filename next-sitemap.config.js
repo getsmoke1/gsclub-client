@@ -65,6 +65,8 @@ module.exports = {
       // How-To pages
       { loc: "/how-to-use-geek-bar-pulse-x", priority: 0.8, changefreq: "monthly" },
       { loc: "/how-to-charge-raz-vape", priority: 0.8, changefreq: "monthly" },
+      // City delivery pages
+      { loc: "/vape-delivery-boston-massachusetts", priority: 0.7, changefreq: "monthly" },
     ];
 
     staticPages.forEach((page) => {

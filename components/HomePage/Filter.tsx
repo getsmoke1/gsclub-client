@@ -44,15 +44,23 @@ const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef
 );
 
 const Filter = ({ productType }: { productType?: string }) => {
-  const { brandId, flavorId, puffsId, nicotineId, setFilters, clearFilters, removeFilter } = useFilter();
+  const {
+    brandId, flavorId, puffsId, nicotineId,
+    activeProductType,
+    setFilters, clearFilters, removeFilter, setActiveProductType,
+  } = useFilter();
 
   const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
+  // Flavors filtered by selected puffsId (null = show full list)
+  const [filteredFlavors, setFilteredFlavors] = useState<FilterOption[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
   const filterRef = useRef<HTMLDivElement>(null);
+  // Ref for the horizontal-scrollable pill — close dropdown on horizontal swipe
+  const pillRef = useRef<HTMLDivElement>(null);
   const brandBtnRef = useRef<HTMLButtonElement>(null);
   const puffsBtnRef = useRef<HTMLButtonElement>(null);
   const flavorBtnRef = useRef<HTMLButtonElement>(null);
@@ -65,8 +73,20 @@ const Filter = ({ productType }: { productType?: string }) => {
     nicotine: nicotineBtnRef,
   };
 
-  // FIX 1: Always fetch ALL options without any active filter values.
-  // This ensures every dropdown always shows the full list regardless of current selection.
+  // FIX: Reset filters when navigating to a different product type page.
+  // Tracked via Zustand so it survives component remount on page navigation.
+  useEffect(() => {
+    if (productType && activeProductType !== productType) {
+      clearFilters();
+      setOpenDropdown(null);
+      setActiveProductType(productType);
+    } else if (productType && !activeProductType) {
+      setActiveProductType(productType);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productType]);
+
+  // Fetch all filter options (always full list — no active filter params)
   const fetchFilterOptions = useCallback(async () => {
     try {
       setLoading(true);
@@ -81,21 +101,27 @@ const Filter = ({ productType }: { productType?: string }) => {
     } finally {
       setLoading(false);
     }
-  }, [productType]); // only refetch when productType changes
+  }, [productType]);
 
   useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
 
-  // FIX 2: Reset all filters when navigating to a different product category page.
-  const prevProductType = useRef(productType);
+  // When puffsId is selected, fetch only flavors that exist for that puff count.
+  // When puffsId is cleared, reset to full flavor list.
   useEffect(() => {
-    if (prevProductType.current !== productType) {
-      clearFilters();
-      setOpenDropdown(null);
-      prevProductType.current = productType;
+    if (!puffsId) {
+      setFilteredFlavors(null);
+      return;
     }
-  }, [productType, clearFilters]);
+    const params = new URLSearchParams();
+    if (productType) params.append("productType", productType);
+    params.append("puffsId", puffsId);
+    fetch(`/api/products/filter-options?${params.toString()}`)
+      .then((r) => r.json())
+      .then((data) => setFilteredFlavors(data.flavors ?? null))
+      .catch(() => setFilteredFlavors(null));
+  }, [puffsId, productType]);
 
-  // Close on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
@@ -106,13 +132,22 @@ const Filter = ({ productType }: { productType?: string }) => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Close on scroll
+  // Close dropdown on vertical page scroll
   useEffect(() => {
     if (!openDropdown) return;
     const handleScroll = () => setOpenDropdown(null);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [openDropdown]);
+
+  // Close dropdown on horizontal scroll inside the pill (mobile swipe right)
+  useEffect(() => {
+    const pill = pillRef.current;
+    if (!pill) return;
+    const handlePillScroll = () => setOpenDropdown(null);
+    pill.addEventListener("scroll", handlePillScroll, { passive: true });
+    return () => pill.removeEventListener("scroll", handlePillScroll);
+  }, []);
 
   const toggle = (name: string) => {
     if (openDropdown === name) {
@@ -142,10 +177,10 @@ const Filter = ({ productType }: { productType?: string }) => {
 
   const getOptions = (key: string): FilterOption[] => {
     if (!filterOptions) return [];
+    if (key === "flavor") return filteredFlavors ?? filterOptions.flavors;
     const map: Record<string, FilterOption[]> = {
       brand: filterOptions.brands,
       puffs: filterOptions.puffs,
-      flavor: filterOptions.flavors,
       nicotine: filterOptions.nicotineLevels,
     };
     return map[key] || [];
@@ -169,6 +204,7 @@ const Filter = ({ productType }: { productType?: string }) => {
     <div className="relative w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef}>
       {/* Yellow pill — overflow-x scroll, no clipping of children */}
       <div
+        ref={pillRef}
         className="flex items-center bg-[#ffc42e] rounded-full px-8 py-2.5 text-black text-sm font-bold overflow-x-auto"
         style={{ scrollbarWidth: "none", overflowY: "visible", paddingLeft: '32px', paddingRight: '32px' }}
       >

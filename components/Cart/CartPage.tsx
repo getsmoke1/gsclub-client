@@ -198,7 +198,7 @@ const CartPage = () => {
                                                     <tr key={itemKey} className="border-b border-gray-200">
                                                         <td className="p-4">
                                                             {product && (
-                                                                <Link href={`/product/${item.id}`} className="flex items-center space-x-4">
+                                                                <Link href={`/product/${product.slug}`} className="flex items-center space-x-4">
                                                                     {product.images[0]?.url && (
                                                                         <Image
                                                                             src={product.images[0].url}

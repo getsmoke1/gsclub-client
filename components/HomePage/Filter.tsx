@@ -1,18 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";
+import { useFilterOptions } from "@/hooks/useFilterOptions";
 
 interface FilterOption {
   id: string;
   name: string;
-}
-
-interface FilterOptions {
-  brands: FilterOption[];
-  flavors: FilterOption[];
-  puffs: FilterOption[];
-  nicotineLevels: FilterOption[];
 }
 
 type FilterKey = "brandId" | "flavorId" | "puffsId" | "nicotineId";
@@ -46,9 +40,11 @@ const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef
 const Filter = ({ productType }: { productType?: string }) => {
   const { brandId, flavorId, puffsId, nicotineId, setFilters, clearFilters, removeFilter } = useFilter();
 
-  const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Filter options are cached in Zustand by productType — never lost on re-renders or remounts
+  const { cache, loading, error, loadOptions } = useFilterOptions();
+  const cacheKey = productType || "__all__";
+  const filterOptions = cache[cacheKey] ?? null;
+
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
@@ -65,27 +61,12 @@ const Filter = ({ productType }: { productType?: string }) => {
     nicotine: nicotineBtnRef,
   };
 
-  // FIX 1: Always fetch ALL options without any active filter values.
-  // This ensures every dropdown always shows the full list regardless of current selection.
-  const fetchFilterOptions = useCallback(async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (productType) params.append("productType", productType);
-      const res = await fetch(`/api/products/filter-options?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to fetch filter options");
-      const data = await res.json();
-      setFilterOptions(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error");
-    } finally {
-      setLoading(false);
-    }
-  }, [productType]); // only refetch when productType changes
+  // Load options on mount and when productType changes (no-op if already cached)
+  useEffect(() => {
+    loadOptions(productType);
+  }, [productType, loadOptions]);
 
-  useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
-
-  // FIX 2: Reset all filters when navigating to a different product category page.
+  // Reset selected filters when navigating to a different product category page.
   const prevProductType = useRef(productType);
   useEffect(() => {
     if (prevProductType.current !== productType) {

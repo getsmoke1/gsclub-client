@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
 import { prefetchProducts } from "@/lib/prefetch-products";

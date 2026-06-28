@@ -1,4 +1,5 @@
 "use client";
+// FILTER_BUILD_20260628_USEREF_V3
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";

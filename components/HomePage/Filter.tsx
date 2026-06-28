@@ -1,6 +1,5 @@
 "use client";
-// FILTER_BUILD_20260628_USEREF_V3
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";
 
@@ -47,13 +46,9 @@ const FilterTrigger = ({ label, isActive, isOpen, onToggle, selectedName, btnRef
 const Filter = ({ productType }: { productType?: string }) => {
   const { brandId, flavorId, puffsId, nicotineId, setFilters, clearFilters, removeFilter } = useFilter();
 
-  // Store options in a REF — immune to re-renders, concurrent mode, Zustand updates.
-  // Once loaded, they NEVER change (until productType changes and we reset).
-  const filterOptionsRef = useRef<FilterOptions | null>(null);
-  const loadedForType = useRef<string | undefined>(undefined);
-  const [optionsReady, setOptionsReady] = useState(false);
-  const [filterError, setFilterError] = useState<string | null>(null);
-
+  const [filterOptions, setFilterOptions] = useState<FilterOptions | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
 
@@ -70,25 +65,27 @@ const Filter = ({ productType }: { productType?: string }) => {
     nicotine: nicotineBtnRef,
   };
 
-  // Load options ONCE per productType — stored in ref, never overwritten by re-renders
-  useEffect(() => {
-    if (loadedForType.current === productType) return; // Already loaded for this type
-    loadedForType.current = productType;
-    filterOptionsRef.current = null;
-    setOptionsReady(false);
+  // FIX 1: Always fetch ALL options without any active filter values.
+  // This ensures every dropdown always shows the full list regardless of current selection.
+  const fetchFilterOptions = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (productType) params.append("productType", productType);
+      const res = await fetch(`/api/products/filter-options?${params.toString()}`);
+      if (!res.ok) throw new Error("Failed to fetch filter options");
+      const data = await res.json();
+      setFilterOptions(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error");
+    } finally {
+      setLoading(false);
+    }
+  }, [productType]); // only refetch when productType changes
 
-    const params = new URLSearchParams();
-    if (productType) params.append("productType", productType);
-    fetch(`/api/products/filter-options?${params.toString()}`)
-      .then(r => { if (!r.ok) throw new Error("Failed to fetch"); return r.json(); })
-      .then((data: FilterOptions) => {
-        filterOptionsRef.current = data;
-        setOptionsReady(true);
-      })
-      .catch(err => setFilterError(err.message));
-  }, [productType]); // strictly only productType
+  useEffect(() => { fetchFilterOptions(); }, [fetchFilterOptions]);
 
-  // Reset selected filters when navigating to a different product category page.
+  // FIX 2: Reset all filters when navigating to a different product category page.
   const prevProductType = useRef(productType);
   useEffect(() => {
     if (prevProductType.current !== productType) {
@@ -144,13 +141,12 @@ const Filter = ({ productType }: { productType?: string }) => {
   };
 
   const getOptions = (key: string): FilterOption[] => {
-    const opts = filterOptionsRef.current;
-    if (!opts) return [];
+    if (!filterOptions) return [];
     const map: Record<string, FilterOption[]> = {
-      brand: opts.brands,
-      puffs: opts.puffs,
-      flavor: opts.flavors,
-      nicotine: opts.nicotineLevels,
+      brand: filterOptions.brands,
+      puffs: filterOptions.puffs,
+      flavor: filterOptions.flavors,
+      nicotine: filterOptions.nicotineLevels,
     };
     return map[key] || [];
   };
@@ -167,7 +163,7 @@ const Filter = ({ productType }: { productType?: string }) => {
     { key: "nicotine", label: "Nicotine", filterKey: "nicotineId" as FilterKey },
   ];
 
-  if (filterError) return <div className="text-red-500 p-2 text-sm">Filter error: {filterError}</div>;
+  if (error) return <div className="text-red-500 p-2 text-sm">Filter error: {error}</div>;
 
   return (
     <div className="relative w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef}>
@@ -179,7 +175,7 @@ const Filter = ({ productType }: { productType?: string }) => {
         <h2 className="font-black whitespace-nowrap shrink-0 mr-2">filter by</h2>
         <span className="text-black/30 mx-2 shrink-0">|</span>
 
-        {!optionsReady ? (
+        {loading ? (
           <div className="flex flex-1 justify-around">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-7 w-20 bg-[#f0b800] rounded-full animate-pulse mx-2 shrink-0" />

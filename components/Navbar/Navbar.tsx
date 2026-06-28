@@ -410,7 +410,7 @@ const Navbar = () => {
                                 </Link>
                             </div>
                             <div className="relative">
-                                <Link href="/cart" aria-label={`Shopping cart${items.length > 0 ? ` (${items.length} items)` : ''}`}>
+                                <Link href="/cart" aria-label={`Shopping cart${items.length > 0 ? ` (${items.reduce((s, i) => s + i.quantity, 0)} items)` : ''}`}>
                                     <Image
                                         src="/images/cart.png"
                                         width={25}
@@ -436,9 +436,9 @@ const Navbar = () => {
                                                 justifyContent: 'center',
                                                 lineHeight: 1,
                                             }}
-                                            aria-label={`${items.length} items in cart`}
+                                            aria-label={`${items.reduce((s, i) => s + i.quantity, 0)} items in cart`}
                                         >
-                                            {items.length}
+                                            {items.reduce((s, i) => s + i.quantity, 0)}
                                         </span>
                                     )}
                                 </Link>

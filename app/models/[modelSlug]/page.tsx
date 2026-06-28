@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getModelBySlug, MODELS } from "@/lib/models-config";
+import { getModelBySlug } from "@/lib/models-config";
 import GenericModelPage from "@/components/ModelPage/GenericModelPage";
 import { prisma } from "@/lib/prisma";
 import Script from "next/script";
@@ -8,13 +8,11 @@ import Script from "next/script";
 const SITE_URL = "https://getsmoke.com";
 
 // ISR: revalidate model pages every 6 hours (not full SSG - avoids 49 concurrent DB calls at build)
+// ISR: cache for 6h, generate on first request (no build-time pre-render — avoids DATABASE_URL issue)
 export const revalidate = 21600;
+export const dynamicParams = true;
 
 type Props = { params: Promise<{ modelSlug: string }> };
-
-export async function generateStaticParams() {
-  return MODELS.map(m => ({ modelSlug: m.slug }));
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { modelSlug } = await params;

@@ -13,7 +13,8 @@ export const orderConfirmationTemplate = (
   total: number,
   shippingAddress: string,
   isSubscription?: boolean,
-  subscriptionFrequency?: string
+  subscriptionFrequency?: string,
+  customerEmail?: string
 ) => {
   const itemsHtml = items.map(item => `
     <tr>
@@ -91,6 +92,7 @@ export const orderConfirmationTemplate = (
       <div style="margin-top:24px;padding:16px;background:#f9fafb;border-radius:6px;border:1px solid #e5e7eb;">
         <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#374151;">Shipping Address:</p>
         <p style="margin:0;font-size:13px;color:#6b7280;white-space:pre-line;">${shippingAddress}</p>
+        ${customerEmail ? `<p style="margin:8px 0 0;font-size:13px;color:#374151;"><strong>Customer Email:</strong> <a href="mailto:${customerEmail}" style="color:#f0a500;">${customerEmail}</a></p>` : ''}
       </div>
 
       <!-- Footer note -->

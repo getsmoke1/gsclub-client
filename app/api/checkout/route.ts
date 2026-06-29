@@ -376,7 +376,8 @@ export async function POST(req: NextRequest) {
           finalTotal,
           shippingAddr,
           !!isSubscription,
-          subscriptionFrequency || undefined
+          subscriptionFrequency || undefined,
+          email  // customer email shown in admin notification
         );
         await Promise.allSettled([
           sendEmail("info@getsmoke.com", storeSubject, storeHtml),

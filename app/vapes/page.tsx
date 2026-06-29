@@ -53,6 +53,9 @@ export default async function VapesPage({ searchParams }: Props) {
 
   return (
     <>
+      <h1 className="sr-only">
+        {pageNum === 1 ? "Shop All Disposable Vapes" : `Shop All Disposable Vapes - Page ${pageNum}`}
+      </h1>
       <VapePage
         productType="VAPES"
         initialProducts={initialProducts}

@@ -12,5 +12,10 @@ export const metadata: Metadata = {
 
 export default async function HookahPage() {
   const initialProducts = await prefetchProducts("HOOKAH", 24);
-  return <VapePage productType="HOOKAH" initialProducts={initialProducts} heading="Hookah & E-Hookah Vapes" />;
+  return (
+    <>
+      <h1 className="sr-only">Hookah &amp; E-Hookah Vapes</h1>
+      <VapePage productType="HOOKAH" initialProducts={initialProducts} heading="Hookah & E-Hookah Vapes" />
+    </>
+  );
 }

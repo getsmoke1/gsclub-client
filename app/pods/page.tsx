@@ -46,11 +46,14 @@ const getCachedPods = unstable_cache(
 export default async function PodsPage() {
   const initialProducts = await getCachedPods();
   return (
-    <VapePage
-      productType="PODS"
-      initialProducts={initialProducts}
-      faqSlug="/pods"
-      heading="Pod Systems & Pod Kits"
-    />
+    <>
+      <h1 className="sr-only">Pod Systems &amp; Pod Kits</h1>
+      <VapePage
+        productType="PODS"
+        initialProducts={initialProducts}
+        faqSlug="/pods"
+        heading="Pod Systems & Pod Kits"
+      />
+    </>
   );
 }

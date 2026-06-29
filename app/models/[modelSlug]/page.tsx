@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getModelBySlug } from "@/lib/models-config";
 import GenericModelPage from "@/components/ModelPage/GenericModelPage";
 import { prisma } from "@/lib/prisma";
-import Script from "next/script";
+// Note: using plain <script> tags (not next/script) for JSON-LD so they render in initial HTML
 
 const SITE_URL = "https://getsmoke.com";
 
@@ -176,24 +176,10 @@ export default async function ModelPage({ params }: Props) {
 
   return (
     <>
-      <Script
-        id="breadcrumb-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-        strategy="beforeInteractive"
-      />
-      <Script
-        id="product-group-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productGroupSchema) }}
-        strategy="beforeInteractive"
-      />
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        strategy="beforeInteractive"
-      />
+      {/* Plain <script> tags render in initial HTML — next/script goes to RSC payload */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productGroupSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {/* SSR H1 for crawlers */}
       <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>
         {model.name} Disposable Vape

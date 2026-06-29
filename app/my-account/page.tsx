@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 import React from 'react';
 import Account from '../../components/myAccount/Account';
 import { getServerSession } from 'next-auth';

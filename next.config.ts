@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         destination: 'https://getsmoke.com/:path*',
         permanent: true,
       },
+      // Duplicate page fix: /terms-conditions → canonical /terms-and-conditions
+      { source: '/terms-conditions', destination: '/terms-and-conditions', permanent: true },
+      // Missing commercial URL
+      { source: '/disposable-vapes', destination: '/vapes', permanent: true },
       {
         source: '/product-tag/:brand*',
         destination: '/brands/:brand',

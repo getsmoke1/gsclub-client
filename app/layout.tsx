@@ -109,6 +109,42 @@ export default function RootLayout({
         {/* Preconnect to R2 image CDN for faster LCP */}
         <link rel="preconnect" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
         <link rel="dns-prefetch" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
+        {/* ── Static JSON-LD schemas — always in initial HTML, visible to all crawlers ── */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "GetSmoke",
+          "url": "https://getsmoke.com",
+          "logo": "https://getsmoke.com/icon-192.png",
+          "email": "info@getsmoke.com",
+          "legalName": "COSMOPROJECT LLC",
+          "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "US", "addressRegion": "FL" } },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "contactPoint": { "@type": "ContactPoint", "email": "info@getsmoke.com", "contactType": "customer support", "areaServed": "US" }
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "GetSmoke",
+          "url": "https://getsmoke.com",
+          "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://getsmoke.com/vapes?search={search_term_string}" }, "query-input": "required name=search_term_string" }
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": ["OnlineStore", "LocalBusiness"],
+          "name": "GetSmoke",
+          "description": "Premium disposable vapes online store. Shop Geek Bar, RAZ, Lost Mary, HQD and more. Fast US shipping. Adults 21+ only.",
+          "url": "https://getsmoke.com",
+          "logo": "https://getsmoke.com/icon-192.png",
+          "email": "info@getsmoke.com",
+          "legalName": "COSMOPROJECT LLC",
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card",
+          "priceRange": "$$",
+          "openingHours": "Mo-Su 00:00-23:59"
+        })}} />
+        {/* ── End Static JSON-LD schemas ── */}
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{

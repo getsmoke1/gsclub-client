@@ -9,6 +9,7 @@ declare global {
     };
     _turnstileReady?: boolean;
     _turnstileCallbacks?: (() => void)[];
+    onTurnstileLoad?: () => void;
   }
 }
 
@@ -42,7 +43,7 @@ export function useTurnstile() {
 
     // Load script once
     if (!document.getElementById('cf-turnstile-script')) {
-      (window as Record<string, unknown>)['onTurnstileLoad'] = () => {
+      window.onTurnstileLoad = () => {
         window._turnstileReady = true;
         (window._turnstileCallbacks || []).forEach(cb => cb());
         window._turnstileCallbacks = [];

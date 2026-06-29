@@ -2,15 +2,38 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useTurnstile } from "@/hooks/useTurnstile"
 
 const Footer = () => {
     const [email, setEmail] = useState("")
-    const [checked, setChecked] = useState(false)
     const [submitted, setSubmitted] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [formError, setFormError] = useState<string | null>(null)
+    const { containerRef, token, reset, hasSiteKey } = useTurnstile()
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (email && checked) setSubmitted(true)
+        if (!email) return
+        if (hasSiteKey && !token) return
+        setLoading(true)
+        setFormError(null)
+        try {
+            const res = await fetch("/api/newsletter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, turnstileToken: token }),
+            })
+            if (!res.ok) {
+                const d = await res.json()
+                throw new Error(d.error || "Failed to subscribe")
+            }
+            setSubmitted(true)
+        } catch (err: unknown) {
+            setFormError(err instanceof Error ? err.message : "Something went wrong")
+            reset()
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -51,38 +74,19 @@ const Footer = () => {
                                 required
                             />
 
-                            {/* reCAPTCHA-style widget */}
-                            <div className="flex items-center gap-3 border border-gray-300 rounded-md px-4 py-3 bg-gray-50 w-fit">
-                                <div
-                                    className="w-6 h-6 border-2 border-gray-400 rounded flex items-center justify-center cursor-pointer flex-shrink-0 bg-white"
-                                    onClick={() => setChecked(!checked)}
-                                >
-                                    {checked && (
-                                        <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    )}
-                                </div>
-                                <span className="text-sm text-gray-700 select-none">I&apos;m not a robot</span>
-                                <div className="ml-4 flex flex-col items-center">
-                                    <svg viewBox="0 0 64 64" className="w-8 h-8" fill="none">
-                                        <path d="M32 8C18.7 8 8 18.7 8 32s10.7 24 24 24 24-10.7 24-24S45.3 8 32 8z" fill="#4A90D9"/>
-                                        <path d="M32 14c-9.9 0-18 8.1-18 18s8.1 18 18 18 18-8.1 18-18-8.1-18-18-18z" fill="#fff"/>
-                                        <path d="M32 20v12l8 4" stroke="#4A90D9" strokeWidth="2.5" strokeLinecap="round"/>
-                                    </svg>
-                                    <span className="text-[9px] text-gray-400 leading-none mt-0.5">reCAPTCHA</span>
-                                    <span className="text-[7px] text-gray-300">Privacy - Terms</span>
-                                </div>
-                            </div>
+                            {/* Cloudflare Turnstile */}
+                            <div ref={containerRef} />
 
                             {/* Sub button */}
                             <button
                                 type="submit"
-                                className="w-full py-4 rounded-full text-black font-bold text-lg lowercase tracking-wide border-2 border-black"
+                                disabled={loading || (hasSiteKey && !token)}
+                                className="w-full py-4 rounded-full text-black font-bold text-lg lowercase tracking-wide border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed"
                                 style={{ backgroundColor: "#FFD600" }}
                             >
-                                sub
+                                {loading ? "..." : "sub"}
                             </button>
+                            {formError && <p className="text-red-500 text-xs">{formError}</p>}
                         </form>
                     )}
                 </div>

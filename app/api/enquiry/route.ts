@@ -1,17 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/mail";
 import { NextRequest, NextResponse } from "next/server";
+import { verifyTurnstile } from "@/lib/verify-turnstile";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    const { email, subject, inquiry } = body;
+    const { email, subject, inquiry, turnstileToken } = body;
     if (!email || !subject || !inquiry) {
       return NextResponse.json(
         { error: "Email, subject, and inquiry are required" },
         { status: 400 }
       );
+    }
+    const valid = await verifyTurnstile(turnstileToken);
+    if (!valid) {
+      return NextResponse.json({ error: "Verification failed. Please try again." }, { status: 400 });
     }
 
     const newEnquiry = await prisma.enquiry.create({

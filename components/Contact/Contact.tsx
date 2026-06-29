@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image'
 import React, { useState } from 'react'
+import { useTurnstile } from '@/hooks/useTurnstile'
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form';
 import { Textarea } from "@/components/ui/textarea"
@@ -22,14 +23,17 @@ const Contact = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const { containerRef, token, reset: resetTurnstile, hasSiteKey } = useTurnstile();
 
   const onSubmit = async (data: FormValues) => {
+    if (hasSiteKey && !token) { toast.error('Please complete the verification'); return; }
     setLoading(true);
     const body = {
       email: data.email,
       subject: data.subject,
       inquiry: data.inquiry,
       isRead: false,
+      turnstileToken: token,
     }
 
     try {
@@ -46,6 +50,7 @@ const Contact = () => {
         console.error('Unexpected error:', error);
         toast.error('An unexpected error occurred. Please try again.');
       }
+      resetTurnstile();
     } finally {
       setLoading(false);
     }
@@ -144,8 +149,11 @@ const Contact = () => {
               {errors.inquiry && <p className=' text-[0.8rem] text-red-400 ml-4'>{errors.inquiry.message}</p>}
             </div>
 
+            {/* Cloudflare Turnstile */}
+            <div ref={containerRef} className="mb-1" />
+
             <div>
-              <Button className=''>
+              <Button className='' disabled={loading || (hasSiteKey && !token)}>
                 {loading ? (
                   <span className="flex items-center gap-2">
                     Sending <FaSpinner className="animate-spin" />

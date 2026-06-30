@@ -107,12 +107,45 @@ export default async function BrandPage({ params }: Props) {
     },
   ];
 
+  // BreadcrumbList schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://getsmoke.com" },
+      { "@type": "ListItem", position: 2, name: "Brands", item: "https://getsmoke.com/brands" },
+      { "@type": "ListItem", position: 3, name: brand.name, item: `https://getsmoke.com/brands/${brand.slug}` },
+    ],
+  };
+
+  // ItemList schema — top products for this brand
+  const itemListSchema = brand.products.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${brand.name} Disposable Vapes`,
+    url: `https://getsmoke.com/brands/${brand.slug}`,
+    numberOfItems: brand.products.length,
+    itemListElement: brand.products.slice(0, 10).map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: p.name,
+      url: `https://getsmoke.com/product/${p.slug}`,
+    })),
+  } : null;
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       {faqSchema && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      {itemListSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
         />
       )}
 

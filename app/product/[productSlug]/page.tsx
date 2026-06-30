@@ -26,7 +26,7 @@ const getProductForPage = cache(async (slug: string): Promise<Product | null> =>
     const product = await prisma.product.findUnique({
       where: { slug },
       include: {
-        Review: true,
+        Review: { where: { isApproved: true }, orderBy: { createdAt: "desc" } },
         images: { orderBy: { position: "asc" } },
         brand: true,
         flavor: true,

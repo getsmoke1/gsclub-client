@@ -8,7 +8,7 @@ import { Providers } from "@/providers/provider";
 import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { Suspense } from "react";
+// Suspense removed — AgeVerification is a Client Component (no Suspense needed)
 import AgeVerification from "@/components/AgeVerification/AgeVerification";
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
 import CookieBanner from "@/components/CookieBanner/CookieBanner";
@@ -231,10 +231,8 @@ export default function RootLayout({
             <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 1500 }} />
             <InitializeCart />
             <div className="bg-white text-black">
-              <Suspense>
-                <AgeVerification />
-                {children}
-              </Suspense>
+              <AgeVerification />
+              {children}
             </div>
             <ScrollToTopButton />
             <Footer />

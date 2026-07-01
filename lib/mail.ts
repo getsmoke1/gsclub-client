@@ -34,3 +34,104 @@ export async function sendEmail(
     throw err;
   }
 }
+
+const LOGO_WHITE_B64 = "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";
+
+export function buildAgeVerifyEmail(params: {
+  name: string;
+  orderNumber: string;
+  uploadUrl: string;
+  adultSignUrl: string;
+}): string {
+  const { name, orderNumber, uploadUrl, adultSignUrl } = params;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Age Verification - GetSmoke</title></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+<tr><td style="background:#0d1117;padding:22px 40px;text-align:center;">
+  <img src="data:image/png;base64,${LOGO_WHITE_B64}" alt="GetSmoke" width="180" style="display:block;margin:0 auto;height:auto;" />
+</td></tr>
+<tr><td style="background:#f5c518;height:4px;"></td></tr>
+<tr><td style="padding:36px 40px 20px;">
+  <p style="margin:0 0 6px;font-size:13px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Order Action Required</p>
+  <h1 style="margin:0 0 20px;font-size:24px;font-weight:800;color:#111;">Age Verification</h1>
+  <p style="margin:0 0 14px;font-size:15px;color:#333;line-height:1.6;">Hello, <strong>${name}</strong></p>
+  <p style="margin:0 0 14px;font-size:15px;color:#333;line-height:1.6;">Thank you for shopping with GetSmoke! Your order <strong>#${orderNumber}</strong> is being prepared.</p>
+  <p style="margin:0 0 14px;font-size:15px;color:#333;line-height:1.6;">As required by federal law (PACT Act), all first-time customers must complete a one-time age verification before we can ship your order. <strong>You will never be asked to do this again</strong> for future purchases.</p>
+  <p style="margin:0 0 0;font-size:15px;color:#333;line-height:1.6;">Please choose one of the options below, or email us at <a href="mailto:info@getsmoke.com" style="color:#111;font-weight:700;">info@getsmoke.com</a> your selfie picture as it is shown below:</p>
+</td></tr>
+<tr><td style="padding:0 40px 30px;">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+<td width="180" valign="middle" style="padding-right:20px;">
+  <div style="border:2px dashed #ddd;border-radius:10px;padding:14px;text-align:center;background:#fafafa;">
+    <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;">Example Photo</p>
+    <svg width="130" height="110" viewBox="0 0 130 110" xmlns="http://www.w3.org/2000/svg">
+      <rect width="130" height="110" rx="8" fill="#e8e8e8"/>
+      <circle cx="65" cy="32" r="18" fill="#bbb"/>
+      <path d="M30 90 Q30 60 65 60 Q100 60 100 90" fill="#bbb"/>
+      <rect x="30" y="70" width="70" height="44" rx="4" fill="#fff" stroke="#f5c518" stroke-width="2"/>
+      <rect x="35" y="76" width="20" height="16" rx="2" fill="#ddd"/>
+      <rect x="60" y="78" width="34" height="4" rx="2" fill="#ccc"/>
+      <rect x="60" y="86" width="24" height="3" rx="1.5" fill="#ddd"/>
+      <rect x="35" y="96" width="58" height="3" rx="1.5" fill="#eee"/>
+      <circle cx="105" cy="25" r="12" fill="#f5c518"/>
+      <path d="M99 25 L103 29 L111 20" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p style="margin:8px 0 0;font-size:10px;color:#888;line-height:1.4;">Selfie holding your<br>Driver License or ID</p>
+  </div>
+</td>
+<td valign="middle">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td style="padding-bottom:12px;">
+  <a href="${uploadUrl}" style="display:block;background:#f5c518;color:#111;text-decoration:none;text-align:center;padding:16px 24px;border-radius:8px;font-size:15px;font-weight:800;">📷 Upload My ID</a>
+  <p style="margin:6px 0 0;font-size:11px;color:#888;text-align:center;">Takes less than 1 minute</p>
+</td></tr>
+<tr><td>
+  <a href="${adultSignUrl}" style="display:block;background:#111;color:#fff;text-decoration:none;text-align:center;padding:16px 24px;border-radius:8px;font-size:15px;font-weight:800;">✍️ Adult Signature Option</a>
+  <p style="margin:6px 0 0;font-size:11px;color:#888;text-align:center;">Verify upon delivery instead</p>
+</td></tr>
+</table>
+</td>
+</tr></table>
+</td></tr>
+<tr><td style="padding:0 40px 30px;">
+  <div style="background:#fffbeb;border:1px solid #f5c518;border-radius:8px;padding:16px 20px;">
+    <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#92400e;">Why do we ask for this?</p>
+    <p style="margin:0;font-size:13px;color:#78350f;line-height:1.5;">Federal law requires age verification for all vape product shipments. Your ID is used solely to confirm you are 21+ and stored securely. It will <strong>never</strong> be shared with third parties.</p>
+  </div>
+</td></tr>
+<tr><td style="padding:0 40px 36px;">
+  <p style="margin:0;font-size:13px;color:#888;line-height:1.6;font-style:italic;">* This is a one-time verification only. Future orders will ship without any additional steps.<br>* Questions? <a href="mailto:info@getsmoke.com" style="color:#111;font-weight:600;">info@getsmoke.com</a></p>
+</td></tr>
+<tr><td style="background:#f9f9f9;border-top:1px solid #eee;padding:24px 40px;text-align:center;">
+  <p style="margin:0 0 6px;font-size:13px;color:#aaa;">GetSmoke - Premium Disposable Vapes</p>
+  <p style="margin:0;font-size:12px;color:#ccc;">COSMOPROJECT LLC | Florida, USA | <a href="https://getsmoke.com" style="color:#aaa;text-decoration:none;">getsmoke.com</a></p>
+</td></tr>
+</table></td></tr></table>
+</body></html>`;
+}
+
+export async function sendAgeVerifyEmail(params: {
+  to: string;
+  name: string;
+  orderNumber: string;
+  token: string;
+}) {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://getsmoke.com";
+  const uploadUrl = `${appUrl}/age-verify/${params.token}`;
+  const adultSignUrl = `${appUrl}/age-verify/${params.token}?opt=adult-sign`;
+
+  return sendEmail(
+    params.to,
+    `Action Required: Age Verification for Order #${params.orderNumber} - GetSmoke`,
+    buildAgeVerifyEmail({
+      name: params.name,
+      orderNumber: params.orderNumber,
+      uploadUrl,
+      adultSignUrl,
+    })
+  );
+}

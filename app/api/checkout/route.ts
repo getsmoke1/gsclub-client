@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { CartItem } from "@/types/cart";
 import { NextRequest, NextResponse } from "next/server";
-import { sendEmail } from "@/lib/mail";
+import { sendEmail, sendAgeVerifyEmail } from "@/lib/mail";
 import { orderConfirmationTemplate } from "@/emails/orderConfirmationTemplate";
 import { SUBSCRIPTION_FREQUENCIES, FrequencyValue, getNextBillingDate, calcSubscriptionPrice } from "@/lib/nmi";
 
@@ -386,6 +386,28 @@ export async function POST(req: NextRequest) {
       } catch (emailErr) {
         console.error("Order confirmation email failed:", emailErr);
         // Don't fail the order if email fails
+      }
+
+      // Age verification: send email to new customers only
+      try {
+        const isHistorical = await prisma.historicalCustomer.findFirst({
+          where: { email: email.toLowerCase() },
+        });
+        const hasExistingOrders = await prisma.order.count({
+          where: { userEmail: email, isPaid: true, id: { not: order.id } },
+        });
+        if (!isHistorical && hasExistingOrders === 0) {
+          // First-time customer - generate token and send age verification email
+          const crypto = await import("crypto");
+          const token = crypto.randomBytes(32).toString("hex");
+          const orderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
+          await prisma.ageVerification.create({
+            data: { token, email, name: shippingName, orderNumber: orderNum },
+          });
+          await sendAgeVerifyEmail({ to: email, name: shippingName, orderNumber: orderNum, token });
+        }
+      } catch (ageErr) {
+        console.error("Age verify email failed:", ageErr);
       }
 
       return NextResponse.json(

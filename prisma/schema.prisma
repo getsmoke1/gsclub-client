@@ -394,3 +394,30 @@ model Subscription {
 
   @@map("subscriptions")
 }
+
+model AgeVerification {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  token       String    @unique
+  email       String
+  name        String
+  orderNumber String
+  status      String    @default("pending") // "pending" | "verified" | "rejected"
+  idImageKey  String?   // R2 key for uploaded ID photo
+  consentGiven Boolean  @default(false)
+  adultSign   Boolean   @default(false) // chose adult signature option
+  verifiedAt  DateTime?
+  verifiedBy  String?   // admin who verified
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("age_verifications")
+}
+
+model HistoricalCustomer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  @@map("historical_customers")
+}

@@ -82,7 +82,7 @@ export interface Product {
   name: string;
   Review: ReviewProps[];
   currentPrice: number;
-  originalPrice: number;
+  originalPrice?: number | null;
   // Optional fields
   eLiquidContent: string | null;
   batteryCapacity: string | null;

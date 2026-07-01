@@ -64,7 +64,7 @@ model Product {
   slug String? @unique
   detailDescription String?
   currentPrice      Float
-  originalPrice     Float
+  originalPrice     Float?
   brandId           String  @db.ObjectId
   nicotineId        String  @db.ObjectId
 

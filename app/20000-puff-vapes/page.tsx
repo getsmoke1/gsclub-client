@@ -142,7 +142,7 @@ export default async function Puffs20000Page() {
                         {product.originalPrice &&
                           product.originalPrice > product.currentPrice && (
                             <span className="text-xs text-gray-400 line-through">
-                              ${product.originalPrice.toFixed(2)}
+                              ${product.originalPrice!.toFixed(2)}
                             </span>
                           )}
                       </div>

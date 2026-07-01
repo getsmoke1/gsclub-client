@@ -138,7 +138,7 @@ export default async function CoffeeVapesPage() {
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-base font-bold">${product.currentPrice.toFixed(2)}</span>
                         {product.originalPrice && product.originalPrice > product.currentPrice && (
-                          <span className="text-xs text-gray-400 line-through">${product.originalPrice.toFixed(2)}</span>
+                          <span className="text-xs text-gray-400 line-through">${product.originalPrice!.toFixed(2)}</span>
                         )}
                       </div>
                       {puffs && <p className="text-[10px] text-gray-400 mt-0.5">{puffs} puffs</p>}

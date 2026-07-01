@@ -116,7 +116,7 @@ const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedPr
                                     <div className="flex items-center justify-center text-sm md:text-xl">
                                         <span>${product.currentPrice.toFixed(2)}</span>
                                         <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
-                                            ${product.originalPrice.toFixed(2)}
+                                            ${product.originalPrice!.toFixed(2)}
                                         </span>
                                     </div>
                                     <h3 className="font-semibold text-base md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">

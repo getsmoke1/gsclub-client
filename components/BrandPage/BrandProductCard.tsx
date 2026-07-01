@@ -32,6 +32,9 @@ const BrandProductCard = ({ product }: BrandProductCardProps) => {
         <div className="p-2 md:p-3">
           <div className="text-center text-sm font-bold text-black">
             ${product.currentPrice.toFixed(2)}
+            {product.originalPrice && product.originalPrice > product.currentPrice && (
+              <span className="ml-1.5 text-xs text-gray-400 line-through font-normal">${product.originalPrice!.toFixed(2)}</span>
+            )}
             <span className="block text-xs text-gray-500 font-normal">
               — or subscribe to save up to 10%
             </span>

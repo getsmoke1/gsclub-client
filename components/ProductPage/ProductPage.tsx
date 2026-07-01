@@ -154,7 +154,7 @@ const ProductPage = ({ productSlug, initialProduct }: SingleProductProps) => {
                             </span>
                             {resolvedProduct.originalPrice && (
                                 <span className="text-lg text-gray-500 line-through">
-                                    ${resolvedProduct.originalPrice.toFixed(2)}
+                                    ${resolvedProduct.originalPrice!.toFixed(2)}
                                 </span>
                             )}
                             {resolvedProduct.packCount > 1 && (

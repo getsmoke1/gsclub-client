@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 
 const slides = [
-    { desktop: '/banners/desktop-1.jpeg', mobile: '/banners/mobile-1.jpeg', alt: 'Welcome to our VapeShop' },
-    { desktop: '/banners/desktop-2.jpg',  mobile: '/banners/mobile-2.jpg',  alt: 'Beri Crush 50K' },
-    { desktop: '/banners/desktop-3.jpg',  mobile: '/banners/mobile-3.jpg',  alt: 'EBCreate BC Pro' },
-    { desktop: '/banners/desktop-4.jpeg', mobile: '/banners/mobile-4.jpeg', alt: 'New Arrivals' },
-    { desktop: '/banners/desktop-5.jpg',  mobile: '/banners/mobile-5.jpg',  alt: 'New In - Lost Mary' },
-    { desktop: '/banners/desktop-6.jpeg', mobile: '/banners/mobile-6.jpeg', alt: 'New Collection' },
+    { desktop: '/banners/desktop-1.webp', mobile: '/banners/mobile-1.webp', alt: 'Welcome to our VapeShop' },
+    { desktop: '/banners/desktop-2.webp', mobile: '/banners/mobile-2.webp', alt: 'Beri Crush 50K' },
+    { desktop: '/banners/desktop-3.webp', mobile: '/banners/mobile-3.webp', alt: 'EBCreate BC Pro' },
+    { desktop: '/banners/desktop-4.webp', mobile: '/banners/mobile-4.webp', alt: 'New Arrivals' },
+    { desktop: '/banners/desktop-5.webp', mobile: '/banners/mobile-5.webp', alt: 'New In - Lost Mary' },
+    { desktop: '/banners/desktop-6.webp', mobile: '/banners/mobile-6.webp', alt: 'New Collection' },
 ];
 
 const Hero = () => {
@@ -40,6 +40,7 @@ const Hero = () => {
                         className="block md:hidden"
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                         loading={i === 0 ? 'eager' : 'lazy'}
+                        {...(i === 0 ? { fetchPriority: 'high' } : {})}
                     />
                     {/* Desktop */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -49,6 +50,7 @@ const Hero = () => {
                         className="hidden md:block"
                         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                         loading={i === 0 ? 'eager' : 'lazy'}
+                        {...(i === 0 ? { fetchPriority: 'high' } : {})}
                     />
                 </div>
             ))}

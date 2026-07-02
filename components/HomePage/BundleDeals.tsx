@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import AddToCartButton from "@/components/Cart/AddToCartButton";
+import { r2src } from "@/lib/r2-image";
 import { ShoppingBag } from "lucide-react";
 
 interface Product {
@@ -94,11 +95,12 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
                       <div className="absolute inset-0">
                         {product.images.length > 0 ? (
                           <Image
-                            src={product.images[0].url}
+                            src={r2src(product.images[0].url)}
                             alt={product.name}
-                            fill
-                            sizes="(max-width: 768px) 50vw, 25vw"
+                            width={400}
+                            height={400}
                             className="object-cover"
+                            style={{ height: "100%", width: "100%" }}
                           />
                         ) : (
                           <div className="flex items-center justify-center h-full">

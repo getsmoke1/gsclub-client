@@ -159,7 +159,7 @@ const Products = ({ productType, search, nameOnly, initialProducts }: ProductsPr
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []); // empty deps - observer created once, reads current values via refs
+  }, [isLoading]); // re-create observer after loading completes so new sentinel is observed
 
   if (isLoading) {
     return (

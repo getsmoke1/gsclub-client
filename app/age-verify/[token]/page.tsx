@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { AgeVerifyForm } from "./AgeVerifyForm";
+import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function AgeVerifyPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;

@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import useCart from '@/hooks/useCart';
 import { Product } from '@/types/product';
 import { useFilter } from '@/hooks/useFilter';
+import { r2src } from '@/lib/r2-image';
 
 // Define type for debounce function
 type DebouncedFunction<T extends unknown[]> = (...args: T) => void;
@@ -360,7 +361,7 @@ const Navbar = () => {
                                                         <div className="w-12 h-12 relative mr-3 flex-shrink-0">
                                                             {product.images && product.images.length > 0 ? (
                                                                 <Image
-                                                                    src={product.images[0].url}
+                                                                    src={r2src(product.images[0].url)}
                                                                     alt={`${product.name} product image`}
                                                                     fill
                                                                     sizes="48px"

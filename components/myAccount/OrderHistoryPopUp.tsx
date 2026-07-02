@@ -9,6 +9,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import CustomStepIcon from "./CustomStepIcon";
 import Box from "@mui/material/Box";
+import { r2src } from "@/lib/r2-image";
 
 interface allDataProps {
   orderDetails: boolean;
@@ -102,7 +103,7 @@ const OrderHistoryPopUp = ({
                       <div className="shadow border border-gray-200 p-2 w-fit rounded-lg">
                         {item.product.images && item.product.images[0] && (
                           <Image
-                            src={item.product.images[0].url}
+                            src={r2src(item.product.images[0].url)}
                             alt={item.product.name}
                             width={50}
                             height={50}

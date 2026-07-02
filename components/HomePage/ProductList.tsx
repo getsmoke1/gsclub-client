@@ -8,6 +8,7 @@ import { Product } from "@/types/product";
 import Image from "next/image";
 import GenericModelCard from "@/components/ModelPage/GenericModelCard";
 import { MODELS } from "@/lib/models-config";
+import { r2src } from "@/lib/r2-image";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import HorizontalProductShimmer from "./HorizontalProductShimmer";
@@ -196,7 +197,7 @@ const ProductList: React.FC<ProductListProps> = ({
                                         <div className="absolute inset-0">
                                             {product.images.length > 0 ? (
                                                 <Image
-                                                    src={product.images[0].url}
+                                                    src={r2src(product.images[0].url)}
                                                     alt={product.name}
                                                     width={400}
                                                     height={400}

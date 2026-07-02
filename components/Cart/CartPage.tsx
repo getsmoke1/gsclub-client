@@ -13,6 +13,7 @@ import { Product } from "@/types/product";
 import { CartItem } from "@/types/cart";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
+import { r2src } from "@/lib/r2-image";
 
 const CartPage = () => {
     const { data: session } = useSession();
@@ -201,7 +202,7 @@ const CartPage = () => {
                                                                 <Link href={`/product/${product.slug}`} className="flex items-center space-x-4">
                                                                     {product.images[0]?.url && (
                                                                         <Image
-                                                                            src={product.images[0].url}
+                                                                            src={r2src(product.images[0].url)}
                                                                             alt={product.name}
                                                                             width={40}
                                                                             height={40}
@@ -333,7 +334,7 @@ const CartPage = () => {
                                                 <div className="bg-white h-[150px] w-1/2 sm:w-1/3 p-2">
                                                     {product?.images[0]?.url && (
                                                         <Image
-                                                            src={product.images[0].url}
+                                                            src={r2src(product.images[0].url)}
                                                             alt="item"
                                                             width={150}
                                                             height={150}

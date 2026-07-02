@@ -10,6 +10,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { FaSpinner, FaLock } from "react-icons/fa";
 import useCart from "@/hooks/useCart";
 import { Product } from "@/types/product";
+import { r2src } from "@/lib/r2-image";
 import { getNmiUserMessage } from "@/lib/nmiErrorMessages";
 import ShippingAddress from "./../myAccount/ShippingAddress";
 
@@ -486,7 +487,7 @@ const CheckoutPage = () => {
                 return (
                   <div key={item.id} className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 last:border-0">
                     {prod?.images?.[0]?.url && (
-                      <Image src={prod.images[0].url} alt={prod.name} width={48} height={48}
+                      <Image src={r2src(prod.images[0].url)} alt={prod.name} width={48} height={48}
                         className="rounded-md object-cover w-12 h-12 flex-shrink-0" />
                     )}
                     <div className="flex-1 min-w-0">
@@ -652,7 +653,7 @@ const CheckoutPage = () => {
                       return (
                         <div key={item.id} className="flex items-center gap-3">
                           {prod?.images?.[0]?.url && (
-                            <Image src={prod.images[0].url} alt={prod.name} width={56} height={56}
+                            <Image src={r2src(prod.images[0].url)} alt={prod.name} width={56} height={56}
                               className="rounded-md object-cover w-14 h-14 flex-shrink-0" />
                           )}
                           <div className="flex-1 min-w-0">

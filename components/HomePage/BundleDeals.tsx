@@ -96,9 +96,9 @@ const BundleDeals: React.FC<BundleDealsProps> = ({ initialProducts }) => {
                           <Image
                             src={product.images[0].url}
                             alt={product.name}
-                            width={400}
-                            height={400}
-                            className="object-cover w-full h-full"
+                            fill
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                            className="object-cover"
                           />
                         ) : (
                           <div className="flex items-center justify-center h-full">

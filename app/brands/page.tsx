@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/brands" },
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: revalidate brands page every hour
 
 // Brands whose logos should render larger in the grid
 const LARGE_LOGO_SLUGS = new Set([

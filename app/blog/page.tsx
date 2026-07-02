@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: revalidate blog list every 5 minutes
 
 export async function generateMetadata(): Promise<Metadata> {
   try {

@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: revalidate homepage every 5 minutes
 import HomePage from "@/components/HomePage/HomePage";
 import BrandCircles from "@/components/HomePage/BrandCircles";
 import { getSEOData } from "@/lib/seo";

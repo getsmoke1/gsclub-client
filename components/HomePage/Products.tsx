@@ -213,7 +213,7 @@ const Products = ({ productType, search, nameOnly, initialProducts }: ProductsPr
               </>
             )}
 
-            {products.map((product: Product) => (
+            {products.map((product: Product, idx: number) => (
               <div
                 key={product.id}
                 className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white"
@@ -228,7 +228,7 @@ const Products = ({ productType, search, nameOnly, initialProducts }: ProductsPr
                           width={400}
                           height={400}
                           className="object-cover w-full h-full"
-                          loading="eager"
+                          loading={idx < 8 ? "eager" : "lazy"}
                           style={{ height: "100%", width: "100%" }}
                         />
                       ) : (

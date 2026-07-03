@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";
 
@@ -158,10 +159,9 @@ const Filter = ({ productType }: { productType?: string }) => {
     const container = filterRef.current;
     if (btn && container) {
       const btnRect = btn.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
       setDropdownPos({
-        top: btnRect.bottom - containerRect.top + 6,
-        left: Math.max(0, btnRect.left - containerRect.left),
+        top: btnRect.bottom + 6,           // viewport-relative (for position:fixed)
+        left: Math.max(0, btnRect.left),
         width: Math.max(btnRect.width, 180),
       });
     }
@@ -247,15 +247,16 @@ const Filter = ({ productType }: { productType?: string }) => {
         )}
       </div>
 
-      {/* Dropdown rendered OUTSIDE the overflow container, positioned absolutely relative to filterRef */}
-      {openDropdown && (
+      {/* Dropdown rendered via Portal into document.body with position:fixed — always above product cards */}
+      {openDropdown && typeof document !== "undefined" && createPortal(
         <div
-          className="absolute bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
+          className="bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto font-unbounded"
           style={{
+            position: "fixed",
             top: dropdownPos.top,
             left: dropdownPos.left,
             minWidth: 180,
-            zIndex: 9999,
+            zIndex: 99999,
           }}
         >
           {getOptions(openDropdown).map((opt) => (
@@ -272,7 +273,8 @@ const Filter = ({ productType }: { productType?: string }) => {
               {opt.name}
             </div>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

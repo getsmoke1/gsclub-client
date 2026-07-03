@@ -238,10 +238,35 @@ const page = async ({ params }: Props) => {
       ],
     };
 
+    // FAQPage schema — generated from article.faq field (stored in MongoDB)
+    type FaqItem = { question: string; answer: string; order?: number };
+    const faqItems: FaqItem[] = Array.isArray((article as Article & { faq?: FaqItem[] }).faq)
+      ? ((article as Article & { faq?: FaqItem[] }).faq as FaqItem[])
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      : [];
+
+    const faqSchema = faqItems.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map((item) => ({
+            "@type": "Question",
+            name: item.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.answer,
+            },
+          })),
+        }
+      : null;
+
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        {faqSchema && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        )}
         <div>
           <BlogDetails article={article as Article} />
         </div>

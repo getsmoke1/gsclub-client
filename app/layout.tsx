@@ -120,7 +120,10 @@ export default function RootLayout({
           "legalName": "COSMOPROJECT LLC",
           "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "US", "addressRegion": "FL" } },
           "areaServed": { "@type": "Country", "name": "United States" },
-          "contactPoint": { "@type": "ContactPoint", "email": "info@getsmoke.com", "contactType": "customer support", "areaServed": "US" }
+          "contactPoint": { "@type": "ContactPoint", "email": "info@getsmoke.com", "contactType": "customer support", "areaServed": "US" },
+          "sameAs": [
+            "https://www.instagram.com/getsmoke.shop/"
+          ]
         })}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
@@ -142,7 +145,10 @@ export default function RootLayout({
           "currenciesAccepted": "USD",
           "paymentAccepted": "Credit Card",
           "priceRange": "$$",
-          "openingHours": "Mo-Su 00:00-23:59"
+          "openingHours": "Mo-Su 00:00-23:59",
+          "sameAs": [
+            "https://www.instagram.com/getsmoke.shop/"
+          ]
         })}} />
         {/* ── End Static JSON-LD schemas ── */}
         {/* Google Tag Manager */}

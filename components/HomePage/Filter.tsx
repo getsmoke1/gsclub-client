@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { createPortal } from "react-dom";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";
 
@@ -201,7 +200,7 @@ const Filter = ({ productType }: { productType?: string }) => {
   if (error) return <div className="text-red-500 p-2 text-sm">Filter error: {error}</div>;
 
   return (
-    <div className="relative w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef}>
+    <div className="w-11/12 mx-auto py-6 md:py-8 font-unbounded" ref={filterRef} style={{ position: 'relative', zIndex: 9999, isolation: 'isolate' }}>
       {/* Yellow pill — overflow-x scroll, no clipping of children */}
       <div
         ref={pillRef}
@@ -247,16 +246,15 @@ const Filter = ({ productType }: { productType?: string }) => {
         )}
       </div>
 
-      {/* Dropdown rendered via Portal into document.body with position:fixed — always above product cards */}
-      {openDropdown && typeof document !== "undefined" && createPortal(
+      {/* Dropdown — positioned absolute relative to filterRef, always on top via parent z-index */}
+      {openDropdown && (
         <div
-          className="bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto font-unbounded"
+          className="absolute bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
           style={{
-            position: "fixed",
             top: dropdownPos.top,
             left: dropdownPos.left,
             minWidth: 180,
-            zIndex: 99999,
+            zIndex: 9999,
           }}
         >
           {getOptions(openDropdown).map((opt) => (
@@ -273,8 +271,7 @@ const Filter = ({ productType }: { productType?: string }) => {
               {opt.name}
             </div>
           ))}
-        </div>,
-        document.body
+        </div>
       )}
     </div>
   );

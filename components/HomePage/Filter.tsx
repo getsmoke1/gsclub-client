@@ -158,9 +158,10 @@ const Filter = ({ productType }: { productType?: string }) => {
     const container = filterRef.current;
     if (btn && container) {
       const btnRect = btn.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
       setDropdownPos({
-        top: btnRect.bottom + 6,           // viewport-relative (for position:fixed)
-        left: Math.max(0, btnRect.left),
+        top: btnRect.bottom - containerRect.top + 6,
+        left: Math.max(0, btnRect.left - containerRect.left),
         width: Math.max(btnRect.width, 180),
       });
     }

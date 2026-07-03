@@ -59,6 +59,7 @@ const Filter = ({ productType }: { productType?: string }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const filterRef = useRef<HTMLDivElement>(null);
   // Ref for the horizontal-scrollable pill — close dropdown on horizontal swipe
@@ -125,10 +126,12 @@ const Filter = ({ productType }: { productType?: string }) => {
       .catch(() => setFilteredFlavors(null));
   }, [puffsId, productType]);
 
-  // Close dropdown on outside click
+  // Close dropdown on outside click — check both filterRef AND the Portal dropdown
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+      const insideFilter = filterRef.current?.contains(e.target as Node);
+      const insideDropdown = dropdownRef.current?.contains(e.target as Node);
+      if (!insideFilter && !insideDropdown) {
         setOpenDropdown(null);
       }
     };
@@ -253,6 +256,7 @@ const Filter = ({ productType }: { productType?: string }) => {
       {/* Dropdown via Portal — position:fixed so it always clears product cards and sticky bars */}
       {mounted && openDropdown && createPortal(
         <div
+          ref={dropdownRef}
           className="bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 overflow-y-auto font-unbounded"
           style={{
             position: "fixed",

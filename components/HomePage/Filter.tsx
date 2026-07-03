@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, X } from "lucide-react";
 import { useFilter } from "@/hooks/useFilter";
 
@@ -57,6 +58,7 @@ const Filter = ({ productType }: { productType?: string }) => {
   const [error, setError] = useState<string | null>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+  const [mounted, setMounted] = useState(false);
 
   const filterRef = useRef<HTMLDivElement>(null);
   // Ref for the horizontal-scrollable pill — close dropdown on horizontal swipe
@@ -75,6 +77,8 @@ const Filter = ({ productType }: { productType?: string }) => {
 
   // FIX: Reset filters when navigating to a different product type page.
   // Tracked via Zustand so it survives component remount on page navigation.
+  useEffect(() => { setMounted(true); }, []);
+
   useEffect(() => {
     if (productType && activeProductType !== productType) {
       clearFilters();
@@ -158,10 +162,9 @@ const Filter = ({ productType }: { productType?: string }) => {
     const container = filterRef.current;
     if (btn && container) {
       const btnRect = btn.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
       setDropdownPos({
-        top: btnRect.bottom - containerRect.top + 6,
-        left: Math.max(0, btnRect.left - containerRect.left),
+        top: btnRect.bottom + 6,
+        left: Math.max(4, btnRect.left),
         width: Math.max(btnRect.width, 180),
       });
     }
@@ -247,15 +250,17 @@ const Filter = ({ productType }: { productType?: string }) => {
         )}
       </div>
 
-      {/* Dropdown — positioned absolute relative to filterRef, always on top via parent z-index */}
-      {openDropdown && (
+      {/* Dropdown via Portal — position:fixed so it always clears product cards and sticky bars */}
+      {mounted && openDropdown && createPortal(
         <div
-          className="absolute bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 max-h-[50vh] overflow-y-auto"
+          className="bg-white border border-gray-200 text-black rounded-xl shadow-xl py-1 overflow-y-auto font-unbounded"
           style={{
+            position: "fixed",
             top: dropdownPos.top,
             left: dropdownPos.left,
             minWidth: 180,
-            zIndex: 9999,
+            maxHeight: "50vh",
+            zIndex: 999999,
           }}
         >
           {getOptions(openDropdown).map((opt) => (
@@ -272,7 +277,8 @@ const Filter = ({ productType }: { productType?: string }) => {
               {opt.name}
             </div>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

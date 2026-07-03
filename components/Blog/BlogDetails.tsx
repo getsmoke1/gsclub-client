@@ -51,7 +51,7 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
-  const authorName = article.author || "GetSmoke Editorial Team";
+  const authorName = article.author || "Angel Rose";
   const imageUrl = article.images[0]?.url || '';
 
   // Article structured data for SEO

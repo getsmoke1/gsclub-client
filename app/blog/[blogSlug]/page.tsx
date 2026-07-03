@@ -204,9 +204,9 @@ const page = async ({ params }: Props) => {
         : new Date().toISOString(),
       image: imageUrl,
       author: {
-        "@type": "Organization",
-        name: "GetSmoke",
-        url: SITE_URL,
+        "@type": "Person",
+        name: "Angel Rose",
+        url: `${SITE_URL}/author/angel-rose`,
       },
       publisher: {
         "@type": "Organization",
@@ -216,6 +216,7 @@ const page = async ({ params }: Props) => {
           "@type": "ImageObject",
           url: `${SITE_URL}/icon-192.png`,
         },
+        sameAs: ["https://www.instagram.com/getsmoke.shop/"],
       },
       mainEntityOfPage: {
         "@type": "WebPage",

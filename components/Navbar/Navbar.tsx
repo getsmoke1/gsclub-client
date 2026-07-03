@@ -252,7 +252,7 @@ const Navbar = () => {
                                         <li key={title}>
                                             <Link
                                                 href={href}
-                                                onClick={() => setshow(!show)}
+                                                onClick={() => { setshow(!show); if (href === '/vapes') clearFilters(); }}
                                                 className="px-4 cursor-pointer block hover:text-[#fe3500] focus:text-[#fe3500] focus:outline-none font-bold text-xl"
                                             >
                                                 {title}
@@ -453,6 +453,7 @@ const Navbar = () => {
                             <Link
                                 key={title}
                                 href={href}
+                                onClick={() => { if (href === '/vapes') clearFilters(); }}
                                 className="text-black font-bold text-sm hover:text-[#fe3500] transition-colors whitespace-nowrap"
                             >
                                 {title}

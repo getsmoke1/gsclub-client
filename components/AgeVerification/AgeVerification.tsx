@@ -22,14 +22,15 @@ function safeLocalStorageSet(key: string, value: string): void {
 }
 
 export default function AgeVerification() {
-    const [isVerified, setIsVerified] = useState<boolean | null>(null);
+    // Start as verified=true so SSR/first-paint skips the modal (better LCP).
+    // useEffect will set to false if localStorage says not verified.
+    const [isVerified, setIsVerified] = useState<boolean>(true);
     const [showNotOldEnough, setShowNotOldEnough] = useState(false);
 
     useEffect(() => {
         const verified = safeLocalStorage('ageVerified') === 'true';
-        setIsVerified(verified);
-
         if (!verified) {
+            setIsVerified(false);
             document.body.style.overflow = 'hidden';
         }
 
@@ -48,7 +49,7 @@ export default function AgeVerification() {
         }
     };
 
-    if (isVerified === null || isVerified) {
+    if (isVerified) {
         return null;
     }
 

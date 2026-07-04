@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 const slides = [
+    { desktop: '/banners/desktop-1.webp', mobile: '/banners/mobile-july4.webp', alt: '4th of July Sale - GetSmoke' },
     { desktop: '/banners/desktop-1.webp', mobile: '/banners/mobile-1.webp', alt: 'Welcome to our VapeShop' },
     { desktop: '/banners/desktop-2.webp', mobile: '/banners/mobile-2.webp', alt: 'Beri Crush 50K' },
     { desktop: '/banners/desktop-3.webp', mobile: '/banners/mobile-3.webp', alt: 'EBCreate BC Pro' },

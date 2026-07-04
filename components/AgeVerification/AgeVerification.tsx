@@ -58,7 +58,7 @@ export default function AgeVerification() {
             style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
         >
             <div className="bg-white rounded-lg max-w-md w-full p-8 text-center flex flex-col justify-center items-center font-unbounded">
-                <Image src="/images/logo.png" width={180} height={180} alt="GetSmoke" />
+                <Image src="/images/logo.png" width={180} height={30} alt="GetSmoke" priority />
                 <p className="my-4">Are you of legal smoking age?</p>
                 <div className="flex flex-col gap-4 justify-center w-full">
                     <Button

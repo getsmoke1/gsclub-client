@@ -419,5 +419,5 @@ model HistoricalCustomer {
   name      String?
   createdAt DateTime @default(now())
 
-  @@map("historical_customers")
+  @@map("HistoricalCustomer")
 }

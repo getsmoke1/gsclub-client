@@ -93,7 +93,7 @@ const Navbar = () => {
         setShowResults(true);
 
         try {
-            const response = await fetch(`/api/products?search=${encodeURIComponent(query)}&archived=false&limit=50`);
+            const response = await fetch(`/api/products?search=${encodeURIComponent(query)}&archived=false`);
             const data = await response.json();
             console.log('Search results:', data.products);
             setSearchResults(data.products || []);

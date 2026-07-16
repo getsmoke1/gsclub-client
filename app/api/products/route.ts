@@ -87,8 +87,6 @@ export async function GET(req: Request) {
         { coil: { contains: search, mode: "insensitive" } },
         { firingMechanism: { contains: search, mode: "insensitive" } },
         { type: { contains: search, mode: "insensitive" } },
-        { flavor: { name: { contains: search, mode: "insensitive" } } },
-        { productFlavors: { some: { flavor: { name: { contains: search, mode: "insensitive" } } } } },
       ];
     }
 

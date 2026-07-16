@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -25,6 +26,8 @@ model User {
   updatedAt        DateTime  @updatedAt
   Address          Address[]
   Order            Order[]
+  subscriptions    Subscription[]
+  customerVault    CustomerVault?
 }
 
 model Address {
@@ -41,9 +44,17 @@ model Address {
 enum ProductType {
   VAPES
   HOOKAH
+  VAPE_JUICE
   SUPPLEMENTS
   ADULT_GOODS
   ACCESSORIES
+  PODS
+}
+
+enum StockStatus {
+  INSTOCK
+  OUTOFSTOCK
+  PREORDER
 }
 
 model Product {
@@ -53,7 +64,7 @@ model Product {
   slug String? @unique
   detailDescription String?
   currentPrice      Float
-  originalPrice     Float
+  originalPrice     Float?
   brandId           String  @db.ObjectId
   nicotineId        String  @db.ObjectId
 
@@ -83,14 +94,16 @@ model Product {
   productPuffs ProductPuffs[]
 
   // System fields
-  isArchived Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  isArchived  Boolean      @default(false)
+  stockStatus StockStatus? @default(INSTOCK)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   //new feild 
   redirectLink          String?
   OrderItem             OrderItem[]
   Review                Review[]
+  subscriptions         Subscription[]
   ProductContentSection ProductContentSection?
 }
 
@@ -170,16 +183,17 @@ model ProductContentSection {
 }
 
 model Review {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userEmail String
-  userName  String
-  rating    Int
-  title     String
-  comment   String
-  productId String   @db.ObjectId
-  product   Product  @relation(fields: [productId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userEmail  String
+  userName   String
+  rating     Int
+  title      String
+  comment    String
+  productId  String   @db.ObjectId
+  product    Product  @relation(fields: [productId], references: [id])
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Image {
@@ -206,6 +220,7 @@ model Cart {
 
 model Order {
   id                    String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber           Int?        @unique
   userEmail             String
   user                  User        @relation(fields: [userEmail], references: [email])
   orderItems            OrderItem[]
@@ -222,8 +237,20 @@ model Order {
   shippingAmount        String?
   Shipment              Shipment?
   shippingRateId        String?
+  // NMI payment data
+  nmiTransactionId      String?     // NMI transaction ID for refunds
+  // Refund data
+  refundedAmount        Float?      @default(0)
+  refundStatus          String?     // "none" | "partial" | "full"
+  refundedAt            DateTime?
   createdAt             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
+}
+
+model Counter {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+  value Int
 }
 
 model OrderItem {
@@ -262,6 +289,7 @@ model BlogArticle {
   title       String
   subtitle    String    @default("")
   description String    @default("")
+  author      String    @default("GetSmoke Editorial Team")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   images      Image[]
@@ -272,6 +300,12 @@ type BlogFaq {
   question String
   answer   String
   order    Int    @default(0)
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  createdAt DateTime @default(now())
 }
 
 model Enquiry {
@@ -322,4 +356,68 @@ type FaqItem {
   question String
   answer   String
   order    Int    @default(0)
+}
+
+model CustomerVault {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @db.ObjectId
+  vaultId   String   // NMI customer_vault_id (stub until launch)
+  lastFour  String?
+  cardType  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id])
+  subscriptions Subscription[]
+
+  @@map("customer_vaults")
+}
+
+model Subscription {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String    @db.ObjectId
+  productId       String    @db.ObjectId
+  vaultId         String?   @db.ObjectId // ref to CustomerVault
+  frequency       String    // "1_week" | "2_week" | "4_week"
+  discountPct     Float     // 10, 8, or 6
+  price           Float     // discounted price per unit
+  quantity        Int       @default(1)
+  status          String    @default("active") // "active" | "paused" | "cancelled"
+  nextBillingDate DateTime
+  lastBilledAt    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user    User          @relation(fields: [userId], references: [id])
+  product Product       @relation(fields: [productId], references: [id])
+  vault   CustomerVault? @relation(fields: [vaultId], references: [id])
+
+  @@map("subscriptions")
+}
+
+model AgeVerification {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  token       String    @unique
+  email       String
+  name        String
+  orderNumber String
+  status      String    @default("pending") // "pending" | "verified" | "rejected"
+  idImageKey  String?   // R2 key for uploaded ID photo
+  consentGiven Boolean  @default(false)
+  adultSign   Boolean   @default(false) // chose adult signature option
+  verifiedAt  DateTime?
+  verifiedBy  String?   // admin who verified
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("age_verifications")
+}
+
+model HistoricalCustomer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  @@map("HistoricalCustomer")
 }

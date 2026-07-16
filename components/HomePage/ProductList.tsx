@@ -1,12 +1,15 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import { ShoppingBag, } from "lucide-react";
-import { Button } from "../ui/button";
 import Link from "next/link";
-import { useFilter } from "@/hooks/useFilter";
+import AddToCartButton from "@/components/Cart/AddToCartButton";
+// useFilter intentionally NOT used here — homepage always shows unfiltered products
 import { Product } from "@/types/product";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import GenericModelCard from "@/components/ModelPage/GenericModelCard";
+import { MODELS } from "@/lib/models-config";
+import { r2src } from "@/lib/r2-image";
+
 import { useInfiniteQuery } from "@tanstack/react-query";
 import HorizontalProductShimmer from "./HorizontalProductShimmer";
 
@@ -14,20 +17,29 @@ interface ProductListProps {
     title?: string;
     viewAllLink?: string;
     showViewAll?: boolean;
-    productType?: string; // New prop for product type filtering
+    productType?: string;
+    search?: string;
+    sortBy?: string;
+    initialProducts?: Product[];
+    compactCart?: boolean; // true = button only (homepage), false = qty+button (listings)
+    featuredModelSlugs?: string[]; // model listing cards to show at top of grid
 }
 
 const ProductList: React.FC<ProductListProps> = ({
     title = "JUST IN",
     viewAllLink = "/vapes",
     showViewAll = true,
-    productType // New prop
+    productType,
+    search,
+    sortBy,
+    initialProducts,
+    compactCart = false,
+    featuredModelSlugs
 }) => {
-    const { brandId, flavorId, puffsId, nicotineId } = useFilter();
-    const router = useRouter();
+    // Homepage: no filters applied regardless of global filter state
+    const brandId = undefined, flavorId = undefined, puffsId = undefined, nicotineId = undefined;
+
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const [showLeftArrow, setShowLeftArrow] = useState(false);
-    const [showRightArrow, setShowRightArrow] = useState(true);
     const limit = 30; // Items per page for infinite loading
 
     // Function to fetch products with pagination
@@ -38,7 +50,9 @@ const ProductList: React.FC<ProductListProps> = ({
         if (flavorId) params.append("flavorId", flavorId);
         if (puffsId) params.append("puffsId", puffsId);
         if (nicotineId) params.append("nicotineId", nicotineId);
-        if (productType) params.append("productType", productType); // Add productType filter
+        if (productType) params.append("productType", productType);
+        if (search) params.append("search", search);
+        if (sortBy) params.append("sortBy", sortBy);
         params.append("page", pageParam.toString());
         params.append("limit", limit.toString());
 
@@ -56,47 +70,47 @@ const ProductList: React.FC<ProductListProps> = ({
         isLoading,
         error,
     } = useInfiniteQuery({
-        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType],
+        queryKey: ["products", brandId, flavorId, puffsId, nicotineId, productType, search, sortBy],
         queryFn: fetchProducts,
         getNextPageParam: (lastPage, pages) => {
             return lastPage.hasNextPage ? pages.length + 1 : undefined;
         },
         initialPageParam: 1,
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+        initialData: initialProducts?.length
+            ? {
+                pages: [{ products: initialProducts, hasNextPage: true, page: 1, pageSize: initialProducts.length, totalCount: initialProducts.length, totalPages: 99 }],
+                pageParams: [1],
+              }
+            : undefined,
+        initialDataUpdatedAt: initialProducts?.length ? Date.now() : undefined,
     });
 
     // Flatten all pages into a single array of products
     const products = data?.pages.flatMap((page) => page.products) || [];
 
-    // Handle scroll and check for arrows visibility
+    // Handle scroll — kept for potential future use
     const handleScroll = useCallback(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
-
         const { scrollLeft, scrollWidth, clientWidth } = container;
-
-        setShowLeftArrow(scrollLeft > 0);
-        setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
-
-        // Check if user scrolled near the end and load more
         if (scrollLeft >= scrollWidth - clientWidth - 100 && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
         }
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    // Scroll functions
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const scrollLeft = () => {
         if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollBy({
-                left: -320, // Scroll by approximately one product width
-                behavior: "smooth",
-            });
+            scrollContainerRef.current.scrollBy({ left: -320, behavior: "smooth" });
         }
     };
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const scrollRight = () => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollBy({
-                left: 320, // Scroll by approximately one product width
+                left: 320,
                 behavior: "smooth",
             });
         }
@@ -142,7 +156,7 @@ const ProductList: React.FC<ProductListProps> = ({
     }
 
     return (
-        <section className="bg-white text-black font-unbounded w-11/12 mx-auto py-14">
+        <section className="bg-white text-black font-unbounded w-full">
             {/* Header */}
             <div className="flex gap-2 items-end mb-6">
                 <h2 className="font-bold text-2xl">{title}</h2>
@@ -170,115 +184,66 @@ const ProductList: React.FC<ProductListProps> = ({
                 </div>
             ) : (
                 <div className="relative">
-                    {/* Left Arrow */}
-                    {showLeftArrow && (
-                        <button
-                            onClick={scrollLeft}
-                            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#F4F4F4] border shadow-lg rounded-full p-2 w-10 h-10 hover:shadow-xl transition-shadow"
-                            aria-label="Scroll left"
-                        >
-                            <Image src={"/images/arrow.png"} width={20} height={20} alt="left arrow" className="rotate-180" />
-                        </button>
-                    )}
-
-                    {/* Right Arrow */}
-                    {showRightArrow && (
-                        <button
-                            onClick={scrollRight}
-                            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#F4F4F4] border shadow-lg rounded-full p-2 w-10 h-10 hover:shadow-xl transition-shadow"
-                            aria-label="Scroll right"
-                        >
-                            <Image src={"/images/arrow.png"} width={20} height={20} alt="right arrow" className="rotate-0" />
-                        </button>
-                    )}
-
-                    {/* Horizontal Scrolling Container */}
-                    <div
-                        ref={scrollContainerRef}
-                        className="flex gap-2 md:gap-6 overflow-x-auto scrollbar-hide pb-4"
-                        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-                    >
-                        {products.map((product: Product) => (
-                            <div
-                                key={product.id}
-                                className="flex-shrink-0 w-[160px] md:w-[280px] cursor-pointer"
-                                onClick={() => router.push(`/product/${product.slug}`)}
-                            >
-                                <div className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-                                    <div className="aspect-square relative bg-gray-100 h-[160px] md:h-[280px]">
-                                        {product.images.length > 0 ? (
-                                            <Image
-                                                src={product.images[0].url}
-                                                alt={product.name}
-                                                width={280}
-                                                height={280}
-                                                className="object-cover w-full h-full"
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full">
-                                                <ShoppingBag className="h-10 w-10 text-gray-300" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="pt-3 pb-5 px-2 md:px-4 flex flex-col flex-grow justify-between">
-                                        <div>
-                                            <div className="flex items-center justify-center text-sm md:text-xl">
-                                                <span className="">
-                                                    ${product.currentPrice.toFixed(2)}
-                                                </span>
-                                                {product.originalPrice && (
-                                                    <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
-                                                        ${product.originalPrice.toFixed(2)}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <h3 className="font-semibold text-sm md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
-                                                {product.brand.name}
-                                            </h3>
-                                            <h3 className="font-semibold text-sm md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-4 md:leading-7">
-                                                {product.name}
-                                            </h3>
-                                        </div>
-                                        <div className="w-full mb-1.5 mt-2 md:px-5 flex flex-col items-center justify-center gap-3 text-xs md:text-base text-center">
-                                            <div>
-                                                <span className="w-full underline">View product</span>
-                                            </div>
-                                            {product?.redirectLink && (
-                                                <Button
-                                                    type="submit"
-                                                    className="leading-4 lg:whitespace-nowrap text-xs md:text-sm px-2 md:px-4 py-1 md:py-2"
-                                                    // onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    {/* <Link href={product?.redirectLink || ""}> */}
-                                                        Shop Now
-                                                    {/* </Link> */}
-                                                </Button>
+                    {/* 2-column grid on mobile, 4-column on desktop — Figma layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5">
+                        {featuredModelSlugs && featuredModelSlugs.map(slug => {
+                            const m = MODELS.find(x => x.slug === slug);
+                            return m ? <GenericModelCard key={slug} model={m} /> : null;
+                        })}
+                        {!featuredModelSlugs && products.slice(0, 4).map((product: Product) => (
+                            <div key={product.id} className="border-2 border-black rounded-3xl overflow-hidden hover:border-[#fe3500] transition-colors flex flex-col h-full bg-white">
+                                <Link href={`/product/${product.slug}`} className="block">
+                                    <div className="relative bg-gray-50" style={{ paddingTop: '100%' }}>
+                                        <div className="absolute inset-0">
+                                            {product.images.length > 0 ? (
+                                                <Image
+                                                    src={r2src(product.images[0].url)}
+                                                    alt={product.name}
+                                                    width={400}
+                                                    height={400}
+                                                    className="object-cover w-full h-full"
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full">
+                                                    <ShoppingBag className="h-10 w-10 text-gray-300" />
+                                                </div>
                                             )}
                                         </div>
                                     </div>
+                                    <div className="p-2 md:p-3">
+                                        <div className="text-center text-sm font-bold text-black">
+                                            ${product.currentPrice.toFixed(2)}
+                                            {product.originalPrice && product.originalPrice > product.currentPrice && (
+                                                <span className="ml-1.5 text-xs text-gray-400 line-through font-normal">${product.originalPrice!.toFixed(2)}</span>
+                                            )}
+                                            <span className="block text-xs text-gray-500 font-normal">
+                                                — or subscribe to save up to 10%
+                                            </span>
+                                        </div>
+                                        <h3 className="font-bold text-xs md:text-sm text-center mt-1">
+                                            {product.brand.name}
+                                        </h3>
+                                        <h3 className="font-bold text-xs md:text-sm text-center line-clamp-2 mt-0.5 leading-4">
+                                            {product.name}
+                                        </h3>
+                                        {product.packCount > 1 && (
+                                            <p className="text-center text-xs mt-1">Pack Of {product.packCount}</p>
+                                        )}
+                                    </div>
+                                </Link>
+                                <div className="mt-auto px-2 md:px-3 pb-2 md:pb-3 flex flex-col gap-2" style={{ paddingLeft: '12px', paddingRight: '12px', paddingBottom: '12px' }}>
+                                    <Link href={`/product/${product.slug}`} className="text-center text-xs underline">View Product</Link>
+                                    <AddToCartButton product={product as never} compact={compactCart} />
+                                    <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
                                 </div>
                             </div>
                         ))}
 
-                        {/* Loading indicator when fetching more */}
-                        {isFetchingNextPage && (
-                            <div className="flex-shrink-0 w-[160px] md:w-[280px] flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
 
-            <style jsx>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+
         </section>
     );
 };

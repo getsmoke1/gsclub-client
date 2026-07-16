@@ -79,6 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         }}
         className={`${baseStyles} ${variantStyles[variant]} ${className}`}
         onClick={handleClick}
+        style={{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '24px', paddingRight: '24px', height: 'auto', minHeight: '40px' }}
         {...props}
       >
         {children}

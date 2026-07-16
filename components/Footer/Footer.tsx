@@ -1,78 +1,127 @@
 "use client"
 import React, { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
+import { useTurnstile } from "@/hooks/useTurnstile"
 
 const Footer = () => {
     const [email, setEmail] = useState("")
     const [submitted, setSubmitted] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [formError, setFormError] = useState<string | null>(null)
+    const { containerRef, token, reset, hasSiteKey } = useTurnstile()
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!email) return
+        if (hasSiteKey && !token) return
+        setLoading(true)
+        setFormError(null)
+        try {
+            const res = await fetch("/api/newsletter", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, turnstileToken: token }),
+            })
+            if (!res.ok) {
+                const d = await res.json()
+                throw new Error(d.error || "Failed to subscribe")
+            }
+            setSubmitted(true)
+        } catch (err: unknown) {
+            setFormError(err instanceof Error ? err.message : "Something went wrong")
+            reset()
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
-        <footer className="bg-white text-black font-unbounded border-t border-gray-100">
-
-            <div className="w-11/12 mx-auto py-12 flex flex-col items-center gap-6 text-center">
+        <footer className="bg-white font-unbounded">
+            {/* White top section */}
+            <div className="w-11/12 mx-auto pt-8 pb-6 flex flex-col md:flex-row md:items-start md:justify-between md:gap-12 gap-4" style={{ paddingTop: '32px', paddingBottom: '24px' }}>
                 {/* Logo */}
                 <Link href="/" className="block">
-                    <span className="font-unbounded font-black text-4xl md:text-5xl tracking-tight">
-                        getsmoke<span className="inline-block w-6 h-6 md:w-7 md:h-7 rounded-full border-2 border-black align-middle mx-0.5 -mt-1" />
-                        <sup className="text-xs align-super">TM</sup>
-                    </span>
+                    <Image
+                        src="/images/logo.png"
+                        alt="GetSmoke"
+                        width={220}
+                        height={56}
+                        className="h-12 w-auto object-contain"
+                    />
                 </Link>
 
-                {/* Contact */}
-                <div className="text-sm text-gray-600 space-y-1">
-                    <p>contact us: <a href="mailto:info@getsmoke.com" className="underline hover:text-black">info@getsmoke.com</a></p>
+                {/* Contact + License */}
+                <div className="text-sm text-black space-y-0.5">
+                    <p>contact us: <a href="mailto:info@getsmoke.com" className="hover:underline">info@getsmoke.com</a></p>
                     <p>License number: #2333778</p>
                 </div>
 
                 {/* Subscribe */}
-                <div className="w-full max-w-sm">
-                    <p className="text-sm font-medium mb-3">Subscribe to the latest news</p>
+                <div className="w-full md:max-w-sm mt-2">
+                    <p className="text-sm font-bold text-black mb-3">Subscribe to the latest news</p>
                     {submitted ? (
-                        <p className="text-[#fe3500] font-bold text-sm">Subscribed!</p>
+                        <p className="text-green-600 font-bold text-sm py-4">Subscribed successfully!</p>
                     ) : (
-                        <form
-                            onSubmit={(e) => { e.preventDefault(); if (email) setSubmitted(true); }}
-                            className="flex gap-2"
-                        >
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                            {/* Email input */}
                             <input
                                 type="email"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
-                                placeholder="Your email"
-                                className="flex-1 border border-gray-300 rounded-full px-5 py-3 text-sm focus:outline-none focus:border-[#fe3500]"
+                                placeholder=""
+                                className="w-full border-2 border-black rounded-full px-5 py-3.5 text-sm focus:outline-none bg-white"
                                 required
                             />
+
+                            {/* Cloudflare Turnstile */}
+                            <div ref={containerRef} />
+
+                            {/* Sub button */}
                             <button
                                 type="submit"
-                                className="w-12 h-12 rounded-xl flex items-center justify-center text-white flex-shrink-0"
-                                style={{ backgroundColor: "#fe3500" }}
-                                aria-label="Subscribe"
+                                disabled={loading || (hasSiteKey && !token)}
+                                className="w-full py-4 rounded-full text-black font-bold text-lg lowercase tracking-wide border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{ backgroundColor: "#FFD600" }}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
-                                </svg>
+                                {loading ? "..." : "sub"}
                             </button>
+                            {formError && <p className="text-red-500 text-xs">{formError}</p>}
                         </form>
                     )}
                 </div>
+            </div>
 
-                {/* Policy links */}
-                <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
-                    {[
-                        { label: "Privacy Policy", href: "/privacy-policy" },
-                        { label: "Terms & Conditions", href: "/terms-conditions" },
-                        { label: "Return Policy", href: "/return-policy" },
-                        { label: "Shipping Policy", href: "/shipping-policy" },
-                        { label: "Contact", href: "/contact" },
-                    ].map(({ label, href }) => (
-                        <Link key={href} href={href} className="hover:text-black transition-colors">
-                            {label}
-                        </Link>
-                    ))}
-                </nav>
+            {/* Black bottom section — policy links */}
+            <div className="bg-black py-5 px-4 flex flex-col md:flex-row md:justify-center md:flex-wrap items-center gap-4 md:gap-8" style={{ paddingTop: '20px', paddingBottom: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+                {[
+                    { label: "Privacy policy",        href: "/privacy-policy" },
+                    { label: "Terms and conditions",  href: "/terms-and-conditions" },
+                    { label: "Return policy",         href: "/return-policy" },
+                    { label: "Contact",               href: "/contact" },
+                    { label: "Shipping Policy",       href: "/shipping-policy" },
+                ].map(({ label, href }) => (
+                    <Link
+                        key={href}
+                        href={href}
+                        className="text-white text-sm font-normal hover:underline"
+                    >
+                        {label}
+                    </Link>
+                ))}
+            </div>
 
-                <p className="text-xs text-gray-400">
-                    &copy; {new Date().getFullYear()} GetSmoke. All rights reserved.
+            {/* Health Warning + Copyright */}
+            <div className="bg-black border-t border-gray-800 py-3 px-4 text-center">
+                <p className="text-gray-600 text-[10px] leading-relaxed max-w-3xl mx-auto">
+                    <strong className="text-gray-500">WARNING:</strong> This product contains nicotine. Nicotine is an addictive chemical.
+                    For use by adults 21+ only. Keep out of reach of children and pets.
+                    If you are pregnant, nursing, or have a heart condition, do not use this product.
+                    GetSmoke is a reseller of third-party manufactured products and assumes no liability for health consequences arising from product use.
+                    By purchasing, you confirm you are 21 or older and acknowledge all associated health risks.
+                </p>
+                <p className="text-gray-700 text-[10px] mt-2">
+                    © {new Date().getFullYear()} Cosmoproject LLC. All rights reserved.
                 </p>
             </div>
         </footer>

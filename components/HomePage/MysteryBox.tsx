@@ -31,7 +31,6 @@ const MysteryBox = () => {
                         width={300}
                         height={460}
                         className="max-w-[200px] md:max-w-[260px] mx-auto"
-                        unoptimized
                     />
                 </div>
             </div>

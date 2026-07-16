@@ -1,18 +1,21 @@
 import { Product } from '@/types/product';
+import { r2src } from "@/lib/r2-image";
 import React, { useEffect, useState, useCallback } from 'react';
 import ProductShimmer from '../HomePage/ProductShimmer';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
+import AddToCartButton from '@/components/Cart/AddToCartButton';
 
 interface RelatedProductProps {
     brandId: string;
     flavorId?: string;
     productId: string;
+    productName?: string; // used for keyword-based flavor matching
 }
 
-const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) => {
+const RelatedPRoduct = ({ brandId, flavorId, productId, productName }: RelatedProductProps) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -20,37 +23,41 @@ const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) =
     const fetchProducts = useCallback(async () => {
         try {
             setLoading(true);
-            const url = '/api/products/related-products?';
 
-            // Add filter parameters
+            // Build flavor search keywords from flavorId name or product name
+            // Strategy: search by flavor keywords, exclude current brand to show variety
             const params = new URLSearchParams();
-            if (brandId) params.append('brandId', brandId);
-            if (flavorId) params.append('flavorId', flavorId);
-
-            // Fixed limit of 8 products
             params.append('page', '1');
-            params.append('limit', '8');
+            params.append('limit', '12'); // fetch more, we filter out same-brand after
+            params.append('excludeBrandId', brandId); // exclude same brand
 
-            const response = await fetch(url + params.toString());
+            if (flavorId) {
+                params.append('flavorId', flavorId);
+            } else if (productName) {
+                // Fallback: search by product name keywords
+                const keywords = productName.split(' ').slice(0, 3).join(' ');
+                params.append('search', keywords);
+            }
 
+            const response = await fetch('/api/products/related-products?' + params.toString());
             if (!response.ok) throw new Error('Failed to fetch products');
-
             const data = await response.json();
-            setProducts(data.products);
+            setProducts(data.products || []);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setLoading(false);
         }
-    }, [brandId, flavorId]);
+    }, [brandId, flavorId, productName]);
 
     useEffect(() => {
         fetchProducts();
     }, [fetchProducts]);
 
-    const filteredProducts = products.filter(
-        (product: Product) => product.id !== productId
-    );
+    // Exclude current product, limit to 8
+    const filteredProducts = products
+        .filter((product: Product) => product.id !== productId)
+        .slice(0, 8);
 
     if (loading) {
         return (
@@ -86,16 +93,18 @@ const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) =
             ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-6 xl:gap-10">
                     {filteredProducts.map((product) => (
-                        <Link href={`/product/${product.id}`} key={product.id}>
-                            <div className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                        <div key={product.id} className="border-2 border-gray-200 rounded-3xl md:rounded-4xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+                            <Link href={`/product/${product.slug}`} className="block">
                                 <div className="aspect-square relative bg-gray-100 h-[16rem] md:h-[32rem] lg:h-[22rem]">
                                     {product.images.length > 0 ? (
                                         <Image
-                                            src={product.images[0].url}
+                                            src={r2src(product.images[0].url)}
                                             alt={product.name}
                                             width={400}
                                             height={400}
                                             className="object-cover w-full h-full"
+                                            loading="eager"
+                                            style={{ height: "100%", width: "100%" }}
                                         />
                                     ) : (
                                         <div className="flex items-center justify-center h-full">
@@ -103,39 +112,34 @@ const RelatedPRoduct = ({ brandId, flavorId, productId }: RelatedProductProps) =
                                         </div>
                                     )}
                                 </div>
-                                <div className="pt-3 pb-5 md:pb-5 px-2 md:px-4 flex flex-col flex-grow justify-between">
-                                    <div>
-                                        <div className="flex items-center justify-center text-sm md:text-xl">
-                                            <span className="">${product.currentPrice.toFixed(2)}</span>
-                                            <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
-                                                ${product.originalPrice.toFixed(2)}
-                                            </span>
-                                        </div>
-                                        <h3 className="font-semibold text-base md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
-                                            {product.brand.name}
-                                        </h3>
-                                        <h3 className="font-semibold text-base md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-5 md:leading-7">
-                                            {product.name}
-                                        </h3>
+                                <div className="pt-3 px-2 md:px-4">
+                                    <div className="flex items-center justify-center text-sm md:text-xl">
+                                        <span>${product.currentPrice.toFixed(2)}</span>
+                                        <span className="ml-2 text-sm md:text-base text-gray-500 line-through">
+                                            ${product.originalPrice!.toFixed(2)}
+                                        </span>
                                     </div>
-
-                                    <div className='w-full mb-1.5 mt-2 md:px-5 flex flex-col items-center justify-center gap-3 text-xs md:text-base text-center'>
-                                        <div>
-                                            <span className="w-full underline">
-                                                View product
-                                            </span>
-                                        </div>
-                                        {product?.redirectLink && (
-                                            <Button type="submit" className='leading-4 lg:whitespace-nowrap'>
-                                                <Link href={product?.redirectLink || ""}>
-                                                    Shop Now
-                                                </Link>
-                                            </Button>
-                                        )}
-                                    </div>
+                                    <h3 className="font-semibold text-base md:text-xl mt-1.5 md:mt-2.5 text-center line-clamp-2">
+                                        {product.brand.name}
+                                    </h3>
+                                    <h3 className="font-semibold text-base md:text-xl text-center line-clamp-3 mt-0.5 md:mt-1 leading-5 md:leading-7">
+                                        {product.name}
+                                    </h3>
                                 </div>
+                            </Link>
+                            <div className="mt-auto px-2 md:px-4 pb-4 pt-2 flex flex-col gap-2" style={{ paddingLeft: '16px', paddingRight: '16px', paddingBottom: '16px' }}>
+                                <Link href={`/product/${product.slug}`} className="text-center text-xs underline">
+                                    View product
+                                </Link>
+                                <AddToCartButton product={product as never} compact={true} />
+                                <p className="text-center text-[9px] text-gray-400 mt-1 leading-tight">21+ only · Nicotine is addictive</p>
+                                {product?.redirectLink && (
+                                    <Button type="submit" className="leading-4 lg:whitespace-nowrap">
+                                        <Link href={product?.redirectLink || ""}>Shop Now</Link>
+                                    </Button>
+                                )}
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             )}

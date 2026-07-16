@@ -1,60 +1,77 @@
 "use client"
-import React from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+
+const slides = [
+    { desktop: '/banners/desktop-1.webp', mobile: '/banners/mobile-july4.webp', alt: '4th of July Sale - GetSmoke' },
+    { desktop: '/banners/desktop-1.webp', mobile: '/banners/mobile-1.webp', alt: 'Welcome to our VapeShop' },
+    { desktop: '/banners/desktop-2.webp', mobile: '/banners/mobile-2.webp', alt: 'Beri Crush 50K' },
+    { desktop: '/banners/desktop-3.webp', mobile: '/banners/mobile-3.webp', alt: 'EBCreate BC Pro' },
+    { desktop: '/banners/desktop-4.webp', mobile: '/banners/mobile-4.webp', alt: 'New Arrivals' },
+    { desktop: '/banners/desktop-5.webp', mobile: '/banners/mobile-5.webp', alt: 'New In - Lost Mary' },
+    { desktop: '/banners/desktop-6.webp', mobile: '/banners/mobile-6.webp', alt: 'New Collection' },
+];
 
 const Hero = () => {
-    return (
-        <section
-            className="w-full relative overflow-hidden"
-            style={{
-                background: 'linear-gradient(135deg, #1a0a2e 0%, #003399 40%, #0a1a4e 100%)',
-                minHeight: '220px',
-            }}
-        >
-            <div className="w-11/12 mx-auto py-8 md:py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-                {/* Left: text */}
-                <div className="flex flex-col gap-3 text-white max-w-lg">
-                    <span
-                        className="text-xs font-bold uppercase px-3 py-1 rounded w-fit"
-                        style={{ backgroundColor: '#ffc42e', color: '#000' }}
-                    >
-                        No more trips to stores
-                    </span>
-                    <h1 className="font-unbounded font-bold text-2xl md:text-4xl uppercase leading-tight">
-                        Welcome to our<br />
-                        <span style={{ color: '#fe3500' }}>VAPESHOP</span>
-                    </h1>
-                    <p className="text-sm text-gray-300 max-w-sm">
-                        Top brands: Geek Bar, Lost Mary, RAZ, VIHO, HQD, FUME. Fast shipping across the USA.
-                    </p>
-                    <div className="flex gap-3 mt-2 flex-wrap">
-                        <Link href="/vapes"
-                            className="font-unbounded font-bold px-6 py-2.5 rounded text-white text-xs uppercase"
-                            style={{ backgroundColor: '#fe3500' }}
-                        >
-                            Shop Now
-                        </Link>
-                        <Link href="/brand/geek-bar"
-                            className="font-unbounded font-bold px-6 py-2.5 rounded text-white text-xs uppercase border border-white hover:bg-white hover:text-black transition-colors"
-                        >
-                            Geek Bar
-                        </Link>
-                    </div>
-                </div>
+    const [current, setCurrent] = useState(0);
 
-                {/* Right: brand pills */}
-                <div className="hidden md:flex flex-wrap gap-2 max-w-xs justify-end">
-                    {['Geek Bar','Lost Mary','RAZ','VIHO','HQD','FUME','Juicy Bar','Foger'].map(b => (
-                        <span
-                            key={b}
-                            className="text-white text-xs font-unbounded px-3 py-1 rounded-full border border-white/30"
-                            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-                        >
-                            {b}
-                        </span>
-                    ))}
+    useEffect(() => {
+        const t = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5000);
+        return () => clearInterval(t);
+    }, []);
+
+    const prev = () => setCurrent(c => (c - 1 + slides.length) % slides.length);
+    const next = () => setCurrent(c => (c + 1) % slides.length);
+
+    return (
+        <section className="w-full relative overflow-hidden">
+            {/* Height spacers */}
+            <div className="hidden md:block" style={{ paddingBottom: '36.4%' }} />
+            <div className="block md:hidden" style={{ paddingBottom: '148.8%' }} />
+
+            {slides.map((slide, i) => (
+                <div
+                    key={i}
+                    className={`absolute inset-0 transition-opacity duration-700 ${i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                >
+                    {/* Mobile */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={slide.mobile}
+                        alt={slide.alt}
+                        className="block md:hidden"
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        {...(i === 0 ? { fetchPriority: 'high' } : {})}
+                    />
+                    {/* Desktop */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={slide.desktop}
+                        alt={slide.alt}
+                        className="hidden md:block"
+                        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        {...(i === 0 ? { fetchPriority: 'high' } : {})}
+                    />
                 </div>
+            ))}
+
+            {/* Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20" style={{ left: '50%', WebkitTransform: 'translateX(-50%)', transform: 'translateX(-50%)' }}>
+                {slides.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrent(i)}
+                        className={`h-2 rounded-full transition-all ${i === current ? 'bg-white w-5' : 'bg-white/50 w-2'}`}
+                        style={{ height: '8px', borderRadius: '9999px', background: i === current ? 'white' : 'rgba(255,255,255,0.5)', width: i === current ? '20px' : '8px' }}
+                        aria-label={`Go to slide ${i + 1}`}
+                    />
+                ))}
             </div>
+
+            {/* Arrows - desktop only */}
+            <button onClick={prev} className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white text-2xl" aria-label="Previous slide">‹</button>
+            <button onClick={next} className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-black/30 hover:bg-black/50 transition-colors text-white text-2xl" aria-label="Next slide">›</button>
         </section>
     );
 };

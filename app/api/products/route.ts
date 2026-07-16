@@ -22,6 +22,8 @@ export async function GET(req: Request) {
     const nicotineId = searchParams.get("nicotineId");
     const productType = searchParams.get("productType");
     const search = searchParams.get("search");
+    const nameOnly = searchParams.get("nameOnly") === "true"; // strict name-only search (for bundles)
+    const sortBy = searchParams.get("sortBy"); // "newest" | undefined
     const archived = searchParams.has("archived")
       ? searchParams.get("archived") === "true"
       : false;
@@ -80,14 +82,19 @@ export async function GET(req: Request) {
 
     // Add search filter if provided
     if (search) {
-      filter.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { eLiquidContent: { contains: search, mode: "insensitive" } },
-        { batteryCapacity: { contains: search, mode: "insensitive" } },
-        { coil: { contains: search, mode: "insensitive" } },
-        { firingMechanism: { contains: search, mode: "insensitive" } },
-        { type: { contains: search, mode: "insensitive" } },
-      ];
+      if (nameOnly) {
+        // Strict name-only filter (used for bundles page)
+        filter.name = { contains: search, mode: "insensitive" };
+      } else {
+        filter.OR = [
+          { name: { contains: search, mode: "insensitive" } },
+          { eLiquidContent: { contains: search, mode: "insensitive" } },
+          { batteryCapacity: { contains: search, mode: "insensitive" } },
+          { coil: { contains: search, mode: "insensitive" } },
+          { firingMechanism: { contains: search, mode: "insensitive" } },
+          { type: { contains: search, mode: "insensitive" } },
+        ];
+      }
     }
 
     // Enhanced flavor filtering that checks both direct flavor relation and productFlavors
@@ -179,8 +186,14 @@ export async function GET(req: Request) {
       }
     }
 
-    // Query products with pagination and filters
-    const products = await prisma.product.findMany({
+    // Get total count for pagination
+    const totalCount = await prisma.product.count({
+      where: filter,
+    });
+
+    // Fetch all products matching filter, then interleave by brand before pagination
+    // This ensures no single brand dominates any page
+    const allProducts = await prisma.product.findMany({
       where: filter,
       include: {
         images: true,
@@ -198,17 +211,27 @@ export async function GET(req: Request) {
           },
         },
       },
-      skip,
-      take: limit,
-      orderBy: [
-        {
-          packCount: "desc",
-        },
-        {
-          createdAt: "desc",
-        },
-      ],
+      orderBy: sortBy === "newest" ? [{ createdAt: "desc" as const }] : [{ name: "asc" as const }],
     });
+
+    // Round-robin interleave by brandId so brands are evenly distributed across pages
+    const byBrand: Record<string, typeof allProducts> = {};
+    for (const p of allProducts) {
+      const key = p.brandId || "unknown";
+      if (!byBrand[key]) byBrand[key] = [];
+      byBrand[key].push(p);
+    }
+    const groups = Object.values(byBrand);
+    const interleaved: typeof allProducts = [];
+    const maxLen = Math.max(0, ...groups.map((g) => g.length));
+    for (let i = 0; i < maxLen; i++) {
+      for (const g of groups) {
+        if (g[i]) interleaved.push(g[i]);
+      }
+    }
+
+    // Apply pagination on interleaved result
+    const products = interleaved.slice(skip ?? 0, (skip ?? 0) + limit);
 
     // Transform the productPuffs data to a more usable format if needed
     const transformedProducts = products.map((product) => ({
@@ -219,17 +242,16 @@ export async function GET(req: Request) {
       })),
     }));
 
-    // Get total count for pagination
-    const totalCount = await prisma.product.count({
-      where: filter,
-    });
-
     return NextResponse.json({
       products: transformedProducts,
       totalCount,
       page,
       pageSize: limit,
       totalPages: limit ? Math.ceil(totalCount / limit) : 1,
+    }, {
+      headers: {
+        "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600",
+      },
     });
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);

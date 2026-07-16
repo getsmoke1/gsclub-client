@@ -5,13 +5,14 @@ import { Unbounded } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import InitializeCart from "@/components/Cart/InitializeCart";
 import { Providers } from "@/providers/provider";
+import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { Suspense } from "react";
+// Suspense removed — AgeVerification is a Client Component (no Suspense needed)
 import AgeVerification from "@/components/AgeVerification/AgeVerification";
 import ScrollToTopButton from "@/components/ScrollToTopButton/ScrollToTopButton";
+import CookieBanner from "@/components/CookieBanner/CookieBanner";
 import { getSEOData } from "@/lib/seo";
-import { noIndex } from "@/lib/noindex";
 
 const SITE_URL = "https://getsmoke.com";
 const GTM_ID = "GTM-TLGTR33M"; // TODO: replace with GetSmoke GTM container ID when created
@@ -36,10 +37,26 @@ export async function generateMetadata(): Promise<Metadata> {
   const seoData = await getSEOData("/*");
 
   const metadata: Metadata = {
-    ...noIndex,
     metadataBase: new URL(SITE_URL),
-    alternates: {
-      canonical: SITE_URL,
+    // No global canonical - each page sets its own via generateMetadata
+    // Setting it here would override all child page canonicals with homepage URL
+    openGraph: {
+      siteName: "GetSmoke",
+      type: "website",
+      images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "GetSmoke - Premium Disposable Vapes" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: ["/og-default.jpg"],
+    },
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: [
+        { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      ],
     },
   };
 
@@ -60,6 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "GetSmoke",
       locale: "en_US",
       type: "website",
+      images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "GetSmoke" }],
     };
     if (ogTitle) metadata.openGraph.title = ogTitle;
     if (ogDescription) metadata.openGraph.description = ogDescription;
@@ -88,6 +106,56 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to R2 image CDN for faster LCP */}
+        <link rel="preconnect" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
+        <link rel="dns-prefetch" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
+        {/* Preload age gate logo - LCP element for new visitors (Lighthouse) */}
+        <link rel="preload" as="image" href="/images/logo.png" />
+        {/* Preload first hero banner for returning visitors */}
+        <link rel="preload" as="image" href="/banners/mobile-july4.webp" media="(max-width: 767px)" fetchPriority="low" />
+        <link rel="preload" as="image" href="/banners/desktop-1.webp" media="(min-width: 768px)" fetchPriority="low" />
+        {/* ── Static JSON-LD schemas — always in initial HTML, visible to all crawlers ── */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "GetSmoke",
+          "url": "https://getsmoke.com",
+          "logo": "https://getsmoke.com/icon-192.png",
+          "email": "info@getsmoke.com",
+          "legalName": "COSMOPROJECT LLC",
+          "foundingLocation": { "@type": "Place", "address": { "@type": "PostalAddress", "addressCountry": "US", "addressRegion": "FL" } },
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "contactPoint": { "@type": "ContactPoint", "email": "info@getsmoke.com", "contactType": "customer support", "areaServed": "US" },
+          "sameAs": [
+            "https://www.instagram.com/getsmoke.shop/"
+          ]
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "GetSmoke",
+          "url": "https://getsmoke.com",
+          "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "https://getsmoke.com/vapes?search={search_term_string}" }, "query-input": "required name=search_term_string" }
+        })}} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": ["OnlineStore", "LocalBusiness"],
+          "name": "GetSmoke",
+          "description": "Premium disposable vapes online store. Shop Geek Bar, RAZ, Lost Mary, HQD and more. Fast US shipping. Adults 21+ only.",
+          "url": "https://getsmoke.com",
+          "logo": "https://getsmoke.com/icon-192.png",
+          "email": "info@getsmoke.com",
+          "legalName": "COSMOPROJECT LLC",
+          "areaServed": { "@type": "Country", "name": "United States" },
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card",
+          "priceRange": "$$",
+          "openingHours": "Mo-Su 00:00-23:59",
+          "sameAs": [
+            "https://www.instagram.com/getsmoke.shop/"
+          ]
+        })}} />
+        {/* ── End Static JSON-LD schemas ── */}
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -101,10 +169,55 @@ export default function RootLayout({
           }}
         />
         {/* End Google Tag Manager */}
+        {/* Yandex Metrika */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110132302', 'ym');
+              ym(110132302, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+            `,
+          }}
+        />
+        {/* End Yandex Metrika */}
+        {/* Polyfills for Safari < 15.4 - must load before any other JS */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          if (!Array.prototype.at) {
+            Array.prototype.at = function(i) {
+              i = Math.trunc(i) || 0;
+              if (i < 0) i += this.length;
+              if (i < 0 || i >= this.length) return undefined;
+              return this[i];
+            };
+          }
+          if (!Object.hasOwn) {
+            Object.hasOwn = function(o, k) {
+              return Object.prototype.hasOwnProperty.call(o, k);
+            };
+          }
+          if (!String.prototype.at) {
+            String.prototype.at = function(i) {
+              i = Math.trunc(i) || 0;
+              if (i < 0) i += this.length;
+              if (i < 0 || i >= this.length) return undefined;
+              return this[i];
+            };
+          }
+          if (typeof structuredClone === 'undefined') {
+            window.structuredClone = function(obj) {
+              return JSON.parse(JSON.stringify(obj));
+            };
+          }
+        ` }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased ${unbounded.variable} bg-black`}
       >
+
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
@@ -115,19 +228,27 @@ export default function RootLayout({
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+        {/* Yandex Metrika (noscript) */}
+        <noscript>
+          <div>
+            <img src="https://mc.yandex.ru/watch/110132302" style={{ position: "absolute", left: "-9999px" }} alt="" />
+          </div>
+        </noscript>
+        {/* End Yandex Metrika (noscript) */}
 
         <Providers>
-          <Navbar />
-          <Toaster position="top-right" reverseOrder={false} />
-          <InitializeCart />
-          <div className="bg-white text-black">
-            <Suspense>
+          <ErrorBoundary>
+            <Navbar />
+            <Toaster position="top-right" reverseOrder={false} toastOptions={{ duration: 1500 }} />
+            <InitializeCart />
+            <div className="bg-white text-black">
               <AgeVerification />
               {children}
-            </Suspense>
-          </div>
-          <ScrollToTopButton />
-          <Footer />
+            </div>
+            <ScrollToTopButton />
+            <Footer />
+            <CookieBanner />
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

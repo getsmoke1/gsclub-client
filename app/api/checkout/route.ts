@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { CartItem } from "@/types/cart";
 import { NextRequest, NextResponse } from "next/server";
+import { sendEmail, sendAgeVerifyEmail } from "@/lib/mail";
+import { orderConfirmationTemplate } from "@/emails/orderConfirmationTemplate";
+import { SUBSCRIPTION_FREQUENCIES, FrequencyValue, getNextBillingDate, calcSubscriptionPrice } from "@/lib/nmi";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +20,29 @@ export async function POST(req: NextRequest) {
       shippingRateId,
       carrier,
       shippingAmount,
+      _insuranceAmount,  // prefixed to avoid ESLint warning
+      nameOnCard,
+      billingStreetAddress,
+      billingCity,
+      billingState,
+      billingZipCode,
+      billingDifferent,
+      // Subscription fields (optional)
+      isSubscription,
+      subscriptionFrequency,
     } = body;
+
+    // Step 0: Geographic restriction check
+    const RESTRICTED_STATES = new Set([
+      "California","District of Columbia","Georgia","Maine","Massachusetts",
+      "Nebraska","New York","Oregon","South Dakota","Utah","Vermont",
+    ]);
+    if (shippingState && RESTRICTED_STATES.has(shippingState)) {
+      return NextResponse.json(
+        { success: false, message: `We're sorry - we do not ship to ${shippingState} due to state regulations on online vape sales.` },
+        { status: 400 }
+      );
+    }
 
     // Step 0: Validate the request
     if (!token) {
@@ -37,12 +62,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Email is required" }, { status: 400 });
     }
 
     if (!items || !items.length) {
-      console.error("No items provided");
-      return NextResponse.json({ error: "No items provided" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "No items provided in cart" }, { status: 400 });
     }
 
     // Step 1: Check if the user exists -- guest ordering
@@ -121,7 +145,6 @@ export async function POST(req: NextRequest) {
         quantity: item.quantity,
         productId: product.id,
         purchasePrice: itemPrice, // Store per-item price
-        attributeId: item.attributeId || null, // Store the attributeId if exists
         productSnapshot: {
           id: product.id,
           name: product.name,
@@ -132,6 +155,7 @@ export async function POST(req: NextRequest) {
           brandName: product.brand.name,
           flavorName: flavorName,
           nicotineName: product.Nicotine.name,
+          stockStatus: product.stockStatus,
           // Include puffs data if available
           puffs: product.productPuffs.map((pp) => ({
             name: pp.puffs.name,
@@ -142,8 +166,13 @@ export async function POST(req: NextRequest) {
     });
 
     // Add shipping cost to calculate final total
-    const shippingCost = shippingAmount ? parseFloat(shippingAmount) : 0;
-    const finalTotal = subtotal + shippingCost;
+    // Server-side validation: free shipping (0) only allowed when subtotal >= FREE_THRESHOLD
+    const FREE_THRESHOLD = 89;
+    const FLAT_RATE = 7.69;
+    const clientShipping = shippingAmount ? parseFloat(shippingAmount) : FLAT_RATE;
+    const shippingCost = clientShipping === 0 && subtotal >= FREE_THRESHOLD ? 0 : Math.min(clientShipping, FLAT_RATE);
+    const insuranceCost = _insuranceAmount ? parseFloat(_insuranceAmount) : 0;
+    const finalTotal = subtotal + shippingCost + insuranceCost;
 
     // Step 4: Create order in the database with isPaid = false
     const orderData = {
@@ -172,8 +201,16 @@ export async function POST(req: NextRequest) {
       shippingRateId,
     };
 
+    // Generate atomic order number starting from 30000 (above last WP order #22741)
+    const counter = await prisma.counter.upsert({
+      where: { name: "orderNumber" },
+      update: { value: { increment: 1 } },
+      create: { name: "orderNumber", value: 30001 },
+    });
+    const orderNumber = counter.value;
+
     const order = await prisma.order.create({
-      data: orderData,
+      data: { ...orderData, orderNumber },
       include: {
         orderItems: true,
         Shipment: true,
@@ -181,22 +218,41 @@ export async function POST(req: NextRequest) {
     });
 
     // Step 5: Prepare the request to NMI Payment API with order ID and calculated amount
+    const cardName = (nameOnCard || shippingName || "").trim();
+    const nameParts = cardName.split(" ");
+    // Build NMI request - only send fields that have values (undefined → skip)
     const nmiRequestData: Record<string, string> = {
       security_key: securityKey,
       payment_token: token.toString(),
-      amount: finalTotal.toFixed(2), // Format to 2 decimal places
-      order_id: order.id,
-      shipping: shippingCost.toFixed(2),
+      amount: finalTotal.toFixed(2),
       type: "sale",
-      // Add billing address information (using shipping address as billing)
-      firstname: shippingName.split(" ")[0], // Assuming the first part is the first name
-      lastname: shippingName.split(" ").slice(1).join(" "), // Assuming the rest is the last name
-      address1: shippingStreetAddress,
-      city: shippingCity,
-      state: shippingState,
-      zip: shippingZipCode,
-      country: "US",
     };
+    // Only add optional fields if they have real values (not undefined/empty)
+    if (order.id) nmiRequestData.order_id = order.id;
+    if (nameParts[0]) nmiRequestData.firstname = nameParts[0];
+    if (nameParts.slice(1).join(" ") || nameParts[0]) nmiRequestData.lastname = nameParts.slice(1).join(" ") || nameParts[0];
+    // Use billing address if set and different; otherwise use shipping address
+    // NMI requires address1 for this merchant account
+    const finalAddrStreet = (billingDifferent && billingStreetAddress) ? billingStreetAddress : shippingStreetAddress;
+    const finalAddrCity   = (billingDifferent && billingCity)          ? billingCity          : shippingCity;
+    const finalAddrState  = (billingDifferent && billingState)         ? billingState         : shippingState;
+    const finalAddrZip    = (billingDifferent && billingZipCode)       ? billingZipCode       : shippingZipCode;
+    console.log("NMI address:", { street: finalAddrStreet, city: finalAddrCity, state: finalAddrState, zip: finalAddrZip });
+    if (finalAddrStreet) nmiRequestData.address1 = finalAddrStreet;
+    if (finalAddrCity)   nmiRequestData.city     = finalAddrCity;
+    if (finalAddrState)  nmiRequestData.state    = finalAddrState;
+    if (finalAddrZip)    nmiRequestData.zip      = finalAddrZip;
+    nmiRequestData.country = "US";
+    if (email)  nmiRequestData.email = email;
+
+    // For subscriptions: add the card to Customer Vault during this transaction
+    if (isSubscription && subscriptionFrequency) {
+      nmiRequestData.customer_vault = "add_customer";
+    }
+    // Debug: log what we're sending to NMI (exclude security_key from log)
+    const debugData = {...nmiRequestData, security_key: "[hidden]"};
+    console.log("NMI Request:", JSON.stringify(debugData));
+
     // Make the API request to NMI
     const response = await fetch("https://secure.nmi.com/api/transact.php", {
       method: "POST",
@@ -207,13 +263,152 @@ export async function POST(req: NextRequest) {
     // NMI returns data in a specific format that needs parsing
     const responseText = await response.text();
     const responseData = parseNmiResponse(responseText);
+    console.log("NMI Response:", JSON.stringify({
+      response: responseData.response,
+      responsetext: responseData.responsetext,
+      response_code: responseData.response_code,
+      transactionid: responseData.transactionid,
+      amount: finalTotal.toFixed(2),
+      hasToken: !!token,
+      hasAddress: !!shippingStreetAddress,
+    }));
 
     if (responseData.response === "1") {
-      // Payment was successful - update order to paid
+      // Payment was successful - update order to paid and save NMI transaction ID
       await prisma.order.update({
         where: { id: order.id },
-        data: { isPaid: true },
+        data: {
+          isPaid: true,
+          nmiTransactionId: responseData.transactionid || null,
+          refundedAmount: 0,
+          refundStatus: "none",
+        },
       });
+
+      // If subscription: save vault ID and create Subscription records for each item
+      if (isSubscription && subscriptionFrequency && responseData.customer_vault_id) {
+        const vaultId = responseData.customer_vault_id;
+        const freq = SUBSCRIPTION_FREQUENCIES.find(f => f.value === subscriptionFrequency) as typeof SUBSCRIPTION_FREQUENCIES[number] | undefined;
+
+        if (freq) {
+          const dbUser = await prisma.user.findUnique({ where: { email } });
+
+          if (dbUser) {
+            // Create or update CustomerVault record
+            const vault = await prisma.customerVault.upsert({
+              where: { userId: dbUser.id },
+              create: {
+                userId: dbUser.id,
+                vaultId: vaultId,
+                lastFour: responseData.cc_number?.slice(-4) || "****",
+                cardType: responseData.cc_type || "card",
+              },
+              update: {
+                vaultId: vaultId,
+                lastFour: responseData.cc_number?.slice(-4) || "****",
+                cardType: responseData.cc_type || "card",
+              },
+            });
+
+            // Create a subscription for each product in the order
+            for (const item of orderItemsData) {
+              const product = productsWithDetails.find(p => p.id === item.productId);
+              if (!product) continue;
+              const discountedPrice = calcSubscriptionPrice(product.currentPrice, freq.discountPct);
+              await prisma.subscription.create({
+                data: {
+                  userId: dbUser.id,
+                  productId: item.productId,
+                  vaultId: vault.id,
+                  frequency: freq.value,
+                  discountPct: freq.discountPct,
+                  price: discountedPrice,
+                  quantity: item.quantity,
+                  status: "active",
+                  nextBillingDate: getNextBillingDate(freq.value as FrequencyValue),
+                },
+              });
+            }
+          }
+        }
+      }
+
+      // Send order confirmation email to customer
+      try {
+        const hasPreOrder = orderItemsData.some((item: { productSnapshot: { stockStatus?: string } }) =>
+          item.productSnapshot?.stockStatus === "PREORDER"
+        );
+        const emailItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number; stockStatus?: string }; quantity: number; purchasePrice: number }) => ({
+          name: item.productSnapshot?.stockStatus === "PREORDER"
+            ? `[PRE-ORDER] ${item.productSnapshot?.name || "Product"}`
+            : (item.productSnapshot?.name || "Product"),
+          quantity: item.quantity,
+          price: item.purchasePrice,
+        }));
+        const subtotal = emailItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
+        const shippingAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
+        const orderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
+        const subjectSuffix = isSubscription ? " - SUBSCRIPTION" : hasPreOrder ? " - Contains Pre-Order Items" : "";
+        await sendEmail(
+          email,
+          `[getsmoke]: Order Confirmed #${orderNum}${subjectSuffix}`,
+          orderConfirmationTemplate(
+            shippingName,
+            orderNum,
+            emailItems,
+            subtotal,
+            parseFloat(shippingAmount) || 0,
+            finalTotal,
+            shippingAddr,
+            !!isSubscription,
+            subscriptionFrequency || undefined
+          )
+        );
+        // Notify store — send to both info@ and owner Gmail for reliability
+        const storeSubjectSuffix = isSubscription ? ` - SUBSCRIPTION (${subscriptionFrequency || "recurring"})` : hasPreOrder ? " - PRE-ORDER" : "";
+        const storeSubject = `[getsmoke]: New order #${orderNum}${storeSubjectSuffix}`;
+        const storeHtml = orderConfirmationTemplate(
+          shippingName,
+          orderNum,
+          emailItems,
+          subtotal,
+          parseFloat(shippingAmount) || 0,
+          finalTotal,
+          shippingAddr,
+          !!isSubscription,
+          subscriptionFrequency || undefined,
+          email  // customer email shown in admin notification
+        );
+        await Promise.allSettled([
+          sendEmail("info@getsmoke.com", storeSubject, storeHtml),
+          sendEmail("breakforlife11@gmail.com", storeSubject, storeHtml),
+        ]);
+      } catch (emailErr) {
+        console.error("Order confirmation email failed:", emailErr);
+        // Don't fail the order if email fails
+      }
+
+      // Age verification: send email to new customers only
+      try {
+        const isHistorical = await prisma.historicalCustomer.findFirst({
+          where: { email: email.toLowerCase() },
+        });
+        const hasExistingOrders = await prisma.order.count({
+          where: { userEmail: email, isPaid: true, id: { not: order.id } },
+        });
+        if (!isHistorical && hasExistingOrders === 0) {
+          // First-time customer - generate token and send age verification email
+          const crypto = await import("crypto");
+          const token = crypto.randomBytes(32).toString("hex");
+          const orderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
+          await prisma.ageVerification.create({
+            data: { token, email, name: shippingName, orderNumber: orderNum },
+          });
+          await sendAgeVerifyEmail({ to: email, name: shippingName, orderNumber: orderNum, token });
+        }
+      } catch (ageErr) {
+        console.error("Age verify email failed:", ageErr);
+      }
 
       return NextResponse.json(
         {
@@ -227,13 +422,75 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     } else {
-      // Payment failed - keep order in database for reference but mark as failed
+      // Payment failed - send admin notification and return error
       console.error("NMI Error:", responseData);
+
+      try {
+        const failedItems = orderItemsData.map((item: { productSnapshot: { name: string; currentPrice: number }; quantity: number; purchasePrice: number }) => ({
+          name: item.productSnapshot?.name || "Product",
+          quantity: item.quantity,
+          price: item.purchasePrice,
+        }));
+        const failedSubtotal = failedItems.reduce((sum: number, i: { price: number; quantity: number }) => sum + i.price * i.quantity, 0);
+        const failedShipping = parseFloat(shippingAmount) || 0;
+        const failedTotal = failedSubtotal + failedShipping + (parseFloat(_insuranceAmount) || 0);
+        const failedOrderNum = String(order.orderNumber || order.id.slice(-8).toUpperCase());
+        const failedReason = responseData.responsetext || "Payment processing error";
+        const failedAddr = `${shippingName}\n${shippingStreetAddress}\n${shippingCity}, ${shippingState} ${shippingZipCode}`;
+
+        const itemRows = failedItems.map((i: { name: string; quantity: number; price: number }) =>
+          `<tr><td style="padding:8px;border:1px solid #ddd">${i.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:center">${i.quantity}</td><td style="padding:8px;border:1px solid #ddd;text-align:right">$${(i.price * i.quantity).toFixed(2)}</td></tr>`
+        ).join("");
+
+        const failedEmailHtml = `
+          <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+            <div style="background:#c0392b;padding:24px;color:#fff">
+              <h1 style="margin:0;font-size:24px">Payment Failed: #${failedOrderNum}</h1>
+            </div>
+            <div style="padding:24px">
+              <p>Payment from <strong>${shippingName}</strong> (${email}) has failed.</p>
+              <p style="color:#c0392b"><strong>Reason: ${failedReason}</strong></p>
+              <h3>Order #${failedOrderNum}</h3>
+              <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
+                <thead>
+                  <tr style="background:#f5f5f5">
+                    <th style="padding:8px;border:1px solid #ddd;text-align:left">Product</th>
+                    <th style="padding:8px;border:1px solid #ddd;text-align:center">Qty</th>
+                    <th style="padding:8px;border:1px solid #ddd;text-align:right">Price</th>
+                  </tr>
+                </thead>
+                <tbody>${itemRows}</tbody>
+                <tfoot>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Subtotal</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right">$${failedSubtotal.toFixed(2)}</td></tr>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Shipping</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right">${failedShipping === 0 ? "Free" : "$" + failedShipping.toFixed(2)}</td></tr>
+                  <tr><td colspan="2" style="padding:8px;border:1px solid #ddd"><strong>Total</strong></td><td style="padding:8px;border:1px solid #ddd;text-align:right"><strong>$${failedTotal.toFixed(2)}</strong></td></tr>
+                </tfoot>
+              </table>
+              <div style="display:flex;gap:24px">
+                <div style="flex:1">
+                  <h4 style="color:#c0392b">Billing / Shipping Address</h4>
+                  <p style="white-space:pre-line;background:#f9f9f9;padding:12px;border-radius:6px">${failedAddr}</p>
+                </div>
+              </div>
+              <p style="color:#888;font-size:12px;margin-top:16px">Payment method: Credit card (NMI) - Response code: ${responseData.response_code || responseData.response}</p>
+            </div>
+          </div>
+        `;
+
+        const failedSubject = `[GetSmoke] Payment FAILED #${failedOrderNum} - ${shippingName} - $${failedTotal.toFixed(2)}`;
+        await Promise.allSettled([
+          sendEmail("info@getsmoke.com", failedSubject, failedEmailHtml),
+          sendEmail("breakforlife11@gmail.com", failedSubject, failedEmailHtml),
+        ]);
+      } catch (notifyErr) {
+        console.error("Failed to send failed-payment notification:", notifyErr);
+      }
+
       return NextResponse.json(
         {
           success: false,
           message: responseData.responsetext || "Payment processing error",
-          errorDetails: responseData, // Include full error details for debugging
+          errorDetails: responseData,
         },
         { status: 400 }
       );

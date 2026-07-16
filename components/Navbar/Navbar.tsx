@@ -4,9 +4,11 @@ import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react
 import { CiSearch } from "react-icons/ci";
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from "framer-motion";
+
 import useCart from '@/hooks/useCart';
 import { Product } from '@/types/product';
+import { useFilter } from '@/hooks/useFilter';
+import { r2src } from '@/lib/r2-image';
 
 // Define type for debounce function
 type DebouncedFunction<T extends unknown[]> = (...args: T) => void;
@@ -22,6 +24,7 @@ const Navbar = () => {
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const { items } = useCart();
+    const { clearFilters } = useFilter();
     // Add state for sticky navbar
     const [isSticky, setIsSticky] = useState(false);
     const blackDivRef = useRef<HTMLDivElement>(null);
@@ -162,12 +165,14 @@ const Navbar = () => {
     }, [searchQuery, showResults]);
 
     const navItems = [
-        { title: "Shop", href: "/vapes" },
-        { title: "Brands", href: "/vapes" },
-        { title: "Accessories", href: "/accessories" },
+        { title: "Disposables", href: "/vapes" },
+        { title: "Switch Pods", href: "/pods" },
+        { title: "Brands", href: "/brands" },
+        { title: "Vape Juice", href: "/vape-juice" },
         { title: "Hookah", href: "/hookah" },
+        { title: "About Us", href: "/about-us" },
+        { title: "FAQ", href: "/faq" },
         { title: "Blog", href: "/blog" },
-        { title: "Contact", href: "/contact" },
     ];
 
     const handleProductClick = (productSlug: string) => {
@@ -180,15 +185,43 @@ const Navbar = () => {
             <section className='font-unbounded'>
                 <div ref={blackDivRef} className='bg-black p-3 text-white text-center text-sm md:text-base'>WARNING: These products contain nicotine. Nicotine is an addictive chemical.</div>
                 <aside
-                    className={`bg-white py-4 ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
-                    style={{ transition: 'all 0.3s ease' }}
+                    className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
+                    style={show ? { position: isSticky ? 'fixed' : 'relative', zIndex: 9999999 } : undefined}
                 >
-                    <div className='w-11/12 mx-auto flex items-center justify-between'>
+                    {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
+                    <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative' style={{ position: 'relative', paddingTop: '20px', paddingBottom: '20px' }}>
+                        {/* Mobile logo - absolutely centered */}
+                        <div
+                            className="md:hidden"
+                            style={{
+                                position: 'absolute',
+                                left: '50%',
+                                WebkitTransform: 'translateX(-50%)',
+                                transform: 'translateX(-50%)',
+                                opacity: isSearchFocused ? 0 : 1,
+                                transition: 'opacity 0.2s ease',
+                                pointerEvents: isSearchFocused ? 'none' : 'auto',
+                                zIndex: 10,
+                            }}
+                        >
+                            <Link
+                                href="/"
+                                onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+                                aria-label="Go to GetSmoke homepage"
+                            >
+                                <Image
+                                    src={"/images/logo.png"}
+                                    width={150}
+                                    height={150}
+                                    alt='GetSmoke logo - Go to homepage'
+                                />
+                            </Link>
+                        </div>
                         <div className="relative flex items-center md:gap-4">
                             <div
                                 ref={hamburgerButtonRef}
                                 onClick={() => setshow(!show)}
-                                className="relative w-10 z-[60]"
+                                className="relative w-10 z-[60] md:hidden"
                                 role="button"
                                 aria-label="Toggle navigation menu"
                                 aria-expanded={show}
@@ -210,8 +243,9 @@ const Navbar = () => {
                             </div>
                             <nav
                                 ref={hamburgerMenuRef}
-                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl bg-gradient-to-b from-[#E8726B] via-[#F5A552] to-[#ffc42e] z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[240px] h-[360px]" : "w-0 h-0"
+                                className={`absolute -top-2.5 -left-3.5 border border-white shadow-2xl z-50 rounded-b-xl rounded-tr-xl ${show ? "w-[240px] h-[360px]" : "w-0 h-0"
                                     } transition-all duration-300 ease-linear overflow-hidden`}
+                                style={{ background: 'linear-gradient(to bottom, #E8726B, #F5A552, #ffc42e)' }}
                                 aria-hidden={!show}
                             >
                                 <ul className="text-black text-[1.1rem] py-16 px-3 space-y-4 flex flex-col items-end">
@@ -219,7 +253,7 @@ const Navbar = () => {
                                         <li key={title}>
                                             <Link
                                                 href={href}
-                                                onClick={() => setshow(!show)}
+                                                onClick={() => { setshow(!show); if (href === '/vapes') clearFilters(); }}
                                                 className="px-4 cursor-pointer block hover:text-[#fe3500] focus:text-[#fe3500] focus:outline-none font-bold text-xl"
                                             >
                                                 {title}
@@ -231,8 +265,8 @@ const Navbar = () => {
 
                             {/* Search Bar with Dropdown */}
                             <div className="relative text-black search-container flex gap-2 items-center" onClick={handleSearchContainerClick}>
-                                {/* Search input remains the same */}
-                                <motion.input
+                                {/* Desktop search input */}
+                                <input
                                     type="text"
                                     placeholder="Search products..."
                                     value={searchQuery}
@@ -244,18 +278,15 @@ const Navbar = () => {
                                     }}
                                     onBlur={() => {
                                         setIsSearchFocused(false);
-                                        setSearchQuery(''); // Add this line to clear on blur
+                                        setSearchQuery('');
                                         setShowResults(false);
                                     }}
-                                    className="hidden md:block border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
-                                    initial={{ width: "10rem" }}
-                                    animate={{
-                                        width: isSearchFocused ? "10rem" : "10rem",
-                                        transition: { duration: 0.3, ease: "easeInOut" }
-                                    }}
+                                    className="hidden md:block border-black border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
+                                    style={{ width: '10rem' }}
                                     aria-label="Search products"
                                 />
-                                <motion.input
+                                {/* Mobile search input */}
+                                <input
                                     type="text"
                                     placeholder="Search products..."
                                     value={searchQuery}
@@ -266,18 +297,19 @@ const Navbar = () => {
                                         setIsSearchFocused(true);
                                     }}
                                     onBlur={() => setIsSearchFocused(false)}
-                                    className="block md:hidden border-white md:border-black border focus:border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent"
-                                    initial={{ width: "2rem" }}
-                                    animate={{
-                                        width: isSearchFocused ? "10rem" : "2rem",
-                                        transition: { duration: 0.3, ease: "easeInOut" }
+                                    className="block md:hidden border-black border rounded-full py-1 px-3 pl-8 focus:outline-none focus:ring-2 focus:ring-[#fe3500] focus:border-transparent text-sm"
+                                    style={{
+                                        width: isSearchFocused ? '10rem' : '2rem',
+                                        transition: 'width 0.3s ease',
+                                        overflow: 'hidden',
                                     }}
                                     aria-label="Search products"
                                 />
 
                                 {/* Search icon with click handler */}
                                 <div
-                                    className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+                                    className="absolute left-2 cursor-pointer z-10"
+                                    style={{ top: '50%', transform: 'translateY(-50%)' }}
                                     onClick={() => {
                                         setIsSearchFocused(true);
                                         searchInputRef.current?.focus();
@@ -296,30 +328,7 @@ const Navbar = () => {
                                     <CiSearch size={20} />
                                 </div>
 
-                                {/* Animated logo - wrapped in Link so it will redirect */}
-                                <AnimatePresence>
-                                    {!isSearchFocused && (
-                                        <motion.div
-                                            initial={{ opacity: 1 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0, transition: { duration: 0.2 } }}
-                                            className="md:hidden"
-                                        >
-                                            <Link
-                                                href="/"
-                                                onClick={(e) => e.stopPropagation()}
-                                                aria-label="Go to GetSmoke homepage"
-                                            >
-                                                <Image
-                                                    src={"/images/logo.png"}
-                                                    width={150}
-                                                    height={150}
-                                                    alt='GetSmoke logo - Go to homepage'
-                                                />
-                                            </Link>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+{/* mobile logo moved to Row 1 absolute center */}
 
                                 {/* Search Results Dropdown */}
                                 {showResults && (
@@ -353,7 +362,7 @@ const Navbar = () => {
                                                         <div className="w-12 h-12 relative mr-3 flex-shrink-0">
                                                             {product.images && product.images.length > 0 ? (
                                                                 <Image
-                                                                    src={product.images[0].url}
+                                                                    src={r2src(product.images[0].url)}
                                                                     alt={`${product.name} product image`}
                                                                     fill
                                                                     sizes="48px"
@@ -380,14 +389,13 @@ const Navbar = () => {
                             </div>
 
                         </div>
-                        <div className="md:mr-28">
-                            <Link href={"/"} aria-label="Go to GetSmoke homepage">
+                        <div className="hidden md:block md:absolute" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', WebkitTransform: 'translateX(-50%)' }}>
+                            <Link href={"/"} onClick={() => clearFilters()} aria-label="Go to GetSmoke homepage">
                                 <Image
                                     src={"/images/logo.png"}
                                     width={180}
                                     height={180}
                                     alt='GetSmoke logo - Go to homepage'
-                                    className='hidden md:block'
                                 />
                             </Link>
                         </div>
@@ -404,7 +412,7 @@ const Navbar = () => {
                                 </Link>
                             </div>
                             <div className="relative">
-                                <Link href="/cart" aria-label={`Shopping cart${items.length > 0 ? ` (${items.length} items)` : ''}`}>
+                                <Link href="/cart" aria-label={`Shopping cart${items.length > 0 ? ` (${items.reduce((s, i) => s + i.quantity, 0)} items)` : ''}`}>
                                     <Image
                                         src="/images/cart.png"
                                         width={25}
@@ -413,19 +421,50 @@ const Navbar = () => {
                                     />
                                     {items.length > 0 && (
                                         <span
-                                            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-full"
-                                            aria-label={`${items.length} items in cart`}
+                                            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full"
+                                            style={{
+                                                position: 'absolute',
+                                                top: '-8px',
+                                                right: '-8px',
+                                                backgroundColor: '#ef4444',
+                                                color: '#fff',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                width: '20px',
+                                                height: '20px',
+                                                borderRadius: '50%',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                lineHeight: 1,
+                                            }}
+                                            aria-label={`${items.reduce((s, i) => s + i.quantity, 0)} items in cart`}
                                         >
-                                            {items.length}
+                                            {items.reduce((s, i) => s + i.quantity, 0)}
                                         </span>
                                     )}
                                 </Link>
                             </div>
                         </div>
                     </div>
+                    {/* Row 2 (desktop only): Navigation links */}
+                    <nav className="hidden md:flex border-t border-gray-200 py-2.5 pb-3 bg-white" style={{ borderTop: '1px solid #e5e7eb', paddingTop: '10px', paddingBottom: '12px' }}>
+                        <div className="w-11/12 mx-auto flex items-center justify-between">
+                        {navItems.map(({ title, href }) => (
+                            <Link
+                                key={title}
+                                href={href}
+                                onClick={() => { if (href === '/vapes') clearFilters(); }}
+                                className="text-black font-bold text-sm hover:text-[#fe3500] transition-colors whitespace-nowrap"
+                            >
+                                {title}
+                            </Link>
+                        ))}
+                        </div>
+                    </nav>
                 </aside>
                 {/* Add a placeholder div when navbar is sticky to prevent content jump */}
-                {isSticky && <div style={{ height: '76px' }}></div>}
+                {isSticky && <div style={{ height: '100px' }}></div>}
             </section>
         </Suspense>
     )

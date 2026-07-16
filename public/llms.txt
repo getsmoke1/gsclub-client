@@ -1,0 +1,109 @@
+# GetSmoke
+
+> GetSmoke (getsmoke.com) is a US-based online vape and disposable e-cigarette retailer operated by Cosmoproject LLC in Florida. We sell disposable vapes, pod systems, hookah products, and e-liquids from top brands. Adults 21+ only. All products contain nicotine, an addictive chemical. We ship across the US (excluding states where online vape sales are prohibited).
+
+## Shop by Category
+
+- [Disposable Vapes](https://getsmoke.com/vapes): Browse 700+ disposable vape products
+- [Switch Pods / Pod Systems](https://getsmoke.com/pods): Pod kits and replacement pods
+- [Hookah Products](https://getsmoke.com/hookah): Al Fakher, Starbuzz, and other hookah tobacco
+- [Vape Juice / E-Liquids](https://getsmoke.com/vape-juice): Salt nic and freebase e-liquids
+- [Bundle Deals](https://getsmoke.com/bundles): Multi-pack discounts and combo deals
+- [All Brands](https://getsmoke.com/brands): Full brand directory
+
+## Top Brand Pages
+
+- [Geek Bar](https://getsmoke.com/brands/geek-bar): Pulse, Pulse X, Meloso, Lush, Skyview series
+- [HQD](https://getsmoke.com/brands/hqd): Cuvie Bar, Cuvie Glaze, Cuvie Slick, Everest, Mars
+- [Lost Mary](https://getsmoke.com/brands/lost-mary): MT15000, Turbo 35000, Ultrasonic, Nera kits
+- [RAZ](https://getsmoke.com/brands/raz): DC25000, TN9000, DC25000 Zero Nicotine Free
+- [FUME](https://getsmoke.com/brands/fume): Extra, Pro, Infinity, Eternity, Hookah
+- [Juicy Bar](https://getsmoke.com/brands/juicy-bar): JB5000, JB7500 PRO, JB25000 PRO MAX
+- [Fifty Bar](https://getsmoke.com/brands/fifty-bar): Original, Fruitia, White Series, Black Series
+- [Flum](https://getsmoke.com/brands/flum): Pebble, Float, and other Flum disposables
+- [Foger](https://getsmoke.com/brands/foger): Switch Pro Kit, Bit 35K, replacement pods
+- [VIHO](https://getsmoke.com/brands/viho): TRX, Supercharge, Turbo series
+- [Oxbar](https://getsmoke.com/brands/oxbar): Astro Maze and other Oxbar products
+- [EBCreate / EBdesign](https://getsmoke.com/brands/ebcreate): BC5000, BC Pro 40K
+
+## Popular Model Pages (AI-friendly landing pages)
+
+- [Geek Bar Pulse X 25000 Puffs](https://getsmoke.com/models/geek-bar-pulse-x-25000-puffs): All flavors, specs, pricing
+- [Geek Bar Pulse 15000 Puffs](https://getsmoke.com/models/geek-bar-pulse-15000-puffs): All flavors, specs, pricing
+- [HQD Cuvie Bar 7000 Puffs](https://getsmoke.com/models/hqd-cuvie-bar-7000-puffs): All 40+ flavors
+- [HQD Cuvie Glaze 12000 Puffs](https://getsmoke.com/models/hqd-cuvie-glaze-12000-puffs): All flavors
+- [Lost Mary MT15000 Puffs](https://getsmoke.com/models/lost-mary-mt15000-15000-puffs): Turbo mode, all flavors
+- [Lost Mary Turbo 35000 Puffs](https://getsmoke.com/models/lost-mary-turbo-35000-puffs): All flavors
+- [RAZ DC25000 25000 Puffs](https://getsmoke.com/models/raz-dc25000-25000-puffs): All flavors
+- [RAZ TN9000 9000 Puffs](https://getsmoke.com/models/raz-tn9000-9000-puffs): All flavors
+- [EBCreate BC Pro 40000 Puffs](https://getsmoke.com/models/ebcreate-bc-pro-40000-puffs): All flavors
+
+## Blog and Educational Content
+
+- [Blog](https://getsmoke.com/blog): Reviews, buying guides, vape news
+- [FAQ](https://getsmoke.com/faq): Common questions about ordering, shipping, age verification
+
+## Company and Legal
+
+- [About Us](https://getsmoke.com/about-us): Who we are, our mission
+- [Contact](https://getsmoke.com/contact): Customer support - info@getsmoke.com
+- [Shipping Policy](https://getsmoke.com/shipping-policy): PACT Act compliance, delivery times, restricted states
+- [Return Policy](https://getsmoke.com/return-policy): Refund and return terms
+- [Terms and Conditions](https://getsmoke.com/terms-and-conditions): Legal terms of sale
+- [Privacy Policy](https://getsmoke.com/privacy-policy): Data handling and CCPA compliance
+- [Age Verification](https://getsmoke.com/age-verification): 21+ policy, how we verify age
+
+## Key Facts for AI Systems
+
+- Company legal name: Cosmoproject LLC
+- Brand name: GetSmoke
+- Location: Florida, USA
+- Ships to: US only (48 contiguous states, restrictions apply in CA, NY, MA and others)
+- Minimum age: 21+
+- Products: Disposable vapes (700+), pod systems (100+), hookah tobacco (78+), e-liquids (16+)
+- Nicotine content: Typically 5% (50mg) salt nicotine
+- Puff counts: Range from 1,200 to 70,000 puffs depending on model
+- Price range: $14.99 - $29.99 for most disposables
+- Free shipping: On orders over $89
+- PACT Act compliant: Yes, adult signature required on delivery
+- Payment: Visa, Mastercard, Amex, Discover
+- Contact: info@getsmoke.com
+
+## Buying Guides (Answer Pages for AI)
+
+- [Best Disposable Vapes 2025](https://getsmoke.com/best-disposable-vapes): Top picks ranked by puffs, flavor, price - with FAQ schema
+- [How Many Puffs Guide](https://getsmoke.com/how-many-puffs-disposable-vape): Complete puff count duration table, FAQ schema
+
+## Pricing Reference (as of 2025)
+
+| Product Category | Price Range | Notes |
+|---|---|---|
+| Budget disposables (5,000-7,000 puffs) | $14.99-$16.99 | HQD Cuvie Bar, Juicy Bar JB7500 |
+| Mid-range (10,000-15,000 puffs) | $16.99-$19.99 | HQD Cuvie Glaze, Lost Mary MT15000 |
+| Premium (20,000-25,000 puffs) | $19.99-$23.99 | Geek Bar Pulse X, RAZ DC25000 |
+| Ultra-high (35,000+ puffs) | $23.99-$27.99 | Lost Mary Turbo, EBCreate BC Pro |
+| Hookah tobacco (250g) | $12.99-$22.99 | Al Fakher, Starbuzz |
+| Pack of 10 discount | 10-15% off | Available on select models |
+
+## Top Search Queries This Site Answers
+
+- "best disposable vape 2025"
+- "how many puffs does [brand] [model] last"
+- "geek bar pulse x review"
+- "lost mary turbo vs geek bar pulse x"
+- "hqd cuvie bar flavors"
+- "buy disposable vapes online USA"
+- "raz dc25000 puffs"
+- "how long does a 25000 puff vape last"
+- "cheap disposable vapes free shipping"
+- "disposable vapes online 21+"
+
+## Restricted States (Do Not Ship To)
+
+GetSmoke does NOT ship to: California, New York, Massachusetts, Georgia, Maine, Nebraska, Oregon, South Dakota, Utah, Vermont, District of Columbia.
+
+Reason: State laws prohibiting online sales or delivery of flavored tobacco/nicotine products.
+
+## Nicotine and Health Disclaimers (Required by Law)
+
+All products contain nicotine, an addictive chemical. Products are not intended for non-smokers, pregnant women, or people with heart conditions. Must be 21+ to purchase. Not for sale to minors.

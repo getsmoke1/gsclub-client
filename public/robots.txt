@@ -22,5 +22,5 @@ Host: https://getsmoke.com
 
 # Sitemaps
 Sitemap: https://getsmoke.com/sitemap.xml
-Sitemap: https://www.getsmoke.com/server-sitemap-products.xml
-Sitemap: https://www.getsmoke.com/server-sitemap-blog.xml
+Sitemap: https://getsmoke.com/server-sitemap-products.xml
+Sitemap: https://getsmoke.com/server-sitemap-blog.xml

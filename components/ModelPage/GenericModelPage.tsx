@@ -1,0 +1,604 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import useCart from "@/hooks/useCart";
+import { ModelConfig } from "@/lib/models-config";
+import SubscriptionSelector from "@/components/ProductPage/SubscriptionSelector";
+import { FrequencyValue } from "@/lib/nmi";
+
+type PackOption = "single" | "pack3" | "pack5" | "pack10";
+
+interface ApiProduct {
+  id: string;
+  name: string;
+  images: { url: string }[];
+  flavor: { name: string } | null;
+  stockStatus?: "INSTOCK" | "OUTOFSTOCK" | "PREORDER";
+}
+
+interface ApiResponse {
+  products: ApiProduct[];
+  model: ModelConfig;
+}
+
+function buildPackConfig(
+  price: number,
+  packPrices?: { pack3?: number; pack5?: number; pack10?: number }
+) {
+  const p3 = packPrices?.pack3 ?? +(price * 0.95).toFixed(2);
+  const p5 = packPrices?.pack5 ?? +(price * 0.92).toFixed(2);
+  const p10 = packPrices?.pack10 ?? +(price * 0.88).toFixed(2);
+  return {
+    single: { label: "Single", price, count: 1, display: `$${price.toFixed(2)}` },
+    pack3: { label: "Pack of 3", price: p3, count: 3, display: `$${p3.toFixed(2)}/each` },
+    pack5: { label: "Pack of 5", price: p5, count: 5, display: `$${p5.toFixed(2)}/each` },
+    pack10: { label: "Pack of 10", price: p10, count: 10, display: `$${p10.toFixed(2)}/each` },
+  };
+}
+
+function getFlavorName(product: ApiProduct): string {
+  if (product.flavor?.name) return product.flavor.name;
+  // Try to extract flavor name from product name by removing common model prefixes
+  return product.name;
+}
+
+function generateDescription(model: ModelConfig, flavorCount: number): string[] {
+  const nicotineNote =
+    model.nicotine === "0% Nicotine Free"
+      ? "nicotine-free formula"
+      : `${model.nicotine} nicotine salt`;
+
+  return [
+    `The ${model.name} disposable vape is designed for vapers who demand long-lasting performance and rich flavor. With up to ${model.puffs} puffs per device, it delivers consistent vapor quality from the very first draw to the last, making it one of the most reliable options in its class.`,
+    `Each ${model.shortName} device is pre-filled with a ${nicotineNote} e-liquid, powered by a rechargeable USB-C battery that ensures you never waste any e-liquid. The draw-activated design requires no buttons - simply inhale to enjoy a smooth, satisfying vaping experience.`,
+    `Available in ${flavorCount > 0 ? flavorCount : "multiple"} carefully crafted flavors, the ${model.shortName} offers something for every palate. Whether you prefer refreshing menthol, sweet fruity blends, or classic tobacco profiles, there is a flavor that matches your taste. Each variant delivers a consistent, true-to-name flavor profile throughout the life of the device.`,
+    `GetSmoke ships the ${model.name} disposable vape across the entire United States with adult signature required delivery. Orders over $79 qualify for free shipping, and all products are sourced from authorized US distributors. We are committed to compliance with all applicable regulations for the sale of nicotine products to adults 21 and older.`,
+  ];
+}
+
+function generateFaq(model: ModelConfig, flavorCount: number, price: number) {
+  const pack3Price = (price * 0.95 * 3).toFixed(2);
+  const pack5Price = (price * 0.92 * 5).toFixed(2);
+  const pack10Price = (price * 0.88 * 10).toFixed(2);
+  const nicotineNote =
+    model.nicotine === "0% Nicotine Free"
+      ? "This device contains no nicotine - it is completely nicotine-free, making it ideal for users who enjoy vaping without any nicotine dependency."
+      : `The ${model.shortName} uses ${model.nicotine} nicotine salt. Nicotine salts deliver a smooth throat hit at higher concentrations compared to freebase nicotine, making this device suitable for users who need a satisfying nicotine experience.`;
+
+  return [
+    {
+      q: `How many puffs does the ${model.shortName} have?`,
+      a: `The ${model.name} delivers up to ${model.puffs} puffs per device. This makes it an excellent long-lasting option for daily vapers who want to go longer between device replacements.`,
+    },
+    {
+      q: `What nicotine strength is in the ${model.shortName}?`,
+      a: nicotineNote,
+    },
+    {
+      q: `How many flavors does the ${model.shortName} come in?`,
+      a: `The ${model.shortName} is available in ${flavorCount > 0 ? flavorCount : "multiple"} flavors at GetSmoke. Browse the flavor selection above to find your favorite.`,
+    },
+    {
+      q: `Can I buy the ${model.shortName} in a pack?`,
+      a: `Yes. GetSmoke offers the ${model.shortName} in Single ($${price.toFixed(2)}), Pack of 3 ($${pack3Price} total), Pack of 5 ($${pack5Price} total), and Pack of 10 ($${pack10Price} total). Each device in a multi-pack can be a different flavor so you can mix and match.`,
+    },
+    {
+      q: `Does the ${model.shortName} have a rechargeable battery?`,
+      a: `Yes, the ${model.shortName} features a rechargeable battery via USB-C. Recharging ensures you can use all the e-liquid in the device before it runs out of power, maximizing the value of each unit.`,
+    },
+    {
+      q: `What is the shipping policy for ${model.shortName}?`,
+      a: `GetSmoke ships ${model.shortName} devices across the United States. Free shipping is available on orders over $79. In compliance with the PACT Act and state regulations, adult signature is required upon delivery. We do not ship to states or localities where the sale of nicotine products is restricted.`,
+    },
+    {
+      q: `Is the ${model.shortName} a good choice for beginners?`,
+      a: model.nicotine === "0% Nicotine Free"
+        ? `The ${model.shortName} is nicotine-free, making it an ideal option for those who enjoy vaping without nicotine. The draw-activated design is simple to use right out of the box with no settings or buttons required.`
+        : `The ${model.shortName} is designed for vapers comfortable with high-nicotine products. If you are transitioning from cigarettes, the ${model.nicotine} nicotine salt provides a satisfying experience. The draw-activated design makes it extremely easy to use - no buttons, no setup.`,
+    },
+    {
+      q: `Where can I buy ${model.name} online?`,
+      a: `You can buy the ${model.name} directly at GetSmoke. We carry all available flavors with fast delivery across the USA. Orders ship from our US warehouse with adult signature required upon delivery.`,
+    },
+  ];
+}
+
+export default function GenericModelPage({ modelSlug }: { modelSlug: string }) {
+  const [products, setProducts] = useState<ApiProduct[]>([]);
+  const [model, setModel] = useState<ModelConfig | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<ApiProduct | null>(null);
+  const [packOption, setPackOption] = useState<PackOption>("single");
+  const [qty, setQty] = useState(1);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>(Array(10).fill(""));
+  const [purchaseMode, setPurchaseMode] = useState<"one-time" | "subscribe">("one-time");
+  const [subscriptionDiscountPct, setSubscriptionDiscountPct] = useState<number>(0);
+  const [invalidSlots, setInvalidSlots] = useState<boolean[]>([]);
+
+  const { addItem, loading: cartLoading } = useCart();
+  const { data: session } = useSession();
+  const email = session?.user?.email ?? null;
+
+  useEffect(() => {
+    fetch(`/api/models/${modelSlug}`)
+      .then(r => r.json())
+      .then((data: ApiResponse) => {
+        setProducts((data.products ?? []).filter((p: ApiProduct) => !/pack\s*of/i.test(p.name)));
+        setModel(data.model);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [modelSlug]);
+
+  if (loading) {
+    return (
+      <main className="font-unbounded pb-16 w-11/12 mx-auto">
+        <div className="pt-6 pb-4">
+          <div className="h-4 w-48 bg-gray-200 rounded animate-pulse" />
+        </div>
+        <div className="md:flex md:gap-10">
+          <div className="md:w-1/2">
+            <div className="w-full rounded-3xl bg-gray-200 animate-pulse" style={{ paddingTop: "100%" }} />
+            <div className="flex gap-3 mt-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="w-12 h-16 bg-gray-200 rounded-xl animate-pulse flex-shrink-0" />
+              ))}
+            </div>
+          </div>
+          <div className="mt-6 md:mt-0 md:w-1/2 space-y-4">
+            <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
+            <div className="h-8 w-56 bg-gray-200 rounded animate-pulse" />
+            <div className="h-4 w-40 bg-gray-200 rounded animate-pulse" />
+            <div className="h-6 w-24 bg-gray-200 rounded animate-pulse" />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!model) {
+    return (
+      <main className="font-unbounded pb-16 w-11/12 mx-auto pt-16 text-center">
+        <p className="text-gray-500">Model not found.</p>
+      </main>
+    );
+  }
+
+  const packConfig = buildPackConfig(model.price, model.packPrices);
+  const pack = packConfig[packOption];
+
+  // Apply subscription discount to all pack prices
+  const discountMultiplier = purchaseMode === "subscribe" ? (1 - subscriptionDiscountPct / 100) : 1;
+  const discountedPackConfig = Object.fromEntries(
+    Object.entries(packConfig).map(([key, cfg]) => [
+      key,
+      {
+        ...cfg,
+        price: +(cfg.price * discountMultiplier).toFixed(2),
+        display: key === "single"
+          ? `$${(cfg.price * discountMultiplier).toFixed(2)}`
+          : `$${(cfg.price * discountMultiplier).toFixed(2)}/each`,
+      },
+    ])
+  ) as typeof packConfig;
+
+  const activePack = discountedPackConfig[packOption];
+
+  const totalPrice =
+    packOption === "single"
+      ? activePack.price * qty
+      : activePack.price * pack.count;
+
+  const handleSubscriptionChange = (
+    mode: "one-time" | "subscribe",
+    _frequency?: FrequencyValue,
+    _price?: number,
+    discountPct?: number
+  ) => {
+    setPurchaseMode(mode);
+    setSubscriptionDiscountPct(mode === "subscribe" && discountPct ? discountPct : 0);
+  };
+
+  const heroSrc = selectedProduct?.images?.[0]?.url ?? model.heroImage;
+
+  const handleProductSelect = (product: ApiProduct) => {
+    setSelectedProduct(product);
+    setSelectedProductIds(prev => {
+      const updated = [...prev];
+      updated[0] = product.id;
+      return updated;
+    });
+  };
+
+  const handlePackChange = (option: PackOption) => {
+    setPackOption(option);
+    setSelectedProductIds(prev => {
+      const updated = Array(10).fill("");
+      updated[0] = prev[0] || selectedProduct?.id || "";
+      return updated;
+    });
+  };
+
+  const handleDropdownChange = (index: number, value: string) => {
+    setSelectedProductIds(prev => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
+  };
+
+  const handleAddToCart = async () => {
+    const isSubscribe = purchaseMode === "subscribe" && subscriptionDiscountPct > 0;
+    const subscriptionMeta = isSubscribe
+      ? { isSubscription: true, subscriptionFrequency: "1_week", price: activePack.price }
+      : {};
+
+    if (packOption === "single") {
+      const id = selectedProductIds[0] || selectedProduct?.id;
+      if (!id) return;
+      setInvalidSlots([]);
+      await addItem(email, { id, quantity: qty, ...subscriptionMeta });
+    } else {
+      // Validate: all slots in the pack must be filled
+      const slots = selectedProductIds.slice(0, pack.count);
+      const invalid = slots.map(id => !id);
+      if (invalid.some(Boolean)) {
+        setInvalidSlots(invalid);
+        // Scroll to first empty slot
+        const firstEmpty = invalid.findIndex(v => v);
+        const el = document.getElementById(`flavor-slot-${firstEmpty}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      setInvalidSlots([]);
+      for (const productId of slots) {
+        if (productId) await addItem(email, { id: productId, quantity: 1, ...subscriptionMeta });
+      }
+    }
+  };
+
+  const packKeys: PackOption[] = ["single", "pack3", "pack5", "pack10"];
+  const descParagraphs = generateDescription(model, products.length);
+  const faqs = generateFaq(model, products.length, model.price);
+
+  return (
+    <main className="font-unbounded pb-16 w-11/12 mx-auto">
+      {/* Breadcrumb */}
+      <nav className="pt-6 pb-4 text-xs text-gray-500 flex items-center gap-2">
+        <Link href="/" className="hover:underline">Home</Link>
+        <span>/</span>
+        <Link href={`/brands/${model.brandSlug}`} className="hover:underline">{model.brand}</Link>
+        <span>/</span>
+        <span className="text-gray-800">{model.shortName}</span>
+      </nav>
+
+      {/* Main layout */}
+      <div className="md:flex md:gap-10 md:items-start">
+        {/* Left: Image + Flavor Scroll */}
+        <div className="md:w-1/2 md:sticky md:top-6">
+          {/* Hero image */}
+          <div className="relative w-full rounded-3xl overflow-hidden bg-gray-50" style={{ paddingTop: "100%" }}>
+            <Image
+              src={heroSrc}
+              alt={selectedProduct ? `${model.shortName} - ${getFlavorName(selectedProduct)}` : model.name}
+              fill
+              className="object-cover"
+              priority
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/placeholder-vape.jpg";
+              }}
+            />
+          </div>
+
+          {/* Flavor chips */}
+          {products.length > 0 && (
+            <div
+              className="flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-none"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {products.map(product => {
+                const isSelected = selectedProduct?.id === product.id;
+                const imgUrl = product.images?.[0]?.url;
+                const oos = product.stockStatus === "OUTOFSTOCK";
+                const preorder = product.stockStatus === "PREORDER";
+                return (
+                  <button
+                    key={product.id}
+                    onClick={() => !oos && !preorder && handleProductSelect(product)}
+                    disabled={oos || preorder}
+                    className={`flex-shrink-0 flex flex-col items-center gap-1 p-1 rounded-xl border-2 transition-colors ${
+                      isSelected ? "border-black" : "border-transparent"
+                    } ${oos || preorder ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
+                    title={oos ? "Out of Stock" : preorder ? "Pre-Order" : ""}
+                  >
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
+                      {imgUrl ? (
+                        <Image
+                          src={imgUrl}
+                          alt={getFlavorName(product)}
+                          fill
+                          className={`object-cover ${oos || preorder ? "grayscale" : ""}`}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200" />
+                      )}
+                      {oos && (
+                        <div className="absolute inset-0 flex items-end justify-center pb-0.5 bg-black/10">
+                          <span className="text-[7px] font-bold text-red-500 bg-white/90 px-0.5 rounded">OOS</span>
+                        </div>
+                      )}
+                      {preorder && (
+                        <div className="absolute inset-0 flex items-end justify-center pb-0.5">
+                          <span className="text-[7px] font-bold text-purple-600 bg-white/90 px-0.5 rounded">PRE</span>
+                        </div>
+                      )}
+                    </div>
+                    <span className={`text-[9px] text-center leading-tight max-w-[44px] ${oos || preorder ? "text-gray-400" : "text-gray-700 font-semibold"}`}>
+                      {getFlavorName(product)}
+                    </span>
+                  </button>
+                );
+              })}
+              {/* Pre-order flavor chips from config (flavors not yet in DB) */}
+              {model.preorderFlavors?.filter(name =>
+                !products.some(p => getFlavorName(p).toLowerCase() === name.toLowerCase())
+              ).map(flavorName => (
+                <div
+                  key={`preorder-${flavorName}`}
+                  className="flex-shrink-0 flex flex-col items-center gap-1 p-1 rounded-xl border-2 border-transparent opacity-40 cursor-not-allowed"
+                  title="Pre-Order"
+                >
+                  <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                    <div className="w-full h-full bg-gray-200" />
+                    <div className="absolute inset-0 flex items-end justify-center pb-0.5">
+                      <span className="text-[7px] font-bold text-purple-600 bg-white/90 px-0.5 rounded">PRE</span>
+                    </div>
+                  </div>
+                  <span className="text-[9px] text-center leading-tight max-w-[44px] text-gray-400 line-through">
+                    {flavorName}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Right: Info + Options + Purchase */}
+        <div className="mt-6 md:mt-0 md:w-1/2">
+          {/* Info */}
+          <div>
+            <Link
+              href={`/brands/${model.brandSlug}`}
+              className="text-xs text-gray-500 hover:underline uppercase tracking-wide"
+            >
+              {model.brand}
+            </Link>
+            <h1 className="font-unbounded font-bold text-2xl mt-1">{model.name}</h1>
+
+            {/* Stars */}
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-yellow-400 text-base">&#9733;&#9733;&#9733;&#9733;&#189;</span>
+              <span className="text-xs text-gray-500">4.5 / 5</span>
+            </div>
+
+            {/* Price */}
+            <p className="text-xl font-bold mt-2">${totalPrice.toFixed(2)}</p>
+          </div>
+
+          {/* Subscription selector */}
+          <SubscriptionSelector
+            basePrice={pack.price}
+            onModeChange={handleSubscriptionChange}
+          />
+
+          {/* Pack options */}
+          <div className="mt-6">
+            <p className="font-bold text-xs uppercase tracking-wider mb-3">Choose Your Option</p>
+            <div className="flex flex-col gap-2">
+              {packKeys.map(key => {
+                const cfg = discountedPackConfig[key];
+                const baseCfg = packConfig[key];
+                const isSelected = packOption === key;
+                const hasDiscount = purchaseMode === "subscribe" && subscriptionDiscountPct > 0;
+                return (
+                  <div key={key}>
+                    <button
+                      onClick={() => handlePackChange(key)}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-full border-2 transition-colors ${
+                        isSelected ? "border-black bg-gray-50" : "border-gray-200 bg-white"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
+                            isSelected ? "border-black bg-black" : "border-gray-400"
+                          }`}
+                        />
+                        <span className="text-sm font-medium">{cfg.label}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {hasDiscount && (
+                          <span className="text-xs text-gray-400 line-through">{baseCfg.display}</span>
+                        )}
+                        <span className={`text-sm font-bold ${hasDiscount ? "text-green-600" : ""}`}>{cfg.display}</span>
+                      </div>
+                    </button>
+
+                    {/* Flavor dropdowns */}
+                    {isSelected && products.length > 0 && (
+                      <div
+                        className={`mt-2 px-2 flex flex-col gap-2 ${
+                          key === "pack10" ? "md:grid md:grid-cols-2 md:gap-x-3" : ""
+                        }`}
+                      >
+                        {Array.from({ length: cfg.count }).map((_, i) => (
+                          <React.Fragment key={i}>
+                            <select
+                              id={`flavor-slot-${i}`}
+                              value={selectedProductIds[i] || ""}
+                              onChange={e => {
+                                handleDropdownChange(i, e.target.value);
+                                if (e.target.value) {
+                                  setInvalidSlots(prev => {
+                                    const next = [...prev];
+                                    next[i] = false;
+                                    return next;
+                                  });
+                                }
+                              }}
+                              className="rounded-full w-full py-2 px-4 text-sm bg-white appearance-none"
+                              style={{
+                                border: invalidSlots[i]
+                                  ? "2px solid #ef4444"
+                                  : "1px solid #d1d5db",
+                                background: invalidSlots[i] ? "#fef2f2" : "#fff",
+                              }}
+                            >
+                              <option value="">Choose flavor</option>
+                              {products.map(p => {
+                                const oos = p.stockStatus === "OUTOFSTOCK";
+                                const preorder = p.stockStatus === "PREORDER";
+                                const label = oos
+                                  ? `${getFlavorName(p)} — Out of Stock`
+                                  : preorder
+                                    ? `${getFlavorName(p)} — Pre-Order`
+                                    : getFlavorName(p);
+                                return (
+                                  <option
+                                    key={p.id}
+                                    value={p.id}
+                                    disabled={oos}
+                                    style={{
+                                      color: oos ? "#aaa" : "#000",
+                                      fontWeight: oos ? 400 : 600,
+                                    }}
+                                  >
+                                    {label}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {invalidSlots[i] && (
+                              <p className="text-xs text-red-500 mt-1 pl-3">
+                                Please choose a flavor for slot {i + 1}
+                              </p>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Purchase */}
+          <div className="mt-6">
+            <p className="font-bold text-lg">
+              Total: <span className={purchaseMode === "subscribe" && subscriptionDiscountPct > 0 ? "text-green-600" : ""}>${totalPrice.toFixed(2)}</span>
+              {purchaseMode === "subscribe" && subscriptionDiscountPct > 0 && (
+                <span className="text-xs text-gray-400 line-through ml-2">
+                  ${(packOption === "single" ? packConfig.single.price * qty : packConfig[packOption].price * pack.count).toFixed(2)}
+                </span>
+              )}
+            </p>
+            <div className="flex items-center gap-3 mt-4">
+              {packOption === "single" && (
+                <div className="flex items-center border-2 border-gray-200 rounded-full overflow-hidden">
+                  <button
+                    onClick={() => setQty(q => Math.max(1, q - 1))}
+                    className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition-colors"
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-2 font-bold min-w-[2.5rem] text-center">{qty}</span>
+                  <button
+                    onClick={() => setQty(q => Math.min(99, q + 1))}
+                    className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={handleAddToCart}
+                disabled={cartLoading || products.length === 0 || selectedProduct?.stockStatus === "PREORDER"}
+                className="flex-1 py-3 px-6 rounded-full text-white font-bold text-sm disabled:opacity-60 transition-opacity"
+                style={{ background: selectedProduct?.stockStatus === "PREORDER" ? "linear-gradient(90deg, #7c3aed 0%, #a855f7 100%)" : "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)" }}
+              >
+                {cartLoading ? "Adding..." : products.length === 0 ? "Out of Stock" : selectedProduct?.stockStatus === "PREORDER" ? "Pre-Order" : "Add to Cart"}
+              </button>
+            </div>
+            <p className="text-[10px] text-gray-400 mt-2 text-center">
+              {model.nicotine === "0% Nicotine Free"
+                ? "21+ only - Nicotine Free"
+                : "21+ only - Nicotine is addictive"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* SEO Description */}
+      <section className="mt-12 border-t border-gray-100 pt-8">
+        <h2 className="text-lg md:text-xl font-bold font-unbounded mb-4">
+          About {model.name} Disposable Vape
+        </h2>
+        <div className="text-sm text-gray-700 space-y-3 leading-relaxed">
+          {descParagraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+      </section>
+
+      {/* Specs table */}
+      <section className="mt-8">
+        <h2 className="text-base font-bold font-unbounded mb-3">{model.shortName} Specifications</h2>
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          {[
+            ["Puff Count", `Up to ${model.puffs} puffs`],
+            ["Nicotine Strength", model.nicotine],
+            ["Battery", "Rechargeable (USB-C)"],
+            ["Operation", "Draw-activated (no button)"],
+            ["Available Flavors", products.length > 0 ? `${products.length} flavors` : "Multiple flavors"],
+            ["Brand", model.brand],
+            ["Age Requirement", "21+ only"],
+          ].map(([label, value]) => (
+            <div key={label} className="flex flex-col bg-gray-50 rounded-xl p-3">
+              <span className="text-xs text-gray-500">{label}</span>
+              <span className="font-bold text-black">{value}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mt-10">
+        <h2 className="text-lg md:text-xl font-bold font-unbounded mb-6">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-4">
+          {faqs.map(({ q, a }) => (
+            <details
+              key={q}
+              className="border border-gray-200 rounded-2xl overflow-hidden group"
+            >
+              <summary className="cursor-pointer px-5 py-4 font-bold text-sm flex justify-between items-center list-none">
+                {q}
+                <span className="text-gray-400 group-open:rotate-180 transition-transform text-lg leading-none ml-2 shrink-0">
+                  &#8964;
+                </span>
+              </summary>
+              <div className="px-5 pb-4 text-sm text-gray-700 leading-relaxed border-t border-gray-100 pt-3">
+                {a}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}

@@ -82,7 +82,7 @@ export interface Product {
   name: string;
   Review: ReviewProps[];
   currentPrice: number;
-  originalPrice: number;
+  originalPrice?: number | null;
   // Optional fields
   eLiquidContent: string | null;
   batteryCapacity: string | null;
@@ -95,6 +95,7 @@ export interface Product {
   extra: string | null;
   // Relations
   isArchived: boolean;
+  stockStatus?: "INSTOCK" | "OUTOFSTOCK" | "PREORDER" | null;
   brandId: string;
   brand: Brand;
   flavorId: string | null; // Make flavorId optional since it might use productFlavors instead

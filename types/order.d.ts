@@ -11,7 +11,7 @@ export interface ProductSnapshot {
   id: string;
   name: string;
   currentPrice: number;
-  originalPrice: number;
+  originalPrice?: number | null;
   brandName: string;
   flavorName: string;
   nicotineName: string;

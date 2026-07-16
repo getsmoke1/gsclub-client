@@ -1,0 +1,159 @@
+"use client";
+import React, { useState } from "react";
+import { Minus, Plus, ShoppingCart, Check } from "lucide-react";
+import { useSession } from "next-auth/react";
+import useCart from "@/hooks/useCart";
+import { Product } from "@/types/product";
+
+interface AddToCartButtonProps {
+  product: Product;
+  className?: string;
+  compact?: boolean;
+  subscriptionDiscountPct?: number;
+  subscriptionFrequency?: string;
+}
+
+const AddToCartButton = ({ product, className = "", compact = false, subscriptionDiscountPct = 0, subscriptionFrequency }: AddToCartButtonProps) => {
+  const [qty, setQty] = useState(1);
+  // "added" = show checkmark + "Added!" feedback for 1.5s after click
+  const [added, setAdded] = useState(false);
+  const { data: session } = useSession();
+  const { addItem, loading } = useCart();
+
+  const email = (session?.user?.email) ?? null;
+
+  const handleAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (added) return; // prevent double-tap spam while feedback is showing
+
+    const basePrice = product.currentPrice / (product.packCount || 1);
+    const discountedPrice = subscriptionDiscountPct > 0
+      ? +(basePrice * (1 - subscriptionDiscountPct / 100)).toFixed(2)
+      : undefined;
+
+    await addItem(email, {
+      id: product.id,
+      quantity: qty,
+      attributeId: undefined,
+      ...(discountedPrice !== undefined ? {
+        price: discountedPrice,
+        isSubscription: true,
+        subscriptionFrequency: subscriptionFrequency || "1_week",
+      } : {}),
+    });
+
+    setQty(1);
+    // Show "Added!" feedback
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
+
+  const dec = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setQty((q) => Math.max(1, q - 1));
+  };
+
+  const inc = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setQty((q) => Math.min(99, q + 1));
+  };
+
+  const isOutOfStock = product.stockStatus === "OUTOFSTOCK";
+  const isPreOrder = product.stockStatus === "PREORDER";
+
+  // Shared button styles
+  const btnBackground = isPreOrder
+    ? "linear-gradient(90deg, #7c3aed 0%, #a855f7 100%)"
+    : added
+    ? "linear-gradient(90deg, #16a34a 0%, #22c55e 100%)"
+    : "linear-gradient(90deg, #7c3aed 0%, #fe3500 100%)";
+
+  if (compact) {
+    if (isOutOfStock) {
+      return (
+        <button
+          disabled
+          className={`w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed ${className}`}
+          style={{ background: "#9ca3af", paddingTop: '10px', paddingBottom: '10px' }}
+        >
+          Out of Stock
+        </button>
+      );
+    }
+    return (
+      <button
+        onClick={handleAdd}
+        disabled={loading}
+        className={`w-full rounded-full text-white text-sm font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 transition-all duration-150 select-none ${className}`}
+        style={{
+          background: btnBackground,
+          paddingTop: '10px',
+          paddingBottom: '10px',
+          transform: loading ? 'scale(0.96)' : 'scale(1)',
+          transition: 'transform 0.1s ease, background 0.3s ease',
+        }}
+      >
+        {added ? <Check size={14} /> : <ShoppingCart size={14} />}
+        {isPreOrder ? "pre-order" : added ? "Added!" : "add to cart"}
+      </button>
+    );
+  }
+
+  return (
+    <div
+      className={`flex items-center gap-2 w-full ${className}`}
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+    >
+      {/* Quantity selector */}
+      <div className="flex items-center border-2 border-black rounded-full overflow-hidden shrink-0">
+        <button
+          onClick={dec}
+          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors"
+          aria-label="Decrease quantity"
+        >
+          <Minus size={13} />
+        </button>
+        <span className="w-7 text-center text-sm font-bold select-none">
+          {qty}
+        </span>
+        <button
+          onClick={inc}
+          className="w-8 h-9 flex items-center justify-center text-black hover:bg-gray-100 transition-colors"
+          aria-label="Increase quantity"
+        >
+          <Plus size={13} />
+        </button>
+      </div>
+
+      {/* Add to cart / Pre-Order / Out of Stock button */}
+      {isOutOfStock ? (
+        <button
+          disabled
+          className="flex-1 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed"
+          style={{ background: "#9ca3af" }}
+        >
+          Out of Stock
+        </button>
+      ) : (
+        <button
+          onClick={handleAdd}
+          disabled={loading}
+          className="flex-1 h-9 rounded-full text-white text-xs font-bold flex items-center justify-center gap-1.5 disabled:opacity-60 select-none"
+          style={{
+            background: btnBackground,
+            transform: loading ? 'scale(0.95)' : 'scale(1)',
+            transition: 'transform 0.1s ease, background 0.3s ease',
+          }}
+        >
+          {added ? <Check size={13} /> : <ShoppingCart size={13} />}
+          {isPreOrder ? "pre-order" : added ? "Added!" : "add to cart"}
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default AddToCartButton;

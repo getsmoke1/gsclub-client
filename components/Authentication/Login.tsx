@@ -10,8 +10,50 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import Link from "next/link";
+
+function MigrationModal({ email, onClose }: { email: string; onClose: () => void }) {
+  const handleResetPassword = () => {
+    localStorage.setItem(`gs_migration_seen_${email}`, "1");
+    onClose();
+    window.location.href = "/forgot-password";
+  };
+  const handleDismiss = () => {
+    localStorage.setItem(`gs_migration_seen_${email}`, "1");
+    onClose();
+  };
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}>
+      <div style={{ background: "#fff", borderRadius: "16px", padding: "32px", maxWidth: "420px", width: "100%", position: "relative", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+        <button onClick={handleDismiss} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", cursor: "pointer", color: "#9ca3af" }}>
+          <X size={20} />
+        </button>
+        <div style={{ fontSize: "32px", marginBottom: "12px" }}>🔄</div>
+        <h2 style={{ fontSize: "18px", fontWeight: 700, marginBottom: "8px", color: "#111" }}>
+          We&apos;ve moved to a new platform
+        </h2>
+        <p style={{ fontSize: "14px", color: "#6b7280", lineHeight: 1.6, marginBottom: "24px" }}>
+          We recently upgraded GetSmoke to a new platform. We apologize for the inconvenience - your old password no longer works.
+          <br /><br />
+          Please set a new password using your email address. It only takes 30 seconds.
+        </p>
+        <button
+          onClick={handleResetPassword}
+          style={{ width: "100%", padding: "12px", borderRadius: "9999px", background: "linear-gradient(90deg,#7c3aed 0%,#fe3500 100%)", color: "#fff", fontWeight: 700, fontSize: "14px", border: "none", cursor: "pointer", marginBottom: "10px" }}
+        >
+          Reset My Password
+        </button>
+        <button
+          onClick={handleDismiss}
+          style={{ width: "100%", padding: "10px", borderRadius: "9999px", background: "transparent", color: "#9ca3af", fontSize: "12px", border: "1px solid #e5e7eb", cursor: "pointer" }}
+        >
+          I already reset my password, try again
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // Zod validation schema
 const formSchema = z.object({
@@ -24,12 +66,14 @@ type FormData = z.infer<typeof formSchema>;
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showMigrationModal, setShowMigrationModal] = useState(false);
+  const [lastEmail, setLastEmail] = useState("");
   const router = useRouter();
-  const [callbackUrl, setCallbackUrl] = useState("/");
+  const [callbackUrl, setCallbackUrl] = useState("/my-account");
   useEffect(() => {
     // This runs ONLY in the browser (after hydration)
     const searchParams = new URLSearchParams(window.location.search);
-    setCallbackUrl(searchParams.get("callbackUrl") || "/");
+    setCallbackUrl(searchParams.get("callbackUrl") || "/my-account");
   }, []);
 
   const {
@@ -55,16 +99,31 @@ const Login = () => {
       }
 
       toast.success("Login successful!");
-      router.push("/");
+      router.push(callbackUrl || "/my-account");
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Invalid credentials. Please try again.");
+      // Show migration modal on first invalid credentials attempt per email
+      const migrationKey = `gs_migration_seen_${formData.email}`;
+      const alreadySeen = typeof window !== "undefined" && localStorage.getItem(migrationKey);
+      if (!alreadySeen) {
+        setLastEmail(formData.email);
+        setShowMigrationModal(true);
+      } else {
+        toast.error("Invalid credentials. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
+    <>
+      {showMigrationModal && (
+        <MigrationModal
+          email={lastEmail}
+          onClose={() => setShowMigrationModal(false)}
+        />
+      )}
     <div className="min-h-[82vh] w-11/12 mx-auto flex items- justify-center bg-white text-black font-unbounded pt-[2rem] pb-[4rem]">
       <div className="w-full max-w-md">
 
@@ -147,6 +206,7 @@ const Login = () => {
 
       </div>
     </div>
+    </>
   );
 };
 

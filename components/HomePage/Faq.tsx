@@ -2,44 +2,41 @@
 import { useFAQBySlug } from '@/hooks/useFAQs';
 import React, { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const FaqItem = ({ faq }: { faq: { question: string; answer: string }; index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <motion.div
-        initial={false}
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="list-none flex justify-between items-center p-5 cursor-pointer bg-gray-50 hover:bg-gray-100"
-        whileHover={{ backgroundColor: 'rgba(243, 244, 246, 1)' }}
       >
         <h3 className="font-medium text-lg text-gray-800">{faq.question}</h3>
-        <motion.span
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
+        <span
           className="text-gray-500"
+          style={{
+            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s ease',
+            display: 'inline-block',
+          }}
         >
           <FiChevronDown size={20} />
-        </motion.span>
-      </motion.div>
+        </span>
+      </div>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            <div className="p-5 pt-0 text-gray-600">
-              <p>{faq.answer}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        style={{
+          maxHeight: isOpen ? '500px' : '0',
+          overflow: 'hidden',
+          opacity: isOpen ? 1 : 0,
+          transition: 'max-height 0.2s ease, opacity 0.2s ease',
+        }}
+      >
+        <div className="p-5 pt-0 text-gray-600">
+          <p>{faq.answer}</p>
+        </div>
+      </div>
     </div>
   );
 };

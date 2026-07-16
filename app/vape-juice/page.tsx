@@ -1,13 +1,17 @@
-import { noIndex } from "@/lib/noindex";
 import { Metadata } from "next";
 import VapePage from "@/components/vapes/VapePage";
+import { noIndex } from "@/lib/noindex";
+import { prefetchProducts } from "@/lib/prefetch-products";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   ...noIndex,
-  title: "Vape Juice & E-Liquids | GetSmoke",
-  description: "Shop vape juice and e-liquids at GetSmoke.",
+  title: "Vape Juice | GetSmoke",
+  description: "Shop premium vape juice and e-liquids at GetSmoke.",
 };
 
-export default function VapeJuicePage() {
-  return <VapePage productType="VAPES" />;
+export default async function VapeJuicePage() {
+  const initialProducts = await prefetchProducts("VAPE_JUICE", 24);
+  return <VapePage productType="VAPE_JUICE" initialProducts={initialProducts} heading="Vape Juice" />;
 }

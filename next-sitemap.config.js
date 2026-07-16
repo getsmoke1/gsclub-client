@@ -5,15 +5,32 @@ module.exports = {
   generateRobotsTxt: true,
   exclude: [
     "/api/*",
+    "/admin",
+    "/admin/*",
+    "/my-account",
     "/my-account/*",
+    "/cart",
     "/cart/*",
+    "/checkout",
     "/checkout/*",
+    "/email-preview",
     "/email-preview/*",
+    "/login",
     "/login/*",
+    "/signup",
     "/signup/*",
+    "/reset-password",
     "/reset-password/*",
+    "/forgot-password",
     "/forgot-password/*",
     "/_next/*",
+    "/robots.txt",
+    "/in-progress",
+    "/juicy-bar-jb25000",
+    "/juicy-bar-jb5000",
+    "/juicy-bar-jb7500",
+    "/adults-goods",
+    "/supplements",
   ],
   generateIndexSitemap: true,
   sitemapSize: 7000,
@@ -35,6 +52,23 @@ module.exports = {
       { loc: "/accessories", priority: 0.5, changefreq: "daily" },
       { loc: "/hookah", priority: 0.5, changefreq: "daily" },
       { loc: "/vapes", priority: 0.5, changefreq: "daily" },
+      // Collection pages (nicotine / puffs / flavor)
+      { loc: "/5-percent-nicotine-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/nicotine-free-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/20000-puff-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/25000-puff-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/coffee-flavored-disposable-vapes", priority: 0.8, changefreq: "weekly" },
+      { loc: "/new-in-stock", priority: 0.7, changefreq: "daily" },
+      // Definition / AI answer pages
+      { loc: "/what-is-a-disposable-vape", priority: 0.8, changefreq: "monthly" },
+      { loc: "/what-is-nicotine-salt", priority: 0.8, changefreq: "monthly" },
+      // How-To pages
+      { loc: "/how-to-use-geek-bar-pulse-x", priority: 0.8, changefreq: "monthly" },
+      { loc: "/how-to-charge-raz-vape", priority: 0.8, changefreq: "monthly" },
+      { loc: "/how-to-use-lost-mary-mt35000-turbo", priority: 0.8, changefreq: "monthly" },
+      { loc: "/how-to-use-hqd-cuvie", priority: 0.8, changefreq: "monthly" },
+      // City delivery pages
+      { loc: "/vape-delivery-boston-massachusetts", priority: 0.7, changefreq: "monthly" },
     ];
 
     staticPages.forEach((page) => {
@@ -74,8 +108,8 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      "https://www.getsmoke.com/server-sitemap-products.xml",
-      "https://www.getsmoke.com/server-sitemap-blog.xml",
+      "https://getsmoke.com/server-sitemap-products.xml",
+      "https://getsmoke.com/server-sitemap-blog.xml",
     ],
   },
 };

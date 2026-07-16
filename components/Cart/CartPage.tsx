@@ -13,6 +13,7 @@ import { Product } from "@/types/product";
 import { CartItem } from "@/types/cart";
 import { Button } from "../ui/button";
 import toast from "react-hot-toast";
+import { r2src } from "@/lib/r2-image";
 
 const CartPage = () => {
     const { data: session } = useSession();
@@ -94,14 +95,16 @@ const CartPage = () => {
         return products.find(product => product.id === itemId);
     };
 
+    const getItemPrice = (item: CartItem) => {
+        if (item.price !== undefined) return item.price;
+        const product = getProductDetails(item.id);
+        if (!product) return 0;
+        return product.currentPrice / (product.packCount || 1);
+    };
+
     const calculateTotal = () => {
         return items.reduce((total, item) => {
-            const product = getProductDetails(item.id);
-            if (product) {
-                const packCount = product.packCount || 1; // Default to 1 if null
-                return total + ((product.currentPrice / packCount) * item.quantity);
-            }
-            return total;
+            return total + getItemPrice(item) * item.quantity;
         }, 0);
     };
 
@@ -196,10 +199,10 @@ const CartPage = () => {
                                                     <tr key={itemKey} className="border-b border-gray-200">
                                                         <td className="p-4">
                                                             {product && (
-                                                                <Link href={`/product/${item.id}`} className="flex items-center space-x-4">
+                                                                <Link href={`/product/${product.slug}`} className="flex items-center space-x-4">
                                                                     {product.images[0]?.url && (
                                                                         <Image
-                                                                            src={product.images[0].url}
+                                                                            src={r2src(product.images[0].url)}
                                                                             alt={product.name}
                                                                             width={40}
                                                                             height={40}
@@ -211,6 +214,11 @@ const CartPage = () => {
                                                                             {product.brand.name} <br />
                                                                             {getProductNameWithFlavor(product, item.attributeId)}
                                                                         </p>
+                                                                        {item.isSubscription && (
+                                                                            <span className="inline-block mt-1 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                                                                                Subscribe &amp; Save
+                                                                            </span>
+                                                                        )}
                                                                     </div>
                                                                     {product.isArchived && (
                                                                         <div className="text-red-500 font-semibold text-sm">(Out of Stock)</div>
@@ -219,7 +227,7 @@ const CartPage = () => {
                                                             )}
                                                         </td>
                                                         <td className="p-4 text-left">
-                                                            {product ? `$${(product.currentPrice / (product.packCount || 1)).toFixed(2)}` : 'N/A'}
+                                                            {product ? `$${(getItemPrice(item)).toFixed(2)}` : 'N/A'}
                                                         </td>
                                                         <td className="p-4 text-left">
                                                             <div className={`w-fit border border-gray-200 rounded-full items-center flex py-1 ${product?.isArchived ? "opacity-50 pointer-events-none" : ""}`}>
@@ -251,7 +259,7 @@ const CartPage = () => {
                                                             </div>
                                                         </td>
                                                         <td className="p-4 font-medium text-left">
-                                                            {product ? `$${((product.currentPrice / (product.packCount || 1)) * item.quantity).toFixed(2)}` : 'N/A'}
+                                                            {product ? `$${((getItemPrice(item)) * item.quantity).toFixed(2)}` : 'N/A'}
                                                         </td>
                                                         <td className="p-4 text-left">
                                                             <button
@@ -326,7 +334,7 @@ const CartPage = () => {
                                                 <div className="bg-white h-[150px] w-1/2 sm:w-1/3 p-2">
                                                     {product?.images[0]?.url && (
                                                         <Image
-                                                            src={product.images[0].url}
+                                                            src={r2src(product.images[0].url)}
                                                             alt="item"
                                                             width={150}
                                                             height={150}
@@ -340,7 +348,7 @@ const CartPage = () => {
                                                         <p className="text-[1rem]">
                                                             {product ? getProductNameWithFlavor(product, item.attributeId) : 'N/A'}
                                                         </p>
-                                                        <p className="">${product ? (product.currentPrice / (product.packCount || 1)).toFixed(2) : 'N/A'}</p>
+                                                        <p className="">${product ? (getItemPrice(item)).toFixed(2) : 'N/A'}</p>
                                                     </div>
 
                                                     <div className="flex items-center gap-10">
@@ -385,7 +393,7 @@ const CartPage = () => {
                                                         </div>
                                                     </div>
                                                     <div className="">
-                                                        Subtotal: ${product ? ((product.currentPrice / (product.packCount || 1)) * item.quantity).toFixed(2) : 'N/A'}
+                                                        Subtotal: ${product ? ((getItemPrice(item)) * item.quantity).toFixed(2) : 'N/A'}
                                                     </div>
                                                 </div>
                                             </div>

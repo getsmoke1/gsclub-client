@@ -1,6 +1,7 @@
 "use client"
 import Image from 'next/image'
 import React, { useState } from 'react'
+import { useTurnstile } from '@/hooks/useTurnstile'
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form';
 import { Textarea } from "@/components/ui/textarea"
@@ -21,14 +22,18 @@ const Contact = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const { containerRef, token, reset: resetTurnstile, hasSiteKey } = useTurnstile();
 
   const onSubmit = async (data: FormValues) => {
+    if (hasSiteKey && !token) { toast.error('Please complete the verification'); return; }
     setLoading(true);
     const body = {
       email: data.email,
       subject: data.subject,
       inquiry: data.inquiry,
       isRead: false,
+      turnstileToken: token,
     }
 
     try {
@@ -36,6 +41,7 @@ const Contact = () => {
       console.log('Enquiry submitted:', response.data);
       toast.success('Enquiry submitted successfully!');
       reset();
+      setSubmitted(true);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Submission error:', error.response?.data);
@@ -44,6 +50,7 @@ const Contact = () => {
         console.error('Unexpected error:', error);
         toast.error('An unexpected error occurred. Please try again.');
       }
+      resetTurnstile();
     } finally {
       setLoading(false);
     }
@@ -52,7 +59,7 @@ const Contact = () => {
 
   return (
     <div className='w-11/12 mx-auto pt-4 pb-14 font-unbounded text-black min-h-[100vh]'>
-      <h3 className=' font-semibold text-[2rem] text-center mb-6'>CONTACT US</h3>
+      <h1 className=' font-semibold text-[2rem] text-center mb-6'>CONTACT US</h1>
       <div className=' w-full flex flex-col-reverse md:flex-row gap-4'>
 
         {/* left side  */}
@@ -76,7 +83,7 @@ const Contact = () => {
             <Image src={"/images/mail.png"} width={50} height={50} alt='email' className='object-contain w-full h-full' />
           </div>
             <div className='flex flex-col'>
-              <Link href="mailto:info@getsmoke.comm" className=' hover:underline'> info@getsmoke.comm </Link>
+              <Link href="mailto:info@getsmoke.com" className=' hover:underline'> info@getsmoke.com </Link>
             </div>
           </div>
 
@@ -101,6 +108,24 @@ const Contact = () => {
 
           <p className=' text-slate w-10/12'>For any inquiries, assistance, or further information, please feel free to reach out to us, and our dedicated team will be delighted to assist you as promptly as possible.</p>
 
+          {submitted ? (
+            <div className='flex flex-col items-center justify-center gap-4 py-12 text-center'>
+              <div style={{width:72,height:72,borderRadius:'50%',background:'#22c55e',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:8}}>
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <path d="M9 18L15 24L27 12" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h3 className='text-xl font-semibold'>Message Sent!</h3>
+              <p className='text-gray-500 text-sm max-w-xs'>Thank you for reaching out. Our team will get back to you as soon as possible.</p>
+              <button
+                type='button'
+                onClick={() => setSubmitted(false)}
+                className='mt-2 text-sm text-red-500 underline underline-offset-2'
+              >
+                Send another message
+              </button>
+            </div>
+          ) : (
           <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 
             <div>
@@ -124,8 +149,11 @@ const Contact = () => {
               {errors.inquiry && <p className=' text-[0.8rem] text-red-400 ml-4'>{errors.inquiry.message}</p>}
             </div>
 
+            {/* Cloudflare Turnstile */}
+            <div ref={containerRef} className="mb-1" />
+
             <div>
-              <Button className=''>
+              <Button className='' disabled={loading || (hasSiteKey && !token)}>
                 {loading ? (
                   <span className="flex items-center gap-2">
                     Sending <FaSpinner className="animate-spin" />
@@ -137,6 +165,7 @@ const Contact = () => {
             </div>
 
           </form>
+          )}
 
         </div>
         <div>

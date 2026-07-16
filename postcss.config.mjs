@@ -1,5 +1,10 @@
 const config = {
-  plugins: ["@tailwindcss/postcss"],
+  plugins: [
+    "@tailwindcss/postcss",
+    "@csstools/postcss-cascade-layers",
+    "postcss-media-minmax",
+    ["@csstools/postcss-oklab-function", { preserve: false }],
+  ],
 };
 
 export default config;

@@ -1,13 +1,21 @@
-"use client"
-import { Loader } from 'lucide-react';
-import React from 'react';
+"use client";
+import React from "react";
 
-const Loading = () => {
+export default function Loading() {
   return (
-    <div className="h-[85vh] flex justify-center items-center">
-      <Loader className="w-6 h-6 -mt-10 animate-spin" />
+    <div className="w-11/12 mx-auto pt-6 pb-16 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        {[...Array(10)].map((_, i) => (
+          <div key={i} className="border-2 border-gray-100 rounded-3xl overflow-hidden">
+            <div className="bg-gray-200 aspect-square w-full" />
+            <div className="p-3 space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto" />
+              <div className="h-3 bg-gray-100 rounded w-4/5 mx-auto" />
+              <div className="h-9 bg-gray-200 rounded-full mt-2" />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default Loading;
+}

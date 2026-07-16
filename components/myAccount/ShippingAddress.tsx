@@ -43,33 +43,32 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ onSelectCard, ischeck
     formState: { errors },
   } = useForm<FormData>();
 
-   const fetchAddresses = async () => {
+  const fetchAddresses = async (userEmail: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/address?email=${email}`, {
+      const response = await fetch(`/api/address?email=${userEmail}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const addresses = await response.json();
       setCards(addresses);
     } catch (error) {
       console.error("Failed to fetch addresses:", error);
-      toast.error("Failed to fetch addresses");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAddresses();
-  }, [fetchAddresses]);
+    if (email) {
+      fetchAddresses(email);
+    } else {
+      // No session yet - stop loading, show empty state
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [email]);
 
  
 
@@ -149,7 +148,7 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ onSelectCard, ischeck
         toast.success("Address added successfully");
       }
 
-      fetchAddresses();
+      if (email) fetchAddresses(email);
       setShowModal(false);
       setCurrentCardId(null);
       reset();

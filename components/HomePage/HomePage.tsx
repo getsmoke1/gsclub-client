@@ -1,30 +1,45 @@
 "use client"
 import React from "react"
 import Hero from "./Hero"
-import Filter from "./Filter"
-import Products from "./Products"
-import Subscriptions from "./Subscriptions"
-import BrandCircles from "./BrandCircles"
-import MysteryBox from "./MysteryBox"
-import InstagramFeed from "./InstagramFeed"
+import BestSellersSection from "./BestSellersSection"
+import VapeSubscription from "./VapeSubscription"
+import BundleDeals from "./BundleDeals"
+import ShopByCategory from "./ShopByCategory"
 
-const HomePage = () => {
+import InstagramFeed from "./InstagramFeed"
+import HomeFaq from "./HomeFaq"
+import HomeBlog from "./HomeBlog"
+import { Product } from "@/types/product"
+
+interface HomePageProps {
+    initialProducts?: Product[];
+    newestProducts?: Product[];
+    brandCircles?: React.ReactNode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    bundleProducts?: any[];
+}
+
+const HomePage = ({ initialProducts, newestProducts, bundleProducts, brandCircles }: HomePageProps) => {
     return (
         <main>
             <Hero />
-            <div className="w-11/12 mx-auto py-6">
-                <h2 className="font-unbounded font-bold text-2xl md:text-3xl text-black">
-                    GetSmoke &mdash; Online Vape Shop
-                </h2>
+            <BestSellersSection initialProducts={initialProducts} newestProducts={newestProducts} />
+            <div className="md:hidden"><VapeSubscription /></div>
+            {/* Desktop-only promo banner between View All and Bundle Deals */}
+            <div className="hidden md:block w-11/12 mx-auto my-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                    src="/banners/vape-more-banner.jpg"
+                    alt="Vape More, Stress Less - Packs of 3, 5 or 10"
+                    style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }}
+                />
             </div>
-            <Subscriptions />
-            <div className="pt-0">
-                <Filter />
-                <Products productType="VAPES" />
-            </div>
-            <BrandCircles />
-            <MysteryBox />
+            <BundleDeals initialProducts={bundleProducts} />
+            <ShopByCategory />
+            {brandCircles}
             <InstagramFeed />
+            <HomeFaq />
+            <HomeBlog />
         </main>
     )
 }

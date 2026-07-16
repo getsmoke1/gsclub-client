@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // In-memory rate limit store (per Edge instance)
-// Key: IP, Value: { count, resetAt }
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
-
-const WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS = 3;       // max 3 checkout attempts per minute per IP
-const BAN_DURATION_MS = 5 * 60 * 1000; // block for 5 minutes after limit hit
 
 function getClientIP(req: NextRequest): string {
   return (
@@ -17,48 +12,86 @@ function getClientIP(req: NextRequest): string {
   );
 }
 
-export function middleware(req: NextRequest) {
-  // Only rate-limit POST /api/checkout
-  if (req.nextUrl.pathname !== "/api/checkout" || req.method !== "POST") {
-    return NextResponse.next();
-  }
-
-  const ip = getClientIP(req);
+function rateLimit(ip: string, windowMs: number, max: number, banMs: number): boolean {
   const now = Date.now();
-
-  const entry = rateLimitStore.get(ip);
+  const key = ip;
+  const entry = rateLimitStore.get(key);
 
   if (!entry || now > entry.resetAt) {
-    // New window
-    rateLimitStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return NextResponse.next();
+    rateLimitStore.set(key, { count: 1, resetAt: now + windowMs });
+    return true; // allowed
   }
-
-  if (entry.count >= MAX_REQUESTS) {
-    // Rate limit exceeded — extend ban window on each retry
-    rateLimitStore.set(ip, { count: entry.count + 1, resetAt: now + BAN_DURATION_MS });
-    return new NextResponse(
-      JSON.stringify({
-        error: "Too many payment attempts. Please wait a few minutes and try again.",
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "Retry-After": "300",
-          "X-RateLimit-Limit": String(MAX_REQUESTS),
-          "X-RateLimit-Remaining": "0",
-        },
-      }
-    );
+  if (entry.count >= max) {
+    rateLimitStore.set(key, { count: entry.count + 1, resetAt: now + banMs });
+    return false; // blocked
   }
-
-  // Increment count
   entry.count += 1;
-  rateLimitStore.set(ip, entry);
+  return true; // allowed
+}
+
+function tooManyResponse(retryAfter = 60): NextResponse {
+  return new NextResponse(
+    JSON.stringify({ error: "Too many requests. Please slow down." }),
+    {
+      status: 429,
+      headers: {
+        "Content-Type": "application/json",
+        "Retry-After": String(retryAfter),
+      },
+    }
+  );
+}
+
+export function middleware(req: NextRequest) {
+  const ip = getClientIP(req);
+  const path = req.nextUrl.pathname;
+  const method = req.method;
+
+  // 1. Checkout: 3 attempts/min, ban 5 min
+  if (path === "/api/checkout" && method === "POST") {
+    if (!rateLimit(ip + ":checkout", 60_000, 3, 300_000)) {
+      return tooManyResponse(300);
+    }
+  }
+
+  // 2. Products API: prevent DB dumping — max 30 req/min per IP
+  if (path.startsWith("/api/products")) {
+    if (!rateLimit(ip + ":products", 60_000, 30, 60_000)) {
+      return tooManyResponse(60);
+    }
+  }
+
+  // 3. Orders API: max 20 req/min (admin/user fetching)
+  if (path.startsWith("/api/orders")) {
+    if (!rateLimit(ip + ":orders", 60_000, 20, 120_000)) {
+      return tooManyResponse(120);
+    }
+  }
+
+  // 4. Blog API: max 30 req/min
+  if (path.startsWith("/api/blog")) {
+    if (!rateLimit(ip + ":blog", 60_000, 30, 60_000)) {
+      return tooManyResponse(60);
+    }
+  }
+
+  // 5. Auth/account endpoints: strict — 10 req/min
+  if (path.startsWith("/api/auth") || path.startsWith("/api/user")) {
+    if (!rateLimit(ip + ":auth", 60_000, 10, 300_000)) {
+      return tooManyResponse(300);
+    }
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/checkout"],
+  matcher: [
+    "/api/checkout",
+    "/api/products/:path*",
+    "/api/orders/:path*",
+    "/api/blog/:path*",
+    "/api/auth/:path*",
+    "/api/user/:path*",
+  ],
 };

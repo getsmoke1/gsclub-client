@@ -109,11 +109,9 @@ export default function RootLayout({
         {/* Preconnect to R2 image CDN for faster LCP */}
         <link rel="preconnect" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
         <link rel="dns-prefetch" href="https://pub-e2c8a53d84f146beb67cf9ee9a8f4961.r2.dev" />
-        {/* Preload age gate logo - LCP element for new visitors (Lighthouse) */}
-        <link rel="preload" as="image" href="/images/logo.png" />
-        {/* Preload first hero banner for returning visitors */}
-        <link rel="preload" as="image" href="/banners/mobile-july4.webp" media="(max-width: 767px)" fetchPriority="low" />
-        <link rel="preload" as="image" href="/banners/desktop-1.webp" media="(min-width: 768px)" fetchPriority="low" />
+        {/* Preload first hero banners - critical for LCP */}
+        <link rel="preload" as="image" href="/banners/mobile-1.webp" media="(max-width: 767px)" fetchPriority="high" />
+        <link rel="preload" as="image" href="/banners/desktop-1.webp" media="(min-width: 768px)" fetchPriority="high" />
         {/* ── Static JSON-LD schemas — always in initial HTML, visible to all crawlers ── */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",

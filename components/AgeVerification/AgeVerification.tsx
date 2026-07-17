@@ -54,8 +54,7 @@ export default function AgeVerification() {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-            style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4"
         >
             <div className="bg-white rounded-lg max-w-md w-full p-8 text-center flex flex-col justify-center items-center font-unbounded">
                 <Image src="/images/logo.png" width={180} height={30} alt="GetSmoke" priority />

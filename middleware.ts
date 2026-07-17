@@ -42,10 +42,25 @@ function tooManyResponse(retryAfter = 60): NextResponse {
   );
 }
 
+// Known bot/spam referrers to block
+const BLOCKED_REFERRERS = [
+  "trafficheap.cc",
+  "trafficheap.net",
+  "semalt.com",
+  "buttons-for-website.com",
+  "blackhatworth.com",
+];
+
 export function middleware(req: NextRequest) {
   const ip = getClientIP(req);
   const path = req.nextUrl.pathname;
   const method = req.method;
+
+  // Block known bot referrers
+  const referer = req.headers.get("referer") || "";
+  if (BLOCKED_REFERRERS.some((bot) => referer.includes(bot))) {
+    return new NextResponse(null, { status: 403 });
+  }
 
   // 1. Checkout: 3 attempts/min, ban 5 min
   if (path === "/api/checkout" && method === "POST") {

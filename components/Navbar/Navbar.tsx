@@ -186,7 +186,7 @@ const Navbar = () => {
                 <div ref={blackDivRef} className='bg-black p-3 text-white text-center text-sm md:text-base'>WARNING: These products contain nicotine. Nicotine is an addictive chemical.</div>
                 <aside
                     className={`bg-white ${isSticky ? 'fixed top-0 left-0 right-0 z-40 shadow-md' : ''}`}
-                    style={show ? { position: isSticky ? 'fixed' : 'relative', zIndex: 9999999 } : undefined}
+                    style={show ? { position: isSticky ? 'fixed' : 'relative', zIndex: 9999999 } : showResults ? { position: isSticky ? 'fixed' : 'relative', zIndex: 99999 } : undefined}
                 >
                     {/* Row 1: Mobile full nav | Desktop: Search + Logo + Icons */}
                     <div className='w-11/12 mx-auto flex items-center justify-between py-3 md:py-5 md:relative' style={{ position: 'relative', paddingTop: '20px', paddingBottom: '20px' }}>
@@ -333,7 +333,8 @@ const Navbar = () => {
                                 {/* Search Results Dropdown */}
                                 {showResults && (
                                     <div
-                                        className="absolute z-50 top-full -left-10 lg:left-0 w-[92vw] lg:w-[60vw] xl:w-[40vw] mt-2 bg-white border border-gray-300 rounded-md shadow-lg max-h-96 overflow-y-auto"
+                                        className="absolute top-full -left-10 lg:left-0 w-[92vw] lg:w-[60vw] xl:w-[40vw] mt-2 bg-white border border-gray-300 rounded-md shadow-lg max-h-96 overflow-y-auto"
+                                        style={{ zIndex: 999999 }}
                                         role="listbox"
                                         aria-label="Search results"
                                     >

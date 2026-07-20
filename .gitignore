@@ -42,3 +42,4 @@ next-env.d.ts
 r2-upload-webp.js
 resize-product-images.js
 public/banners/mobile-1-backup.webp
+.deploy-secrets

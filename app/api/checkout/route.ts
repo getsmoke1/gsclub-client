@@ -149,7 +149,21 @@ export async function POST(req: NextRequest) {
 
       // Calculate price per item considering packCount
       const packCount = product.packCount || 1;
-      const itemPrice = product.currentPrice / packCount;
+      const dbUnitPrice = product.currentPrice / packCount;
+
+      // Use client-supplied price (pack discount or subscription discount) when valid.
+      // Accept if: provided, > 0, not higher than DB price, and at least 70% of DB price
+      // (covers pack10 ~79% and subscription discounts; rejects fraudulent near-zero prices).
+      const clientPrice = item.price;
+      const minAllowedPrice = dbUnitPrice * 0.70;
+      const itemPrice =
+        clientPrice != null &&
+        clientPrice > 0 &&
+        clientPrice >= minAllowedPrice &&
+        clientPrice <= dbUnitPrice
+          ? clientPrice
+          : dbUnitPrice;
+
       const itemTotal = itemPrice * item.quantity;
       subtotal += itemTotal;
 

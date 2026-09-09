@@ -331,6 +331,11 @@ const CheckoutPage = () => {
             items: gaItems,
           }));
         } catch { /* ignore */ }
+        if (data.ageVerifyToken) {
+          try {
+            sessionStorage.setItem("gs_age_token", data.ageVerifyToken);
+          } catch { /* ignore */ }
+        }
         router.push("/checkout/success");
       } else {
         const msg = getNmiUserMessage(data.message || "", data.errorDetails?.response_code);

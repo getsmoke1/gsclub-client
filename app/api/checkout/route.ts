@@ -416,6 +416,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Age verification: send email to new customers only
+      let ageVerifyToken: string | null = null;
       try {
         const isHistorical = await prisma.historicalCustomer.findFirst({
           where: { email: email.toLowerCase() },
@@ -431,6 +432,7 @@ export async function POST(req: NextRequest) {
           await prisma.ageVerification.create({
             data: { token, email, name: shippingName, orderNumber: orderNum },
           });
+          ageVerifyToken = token;
           await sendAgeVerifyEmail({ to: email, name: shippingName, orderNumber: orderNum, token });
         }
       } catch (ageErr) {
@@ -446,6 +448,7 @@ export async function POST(req: NextRequest) {
           authCode: responseData.authcode,
           message: responseData.responsetext,
           total: finalTotal.toFixed(2),
+          ageVerifyToken,
         },
         { status: 200 }
       );

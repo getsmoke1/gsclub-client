@@ -76,6 +76,38 @@ const nextConfig: NextConfig = {
       { source: '/models/:slug*bc5000:rest*', destination: '/brands/ebcreate', permanent: true },
       // Missing commercial URL
       { source: '/disposable-vapes', destination: '/vapes', permanent: true },
+      // Old WordPress /tag/ pages → brand or category pages
+      { source: '/tag/geek-bar', destination: '/brands/geek-bar', permanent: true },
+      { source: '/tag/geek-bar/', destination: '/brands/geek-bar', permanent: true },
+      { source: '/tag/hqd', destination: '/brands/hqd', permanent: true },
+      { source: '/tag/hqd/', destination: '/brands/hqd', permanent: true },
+      { source: '/tag/raz', destination: '/brands/raz', permanent: true },
+      { source: '/tag/raz/', destination: '/brands/raz', permanent: true },
+      { source: '/tag/fume', destination: '/brands/fume', permanent: true },
+      { source: '/tag/fume/', destination: '/brands/fume', permanent: true },
+      { source: '/tag/lost-mary', destination: '/brands/lost-mary', permanent: true },
+      { source: '/tag/lost-mary/', destination: '/brands/lost-mary', permanent: true },
+      { source: '/tag/:slug*', destination: '/vapes', permanent: true },
+      // Old WordPress pagination
+      { source: '/vapes/page/:num', destination: '/vapes', permanent: true },
+      { source: '/vapes/page/:num/', destination: '/vapes', permanent: true },
+      { source: '/blog/page/:num', destination: '/blog', permanent: true },
+      // Old store/deals/sale pages
+      { source: '/store', destination: '/vapes', permanent: true },
+      { source: '/store/', destination: '/vapes', permanent: true },
+      { source: '/deals', destination: '/vapes', permanent: true },
+      { source: '/deals/', destination: '/vapes', permanent: true },
+      { source: '/sale', destination: '/vapes', permanent: true },
+      { source: '/sale/', destination: '/vapes', permanent: true },
+      // Old policy page slugs
+      { source: '/refund_returns', destination: '/return-policy', permanent: true },
+      { source: '/refund_returns/', destination: '/return-policy', permanent: true },
+      { source: '/refund-policy', destination: '/return-policy', permanent: true },
+      { source: '/refund-policy/', destination: '/return-policy', permanent: true },
+      { source: '/shipping-and-returns', destination: '/shipping-policy', permanent: true },
+      { source: '/shipping-and-returns/', destination: '/shipping-policy', permanent: true },
+      { source: '/privacy', destination: '/privacy-policy', permanent: true },
+      { source: '/privacy/', destination: '/privacy-policy', permanent: true },
       {
         source: '/product-tag/:brand*',
         destination: '/brands/:brand',

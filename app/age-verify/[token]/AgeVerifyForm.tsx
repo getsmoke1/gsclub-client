@@ -102,7 +102,7 @@ export function AgeVerifyForm({ token }: { token: string }) {
           type="checkbox"
           checked={consent}
           onChange={e => setConsent(e.target.checked)}
-          style={{ marginTop: 2, width: 16, height: 16, flexShrink: 0, cursor: "pointer" }}
+          style={{ marginTop: 2, width: 18, height: 18, flexShrink: 0, cursor: "pointer", accentColor: "#FE3500", appearance: "auto", WebkitAppearance: "checkbox", opacity: 1, visibility: "visible" }}
         />
         <span style={{ fontSize: 13, color: "#555", lineHeight: 1.5 }}>
           I agree that GetSmoke (COSMOPROJECT LLC) may collect and process my personal identification data solely for age verification purposes, in accordance with the{" "}

@@ -182,7 +182,7 @@ export default function SuccessPage() {
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
                     required
-                    style={{ marginTop: 3, flexShrink: 0, cursor: "pointer" }}
+                    style={{ marginTop: 3, width: 18, height: 18, flexShrink: 0, cursor: "pointer", accentColor: "#FE3500", appearance: "auto", WebkitAppearance: "checkbox", opacity: 1, visibility: "visible" }}
                   />
                   <label htmlFor="age-consent" style={{ fontSize: 14, color: "#374151", cursor: "pointer" }}>
                     I confirm I am 21 years of age or older

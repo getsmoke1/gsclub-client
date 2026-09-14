@@ -61,6 +61,7 @@ export default function robots(): MetadataRoute.Robots {
       "https://getsmoke.com/sitemap.xml",
       "https://getsmoke.com/server-sitemap-products.xml",
       "https://getsmoke.com/server-sitemap-blog.xml",
+      "https://getsmoke.com/server-sitemap-flavors.xml",
     ],
     host: "https://getsmoke.com",
   };

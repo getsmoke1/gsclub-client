@@ -454,3 +454,25 @@ model CouponUsage {
 
   @@map("coupon_usages")
 }
+
+model FlavorBuyPage {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug            String   @unique
+  productSlug     String
+  modelSlug       String
+  brandSlug       String
+  flavorName      String
+  modelName       String
+  price           Float
+  puffCount       String
+  title           String
+  metaDescription String
+  h1              String
+  content         String
+  faq             Json
+  relatedSlugs    String[]
+  isActive        Boolean  @default(true)
+  createdAt       String
+
+  @@map("flavor_buy_pages")
+}

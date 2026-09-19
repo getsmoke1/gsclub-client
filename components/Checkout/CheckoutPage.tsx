@@ -1,7 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
-import ReCAPTCHA from "react-google-recaptcha";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -139,8 +138,6 @@ const CheckoutPage = () => {
   const [fieldsReady, setFieldsReady] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [paymentProcessing, setPaymentProcessing] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const collectJsConfigured = useRef(false);
 
   // Products for display
@@ -269,14 +266,6 @@ const CheckoutPage = () => {
         return;
       }
 
-      // reCAPTCHA verification - only enforce if sitekey is configured
-      if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !recaptchaToken) {
-        setPaymentError("Please complete the reCAPTCHA verification.");
-        toast.error("Please complete the reCAPTCHA verification.");
-        setPaymentProcessing(false);
-        return;
-      }
-
       const shippingName   = addr ? addr.name            : `${guestFirstNameRef.current} ${guestLastNameRef.current}`.trim();
       const shippingStreet = addr ? addr.streetAddress   : guestStreetRef.current;
       const shippingCity   = addr ? addr.city            : guestCityRef.current;
@@ -299,7 +288,6 @@ const CheckoutPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           token,
-          recaptchaToken,
           email: emailToSend,
           items: lineItems,
           isSubscription: hasSubscription,
@@ -648,17 +636,7 @@ const CheckoutPage = () => {
                   </div>
                 )}
 
-                {/* reCAPTCHA - only render when sitekey is configured */}
-                {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
-                  <div className="flex justify-center mb-3">
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-                      onChange={(token) => setRecaptchaToken(token)}
-                      onExpired={() => setRecaptchaToken(null)}
-                    />
-                  </div>
-                )}
+
 
                 {/* Submit */}
                 <button

@@ -5,7 +5,30 @@ import { sendEmail, sendAgeVerifyEmail } from "@/lib/mail";
 import { orderConfirmationTemplate } from "@/emails/orderConfirmationTemplate";
 import { SUBSCRIPTION_FREQUENCIES, FrequencyValue, getNextBillingDate, calcSubscriptionPrice } from "@/lib/nmi";
 
+// --- In-memory rate limiter (per IP, resets hourly) ---
+const ipAttempts = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 5;       // max checkout attempts per IP per hour
+const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in ms
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    ipAttempts.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
+    return true; // allowed
+  }
+  entry.count += 1;
+  if (entry.count > RATE_LIMIT) return false; // blocked
+  return true;
+}
+
 export async function POST(req: NextRequest) {
+  // Rate limit by IP
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json({ success: false, message: "Too many checkout attempts. Please try again later." }, { status: 429 });
+  }
+
   try {
     const body = await req.json();
     const {

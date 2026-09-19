@@ -269,8 +269,8 @@ const CheckoutPage = () => {
         return;
       }
 
-      // reCAPTCHA verification
-      if (!recaptchaToken) {
+      // reCAPTCHA verification - only enforce if sitekey is configured
+      if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !recaptchaToken) {
         setPaymentError("Please complete the reCAPTCHA verification.");
         toast.error("Please complete the reCAPTCHA verification.");
         setPaymentProcessing(false);
@@ -648,15 +648,17 @@ const CheckoutPage = () => {
                   </div>
                 )}
 
-                {/* reCAPTCHA */}
-                <div className="flex justify-center mb-3">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-                    onChange={(token) => setRecaptchaToken(token)}
-                    onExpired={() => setRecaptchaToken(null)}
-                  />
-                </div>
+                {/* reCAPTCHA - only render when sitekey is configured */}
+                {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+                  <div className="flex justify-center mb-3">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                      onChange={(token) => setRecaptchaToken(token)}
+                      onExpired={() => setRecaptchaToken(null)}
+                    />
+                  </div>
+                )}
 
                 {/* Submit */}
                 <button

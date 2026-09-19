@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const {
       token,
+      recaptchaToken,
       email,
       items,
       shippingName,
@@ -68,6 +69,21 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 0: Validate the request
+    // Verify reCAPTCHA token server-side
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+    if (recaptchaSecret && recaptchaToken) {
+      const recaptchaRes = await fetch(
+        `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaToken}`,
+        { method: "POST" }
+      );
+      const recaptchaData = await recaptchaRes.json();
+      if (!recaptchaData.success) {
+        return NextResponse.json({ success: false, message: "reCAPTCHA verification failed. Please try again." }, { status: 400 });
+      }
+    } else if (recaptchaSecret && !recaptchaToken) {
+      return NextResponse.json({ success: false, message: "Please complete the reCAPTCHA verification." }, { status: 400 });
+    }
+
     if (!token) {
       return NextResponse.json(
         { success: false, message: "Missing payment token" },

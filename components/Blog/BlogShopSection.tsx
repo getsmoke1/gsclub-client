@@ -23,7 +23,7 @@ interface BlogShopSectionProps {
   modelName?: string;
 }
 
-const BlogShopSection = ({ products, title = "Shop Featured Products", modelSlug, modelName }: BlogShopSectionProps) => {
+const BlogShopSection = ({ products, title = "Shop Featured Products", modelSlug }: BlogShopSectionProps) => {
   if (!products || products.length === 0) return null;
 
   return (

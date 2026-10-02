@@ -4,11 +4,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Vape Delivery to Atlanta | Fast Shipping from GetSmoke | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Vape Delivery to Atlanta | Fast Shipping from GetSmoke.",
+  description: "Order disposable vapes online with fast delivery to Atlanta, GA. Geek Bar Pulse 2, RAZ, HQD and more — all legal flavors, 21+ verified. Free shipping on orders $89+ at GetSmoke.",
   alternates: { canonical: "https://getsmoke.com/vape-delivery-atlanta" },
   openGraph: {
     title: "Vape Delivery to Atlanta | Fast Shipping from GetSmoke | GetSmoke",
-    description: "Buy disposable vapes online at GetSmoke. Vape Delivery to Atlanta | Fast Shipping from GetSmoke.",
+    description: "Order disposable vapes online with fast delivery to Atlanta, GA. Geek Bar Pulse 2, RAZ, HQD and more — all legal flavors, 21+ verified. Free shipping on orders $89+ at GetSmoke.",
     url: "https://getsmoke.com/vape-delivery-atlanta",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

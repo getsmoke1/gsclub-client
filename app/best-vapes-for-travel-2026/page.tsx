@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Vapes for Travel 2026: TSA-Friendly Disposable Picks | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Vapes for Travel 2026: TSA-Friendly Disposable Picks.",
+  description: "Best disposable vapes for travel 2026. TSA-friendly picks: Geek Bar Pulse 2 (25,000 puffs), USB-C charging, compact design. Shop top brands at GetSmoke with fast US shipping.",
   alternates: { canonical: "https://getsmoke.com/best-vapes-for-travel-2026" },
   openGraph: {
     title: "Best Vapes for Travel 2026: TSA-Friendly Disposable Picks | GetSmoke",
-    description: "Buy disposable vapes online at GetSmoke. Best Vapes for Travel 2026: TSA-Friendly Disposable Picks.",
+    description: "Best disposable vapes for travel 2026. TSA-friendly picks: Geek Bar Pulse 2 (25,000 puffs), USB-C charging, compact design. Shop top brands at GetSmoke with fast US shipping.",
     url: "https://getsmoke.com/best-vapes-for-travel-2026",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

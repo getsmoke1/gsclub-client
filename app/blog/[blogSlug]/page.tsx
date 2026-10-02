@@ -179,6 +179,33 @@ const page = async ({ params }: Props) => {
       return notFound();
     }
 
+    // Fetch shop products if blog has shopProductSlugs field
+    type ArticleWithShop = typeof article & { shopProductSlugs?: string[]; shopSectionTitle?: string; shopModelSlug?: string };
+    const articleWithShop = article as ArticleWithShop;
+    const shopProductSlugs: string[] = articleWithShop.shopProductSlugs || [];
+
+    type ShopProduct = { id: string; slug: string; name: string; currentPrice: number; stockStatus: string; packCount: number | null; imageUrl: string | null };
+    let shopProducts: ShopProduct[] = [];
+    if (shopProductSlugs.length > 0) {
+      const products = await prisma.product.findMany({
+        where: { slug: { in: shopProductSlugs } },
+        include: { images: { take: 1, orderBy: { position: "asc" } } },
+      });
+      // Preserve slug order
+      shopProducts = shopProductSlugs
+        .map(slug => products.find(p => p.slug === slug))
+        .filter(Boolean)
+        .map(p => ({
+          id: p!.id,
+          slug: p!.slug ?? "",
+          name: p!.name,
+          currentPrice: Number(p!.currentPrice),
+          stockStatus: String(p!.stockStatus || "INSTOCK"),
+          packCount: p!.packCount ?? null,
+          imageUrl: p!.images?.[0]?.url ?? null,
+        }));
+    }
+
     const articleUrl = `${SITE_URL}/blog/${blogSlug}`;
     const imageUrl = article.images?.[0]?.url
       ? r2src(article.images[0].url)
@@ -269,7 +296,12 @@ const page = async ({ params }: Props) => {
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         )}
         <div>
-          <BlogDetails article={article as Article} />
+          <BlogDetails
+            article={article as Article}
+            shopProducts={shopProducts}
+            shopSectionTitle={articleWithShop.shopSectionTitle || "Shop Geek Bar Pulse 2"}
+            shopModelSlug={articleWithShop.shopModelSlug}
+          />
         </div>
       </>
     );

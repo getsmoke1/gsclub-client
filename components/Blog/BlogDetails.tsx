@@ -6,12 +6,26 @@ import Link from 'next/link';
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { format } from 'date-fns';
 import { Article } from '@/types/article';
+import BlogShopSection from './BlogShopSection';
+
+interface ShopProduct {
+  id: string;
+  slug: string;
+  name: string;
+  currentPrice: number;
+  stockStatus: string;
+  packCount?: number | null;
+  imageUrl?: string | null;
+}
 
 interface BlogDetailsProps {
   article: Article;
+  shopProducts?: ShopProduct[];
+  shopSectionTitle?: string;
+  shopModelSlug?: string;
 }
 
-const BlogDetails = ({ article }: BlogDetailsProps) => {
+const BlogDetails = ({ article, shopProducts, shopSectionTitle, shopModelSlug }: BlogDetailsProps) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -121,6 +135,15 @@ const BlogDetails = ({ article }: BlogDetailsProps) => {
           className={contentStyles}
         />
       </article>
+
+      {/* Shop Section */}
+      {shopProducts && shopProducts.length > 0 && (
+        <BlogShopSection
+          products={shopProducts}
+          title={shopSectionTitle || "Shop Featured Products"}
+          modelSlug={shopModelSlug}
+        />
+      )}
 
       {/* FAQ Section */}
       {sortedFaqs.length > 0 && (

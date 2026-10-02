@@ -288,18 +288,21 @@ model Shipment {
 }
 
 model BlogArticle {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  slug        String    @unique
-  title       String
-  subtitle    String    @default("")
-  description String    @default("")
-  content     String    @default("")
-  author      String    @default("GetSmoke Editorial Team")
-  authorName  String    @default("")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  images      Image[]
-  faq         BlogFaq[]
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug              String    @unique
+  title             String
+  subtitle          String    @default("")
+  description       String    @default("")
+  content           String    @default("")
+  author            String    @default("GetSmoke Editorial Team")
+  authorName        String    @default("")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  images            Image[]
+  faq               BlogFaq[]
+  shopProductSlugs  String[]
+  shopSectionTitle  String?
+  shopModelSlug     String?
 }
 
 type BlogFaq {

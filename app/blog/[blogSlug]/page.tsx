@@ -180,9 +180,7 @@ const page = async ({ params }: Props) => {
     }
 
     // Fetch shop products if blog has shopProductSlugs field
-    type ArticleWithShop = typeof article & { shopProductSlugs?: string[]; shopSectionTitle?: string; shopModelSlug?: string };
-    const articleWithShop = article as ArticleWithShop;
-    const shopProductSlugs: string[] = articleWithShop.shopProductSlugs || [];
+    const shopProductSlugs: string[] = article.shopProductSlugs || [];
 
     type ShopProduct = { id: string; slug: string; name: string; currentPrice: number; stockStatus: string; packCount: number | null; imageUrl: string | null };
     let shopProducts: ShopProduct[] = [];
@@ -299,8 +297,8 @@ const page = async ({ params }: Props) => {
           <BlogDetails
             article={article as Article}
             shopProducts={shopProducts}
-            shopSectionTitle={articleWithShop.shopSectionTitle || "Shop Geek Bar Pulse 2"}
-            shopModelSlug={articleWithShop.shopModelSlug}
+            shopSectionTitle={article.shopSectionTitle || "Shop Geek Bar Pulse 2"}
+            shopModelSlug={article.shopModelSlug ?? undefined}
           />
         </div>
       </>

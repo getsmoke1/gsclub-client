@@ -217,9 +217,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = product.images?.[0]?.url;
   const inStock = product.stockStatus !== "OUTOFSTOCK";
   const title = `${product.name} | GetSmoke`;
-  const description = `Buy ${product.name} for $${price} at GetSmoke. ${
-    inStock ? "In stock" : "Pre-order"
-  }, fast US shipping. 21+ only.`;
+  const puffCount = product.puffs?.[0]?.name ?? null;
+  const brandName = product.brand?.name ?? null;
+  const nicotine = product.Nicotine?.name ?? "5%";
+  // Build a rich 150-160 char meta description
+  let description = `Buy ${product.name} for $${price} at GetSmoke.`;
+  if (puffCount) description += ` ${puffCount} puffs,`;
+  description += ` ${nicotine} nicotine salt.`;
+  if (brandName) description += ` Authentic ${brandName} disposable vape.`;
+  description += ` ${inStock ? "In stock" : "Pre-order"} — fast US shipping. Ages 21+.`;
+  // Trim to 160 chars max
+  if (description.length > 160) description = description.slice(0, 157) + "...";
 
   return {
     title,

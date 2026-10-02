@@ -127,6 +127,15 @@ const BlogDetails = ({ article, shopProducts, shopSectionTitle, shopModelSlug }:
         </div>
       </header>
 
+      {/* Shop Section - above article content */}
+      {shopProducts && shopProducts.length > 0 && (
+        <BlogShopSection
+          products={shopProducts}
+          title={shopSectionTitle || "Shop Featured Products"}
+          modelSlug={shopModelSlug}
+        />
+      )}
+
       {/* Blog Content */}
       <article className="mt-7">
         <div
@@ -135,15 +144,6 @@ const BlogDetails = ({ article, shopProducts, shopSectionTitle, shopModelSlug }:
           className={contentStyles}
         />
       </article>
-
-      {/* Shop Section */}
-      {shopProducts && shopProducts.length > 0 && (
-        <BlogShopSection
-          products={shopProducts}
-          title={shopSectionTitle || "Shop Featured Products"}
-          modelSlug={shopModelSlug}
-        />
-      )}
 
       {/* FAQ Section */}
       {sortedFaqs.length > 0 && (

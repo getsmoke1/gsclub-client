@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "How to Buy Disposable Vapes Online Safely in 2026 | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. How to Buy Disposable Vapes Online Safely in 2026.",
+  description: "How to buy disposable vapes online safely in 2026. Avoid fakes, find trusted retailers, verify age compliance. Complete buyer's guide from GetSmoke. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/how-to-buy-disposable-vapes-online-safely-2026" },
   openGraph: {
     title: "How to Buy Disposable Vapes Online Safely in 2026 | GetSmoke",

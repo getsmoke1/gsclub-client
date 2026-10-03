@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["how to use geek bar pulse x", "geek bar pulse x guide", "geek bar pulse x pulse mode", "how to charge geek bar pulse x", "geek bar pulse x modes"],
   openGraph: {
     title: "How to Use Geek Bar Pulse X - Complete Guide",
-    description: "Complete guide to using the Geek Bar Pulse X: Regular vs Pulse mode, charging, display, and troubleshooting.",
+    description: "Complete step-by-step guide to using the Geek Bar Pulse X: Regular vs Pulse mode, LED display, USB-C charging, and airflow. Expert tips from GetSmoke.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

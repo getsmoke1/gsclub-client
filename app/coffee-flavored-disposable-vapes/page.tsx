@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   keywords: ["coffee vape", "coffee flavored disposable vape", "coffee ice vape", "colombian coffee vape", "italian coffee vape", "coffee disposable"],
   openGraph: {
     title: "Coffee Flavored Disposable Vapes | GetSmoke",
-    description: "Shop coffee flavored disposable vapes - Colombian Coffee, Coffee Ice, Italian Coffee and more.",
+    description: "Shop coffee flavored disposable vapes at GetSmoke. Colombian Coffee, Coffee Tobacco, and more rich coffee blends. Authentic brands, fast US shipping. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "Coffee Flavored Vapes" }],

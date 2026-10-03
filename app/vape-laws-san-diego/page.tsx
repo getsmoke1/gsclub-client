@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Vape Laws in San Diego: 2026 California Guide | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Vape Laws in San Diego: 2026 California Guide.",
+  description: "Complete guide to vape laws in San Diego, CA. Where you can vape, flavor bans, age restrictions, and where to buy legal disposable vapes online. GetSmoke.",
   alternates: { canonical: "https://getsmoke.com/vape-laws-san-diego" },
   openGraph: {
     title: "Vape Laws in San Diego: 2026 California Guide | GetSmoke",

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/geek-bar-pulse-x-review" },
   openGraph: {
     title: "Geek Bar Pulse X 25000 Review | GetSmoke",
-    description: "Is the Geek Bar Pulse X worth buying? Full review: puffs, flavor, battery, build quality.",
+    description: "Honest Geek Bar Pulse X 25000 review: dual-mode puffs, LED display, best flavors, and price. Is it worth buying in 2026? Full breakdown at GetSmoke.",
     url: "https://getsmoke.com/geek-bar-pulse-x-review",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "20000 Puff Disposable Vapes | GetSmoke",
-    description: "Shop 20,000 puff rechargeable disposable vapes. Fast US shipping, 21+ only.",
+    description: "Shop 20,000 puff rechargeable disposable vapes at GetSmoke. Best brands: Geek Bar, RAZ, HQD with USB-C charging and dual modes. Fast US shipping. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "20000 Puff Vapes" }],

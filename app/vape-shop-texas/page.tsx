@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/vape-shop-texas" },
   openGraph: {
     title: "Vape Shop Texas | GetSmoke",
-    description: "Shop premium disposable vapes online - delivered to Texas fast. Free shipping on orders $89+.",
+    description: "Shop premium disposable vapes online with fast delivery to Texas. Geek Bar Pulse 2, RAZ DC25000, HQD and more. Free shipping $89+. All ages 21+ verified. GetSmoke.",
     url: "https://getsmoke.com/vape-shop-texas",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

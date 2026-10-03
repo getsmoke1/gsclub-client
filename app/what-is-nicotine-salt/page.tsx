@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["what is nicotine salt", "nic salt vs freebase nicotine", "nicotine salt explained", "50mg nicotine salt", "smooth nicotine hit"],
   openGraph: {
     title: "What Is Nicotine Salt? Nic Salt vs Freebase Explained",
-    description: "Nicotine salt delivers smoother, faster nicotine satisfaction than freebase. Learn why all disposable vapes use nic salt formulations.",
+    description: "What is nicotine salt (nic salt)? Learn how salt nic delivers smoother, faster nicotine satisfaction vs freebase. Expert guide from GetSmoke. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

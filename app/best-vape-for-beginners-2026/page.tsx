@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Vape for Beginners 2026: Top 6 Disposable Picks | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Vape for Beginners 2026: Top 6 Disposable Picks.",
+  description: "Best disposable vapes for beginners in 2026. Easy-to-use picks with great flavor and simple design. Expert recommendations from GetSmoke. Fast US shipping. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/best-vape-for-beginners-2026" },
   openGraph: {
     title: "Best Vape for Beginners 2026: Top 6 Disposable Picks | GetSmoke",

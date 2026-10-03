@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["what is a disposable vape", "how does a disposable vape work", "disposable vape guide", "disposable e-cigarette explained"],
   openGraph: {
     title: "What Is a Disposable Vape? Complete Guide 2026",
-    description: "Everything you need to know about disposable vapes - how they work, puff counts, nicotine levels, and the best brands.",
+    description: "Everything you need to know about disposable vapes — how they work, puff counts, nicotine types, and top brands in 2026. Complete guide from GetSmoke. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

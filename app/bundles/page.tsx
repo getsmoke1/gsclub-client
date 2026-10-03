@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Bundle Deals | GetSmoke",
-  description: "Shop all vape bundle deals at GetSmoke. Pack of 3, 5, and 10 at unbeatable prices.",
+  description: "Shop vape bundle deals at GetSmoke. Save more with pack of 3, 5, and 10 on top brands like Geek Bar Pulse 2, RAZ, HQD. Fast US shipping. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/bundles" },
   openGraph: { title: "Bundle Deals | GetSmoke", url: "https://getsmoke.com/bundles", siteName: "GetSmoke", images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "Bundle Deals | GetSmoke" }] },
 };

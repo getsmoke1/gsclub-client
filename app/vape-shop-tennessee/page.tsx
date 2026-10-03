@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/vape-shop-tennessee" },
   openGraph: {
     title: "Vape Shop Tennessee | GetSmoke",
-    description: "Premium disposable vapes delivered to Tennessee. Free shipping $89+. Shop 500+ flavors from top brands.",
+    description: "Shop premium disposable vapes online delivered to Tennessee. Geek Bar Pulse 2, RAZ, HQD and 700+ products. Free shipping $89+. Ages 21+ verified. GetSmoke.",
     url: "https://getsmoke.com/vape-shop-tennessee",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

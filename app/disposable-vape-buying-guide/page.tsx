@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/disposable-vape-buying-guide" },
   openGraph: {
     title: "Disposable Vape Buying Guide 2025 | GetSmoke",
-    description: "Everything you need to know before buying a disposable vape - puff counts, brands, nicotine, flavors.",
+    description: "Complete disposable vape buying guide for 2026. Everything you need to know: puff counts, nicotine levels, charging, top brands, and where to buy. GetSmoke. 21+.",
     url: "https://getsmoke.com/disposable-vape-buying-guide",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

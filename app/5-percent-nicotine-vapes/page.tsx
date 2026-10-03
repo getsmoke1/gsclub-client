@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "5% Nicotine Disposable Vapes | GetSmoke",
     description:
-      "Shop the best 5% nicotine disposable vapes. Top brands, fast US shipping, 21+ only.",
+      "Shop the best 5% nicotine disposable vapes at GetSmoke. Top brands including Geek Bar, RAZ, HQD with 5% salt nic. Fast US shipping on all orders. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "5% Nicotine Vapes" }],

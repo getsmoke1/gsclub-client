@@ -86,7 +86,7 @@ export default async function Home() {
     "@context": "https://schema.org",
     "@type": ["OnlineStore", "LocalBusiness"],
     name: "GetSmoke",
-    description: "Premium disposable vapes online store. Shop Geek Bar, RAZ, Lost Mary, HQD and more. Fast US shipping, adults 21+ only.",
+    description: "Shop 700+ disposable vapes online at GetSmoke. Top brands: Geek Bar Pulse 2, RAZ DC25000, HQD, Lost Mary, FUME. Free shipping on orders $89+. Ages 21+.",
     url: "https://getsmoke.com",
     logo: "https://getsmoke.com/icon-192.png",
     email: "info@getsmoke.com",

@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   alternates: { canonical: 'https://getsmoke.com/privacy-policy' },
   title: "Privacy Policy | GetSmoke",
-  description: "GetSmoke Privacy Policy - how we collect, use, and protect your personal information.",
+  description: "GetSmoke Privacy Policy — how we collect, use, and protect your personal information. PACT Act compliant, secure checkout, 21+ verified online vape retailer.",
 }
 
 const content = `

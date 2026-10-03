@@ -24,7 +24,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
   return {
     title,
-    description: "Shop all disposable vapes, e-cigarettes, and hookah at GetSmoke. Best brands, fast US shipping, 21+ only.",
+    description: "Shop all disposable vapes at GetSmoke. 700+ products, 30+ brands: Geek Bar, RAZ, HQD, Lost Mary, FUME. Free shipping on orders $89+. Ages 21+ verified.",
     alternates: {
       canonical,
       ...(pageNum > 1 && { prev: pageNum === 2 ? `${SITE_URL}/vapes` : `${SITE_URL}/vapes?page=${pageNum - 1}` }),

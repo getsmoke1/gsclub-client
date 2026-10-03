@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/vape-shop-wisconsin" },
   openGraph: {
     title: "Vape Shop Wisconsin | GetSmoke",
-    description: "Shop premium disposable vapes online - delivered to Wisconsin fast. Free shipping on orders $89+.",
+    description: "Shop premium disposable vapes online delivered to Wisconsin. Geek Bar Pulse 2, RAZ, HQD and 700+ products. Free shipping $89+. Ages 21+ verified. GetSmoke.",
     url: "https://getsmoke.com/vape-shop-wisconsin",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

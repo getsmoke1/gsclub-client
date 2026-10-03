@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/new-in-stock" },
   openGraph: {
     title: "New In Stock - Latest Disposable Vapes | GetSmoke",
-    description: "Shop the newest disposable vapes just added to GetSmoke.",
+    description: "Shop the newest disposable vapes just added to GetSmoke. Latest Geek Bar, RAZ, HQD and more — all authentic, fast US shipping. Check back weekly for new arrivals.",
     url: "https://getsmoke.com/new-in-stock",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

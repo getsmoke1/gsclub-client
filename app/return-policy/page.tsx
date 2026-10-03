@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   alternates: { canonical: 'https://getsmoke.com/return-policy' },
   title: "Refund and Returns Policy | GetSmoke",
-  description: "GetSmoke Refund and Returns Policy",
+  description: "GetSmoke return and refund policy. Learn how to return defective disposable vapes, request replacements, and get support. Fast resolution, 21+ verified retailer.",
 }
 
 const content = `

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/vape-shop-florida" },
   openGraph: {
     title: "Vape Shop Florida | GetSmoke",
-    description: "Premium disposable vapes delivered to Florida. Free shipping $89+. Shop 500+ flavors from top brands.",
+    description: "Shop premium disposable vapes online delivered to Florida. Geek Bar Pulse 2, RAZ, HQD and 700+ products. Free shipping $89+. Same-day processing. Ages 21+.",
     url: "https://getsmoke.com/vape-shop-florida",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

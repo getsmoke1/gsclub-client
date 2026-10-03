@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Nicotine-Free Vapes 2026: Zero Nic Disposables Compared | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Nicotine-Free Vapes 2026: Zero Nic Disposables Compared.",
+  description: "Best nicotine-free disposable vapes of 2026. 0% nicotine with great flavor and big puff counts. Top picks and where to buy at GetSmoke. Fast US shipping. 21+.",
   alternates: { canonical: "https://getsmoke.com/best-nicotine-free-vapes-2026" },
   openGraph: {
     title: "Best Nicotine-Free Vapes 2026: Zero Nic Disposables Compared | GetSmoke",

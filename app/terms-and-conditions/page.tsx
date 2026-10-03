@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   alternates: { canonical: 'https://getsmoke.com/terms-and-conditions' },
   title: "Terms and Conditions | GetSmoke",
-  description: "GetSmoke Terms and Conditions - Legal terms governing use of our website and purchase of products.",
+  description: "GetSmoke Terms and Conditions. Legal terms governing use of our online vape store, purchases, age verification, and shipping. 21+ only, US residents.",
 }
 
 const content = `

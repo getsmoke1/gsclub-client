@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Refillable Pod Vapes 2026: Top Reusable Picks | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Refillable Pod Vapes 2026: Top Reusable Picks.",
+  description: "Best refillable pod vapes of 2026 ranked and reviewed. Compare top pod systems by battery life, flavor, and value. Shop at GetSmoke with fast US shipping. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/best-refillable-pod-vapes-2026" },
   openGraph: {
     title: "Best Refillable Pod Vapes 2026: Top Reusable Picks | GetSmoke",

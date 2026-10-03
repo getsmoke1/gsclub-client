@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["how to use lost mary mt35000 turbo", "lost mary mt35000 turbo guide", "lost mary turbo mode", "how to charge lost mary mt35000", "lost mary mt35000 not hitting"],
   openGraph: {
     title: "How to Use Lost Mary MT35000 Turbo",
-    description: "Complete guide to using the Lost Mary MT35000 Turbo: modes, charging, display, and troubleshooting.",
+    description: "Complete guide to using the Lost Mary MT35000 Turbo: switching modes, LED display, charging tips, and flavor tips. Expert guide from GetSmoke. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

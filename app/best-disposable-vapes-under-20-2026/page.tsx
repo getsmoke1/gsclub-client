@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Disposable Vapes Under $20 in 2026 | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Disposable Vapes Under $20 in 2026.",
+  description: "Best disposable vapes under $20 in 2026. Affordable picks with great flavor and battery life. Top brands at GetSmoke with fast US shipping. 21+ only.",
   alternates: { canonical: "https://getsmoke.com/best-disposable-vapes-under-20-2026" },
   openGraph: {
     title: "Best Disposable Vapes Under $20 in 2026 | GetSmoke",

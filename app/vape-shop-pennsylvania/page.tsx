@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Vape Shop Pennsylvania | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Vape Shop Pennsylvania.",
+  description: "Buy disposable vapes online with fast delivery to Pennsylvania. Shop Geek Bar Pulse 2, RAZ, HQD and 700+ products at GetSmoke. Free shipping on orders $89+. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/vape-shop-pennsylvania" },
   openGraph: {
     title: "Vape Shop Pennsylvania | GetSmoke",

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://getsmoke.com/faq' },
   ...noIndex,
   title: "FAQ | GetSmoke",
-  description: "Frequently asked questions about GetSmoke - shipping, returns, products and more.",
+  description: "Find answers to common questions about GetSmoke: shipping times, returns, age verification, payment methods, disposable vape orders, and more. Fast US delivery, 21+ only.",
 };
 
 const faqs = [

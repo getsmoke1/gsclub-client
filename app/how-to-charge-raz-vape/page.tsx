@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["how to charge raz vape", "raz dc25000 charging", "raz vape battery", "raz vape not charging", "raz vape usb c"],
   openGraph: {
     title: "How to Charge RAZ Vape - RAZ DC25000 Charging Guide",
-    description: "Complete charging guide for RAZ disposable vapes. Learn charging time, indicators, and troubleshooting.",
+    description: "Complete guide to charging RAZ disposable vapes. Learn how to charge the RAZ DC25000, indicator lights, and charge times. GetSmoke expert tips for 21+ vapers.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

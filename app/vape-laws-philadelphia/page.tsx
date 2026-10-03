@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Vape Laws in Philadelphia: 2026 Pennsylvania Guide | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Vape Laws in Philadelphia: 2026 Pennsylvania Guide.",
+  description: "Complete guide to vape laws in Philadelphia, PA. Local regulations, flavor restrictions, age limits, and where to buy legal disposable vapes online. GetSmoke.",
   alternates: { canonical: "https://getsmoke.com/vape-laws-philadelphia" },
   openGraph: {
     title: "Vape Laws in Philadelphia: 2026 Pennsylvania Guide | GetSmoke",

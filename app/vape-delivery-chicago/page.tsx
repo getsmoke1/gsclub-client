@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Vape Delivery to Chicago | Fast Shipping from GetSmoke | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Vape Delivery to Chicago | Fast Shipping from GetSmoke.",
+  description: "Fast disposable vape delivery to Chicago, IL. Order Geek Bar Pulse 2, RAZ, HQD and 700+ products at GetSmoke. Free shipping on orders $89+. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/vape-delivery-chicago" },
   openGraph: {
     title: "Vape Delivery to Chicago | Fast Shipping from GetSmoke | GetSmoke",

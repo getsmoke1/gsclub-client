@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Best Compact and Discreet Vapes 2026: Small Pocket Picks | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Compact and Discreet Vapes 2026: Small Pocket Picks.",
+  description: "Best compact and discreet disposable vapes of 2026. Slim, pocketable designs with great flavor and battery life. Expert picks from GetSmoke. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/best-compact-discreet-vapes-2026" },
   openGraph: {
     title: "Best Compact and Discreet Vapes 2026: Small Pocket Picks | GetSmoke",

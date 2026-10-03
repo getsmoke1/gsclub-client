@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "25000 Puff Disposable Vapes | GetSmoke",
-    description: "Shop 25,000 puff rechargeable disposable vapes. Top brands, fast US shipping.",
+    description: "Shop 25,000 puff rechargeable disposable vapes at GetSmoke. Geek Bar Pulse 2, RAZ DC25000 and more. USB-C charging, dual modes, fast US shipping. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "25000 Puff Vapes" }],

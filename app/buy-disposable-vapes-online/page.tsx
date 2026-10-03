@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://getsmoke.com/buy-disposable-vapes-online" },
   openGraph: {
     title: "Buy Disposable Vapes Online | GetSmoke",
-    description: "700+ disposable vapes, 30+ brands, free shipping over $89. PACT Act compliant US retailer.",
+    description: "Buy disposable vapes online at GetSmoke. 700+ products from 30+ brands. Geek Bar, RAZ, HQD, Lost Mary and more. Free shipping on orders $89+. Ages 21+.",
     url: "https://getsmoke.com/buy-disposable-vapes-online",
     images: [{ url: "https://getsmoke.com/og-default.jpg" }],
   },

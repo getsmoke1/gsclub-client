@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Pod Systems & Pod Kits | GetSmoke",
-  description: "Shop pod systems, pod kits, and replacement pods at GetSmoke. Lost Mary, Foger, X-Posed, VIHO and more. Fast US shipping, 21+ only.",
+  description: "Shop pod systems, pod kits, and replacement pods at GetSmoke. Best pod vape brands with fast US shipping and competitive prices. Ages 21+ only. Free shipping $89+.",
   alternates: { canonical: "https://getsmoke.com/pods" },
   openGraph: {
     title: "Pod Systems & Pod Kits | GetSmoke",

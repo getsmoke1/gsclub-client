@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   keywords: ["how to use hqd cuvie", "hqd cuvie plus guide", "hqd vape not hitting", "how to charge hqd cuvie", "hqd cuvie blinking"],
   openGraph: {
     title: "How to Use HQD Cuvie Vape - Complete Guide",
-    description: "Complete guide to HQD Cuvie disposable vapes: how they work, charging, blinking lights, and troubleshooting.",
+    description: "Complete guide to HQD Cuvie disposable vapes: how they work, charging instructions, Cuvie Glaze 15000 features, and tips for best flavor. GetSmoke. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     type: "article",

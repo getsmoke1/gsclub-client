@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     }
     return meta;
   } catch {
-    return { title: "Blog | GetSmoke", description: "Explore our latest vape articles." };
+    return { title: "Blog | GetSmoke", description: "Browse 300+ expert vape articles at GetSmoke: reviews, comparisons, guides, and tips on the best disposable vapes. Geek Bar, RAZ, HQD and more. 21+ only." };
   }
 }
 

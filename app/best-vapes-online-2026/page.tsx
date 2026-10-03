@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Vapes Online 2026: 10 Top Picks Across Every Category | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Vapes Online 2026: 10 Top Picks Across Every Category.",
+  description: "Best disposable vapes online in 2026. Top-ranked picks by puffs, flavor, and value: Geek Bar Pulse 2, RAZ DC25000, HQD. Shop at GetSmoke. Fast US shipping. 21+.",
   alternates: { canonical: "https://getsmoke.com/best-vapes-online-2026" },
   openGraph: {
     title: "Best Vapes Online 2026: 10 Top Picks Across Every Category | GetSmoke",

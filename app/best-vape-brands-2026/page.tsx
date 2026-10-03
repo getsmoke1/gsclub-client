@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Best Vape Brands of 2026: Top 10 Ranked | GetSmoke",
-  description: "Buy disposable vapes online at GetSmoke. Best Vape Brands of 2026: Top 10 Ranked.",
+  description: "Best vape brands of 2026 ranked by quality, flavor, and value. Geek Bar, RAZ, HQD, Lost Mary, FUME compared side by side. Shop all at GetSmoke. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/best-vape-brands-2026" },
   openGraph: {
     title: "Best Vape Brands of 2026: Top 10 Ranked | GetSmoke",

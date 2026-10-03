@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: "Contact Us | GetSmoke",
-  description: "Get in touch with GetSmoke. Questions about your order, products, or shipping? We're here to help. 21+ only.",
+  description: "Get in touch with GetSmoke. Questions about your order, products, or account? Reach our support team. Fast response times for all disposable vape inquiries. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/contact" },
 }
 

@@ -217,7 +217,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const image = product.images?.[0]?.url;
   const inStock = product.stockStatus !== "OUTOFSTOCK";
   const title = `${product.name} | GetSmoke`;
-  const puffCount = product.puffs?.[0]?.name ?? null;
+  // Pick the largest puff count (products often have dual modes, e.g. 7500/15000)
+  const puffCount = product.puffs && product.puffs.length > 0
+    ? product.puffs.reduce((max: { name: string } | null, p: { name: string }) =>
+        !max || parseInt(p.name) > parseInt(max.name) ? p : max, null)?.name ?? null
+    : null;
   const brandName = product.brand?.name ?? null;
   const nicotine = product.Nicotine?.name ?? "5%";
   // Build a rich 150-160 char meta description

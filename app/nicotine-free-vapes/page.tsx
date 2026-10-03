@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Nicotine Free Disposable Vapes (0%) | GetSmoke",
     description:
-      "Shop 0% nicotine disposable vapes at GetSmoke. All the flavor, zero nicotine — perfect for those cutting back. Top brands, fast US shipping. Ages 21+.",
+      "Shop 0% nicotine disposable vapes at GetSmoke. All the flavor, zero nicotine - perfect for those cutting back. Top brands, fast US shipping. Ages 21+.",
     url: PAGE_URL,
     siteName: "GetSmoke",
     images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "Nicotine Free Vapes" }],

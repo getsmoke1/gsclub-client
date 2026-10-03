@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   keywords: ["where to buy disposable vapes online", "buy disposable vapes online", "disposable vape online store USA", "geek bar online", "raz vape online", "hqd vape online"],
   openGraph: {
     title: "Where to Buy Disposable Vapes Online in 2026",
-    description: "Buy disposable vapes online at GetSmoke — a licensed US retailer. 700+ authentic products, 30+ top brands, free shipping on orders $89+. Ages 21+ verified.",
+    description: "Buy disposable vapes online at GetSmoke - a licensed US retailer. 700+ authentic products, 30+ top brands, free shipping on orders $89+. Ages 21+ verified.",
     url: "https://getsmoke.com/where-to-buy-disposable-vapes-online",
     images: [{ url: "https://getsmoke.com/og-default.jpg", width: 1200, height: 630 }],
   },

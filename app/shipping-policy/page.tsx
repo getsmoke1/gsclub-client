@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   alternates: { canonical: 'https://getsmoke.com/shipping-policy' },
   title: "Shipping Policy | GetSmoke",
-  description: "GetSmoke Shipping Policy — delivery times, PACT Act compliance, age signature requirements, and shipping rates. Fast US vape delivery. 21+ verified retailer.",
+  description: "GetSmoke Shipping Policy - delivery times, PACT Act compliance, age signature requirements, and shipping rates. Fast US vape delivery. 21+ verified retailer.",
 }
 
 const content = `

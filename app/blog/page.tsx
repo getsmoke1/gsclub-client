@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { getSEOData } from "@/lib/seo";
 import { buildSeoMetadata } from "@/lib/canonical";
 
-export const dynamic = "force-dynamic"; // always fetch fresh from DB — blog list updates frequently
+export const dynamic = "force-dynamic"; // always fetch fresh from DB - blog list updates frequently
 
 export async function generateMetadata(): Promise<Metadata> {
   try {

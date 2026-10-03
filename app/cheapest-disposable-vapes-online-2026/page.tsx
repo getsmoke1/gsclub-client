@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Cheapest Disposable Vapes Online in 2026: 8 Picks Under $15 | GetSmoke",
-  description: "Cheapest disposable vapes online in 2026 — best value picks with great flavor. Compare prices on Geek Bar, HQD, and more at GetSmoke. Free shipping $89+. Ages 21+.",
+  description: "Cheapest disposable vapes online in 2026 - best value picks with great flavor. Compare prices on Geek Bar, HQD, and more at GetSmoke. Free shipping $89+. Ages 21+.",
   alternates: { canonical: "https://getsmoke.com/cheapest-disposable-vapes-online-2026" },
   openGraph: {
     title: "Cheapest Disposable Vapes Online in 2026: 8 Picks Under $15 | GetSmoke",

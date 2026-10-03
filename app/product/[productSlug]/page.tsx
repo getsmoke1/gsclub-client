@@ -229,7 +229,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (puffCount) description += ` ${puffCount} puffs,`;
   description += ` ${nicotine} nicotine salt.`;
   if (brandName) description += ` Authentic ${brandName} disposable vape.`;
-  description += ` ${inStock ? "In stock" : "Pre-order"} — fast US shipping. Ages 21+.`;
+  description += ` ${inStock ? "In stock" : "Pre-order"} - fast US shipping. Ages 21+.`;
   // Trim to 160 chars max
   if (description.length > 160) description = description.slice(0, 157) + "...";
 

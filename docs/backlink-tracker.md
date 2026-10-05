@@ -32,8 +32,9 @@ _Last updated: 2026-09-22_
 | 9 | northpennnow.com | 65 | https://northpennnow.com/news-from-our-partners/what-pennsylvania-vapers-are-buying-online-in-2026-a-complete-guide/ | $50 | P5 | 2026-09-07 | ✅ 2 links |
 | 10 | breakingac.com | 57 | https://breakingac.com/news-from-our-partners/top-disposable-vapes-of-2026-what-is-selling-and-why/ | $40 | P1 | 2026-09-09 | ✅ 2 links |
 | 11 | tynmagazine.com | 60 | https://tynmagazine.com/geek-bar-pulse-2-best-flavors-of-2026-complete-buyers-guide/ | $40 | P5 | 2026-09-22 | ⚠️ 2 links (попросили добавить 3-ю) |
+| 12 | gisuser.com | 66 | https://gisuser.com/2026/09/geek-bar-pulse-2-in-2026-the-data-backed-guide-to-the-best-flavors-and-why-tech-savvy-vapers-are-switching/ | $45 | P4 | 2026-10-01 | ✅ 3 dofollow links |
 
-**Итого live: 10 ссылок | Оплачено: $450**
+**Итого live: 11 ссылок | Оплачено: $495**
 
 ---
 

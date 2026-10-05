@@ -3,8 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About GetSmoke - US Disposable Vape Retailer | GetSmoke",
-  description: "GetSmoke is a Florida-based online vape retailer operated by Cosmoproject LLC. We carry 900+ disposable vapes, pod systems, and hookah products from 30+ top brands. PACT Act compliant, 21+ only.",
+  title: "About GetSmoke | Licensed US Vape Store, PACT Act Compliant, 900+ Products",
+  description: "GetSmoke is a licensed Florida-based online vape retailer. 900+ authentic disposable vapes from 30+ top brands - Geek Bar, RAZ, HQD, Lost Mary. PACT Act compliant, age verified, fast US shipping. 21+ only.",
   alternates: { canonical: "https://getsmoke.com/about-us" },
 };
 

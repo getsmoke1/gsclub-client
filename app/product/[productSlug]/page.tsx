@@ -338,6 +338,14 @@ const page = async ({ params }: Props) => {
             </>
           )}
 
+          {/* Product description - SSR visible for indexing */}
+          {product.detailDescription && (
+            <div
+              style={{ marginTop: "28px", marginBottom: "28px", lineHeight: 1.8, color: "#333" }}
+              dangerouslySetInnerHTML={{ __html: product.detailDescription }}
+            />
+          )}
+
           {/* FAQ section for AI citations */}
           <h2 style={{ fontSize: "1.3rem", fontWeight: 700, marginTop: "32px", marginBottom: "16px" }}>
             Frequently Asked Questions - {product.name}

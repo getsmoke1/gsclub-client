@@ -202,12 +202,19 @@ const CheckoutPage = () => {
     return sum + price * item.quantity;
   }, 0);
   const discount = originalTotal > subtotal ? originalTotal - subtotal : 0;
+
+  // Coupon state
+  const [couponInput, setCouponInput] = useState("");
+  const [couponApplied, setCouponApplied] = useState<{ code: string; discountAmount: number; couponId: string } | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const couponDiscount = couponApplied ? Math.min(couponApplied.discountAmount, subtotal) : 0;
   const eligibleForFreeShipping = subtotal >= FREE_THRESHOLD;
   eligibleForFreeShippingRef.current = eligibleForFreeShipping; // keep ref in sync every render (avoids stale closure in useCallback)
   const isFreeShipping = eligibleForFreeShipping && applyFreeShipping;
   const shippingCost = isFreeShipping ? 0 : FLAT_RATE;
   const insuranceCost = useInsurance ? INSURANCE_FEE : 0;
-  const total = subtotal + shippingCost + insuranceCost;
+  const total = Math.max(0, subtotal - couponDiscount + shippingCost + insuranceCost);
 
   // ── Card select (authenticated users) ──────────────────────────────────────
   const handleCardSelect = (card: Card) => {
@@ -306,6 +313,8 @@ const CheckoutPage = () => {
           billingCity: billingRef.current.city,
           billingState: billingRef.current.state,
           billingZipCode: billingRef.current.zip,
+          couponId: couponApplied?.couponId || null,
+          couponDiscount: couponApplied?.discountAmount || 0,
         }),
       });
 
@@ -543,7 +552,59 @@ const CheckoutPage = () => {
                   </div>
                 </div>
               )}
-              <OrderTotals subtotal={subtotal} discount={discount} shippingCost={shippingCost}
+              {/* Coupon Code */}
+              <div style={{ marginTop: 16 }}>
+                {couponApplied ? (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "10px 14px" }}>
+                    <div>
+                      <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#15803d" }}>Coupon applied: {couponApplied.code}</p>
+                      <p style={{ margin: 0, fontSize: 12, color: "#16a34a" }}>-${couponApplied.discountAmount.toFixed(2)} discount</p>
+                    </div>
+                    <button onClick={() => { setCouponApplied(null); setCouponInput(""); setCouponError(""); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9ca3af" }}>×</button>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(""); }}
+                      placeholder="Coupon code"
+                      style={{ flex: 1, border: couponError ? "1.5px solid #fca5a5" : "1.5px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 14, fontFamily: "monospace", letterSpacing: 2, outline: "none" }}
+                      onKeyDown={async e => {
+                        if (e.key !== "Enter") return;
+                        if (!couponInput.trim()) return;
+                        setCouponLoading(true); setCouponError("");
+                        try {
+                          const res = await fetch("/api/coupons/validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: couponInput.trim() }) });
+                          const data = await res.json();
+                          if (!res.ok) { setCouponError(data.error || "Invalid code"); }
+                          else { setCouponApplied({ code: data.code, discountAmount: data.discountAmount, couponId: data.couponId }); }
+                        } finally { setCouponLoading(false); }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (!couponInput.trim()) return;
+                        setCouponLoading(true); setCouponError("");
+                        try {
+                          const res = await fetch("/api/coupons/validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: couponInput.trim() }) });
+                          const data = await res.json();
+                          if (!res.ok) { setCouponError(data.error || "Invalid code"); }
+                          else { setCouponApplied({ code: data.code, discountAmount: data.discountAmount, couponId: data.couponId }); }
+                        } finally { setCouponLoading(false); }
+                      }}
+                      disabled={couponLoading || !couponInput.trim()}
+                      style={{ background: "#111", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: couponLoading ? 0.6 : 1, whiteSpace: "nowrap" }}
+                    >
+                      {couponLoading ? "..." : "Apply"}
+                    </button>
+                  </div>
+                )}
+                {couponError && <p style={{ margin: "4px 0 0", fontSize: 12, color: "#dc2626" }}>{couponError}</p>}
+              </div>
+
+              <OrderTotals subtotal={subtotal} discount={discount} couponDiscount={couponDiscount} shippingCost={shippingCost}
                 isFreeShipping={isFreeShipping} useInsurance={useInsurance} total={total} />
             </section>
 
@@ -708,7 +769,7 @@ const CheckoutPage = () => {
                       </p>
                     </div>
                   )}
-                  <OrderTotals subtotal={subtotal} discount={discount} shippingCost={shippingCost}
+                  <OrderTotals subtotal={subtotal} discount={discount} couponDiscount={couponDiscount} shippingCost={shippingCost}
                     isFreeShipping={isFreeShipping} useInsurance={useInsurance} total={total} />
                 </>
               )}
@@ -722,8 +783,8 @@ const CheckoutPage = () => {
 };
 
 // ─── Order Totals sub-component ──────────────────────────────────────────────
-function OrderTotals({ subtotal, discount, shippingCost, isFreeShipping, useInsurance, total }: {
-  subtotal: number; discount: number; shippingCost: number; isFreeShipping: boolean; useInsurance: boolean; total: number;
+function OrderTotals({ subtotal, discount, couponDiscount = 0, shippingCost, isFreeShipping, useInsurance, total }: {
+  subtotal: number; discount: number; couponDiscount?: number; shippingCost: number; isFreeShipping: boolean; useInsurance: boolean; total: number;
 }) {
   return (
     <div className="border-t border-gray-200 pt-3 space-y-2">
@@ -735,6 +796,12 @@ function OrderTotals({ subtotal, discount, shippingCost, isFreeShipping, useInsu
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Discount</span>
           <span className="font-medium text-green-600">-${discount.toFixed(2)}</span>
+        </div>
+      )}
+      {couponDiscount > 0 && (
+        <div className="flex justify-between text-sm">
+          <span className="text-gray-600">Coupon</span>
+          <span className="font-medium text-green-600">-${couponDiscount.toFixed(2)}</span>
         </div>
       )}
       <div className="flex justify-between text-sm">

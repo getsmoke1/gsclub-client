@@ -769,6 +769,47 @@ const CheckoutPage = () => {
                       </p>
                     </div>
                   )}
+                  {/* Coupon Code - desktop */}
+                  <div style={{ marginTop: 12, marginBottom: 4 }}>
+                    {couponApplied ? (
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f0fdf4", border: "1.5px solid #86efac", borderRadius: 8, padding: "10px 14px" }}>
+                        <div>
+                          <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#15803d" }}>Coupon: {couponApplied.code}</p>
+                          <p style={{ margin: 0, fontSize: 12, color: "#16a34a" }}>-${couponApplied.discountAmount.toFixed(2)} off</p>
+                        </div>
+                        <button onClick={() => { setCouponApplied(null); setCouponInput(""); setCouponError(""); }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9ca3af" }}>×</button>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input
+                          type="text"
+                          value={couponInput}
+                          onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(""); }}
+                          placeholder="Coupon code"
+                          style={{ flex: 1, border: couponError ? "1.5px solid #fca5a5" : "1.5px solid #e5e7eb", borderRadius: 8, padding: "8px 12px", fontSize: 14, fontFamily: "monospace", letterSpacing: 2, outline: "none" }}
+                        />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!couponInput.trim()) return;
+                            setCouponLoading(true); setCouponError("");
+                            try {
+                              const res = await fetch("/api/coupons/validate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: couponInput.trim() }) });
+                              const data = await res.json();
+                              if (!res.ok) { setCouponError(data.error || "Invalid code"); }
+                              else { setCouponApplied({ code: data.code, discountAmount: data.discountAmount, couponId: data.couponId }); }
+                            } finally { setCouponLoading(false); }
+                          }}
+                          disabled={couponLoading || !couponInput.trim()}
+                          style={{ background: "#111", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer", opacity: couponLoading ? 0.6 : 1, whiteSpace: "nowrap" }}
+                        >
+                          {couponLoading ? "..." : "Apply"}
+                        </button>
+                      </div>
+                    )}
+                    {couponError && <p style={{ margin: "4px 0 0", fontSize: 12, color: "#dc2626" }}>{couponError}</p>}
+                  </div>
+
                   <OrderTotals subtotal={subtotal} discount={discount} couponDiscount={couponDiscount} shippingCost={shippingCost}
                     isFreeShipping={isFreeShipping} useInsurance={useInsurance} total={total} />
                 </>

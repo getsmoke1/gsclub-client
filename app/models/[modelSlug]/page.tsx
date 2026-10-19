@@ -207,16 +207,65 @@ export default async function ModelPage({ params }: Props) {
     ],
   };
 
+  // Build SSR text content for Googlebot (GenericModelPage is a client component and starts with loading state)
+  const nicotineNote = model.nicotine === "0% Nicotine Free" ? "nicotine-free formula" : `${model.nicotine} nicotine salt`;
+  const topFlavorStr = model.topFlavors && model.topFlavors.length > 0
+    ? model.topFlavors.slice(0, 6).join(", ")
+    : "Watermelon Ice, Blue Razz Ice, Strawberry Banana";
+  const specParts = [
+    model.battery ? `${model.battery} rechargeable battery` : null,
+    model.eliquid ? `${model.eliquid} e-liquid capacity` : null,
+    model.coil ? `${model.coil} coil` : null,
+    model.display ? `${model.display} display` : null,
+  ].filter(Boolean).join(", ");
+  const flavorCount = products.length > 0 ? products.length : "multiple";
+  const ssrDescription = [
+    `The ${model.name} disposable vape is designed for vapers who demand long-lasting performance and rich flavor. With up to ${model.puffs} puffs per device, it delivers consistent vapor quality from the very first draw to the last, making it one of the most reliable choices in its class.`,
+    `Each ${model.shortName} device is pre-filled with ${nicotineNote} e-liquid${specParts ? ` and features ${specParts}` : ""}. The rechargeable USB-C design ensures you never waste e-liquid. Draw-activated, no buttons needed.`,
+    `Available in ${flavorCount} carefully crafted flavors, the ${model.shortName} covers every palate. Top-rated flavors include ${topFlavorStr} - each delivering a bold, true-to-name taste throughout the life of the device.`,
+    `GetSmoke ships the ${model.name} across the entire United States with adult signature required delivery. Orders over $89 qualify for free shipping. All products are sourced from authorized US distributors. Adults 21 and older only.`,
+  ];
+  const faqItems = faqSchema.mainEntity as Array<{ "@type": string; name: string; acceptedAnswer: { "@type": string; text: string } }>;
+
   return (
     <>
       {/* Plain <script> tags render in initial HTML - next/script goes to RSC payload */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productGroupSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      {/* SSR H1 for crawlers */}
-      <h1 style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>
-        {model.name} Disposable Vape
-      </h1>
+      {/* SSR content section for Googlebot — GenericModelPage loads via useEffect/client fetch */}
+      <section aria-label="About this product" style={{ position: "absolute", width: "1px", height: "1px", overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>
+        <h1>{model.name} Disposable Vape</h1>
+        {ssrDescription.map((p, i) => <p key={i}>{p}</p>)}
+        <h2>{model.shortName} Specifications</h2>
+        <ul>
+          <li>Puff Count: Up to {model.puffs} puffs</li>
+          <li>Nicotine Strength: {model.nicotine}</li>
+          {model.battery && <li>Battery: {model.battery} rechargeable (USB-C)</li>}
+          {model.eliquid && <li>E-Liquid Capacity: {model.eliquid}</li>}
+          {model.coil && <li>Coil Type: {model.coil}</li>}
+          <li>Available Flavors: {flavorCount} flavors</li>
+          <li>Brand: {model.brand}</li>
+          <li>Price: ${model.price.toFixed(2)}</li>
+        </ul>
+        {products.length > 0 && (
+          <>
+            <h2>Available Flavors</h2>
+            <ul>
+              {products.slice(0, 20).map(p => (
+                <li key={p.slug}><a href={`/product/${p.slug}`}>{p.flavor?.name || p.name}</a></li>
+              ))}
+            </ul>
+          </>
+        )}
+        <h2>Frequently Asked Questions</h2>
+        {faqItems.map((item) => (
+          <div key={item.name}>
+            <h3>{item.name}</h3>
+            <p>{item.acceptedAnswer.text}</p>
+          </div>
+        ))}
+      </section>
       <GenericModelPage modelSlug={modelSlug} />
     </>
   );

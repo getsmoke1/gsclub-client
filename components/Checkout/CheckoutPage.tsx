@@ -283,6 +283,7 @@ const CheckoutPage = () => {
         id: item.id,
         quantity: item.quantity,
         attributeId: item.attributeId || null,
+        price: item.price ?? null,
         isSubscription: item.isSubscription || false,
         subscriptionFrequency: item.subscriptionFrequency || null,
       }));

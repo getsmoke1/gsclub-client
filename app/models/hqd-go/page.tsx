@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "Buy HQD GO 35,000 puffs disposable vape online. 14 flavors available - $34.99. Free shipping on orders over $79. Delivery 3-7 days across the USA.",
   ...noIndex,
+  alternates: {
+    canonical: "https://getsmoke.com/models/hqd-go",
+  },
 };
 
 const jsonLd = {

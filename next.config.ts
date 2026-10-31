@@ -148,6 +148,9 @@ const nextConfig: NextConfig = {
         destination: '/vapes',
         permanent: true,
       },
+      { source: '/category/juicy-bar-vape', destination: '/brands/juicy-bar', permanent: true },
+      { source: '/category/geek-bar-vape', destination: '/brands/geek-bar', permanent: true },
+      { source: '/models/geek-bar-pulse-x2-25000-puffs', destination: '/models/geek-bar-pulse-x2-50000-puffs', permanent: true },
       {
         source: '/category/:brand*',
         destination: '/brands/:brand',

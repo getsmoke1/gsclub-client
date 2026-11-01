@@ -35,7 +35,7 @@ const BlogDetails = ({ article, shopProducts, shopSectionTitle, shopModelSlug }:
     if (!el) return;
     const imgs = el.querySelectorAll('img');
     imgs.forEach(img => {
-      if (!img.complete || img.naturalWidth === 0) {
+      if (img.complete && img.naturalWidth === 0) {
         img.style.display = 'none';
       }
       img.addEventListener('error', () => { img.style.display = 'none'; });
